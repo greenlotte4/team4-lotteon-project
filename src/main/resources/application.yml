@@ -25,6 +25,13 @@ spring:
     devtools:
         livereload:
             enabled: true
+
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        password: "Choasa15!"
+        url: jdbc:mysql://13.125.226.80:3306/lotteon
+        username: root
+
     jpa:
         database: mysql
         hibernate:
