@@ -1,30 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>공지사항 보기</title>
     <link rel="stylesheet" th:href="@{/css/common.css}">
-    <link rel="stylesheet" th:href="@{/css/cs/notice_view.css}" />
-  </head>
-  <body>
+    <link rel="stylesheet" th:href="@{/css/cs/cs_common.css}"/>
+</head>
+<body>
+<header th:replace="~{/include/my_header.html}"></header>
+<div id="wrapper">
+    <th:block th:replace="~{/cs/aside/aside_notice.html}"></th:block>
     <section id="section_wrapper">
-      <div id="category">
-        <a href="#">전체</a>
-        <a>공지사항 전체 내용입니다.</h>
-      </div>
-      <table>
-        <tr id="title">
-          <td>
-            [안내] 해외결제사칭 문자주의<br>
-            <span class="r-date">2022.11.30</span>
-          </td>
-        </tr>
-        <tr id="content">
-          <td>글 내용~~~~</td>
-        </tr>
-      </table>
-      <a href="#"><button id="toList">목록</button></a>
+        <div id="category">
+            <p>전체<br><span class="subtitle">공지사항 전체 내용입니다.</span></p>
+            <div class="breadcrumb">
+                <a href="#">Home</a> > <a href="#" class="location">공지사항</a>
+            </div>
+        </div>
+        <table>
+            <tr id="title">
+                <td>
+                    [안내] 해외결제사칭 문자주의
+                    <span class="r-date">2022.11.30</span>
+                </td>
+            </tr>
+            <tr id="content">
+                <td>글 내용~~~~</td>
+            </tr>
+        </table>
+        <a href="#">
+            <button id="toList">목록</button>
+        </a>
     </section>
-  </body>
+</div>
+<footer th:replace="~{/include/footer.html}"></footer>
+</body>
 </html>

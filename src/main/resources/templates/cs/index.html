@@ -8,7 +8,8 @@
     <link rel="stylesheet" th:href="@{/css/cs/index.css}" />
   </head>
   <body>
-    <section id="section_wrapper">
+  <header th:replace="~{/include/my_header.html}"></header>
+  <section id="section_wrapper">
       <!-- Main Title Section -->
       <section class="main-title-section">
         <p>롯데 ON</p>
@@ -16,17 +17,17 @@
       </section>
 
       <!-- 공지사항 Section -->
-      <section id="notification-section">
+      <section id="notice-section">
         <table>
           <thead>
             <tr>
               <th>
                 <span>공지사항</span>
-                <div>
+                <span>
                   <!-- 공지사항 링크 / 화살표 이미지 링크 필요 -->
                   <a th:href="@{/cs/notice/list}">전체보기</a>
                   <a th:href="@{/cs/notice/list}" class="viewAll"></a>
-                </div>
+                </span>
               </th>
             </tr>
           </thead>
@@ -62,7 +63,7 @@
             </th>
           </thead>
           <tbody>
-            <tr>
+            <tr id="faq-tr">
               <td id="faq-td">
                 <div>
                   <a href="#" class="image member"></a>
@@ -95,7 +96,7 @@
       </section>
 
       <!-- 문의하기 Section -->
-      <section id="inquiry-section">
+      <section id="qna-section">
         <table>
           <thead>
             <th>
@@ -110,7 +111,7 @@
           <tbody>
             <tr>
               <!-- 5개씩 출력 -->
-              <td class="inquiry-td">
+              <td class="qna-td">
                 <a href="#">[안내] 해외결제사 창 문자주의</a>
                 <div>
                   <span>chh**</span>
@@ -120,7 +121,7 @@
               </td>
             </tr>
             <tr>
-              <td class="inquiry-td">
+              <td class="qna-td">
                 <a href="#">[안내] 해외결제사 창 문자주의</a>
                 <div>
                   <span>chh**</span>
@@ -130,7 +131,7 @@
             </tr>
           </tbody>
         </table>
-        <a href="#" id="inquiry-write">문의글 작성 ></a>
+        <a href="#" id="qna-write">문의글 작성 ></a>
       </section>
 
       <!-- 1:1 상담안내 Section -->
@@ -179,5 +180,6 @@
         </table>
       </section>
     </section>
+  <footer th:replace="~{/include/footer.html}"></footer>
   </body>
 </html>
