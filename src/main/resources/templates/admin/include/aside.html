@@ -1,0 +1,69 @@
+<link rel="stylesheet" th:href="@{/css/admin/include/style_admin_aside.css}">
+<aside>
+    <ul class="sidebar-menu">
+        <li>
+            <a href="#">환경설정</a>
+            <ul class="submenu">
+                <li><a th:href="@{/admin/config/info}">기본설정</a></li>
+                <li><a th:href="@{/admin/config/banner}">배너관리</a></li>
+                <li><a th:href="@{/admin/config/policy}">약관관리</a></li>
+                <li><a th:href="@{/admin/config/category}">카테고리</a></li>
+                <li><a th:href="@{/admin/config/version}">버전관리</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">상점관리</a>
+            <ul class="submenu">
+                <li><a th:href="@{/admin/shop/list}">상점목록</a></li>
+                <li><a th:href="@{/admin/shop/sales}">매출현황</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">회원관리</a>
+            <ul class="submenu">
+                <li><a th:href="@{/admin/member/list}">회원목록</a></li>
+                <li><a th:href="@{/admin/member/point}">포인트관리</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">상품관리</a>
+            <ul class="submenu">
+                <li><a th:href="@{/admin/product/list}">상품목록</a></li>
+                <li><a th:href="@{/admin/product/register}">상품등록</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">주문관리</a>
+            <ul class="submenu">
+                <li><a th:href="@{/admin/order/list}">주문현황</a></li>
+                <li><a th:href="@{/admin/order/delivery}">배송현황</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">고객센터</a>
+            <ul class="submenu">
+                <li><a th:href="@{/admin/cs/notice/list}">공지사항</a></li>
+                <li><a th:href="@{/admin/cs/faq/list}">자주묻는질문</a></li>
+                <li><a th:href="@{/admin/cs/qna/list}">문의하기</a></li>
+            </ul>
+        </li>
+    </ul>
+</aside>
+
+<script>
+    document.querySelectorAll('.sidebar-menu > li').forEach(function (menuItem) {
+        menuItem.addEventListener('mouseenter', function () {
+            const submenu = menuItem.querySelector('.submenu');
+            if (submenu) {
+                submenu.style.display = 'block';
+            }
+        });
+
+        menuItem.addEventListener('mouseleave', function () {
+            const submenu = menuItem.querySelector('.submenu');
+            if (submenu) {
+                submenu.style.display = 'none';
+            }
+        });
+    });
+</script>

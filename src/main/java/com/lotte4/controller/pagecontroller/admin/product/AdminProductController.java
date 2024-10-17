@@ -19,11 +19,7 @@ public class AdminProductController {
         return "/admin/product/register";
     }
 
-    // 상품 카테고리
-    @GetMapping("/admin/product/category")
-    public String AdminProductCategory() {
-        return "/admin/product/category";
-    }
+
 
 
 
