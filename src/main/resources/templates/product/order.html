@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<!-- xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.thymeleaf.org/"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" -->
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>롯데ON::롯데 온라인 쇼핑몰</title>
+    <!-- 파비콘 -->
+    <link rel="shortcut icon" type="image/x-icon" href="../images/favicon.ico"/>
+    <link rel="stylesheet" th:href="@{/css/main/common.css}"/>
+    <link rel="stylesheet" th:href="@{/css/include/header.css}"/>
+    <link rel="stylesheet" th:href="@{/css/product/style_product_order.css}"/>
+</head>
+<body>
+<div id="bannerTop" class="on" style="background: #e4dfdf;">
+    <article>
+        <a href="#"><img src="../../../images/main/topBanner1.png"/></a>
+        <button class="btnClose">close</button>
+    </article>
+</div>
+<div id="wrapper">
+    <header th:replace="~{include/header.html}"></header>
+    <main class="mainIn cf">
+        <aside>
+            <!-- 베스트상품 배너 -->
+            <article class="best">
+                <h1><i class="fas fa-crown"></i>베스트상품</h1>
+                <ol>
+                    <block each="product5, loop :${productSold}">
+                        <li>
+                            <a href="/product/view(prodCate1=${product5.getProdCate1()},prodCate2=${product5.getProdCate2()},prodNo=${product5.getProdNo()},price=${product5.getPrice()})}">
+                                <div class="thumb">
+                                    <i text="${loop.index+1}"></i>
+                                    <img src="/thumbs/+${product5.prodCate1}+'/'+${product5.prodCate2}+'/'+${product5.thumb2}" alt="item1"/>
+                                </div>
+                                <h2 text="${product5.prodName}"></h2>
+                                <div class="org_price">
+                                    <del text="${product5.price}"></del>
+                                    <span text="${product5.discount+'%'}"></span>
+                                </div>
+                                <div class="dis_price">
+                                    <ins text="${product5.getDiscount(product5.price,product5.discount)}"></ins>
+                                    <block if="${product5.delivery == 0}">
+                                        <span class="free">무료배송</span>
+                                    </block>
+                                    <block if="${product5.delivery != 0}">
+                                        <span text=" '배송비:'+${product5.delivery}+'원'"></span>
+                                    </block>
+                                </div>
+                            </a>
+                        </li>
+                    </block>
+                </ol>
+            </article>
+        </aside>
+
+
+        <!-- 주문하기 영역 -->
+        <section class="cart-section">
+
+            <!-- Breadcrumb -->
+            <div class="breadcrumb">
+                <a href="#">Home</a> &gt;
+                <a href="#">장바구니</a> &gt;
+                <a href="#">주문하기</a>
+                <section class="order-section">
+            </div>
+            <!-- 주문하기 제목 -->
+            <h2 class="section-title">주문하기</h2>
+            <!-- 주문 상품목록 -->
+            <div class="cart-">
+                <table class="cart-table">
+                    <thead>
+                    <tr>
+                        <th>상품정보</th>
+                        <th>판매가</th>
+                        <th>수량</th>
+                        <th>구매가</th>
+                        <th>배송정보</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="product-info">
+                            <img src="/images/product/image.png" alt="상품 이미지">
+                            <div class="product-details">
+                                <p class="product-name">[브랜드] 상품명</p>
+                            </div>
+                        </td>
+                        <td>33,000원</td>
+                        <td>
+                            <div class="quantity">
+                                <p>1</p>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="price-info">
+                                <del>33,000원</del>
+                                <span class="discount-price">23,760원</span>
+                            </div>
+                        </td>
+                        <td class="shipping-info">무료배송</td>
+
+                    </tr>
+                    </tbody>
+
+                    <tbody>
+                    <tr>
+
+                        <td class="product-info">
+                            <img src="/images/product/image2.png" alt="상품 이미지">
+                            <div class="product-details">
+                                <p class="product-name">[브랜드] 상품명</p>
+                            </div>
+                        </td>
+                        <td>33,000원</td>
+                        <td>
+                            <div class="quantity">
+                                <p>1</p>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="price-info">
+                                <del>33,000원</del>
+                                <span class="discount-price">23,760원</span>
+                            </div>
+                        </td>
+                        <td class="shipping-info">무료배송</td>
+
+                    </tr>
+                    </tbody>
+
+                </table>
+            </div> <!--cart--->
+
+            <div class="forDiv">
+                <section class="order-right">
+                    <aside class="coupon-section">
+
+                        <table class="form-group">
+                            <th><p class="tableTitle">할인 정보</p></th>
+                            <tr>
+                                <th>현재포인트 : </th>
+                                <td>
+                                    <span>7200p</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>사용포인트 : </th>
+                                <td>
+                                    <input type="number" step="">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>상품별 쿠폰선택</th>
+                                <td>
+                                    <select name="etc" id="condition" >
+                                        <option value="condition">[브랜드] 10000원 쿠폰</option>
+                                        <option value="condition">[브랜드] 10000원 쿠폰</option>
+                                        <option value="condition">[브랜드] 10000원 쿠폰</option>
+                                        <option value="condition">[브랜드] 10000원 쿠폰</option>
+                                    </select>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>주문별 쿠폰선택</th>
+                                <td>
+                                    <select name="etc" id="condition" >
+                                        <option value="condition">[전상품] 10000원 쿠폰</option>
+                                        <option value="condition">[전상품] 20000원 쿠폰</option>
+                                        <option value="condition">[전상품] 1000원 쿠폰</option>
+                                        <option value="condition">[전상품] 2000원 쿠폰</option>
+                                    </select>
+
+                                </td>
+                            </tr>
+                        </table>
+                    </aside>
+
+                    <!-- 최종 결제 금액-->
+                    <aside class="checkout-summary">
+                        <div class="checkout-details">
+                            <table class="checkout-row">
+                                <th><p class="tableTitle">최종 결제</p></th>
+                                <tr class="checkout-column">
+                                    <th>총 판매가</th>
+                                    <td>33,000원</td>
+                                </tr>
+                                <tr class="checkout-column">
+                                    <th>총 할인금액</th>
+                                    <td class="discount">9,240원</td>
+                                </tr>
+                                <tr class="checkout-column">
+                                    <th>배송비</th>
+                                    <td>0원</td>
+                                </tr>
+                                <tr class="checkout-price">
+                                    <th>총 결제 금액</th>
+                                    <td>23,760원</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <button type="submit" class="checkout-btn">결제하기</button>
+                    </aside>
+                </section> <!-- order-right -->
+            </div>
+            <!-- 배송 정보 -->
+            <section class = "order-left">
+                <div class="shipping-section">
+                    <form>
+                        <table class="shipping-table">
+                            <th> <p class="tableTitle">배송 정보</p></th>
+                            <tr>
+                                <th>수령자</th>
+                                <td>
+                                    <input type=text value="수령자"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>휴대폰</th>
+                                <td>
+                                    <input type=text  id="phone-number" value="휴대폰"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>우편번호</th>
+                                <td>
+                                    <input type="text" id="zipcode" name="zipcode" required>
+                                    <button type="button">검색</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>기본주소</th>
+                                <td>
+                                    <input type="text" id="address" name="address" required>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <th>상세주소</th>
+                                <td>
+                                    <input type="text" id="address-detail" name="addressDetail" required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>배송 메시지</th>
+                                <td>
+                                    <textarea></textarea>
+                                </td>
+                            </tr>
+
+                            <th><p class="tableTitle">결제 정보</p></th>
+                            <tr>
+                                <th>결제방법</th>
+                                <td class ="radio">
+                                    <label>
+                                        <input type="radio" th:checked="${deliveryfee == 2000}"/> 카카오페이
+                                    </label>
+                                    <label>
+                                        <input type="radio" th:checked="${deliveryfee == 3000}"/> 토스
+                                    </label>
+                                    <label>
+                                        <input type="radio" th:checked="${deliveryfee == 5000}"/> 페이코</br>
+                                    </label>
+                                    <label>
+                                        <input type="radio" th:checked="${deliveryfee == 0}"/> 무통장입금
+                                    </label>
+                                    <label>
+                                        <input type="radio" th:checked="${deliveryfee == 0}"/> 네이버페이
+                                    </label>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div><!-- shipping-section-->
+            </section><!-- order-left -->
+
+        </section>
+        </section>
+
+
+
+
+    </main>
+    <footer>
+        <ul>
+            <li><a href="/company/index">회사소개</a></li>
+            <li><a href="#">서비스이용약관</a></li>
+            <li><a href="#">개인정보처리방침</a></li>
+            <li><a href="#">전자금융거래약관</a></li>
+        </ul>
+        <div>
+            <p><img src="../images/main/footer_logo.png" alt="로고"/></p>
+            <p>
+                <strong>(주)롯데ON</strong><br/>- bxSlider
+                대표이사 : 김사무엘상현, 정준호, 강성현<br/>
+                사업자등록번호 : 529-85-00774(롯데쇼핑(주) e커머스사업부)<br/>
+                통신판매업 신고 : 서울송파 제0158호<br>
+                호스팅 서비스사업자 : 롯데쇼핑(주) e커머스사업부
+            </p>
+            <p>
+                <strong>고객센터</strong><br/>
+                Tel : 1899-7000(유료) (평일 09:00~18:00)<br/>
+                Fax : 051-123-4567 | E-mail : lotteon@lotte.net<br/>
+                App Version:[[${appInfo}]]
+            </p>
+        </div>
+    </footer>
+    <button type="button" id="top">상단이동</button>
+</div>
+</body>
+</html>

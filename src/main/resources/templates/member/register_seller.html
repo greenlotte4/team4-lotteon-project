@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<!-- xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.thymeleaf.org/"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" -->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login</title>
+    <link rel="stylesheet" href="css/user/common.css" />
+    <link rel="stylesheet" href="../css/member/register_seller.css" />
+</head>
+<style>
+</style>
+
+<body>
+    <main>
+        <div class="main-wrapper">
+
+            <div class="main-box">
+                <section class="register">
+                    <form action="#" method="POST">
+                        <table border="1">
+                            <caption>판매자 회원가입</caption>
+                            <tr>
+                                <td>아이디</td>
+                                <td>
+                                    <input type="text" name="uid" placeholder="아이디 입력" /> <span> 영문, 숫자 4~12자 설정</span>
+                                    <span class="resultId"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>비밀번호</td>
+                                <td>
+                                    <input type="password" name="pass1" placeholder="비밀번호 입력" /> <span> 영문, 숫자, 특수문자
+                                        8~12자 설정</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>비밀번호 확인</td>
+                                <td>
+                                    <input type="password" name="pass2" placeholder="비밀번호 확인 입력" />
+                                    <span class="resultPass"></span>
+                                </td>
+                            </tr>
+                        </table>
+                        <table border="1">
+                            <caption>개인정보 입력</caption>
+                            <tr>
+                                <td>회사명</td>
+                                <td>
+                                    <input type="text" name="company" placeholder="회사명 입력 예) 다판다" />
+                                    <span class="resultName"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>대표</td>
+                                <td>
+                                    <input type="text" name="CEO" placeholder="이름 입력" />
+                                    <span class="resultName"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>사업자등록번호</td>
+                                <td>
+                                    <input type="number" name="BN" placeholder="사업자등록번호 입력" /> <span> - 포함 12자 입력</span>
+                                    <span class="resultName"></span>
+            </div>
+            </td>
+            </tr>
+            <tr>
+                <td>전화번호</td>
+                <td>
+                    <input type="text" name="hp" placeholder="- 포함 13자리 입력" minlength="13" maxlength="13" />
+                    <span class="resultHp"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>팩스</td>
+                <td>
+                    <input type="text" name="fax" placeholder="팩스번호입력" minlength="13" maxlength="13" />
+                    <span class="resultHp"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>주소</td>
+                <td>
+                    <div>
+                        <input type="text" name="zip" id="zip" placeholder="우편번호" readonly />
+                        <button type="button" class="btnZip" onclick="postcode()"><img src="#" alt=""></button>
+                    </div>
+                    <div>
+                        <input type="text" name="addr1" id="addr1" placeholder="기본주소검색" readonly />
+                    </div>
+                    <div>
+                        <input type="text" name="addr2" id="addr2" placeholder="상세주소검색" />
+                    </div>
+                </td>
+            </tr>
+            </table>
+            <div>
+                <input type="button" class="sellerbtn"></button>
+            </div>
+            </form>
+            </section>
+        </div>
+    </main>
+
+</body>
+
+</html>

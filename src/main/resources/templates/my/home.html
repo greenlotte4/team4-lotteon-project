@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<!-- xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.thymeleaf.org/"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" -->
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>롯데ON::롯데 온라인 쇼핑몰</title>
+  <link rel="stylesheet" th:href="@{../css/my/myInfo.css}" />
+  <link rel="stylesheet" th:href="@{../css/my/myInfo_modal.css}" />
+  <link rel="stylesheet" th:href="@{../css/my/myInfo_order.css}" />
+  <link rel="stylesheet" th:href="@{../css/my/myInfo_qna.css}" />
+</head>
+
+<body>
+  <div id="wrapper">
+    <main>
+      <header th:replace="~{include/my_header.html}"></header>
+      <div th:replace="~{my/my_aside.html}"></div>
+      <section class="myInfo_sec">
+
+        <div th:replace="~{my/banner.html}"></div>
+
+
+        <!-- 최근 주문내역 -->
+        <article class="myInfo_recentOrder myInfo_Article">
+          <div class="myInfo_ArticleTitle"><span>최근주문내역</span><a th:href="@{/my/order}">더보기 ></a></div>
+          <ul class="myInfo_product">
+            <li>
+              <span>2022-12-13</span>
+              <div>
+                <img src="../images/my/임시 이미지.png" alt="">
+                <div>
+                  <a href="">주문번호: 1012211341</a>
+                  <a href="">{주}상호명</a>
+                  <a href="">상품명</a>
+                  <p>수량: 1개</p>
+                  <p><strong>34,000원</strong></p>
+                </div>
+                <div>
+                  <span>
+                  배송완료
+                  </span>
+                </div>
+                <div>
+                  <button>수취확인</button>
+                  <button>상품평쓰기</button>
+                  <button>반품신청</button>
+                  <button>교환신청</button>
+                </div>
+              </div>
+            </li>
+
+            <li>
+              <span>2022-12-13</span>
+              <div>
+                <img src="../images/my/임시 이미지.png" alt="">
+                <div>
+                  <a href="">주문번호: 1012211341</a>
+                  <a href="">{주}상호명</a>
+                  <a href="">상품명</a>
+                  <p>수량: 1개</p>
+                  <p><strong>34,000원</strong></p>
+                </div>
+                <div>
+                  <span>
+                  배송완료
+                  </span>
+                </div>
+                <div>
+                  <button>수취확인</button>
+                  <button>상품평쓰기</button>
+                  <button>반품신청</button>
+                  <button>교환신청</button>
+                </div>
+              </div>
+            </li>
+
+            <li>
+              <span>2022-12-13</span>
+              <div>
+                <img src="../images/my/임시 이미지.png" alt="">
+                <div>
+                  <a href="">주문번호: 1012211341</a>
+                  <a href="">{주}상호명</a>
+                  <a href="">상품명</a>
+                  <p>수량: 1개</p>
+                  <p><strong>34,000원</strong></p>
+                </div>
+                <div>
+                  <span>
+                  배송완료
+                  </span>
+                </div>
+                <div>
+                  <button>수취확인</button>
+                  <button>상품평쓰기</button>
+                  <button>반품신청</button>
+                  <button>교환신청</button>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </article>
+        <!-- 최근 주문내역 끝 -->
+
+        <!-- 주문상세 모달 시작 -->
+        <article class="myInfo_modal Modalhidden">
+          <div class="myInfo_ModalWindow">
+            <!-- 상단 표시줄 -->
+            <div class="myInfo_ModalControl">
+              <span>주문상세</span>
+              <span>20xx-12-13</span>
+              <img th:src="@{../images/my/x-mark-xxl.png}">
+            </div>
+            <!-- 모달 내용 -->
+            <article class="myInfo_ModalDetail">
+              <div class="myInfo_ArticleTitle"><span>최근주문내역</span></div>
+              <table class="myInfo_recentTable myInfo_Table">
+                <thead>
+                  <tr>
+                    <th>날짜</th>
+                    <th>상품정보</th>
+                    <th>상태</th>
+                    <th>확인/신청</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>2022-12-13</td>
+                    <td>
+                      <div class="myInfo_productInfo">
+                        <img th:src="@{../images/my/임시 이미지.png}" alt="">
+                        <div>
+                          <p>주문번호: 1012211341</p>
+                          <p>{주}상호명</p>
+                          <p>상품명</p>
+                          <p>수량: 1개</p>
+                          <p><strong>34,000원</strong></p>
+                        </div>
+                      </div>
+                    </td>
+                    <td>배송완료</td>
+                    <td class="myInfo_product_buttons">
+                      <button>수취확인</button>
+                      <button>상품평쓰기</button>
+                      <button>반품신청</button>
+                      <button>교환신청</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <table class="myInfo_ModalTable">
+
+                <tr>
+                  <td>이름</td>
+                  <td>
+                    <span>홍길동</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>연락처</td>
+                  <td>
+                    <span>010-1234-1001</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>주소</td>
+                  <td>
+                    <span>[210**] 부산광역시 부산진구 대연동 121 10층 1004호</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>배송 요청 사항</td>
+                  <td>
+                    <span>없음</span>
+                  </td>
+                </tr>
+              </table>
+            </article>
+          </div>
+        </article>
+        <!-- 주문상세 모달 끝 -->
+
+        <!-- 판매자 정보 모달 시작 -->
+        <article class="myInfo_modal Modalhidden">
+          <div class="myInfo_ModalWindow">
+            <!-- 상단 표시줄 -->
+            <div class="myInfo_ModalControl">
+              <span>판매자정보</span>
+              <img th:src="@{../images/my/x-mark-xxl.png}">
+            </div>
+            <!-- 모달 내용 -->
+            <article class="myInfo_ModalDetail modalDealer">
+
+              <table class="myInfo_ModalTable">
+                <tr>
+                  <td>판매자 등급</td>
+                  <td>
+                    <span>파워 딜러</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>상호</td>
+                  <td>
+                    <span>(주) 상호명</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>대표자</td>
+                  <td>
+                    <span>홍길동</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>전화번호</td>
+                  <td>
+                    <span>051-123-1000</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>FAX</td>
+                  <td>
+                    <span>051-123-1001</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Email</td>
+                  <td>
+                    <span>company@abc.com</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>사업자번호</td>
+                  <td>
+                    <span>123-12-123457</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>영업소재지</td>
+                  <td>
+                    <span>[210**] 부산광역시 부산진구 대연동 121 10층 1004호</span>
+                  </td>
+                </tr>
+              </table>
+              <p>* 위 정보는 전자상거래 법 제 20조 제 2항 및 동 법 시행령 제 25조 제 2항에 의거하여 소비자 보호에 의거하여 공개합니다.</p>
+              <div class="modalButtons"><button type="button">문의하기</button></div>
+            </article>
+          </div>
+        </article>
+        <!-- 판매자 정보 모달 끝 -->
+
+        <!-- 문의하기 모달 시작 -->
+        <article class="myInfo_modal Modalhidden">
+          <div class="myInfo_ModalWindow">
+            <!-- 상단 표시줄 -->
+            <div class="myInfo_ModalControl">
+              <span>문의하기</span>
+              <img th:src="@{../images/my/x-mark-xxl.png}">
+            </div>
+            <!-- 모달 내용 -->
+            <article class="myInfo_ModalDetail">
+
+              <table class="myInfo_ModalTable">
+                <tr>
+                  <td>문의종류</td>
+                  <td>
+                    <span class="Modalradio">
+                      <input type="radio" name="contact" value="product"><label>상품</label>
+                      <input type="radio" name="contact" value="product"><label>배송</label>
+                      <input type="radio" name="contact" value="product"><label>반품 / 취소</label>
+                      <input type="radio" name="contact" value="product"><label>교환</label>
+                      <input type="radio" name="contact" value="product"><label>기타</label>
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Email</td>
+                  <td>
+                    <span class="ModalInput"><input type="text" placeholder="abc123@gmail.com"></span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>제목</td>
+                  <td>
+                    <span class="ModalInput"><input type="text"></span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>내용</td>
+                  <td>
+                    <span  class="ModalInput"><textarea name=""></textarea></span>
+                  </td>
+                </tr>
+              </table>
+              <div class="modalButtons"><button type="button">등록하기</button><button type="button">취소</button></div>
+            </article>
+          </div>
+        </article>
+        <!-- 문의하기 모달 끝 -->
+
+        <!-- 수취확인 모달 시작 -->
+        <article class="myInfo_modal Modalhidden">
+          <div class="myInfo_ModalWindow">
+            <!-- 상단 표시줄 -->
+            <div class="myInfo_ModalControl">
+              <span>수취확인</span>
+              <img th:src="@{../images/my/x-mark-xxl.png}">
+            </div>
+            <!-- 모달 내용 -->
+            <article class="myInfo_ModalDetail">
+              <p class="ModalCheck">
+                상품을 받으셨나요?<br>
+                상품 받으신 분 만 수취 확인을 해주세요.
+              </p>
+
+              <div class="modalButtons"><button type="button">등록하기</button><button type="button">취소</button></div>
+            </article>
+          </div>
+        </article>
+        <!-- 수취확인 모달 끝 -->
+
+        <!-- 상품평작성하기 모달 시작 -->
+        <article class="myInfo_modal Modalhidden">
+          <div class="myInfo_ModalWindow">
+            <!-- 상단 표시줄 -->
+            <div class="myInfo_ModalControl">
+              <span>상품평작성하기</span>
+              <img th:src="@{../images/my/x-mark-xxl.png}">
+            </div>
+            <!-- 모달 내용 -->
+            <article class="myInfo_ModalDetail">
+
+              <table class="myInfo_ModalTable">
+                <tr>
+                  <td>상품명</td>
+                  <td>
+                    <span>상품명 출력</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>만족도</td>
+                  <td>
+                    <span><img th:src="@{../images/my/임시 별점.png}" alt=""></span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>내용</td>
+                  <td>
+                    <span  class="ModalInput"><textarea name="" id="" placeholder="최소 10자 이상 200자 내외로 작성하세요."></textarea></span>
+                  </td>
+                </tr>
+              </table>
+              <div class="modalButtons"><button type="button">작성완료</button><button type="button">취소</button></div>
+            </article>
+          </div>
+        </article>
+        <!-- 상품평작성하기 모달 끝 -->
+
+
+
+        <!-- 포인트 적립내역 -->
+        <article class="myInfo_PointRecode myInfo_Article">
+          <div class="myInfo_ArticleTitle"><span>최근주문내역</span><a href="#">더보기 ></a></div>
+          <table class="myInfo_PointTable myInfo_Table">
+            <thead>
+              <tr>
+                <th>날짜</th>
+                <th>구분</th>
+                <th>주문번호</th>
+                <th>적립금액</th>
+                <th>비고</th>
+                <th>유효기간</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- 반복 block -->
+              <tr>
+                <td>
+                  2022-12-13
+                </td>
+                <td>
+                  적립
+                </td>
+                <td>
+                  2022131001
+                </td>
+                <td>
+                  340
+                </td>
+                <td>
+                  상품 구매확정
+                </td>
+                <td>
+                  2024-12-10
+                </td>
+              </tr>
+              <!-- 반복 블럭 끝 -->
+
+              <!-- 반복 block -->
+              <tr>
+                <td>
+                  2022-12-13
+                </td>
+                <td>
+                  적립
+                </td>
+                <td>
+                  2022131001
+                </td>
+                <td>
+                  340
+                </td>
+                <td>
+                  상품 구매확정
+                </td>
+                <td>
+                  2024-12-10
+                </td>
+              </tr>
+              <!-- 반복 블럭 끝 -->
+            </tbody>
+          </table>
+        </article>
+
+        <!-- 상품평 -->
+        <article class="myInfo_Review myInfo_Article">
+          <div class="myInfo_ArticleTitle"><span>상품평</span><a href="#">더보기 ></a></div>
+          <table class="myInfo_ReviewTable myInfo_Table">
+            <thead>
+              <tr>
+                <th>번호</th>
+                <th>상품평</th>
+                <th>내용</th>
+                <th>평점</th>
+                <th>작성일</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- 반복 block -->
+              <tr>
+                <td>
+                  1
+                </td>
+                <td>
+                  상품번호 / 상품명
+                </td>
+                <td>
+                  배송이 빠릅니다. 잘 사용하겠습니다.
+                </td>
+                <td>
+                  <img th:src="@{../images/my/임시 별점.png}" alt="">
+                </td>
+                <td>
+                  2022-12-10
+                </td>
+              </tr>
+              <!-- 반복 블럭 끝 -->
+
+              <!-- 반복 block -->
+              <tr>
+                <td>
+                  2
+                </td>
+                <td>
+                  상품번호 / 상품명
+                </td>
+                <td>
+                  배송이 빠릅니다. 잘 사용하겠습니다.
+                </td>
+                <td>
+                  <img th:src="@{../images/my/임시 별점.png}" alt="">
+                </td>
+                <td>
+                  2022-12-6
+                </td>
+              </tr>
+              <!-- 반복 블럭 끝 -->
+
+              <!-- 반복 block -->
+              <tr>
+                <td>
+                  3
+                </td>
+                <td>
+                  상품번호 / 상품명
+                </td>
+                <td>
+                  배송이 빠릅니다. 잘 사용하겠습니다.
+                </td>
+                <td>
+                  <img th:src="@{../images/my/임시 별점.png}" alt="">
+                </td>
+                <td>
+                  2022-12-6
+                </td>
+              </tr>
+              <!-- 반복 블럭 끝 -->
+            </tbody>
+          </table>
+        </article>
+
+        <!-- 문의 내역 -->
+        <article class="myInfo_Qna myInfo_Article">
+          <div class="myInfo_ArticleTitle"><span>문의 내역</span><a href="#">더보기 ></a></div>
+          <table class="myInfo_QnaTable myInfo_Table">
+            <thead>
+              <tr>
+                <th>번호</th>
+                <th>문의채널</th>
+                <th>문의유형</th>
+                <th>제목</th>
+                <th>작성일</th>
+                <th>상태</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- 반복 block -->
+              <tr>
+                <td>
+                  1
+                </td>
+                <td>
+                  고객센터
+                </td>
+                <td>
+                  주문 / 결제
+                </td>
+                <td>
+                  신용카드 결제 중 오류가 난 경우 어떻게 하나요?
+                </td>
+                <td>
+                  2022-12-12
+                </td>
+                <td class="qna_answer">
+                  검토 중
+                </td>
+              </tr>
+              <!-- 반복 블럭 끝 -->
+
+              <!-- 반복 block -->
+              <tr>
+                <td>
+                  2
+                </td>
+                <td>
+                  고객센터
+                </td>
+                <td>
+                  주문 / 결제
+                </td>
+                <td>
+                  신용카드 결제 중 오류가 난 경우 어떻게 하나요?
+                </td>
+                <td>
+                  2022-12-12
+                </td>
+                <td class="qna_answer answerd">
+                  답변완료
+                </td>
+              </tr>
+              <!-- 반복 블럭 끝 -->
+
+              <!-- 반복 block -->
+              <tr>
+                <td>
+                  3
+                </td>
+                <td>
+                  판매자 게시판
+                </td>
+                <td>
+                  배송
+                </td>
+                <td>
+                  배송기간이 보통 얼마나 걸리나요?
+                </td>
+                <td>
+                  2022-12-12
+                </td>
+                <td class="qna_answer answerd">
+                  답변완료
+                </td>
+              </tr>
+              <!-- 반복 블럭 끝 -->
+            </tbody>
+          </table>
+        </article>
+
+        <!-- 나의 설정 -->
+        <article class="myInfo_myInfo myInfo_Article">
+          <div class="myInfo_ArticleTitle"><span>나의 설정</span><a href="#">더보기 ></a></div>
+          <ol class="myInfo_div">
+            <li>
+              <div>기본배송지설정</div>
+              <a href="#">변경</a>
+              <p>부산광역시 부산진구 대연동 120</p>
+              <p>한빛빌딩 10층</p>
+            </li>
+            <li>
+              <div>Email 설정</div>
+              <a href="#">변경</a>
+              <p>abd123@naver.com</p>
+              <p>(최종수정일 2021-12-10)</p>
+            </li>
+            <li>
+              <div>휴대폰 설정</div>
+              <a href="#">변경</a>
+              <p>010 - 1234 - 1001</p>
+              <p>(최종수정일 2021-12-10)</p>
+            </li>
+          </ol>
+        </article>
+
+      </section>
+    </main>
+  </div>
+  <footer th:replace="~{include/footer.html}"></footer>
+</body>
+
+</html>

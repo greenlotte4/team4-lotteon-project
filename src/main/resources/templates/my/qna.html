@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<!-- xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.thymeleaf.org/"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" -->
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>롯데ON::롯데 온라인 쇼핑몰</title>
+  <link rel="stylesheet" href="../css/my/myInfo.css" />
+  <link rel="stylesheet" href="../css/my/myInfo_qna.css" />
+</head>
+
+<body>
+  <div id="wrapper">
+
+    <main>
+      <header th:replace="~{include/my_header.html}"></header>
+      <!--어사이드-->
+      <div th:replace="~{my/my_aside.html}"></div>
+      <section class="myInfo_sec">
+
+        <div th:replace="~{my/banner.html}"></div>
+
+
+        <!-- 나의 문의 -->
+        <article class="myInfo_Qna myInfo_Article">
+          <div class="myInfo_ArticleTitle"><span>나의문의</span></div>
+          <table class="myInfo_QnaTable myInfo_Table">
+            <thead>
+              <tr>
+                <th>번호</th>
+                <th>문의채널</th>
+                <th>문의유형</th>
+                <th>제목</th>
+                <th>작성일</th>
+                <th>상태</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- 반복 block -->
+              <tr>
+                <td>
+                  1
+                </td>
+                <td>
+                  고객센터
+                </td>
+                <td>
+                  주문 / 결제
+                </td>
+                <td>
+                  신용카드 결제 중 오류가 난 경우 어떻게 하나요?
+                </td>
+                <td>
+                  2022-12-12
+                </td>
+                <td class="qna_answer">
+                  검토 중
+                </td>
+              </tr>
+              <!-- 반복 블럭 끝 -->
+
+              <!-- 반복 block -->
+              <tr>
+                <td>
+                  2
+                </td>
+                <td>
+                  고객센터
+                </td>
+                <td>
+                  주문 / 결제
+                </td>
+                <td>
+                  신용카드 결제 중 오류가 난 경우 어떻게 하나요?
+                </td>
+                <td>
+                  2022-12-12
+                </td>
+                <td class="qna_answer answerd">
+                  답변완료
+                </td>
+              </tr>
+              <!-- 반복 블럭 끝 -->
+
+              <!-- 반복 block -->
+              <tr>
+                <td>
+                  3
+                </td>
+                <td>
+                  판매자 게시판
+                </td>
+                <td>
+                  배송
+                </td>
+                <td>
+                  배송기간이 보통 얼마나 걸리나요?
+                </td>
+                <td>
+                  2022-12-12
+                </td>
+                <td class="qna_answer answerd">
+                  답변완료
+                </td>
+              </tr>
+              <!-- 반복 블럭 끝 -->
+            </tbody>
+          </table>
+        </article>
+        <div class="page">
+          <a href="#">이전</a>
+          <a href="#" class="page_current">1</a>
+          <a href="#">2</a>
+          <a href="#">3</a>
+          <a href="#">다음</a>
+        </div>
+
+      </section>
+    </main>
+  </div>
+  <footer th:replace="~{include/footer.html}"></footer>
+</body>
+
+</html>

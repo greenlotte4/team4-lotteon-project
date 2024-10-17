@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<!-- xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.thymeleaf.org/"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" -->
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>롯데ON::롯데 온라인 쇼핑몰</title>
+  <link rel="stylesheet" href="../css/my/myInfo.css" />
+</head>
+
+<body>
+  <div id="wrapper">
+
+    <main>
+      <header th:replace="~{include/my_header.html}"></header>
+      <!--어사이드-->
+      <div th:replace="~{my/my_aside.html}"></div>
+
+      <section class="myInfo_sec">
+
+        <div th:replace="~{my/banner.html}"></div>
+
+        
+        <!-- 쿠폰내역 -->
+        <article class="myInfo_PointRecode myInfo_Article">
+          <div class="myInfo_ArticleTitle"><span>쿠폰내역</span></div>
+          <table class="myInfo_PointTable myInfo_Table">
+            <thead>
+              <tr>
+                <th>쿠폰명</th>
+                <th>할인금액</th>
+                <th>적립기준 / 제한조건</th>
+                <th>상태</th>
+                <th>유효기간</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- 반복 block -->
+              <tr>
+                <td>
+                  1 만원 할인 중복 쿠폰
+                </td>
+                <td>
+                  10,000원
+                </td>
+                <td>
+                  10,000원 이상 구매시
+                </td>
+                <td>
+                  사용가능
+                </td>
+                <td>
+                  ~ 12/31
+                </td>
+              </tr>
+              <!-- 반복 블럭 끝 -->
+
+              <!-- 반복 block -->
+              <tr>
+                <td>
+                  회원가입 즉석, 5천원 할인 쿠폰
+                </td>
+                <td>
+                  5,000원
+                </td>
+                <td>
+                  5,000원 이상 구매시
+                </td>
+                <td>
+                  사용가능
+                </td>
+                <td>
+                  ~ 12/31
+                </td>
+              </tr>
+              <!-- 반복 블럭 끝 -->
+              
+            </tbody>
+          </table>
+
+          
+        </article>
+        <ul class="terms">
+          <li>순금 / 골드바 / 돌반지 / 상품권 등 환금성 카테고리 및 중고상품 및 일부 프로모션 상품에는 쿠폰사용이 제한됩니다.</li>
+          <li>쿠론 적용 가능한 금액 기준은 판매자 상품별할인과 Gr마케 추가할인이 모두 포함된 할인 적용가 입니다.</li>
+          <li>중복쿠폰은 판매자 할인, G마켓 할인과 중복 적용 가능하며 하나의 상품당 한장의 중복만 사용가능 합니다.</li>
+          <li>항공 할인이 항공권 전용 할인으로 결제시점에 할인 혜택을 받을 수 있습니다.</li>
+          <li>항공권 예약 취소 또는 환불시 적용했던 항공할인은 id당 1회 한하여 다시 발급됩니다.</li>
+        </ul>
+      </section>
+    </main>
+  </div>
+  <footer th:replace="~{include/footer.html}"></footer>
+</body>
+
+</html>

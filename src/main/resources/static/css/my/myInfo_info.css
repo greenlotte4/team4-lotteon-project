@@ -1,0 +1,82 @@
+
+.myInfoForm {
+  margin-top: 5px;
+}
+
+.myInfoForm table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  border-top: 2px solid #111;
+  margin-bottom: 10px;
+}
+.myInfoForm table  tr, td {
+  border-style: none;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.myInfoForm table tr > td:nth-child(1) {
+  width: 105px;
+  background: #f0f0f0;
+}
+
+.myInfoForm table > tr > td {
+  padding: 6px 12px;
+  border-style: none;
+  box-sizing: border-box;
+}
+
+.myInfoForm table input {
+  height: 22px;
+  border: 1px solid #e4eaec;
+  background: #f7f7f7;
+  text-indent: 6px;
+}
+
+.myInfo_email {
+  width : 100px;
+}
+
+.inputHp{
+  width : 80px;
+}
+
+.HpButton{
+  display: inline-block;
+}
+
+.myInfo_address {
+  display: block;
+  width: 220px;
+  margin-top: 5px;
+}
+
+.secessionBtn {
+  width: 80px;
+  height: 30px;
+  background-color: rgb(177, 30, 30);
+  color: white;
+  border: none;
+}
+
+.secessionBtn:hover {
+  opacity: 90%;
+}
+
+.Myinfo_modify {
+  width: 100%;
+  text-align: center;
+}
+
+.Myinfo_modify > button{
+  width : 180px;
+  height : 40px;
+  background-color: #558ED5;
+  color: white;
+  border: none;
+}
+
+.Myinfo_modify > button:hover{
+  opacity: 90%;
+}

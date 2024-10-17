@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 메인</title>
+
+
+    <!--공통 css 부분-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}">
+    <!--각 페이지(section) 개별 css-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_main.css}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <div class="header-top">
+            <a href="#" class="logo">
+                <img th:src="@{/images/logo.png}" alt="Logo"/>
+            </a>
+            <nav>
+                <a href="#">로그아웃</a>
+                <a href="#">고객센터</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div id="wrapper">
+            <aside>
+                <ul class="sidebar-menu">
+                    <li><a href="#">환경설정</a></li>
+                    <li><a href="#">상품관리</a></li>
+                    <li><a href="#">회원관리</a></li>
+                    <li><a href="#">주문관리</a></li>
+                    <li><a href="#">고객센터</a></li>
+                </ul>
+            </aside>
+
+            <!--section-->
+            <section>
+                <div class="breadcrumb">
+                    <a href="#">Home</a> > <a href="#" class="location">관리자메인</a>
+                </div>
+                <h3>관리자 메인</h3>
+
+                <div class="dashboard">
+                    <article class="dashboard-item">
+                        <div class="content__bar">
+                            <div>
+                                <canvas id="barChart"></canvas>
+                            </div>
+                            <div style="max-width: 500px">
+                                <canvas id="doughnutChart"></canvas>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="dashboard-item">
+                        <h4>운영현황</h4>
+                        <table class="operation_product">
+                            <tr>
+                                <th>입금대기</th>
+                                <th>배송준비</th>
+                                <th>취소요청</th>
+                                <th>교환요청</th>
+                                <th>반품요청</th>
+                            </tr>
+                            <tr>
+                                <td>101건</td>
+                                <td>124건</td>
+                                <td>14건</td>
+                                <td>7건</td>
+                                <td>24건</td>
+                            </tr>
+                        </table>
+                        <table class="operation_total">
+                            <tr>
+                                <th colspan="2">주문건수</th>
+                                <th colspan="2">주문금액</th>
+                                <th colspan="2">회원가입</th>
+                                <th colspan="2">방문자 수</th>
+                                <th colspan="2">신규 게시물</th>
+                            </tr>
+                            <tr>
+                                <td colspan="2">131</td>
+                                <td colspan="2">1,130,000원</td>
+                                <td colspan="2">1,014명</td>
+                                <td colspan="2">1,014명</td>
+                                <td colspan="2">14개</td>
+                            </tr>
+                            <tr>
+                                <td>오늘<br>어제</td>
+                                <td>60<br>70</td>
+                                <td>오늘<br>어제</td>
+                                <td>1,200,000<br>2,500,000</td>
+                                <td>오늘<br>어제</td>
+                                <td>102<br>130</td>
+                                <td>오늘<br>어제</td>
+                                <td>1,200<br>1,300</td>
+                                <td>오늘<br>어제</td>
+                                <td>12<br>13</td>
+
+                            </tr>
+                        </table>
+                    </article>
+
+                    <article class="dashboard-item">
+                        <h4>공지사항</h4>
+                        <ul>
+                            <li><a href="#">[안내] 해외결제사 창 문자주의</a></li>
+                            <li><a href="#">[안내] 롯데ON 배송관련 안내</a></li>
+                            <li><a href="#">[안내] 구매확정 안내</a></li>
+                        </ul>
+                    </article>
+
+                    <article class="dashboard-item">
+                        <h4>고객문의</h4>
+                        <ul>
+                            <li>[가입] 개인정보 문의 - 22.10.31</li>
+                            <li>[배송] 배송 문의 - 22.10.31</li>
+                            <li>[회원정보] 정보 수정 문의 - 22.10.31</li>
+                        </ul>
+                    </article>
+                </div>
+            </section>
+            <!--/section-->
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 롯데ON. All rights reserved.</p>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const doughnutChartctx = document.querySelector('#doughnutChart').getContext('2d');
+            const doughnutChart = new Chart(doughnutChartctx, {
+                type: 'pie',
+                data: {
+                    datasets: [{
+                        data: [20, 30, 50],
+                        backgroundColor: [
+                            'rgba(255,0,0,0.5)',
+                            'rgba(0,0,255,0.5)',
+                            'rgba(48,255,93,0.5)'
+                        ],
+                        borderColor: [
+                            'rgba(255,0,0,1)',
+                            'rgba(0,0,255,1)',
+                            'rgba(48,255,93,1)'
+                        ],
+                        borderWidth: 1
+                    }],
+                    labels: ['결제취소', '배송완료', '배송 중']
+                },
+                options: {
+                    cutout: '50%'
+                }
+            });
+
+            const barChartCtx = document.querySelector('#barChart').getContext('2d');
+            const barChart = new Chart(barChartCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['January', 'February', 'March', 'April', 'May'],
+                    datasets: [{
+                        label: 'Sales',
+                        data: [120, 190, 300, 500, 200],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>

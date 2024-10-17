@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>롯데ON::롯데 온라인 쇼핑몰</title>
+    <!-- 파비콘 -->
+    <link rel="shortcut icon" type="image/x-icon" href="../images/favicon.ico"/>
+    <!-- 기본 스타일 -->
+    <link rel="stylesheet" th:href="@{/css/include/header.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main/common.css}"/>
+    <link rel="stylesheet" th:href="@{/css/product/style_product_list_common.css}"/>
+
+    <link id="pageStylesheet" rel="stylesheet" th:href="@{/css/product/style_product_list.css}"/>
+    <script>
+        // CSS 파일을 동적으로 변경하는 함수
+        function changeStylesheet(fileName) {
+            const stylesheet = document.getElementById('pageStylesheet');
+            stylesheet.href = fileName;
+        }
+    </script>
+</head>
+<body>
+<div id="bannerTop" class="on" style="background: #e4dfdf;">
+    <article>
+        <a href="#"><img src="../../../images/main/topBanner1.png" alt="배너"/></a>
+        <button class="btnClose">close</button>
+    </article>
+</div>
+<div id="wrapper">
+    <header th:replace="~{include/header.html}"></header>
+    <main class="mainIn cf">
+        <aside>
+            <!-- 베스트상품 배너 -->
+            <article class="best">
+                <h1><i class="fas fa-crown"></i>베스트상품</h1>
+                <ol>
+                    <!-- 상품 목록이 들어갈 자리 -->
+                </ol>
+            </article>
+        </aside>
+        <!-- 카테고리/베스트 상품 영역 -->
+        <section class="product-list-section">
+            <!-- Breadcrumb -->
+            <div class="breadcrumb">
+                <a href="#">Home</a> &gt;
+                <a href="#">패션·의류·뷰티</a> &gt;
+                <a href="#">남성의류</a>
+            </div>
+
+            <!-- 상품 목록 제목 -->
+            <h2 class="section-title">상품목록</h2>
+
+            <!-- 상품 정렬 옵션 -->
+            <div class="sort-options">
+                <div class="sort-left">
+                    <a href="#" class="sort-link f">인기순</a>
+                    <a href="#" class="sort-link">신상품순</a>
+                    <a href="#" class="sort-link">판매순</a>
+                    <a href="#" class="sort-link">낮은가격순</a>
+                    <a href="#" class="sort-link">할인율순</a>
+                </div>
+
+                <div class="sort-view-options">
+                    <span class="view-count">VIEW</span>
+                    <!-- 목록보기: 클릭하면 목록 CSS 적용 -->
+                    <a href="javascript:void(1);" onclick="changeStylesheet('/lotteon/css/product/style_product_list.css')" class="sort-linkRight">목록보기</a>
+                    <!-- 바둑보기: 클릭하면 바둑 CSS 적용 -->
+                    <a href="javascript:void(0);" onclick="changeStylesheet('/lotteon/css/product/style_product_list_grid.css')" class="sort-linkRight">바둑보기</a>
+                </div>
+            </div>
+
+            <!-- 상품 목록 -->
+            <div class="product-list">
+                <div class="product-item">
+                    <div class="product-image">
+                        <img src="../images/product/image.png" alt="Product Image" />
+                    </div>
+
+                    <a href="/product/view.html" class="product-details">
+                        <h3 class="product-name">상품명</h3>
+                        <p class="product-description">간단한 상품 설명</p>
+                        <div class="price-info">
+
+                            <span class="original-price">30,000원</span>
+                            <span class="discount-rate">10% ↓</span>
+                            <span class="product-price">27,000원</span>
+                        </div>
+                        <div class="shipping-info">
+                            <span class="shipping-cost">무료배송</span>
+                        </div>
+                    </a>
+
+                    <div class="seller-info">
+                        <p>판매자</p>
+                        <span class="seller-badge">고객만족우수</span>
+                        <div class="rating">
+                            상품평 ⭐⭐⭐⭐
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 상품 3 -->
+                <div class="product-item">
+                    <div class="product-image">
+                        <img src="../images/product/image2.png" alt="Product Image" />
+                    </div>
+                    <div class="product-details">
+                        <h3 class="product-name">상품명</h3>
+                        <p class="product-description">간단한 상품 설명</p>
+                        <div class="price-info">
+                            <span class="original-price">30,000원</span>
+                            <span class="discount-rate">10% ↓</span>
+                            <span class="product-price">27,000원</span>
+                        </div>
+                        <div class="shipping-info">
+                            <span class="shipping-cost">배송비 2,500원</span>
+                        </div>
+                    </div>
+                    <div class="seller-info">
+                        <p>판매자</p>
+                        <span class="seller-badge">고객만족우수</span>
+                        <div class="rating">
+                            상품평 ⭐⭐⭐⭐
+                        </div>
+                    </div>
+                </div>
+                <!-- 상품 4 -->
+                <div class="product-item">
+                    <div class="product-image">
+                        <img src="../images/product/image.png" alt="Product Image" />
+                    </div>
+                    <div class="product-details">
+                        <h3 class="product-name">상품명</h3>
+                        <p class="product-description">간단한 상품 설명</p>
+                        <div class="price-info">
+                            <span class="original-price">30,000원</span>
+                            <span class="discount-rate">10% ↓</span>
+                            <span class="product-price">27,000원</span>
+                        </div>
+                        <div class="shipping-info">
+                            <span class="shipping-cost">배송비 2,500원</span>
+                        </div>
+                    </div>
+                    <div class="seller-info">
+                        <p>판매자</p>
+                        <span class="seller-badge">고객만족우수</span>
+                        <div class="rating">
+                            상품평 ⭐⭐⭐⭐⭐
+                        </div>
+                    </div>
+                </div>
+                <!-- 상품 4 -->
+                <div class="product-item">
+                    <div class="product-image">
+                        <img src="../images/product/image2.png" alt="Product Image" />
+                    </div>
+                    <div class="product-details">
+                        <h3 class="product-name">상품명</h3>
+                        <p class="product-description">간단한 상품 설명</p>
+                        <div class="price-info">
+                            <span class="original-price">30,000원</span>
+                            <span class="discount-rate">10% ↓</span>
+                            <span class="product-price">27,000원</span>
+                        </div>
+                        <div class="shipping-info">
+                            <span class="shipping-cost">배송비 2,500원</span>
+                        </div>
+                    </div>
+                    <div class="seller-info">
+                        <p>판매자</p>
+                        <span class="seller-badge">고객만족우수</span>
+                        <div class="rating">
+                            상품평 ⭐⭐⭐⭐⭐
+                        </div>
+                    </div>
+                </div>
+                <!-- 페이지네이션 -->
+
+            </div>
+            <div class="pagination">
+                <ul>
+                    <li><a href="#">&lt;</a></li>
+                    <li><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">4</a></li>
+                    <li><a href="#">5</a></li>
+                    <li><a href="#">&gt;</a></li>
+                </ul>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <!-- footer 내용 -->
+    </footer>
+    <button type="button" id="top">상단이동</button>
+</div>
+</body>
+</html>

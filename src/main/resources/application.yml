@@ -1,0 +1,51 @@
+logging:
+    file:
+        name: /logs/letteon.log
+    level:
+        jdbc:
+            resultsettable: debug
+            sqlonly: debug
+            sqltiming: debug
+        root: info
+        org.springframework.web: debug
+
+server:
+    port: 8080
+    servlet:
+        context-path: /lotteon
+    error:
+        whitelabel:
+            enabled: false
+        path: error
+
+
+spring:
+    application:
+        name: lotteon-team4
+    devtools:
+        livereload:
+            enabled: true
+    jpa:
+        database: mysql
+        hibernate:
+            ddl-auto: update
+            naming:
+                physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        properties:
+            hibernate:
+                format_sql: true
+                show_sql: true
+    servlet:
+        session:
+            timeout: 10m
+    web:
+        resources:
+            static-locations:
+                - classpath:/static/
+    thymeleaf:
+        cache: false
+        check-template-location: true
+        enabled: true
+        prefix: classpath:/templates/
+        suffix: .html
+

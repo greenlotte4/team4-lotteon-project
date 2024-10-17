@@ -1,0 +1,52 @@
+
+/* 검색 */
+.myInfo_Search{
+  margin-top: 10px;
+  border: 1px solid #e0e0e0;
+  background-color: #DCE6F2;
+  padding: 10px;
+  box-sizing: border-box;
+  display : flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.myInfo_Search > p {
+  margin-right: 5px;
+  font-size: 15px;
+}
+
+.myInfo_Search_Time {
+  background-color: #f2f2f2;
+  padding: 5px;
+  border: 1px solid #b9b9b9;
+  box-sizing: border-box;
+}
+
+.myInfo_Search_Time > li{
+  border-right: 1px solid #b9b9b9;
+  display: inline-flex;
+}
+
+.myInfo_Search_Time > li:last-of-type{
+  border: none;
+}
+
+.myInfo_Search_Time > li > a {
+  font-size: 15px;
+  margin: 3px;
+}
+.myInfo_Search_Time > li > span {
+  font-size: 15px;
+  margin: 3px 0;
+}
+
+.myInfo_Search > button{
+  margin-top :3px;
+  padding: 5px 10px;
+}
+
+.Time_current {
+  color: #558ED5;
+}
+/* 검색 끝 */

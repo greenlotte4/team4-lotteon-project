@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<!-- xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.thymeleaf.org/"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" -->
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>롯데ON::롯데 온라인 쇼핑몰</title>
+  <link rel="stylesheet" href="../css/my/myInfo.css" />
+</head>
+
+<body>
+  <div id="wrapper">
+
+    <main>
+      <header th:replace="~{include/my_header.html}"></header>
+      <!--어사이드-->
+      <div th:replace="~{my/my_aside.html}"></div>
+
+      <section class="myInfo_sec">
+
+        <div th:replace="~{my/banner.html}"></div>
+
+
+        <!-- 나의리뷰 -->
+        <article class="myInfo_Review myInfo_Article">
+          <div class="myInfo_ArticleTitle"><span>나의리뷰</span></div>
+          <table class="myInfo_ReviewTable myInfo_Table">
+            <thead>
+              <tr>
+                <th>번호</th>
+                <th>상품평</th>
+                <th>내용</th>
+                <th>평점</th>
+                <th>작성일</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- 반복 block -->
+              <tr>
+                <td>
+                  1
+                </td>
+                <td>
+                  상품번호 / 상품명
+                </td>
+                <td>
+                  배송이 빠릅니다. 잘 사용하겠습니다.
+                </td>
+                <td>
+                  <img th:src="@{../images/my/임시 별점.png}" alt="">
+                </td>
+                <td>
+                  2022-12-10
+                </td>
+              </tr>
+              <!-- 반복 블럭 끝 -->
+
+              <!-- 반복 block -->
+              <tr>
+                <td>
+                  2
+                </td>
+                <td>
+                  상품번호 / 상품명
+                </td>
+                <td>
+                  배송이 빠릅니다. 잘 사용하겠습니다.
+                </td>
+                <td>
+                  <img th:src="@{../images/my/임시 별점.png}" alt="">
+                </td>
+                <td>
+                  2022-12-6
+                </td>
+              </tr>
+              <!-- 반복 블럭 끝 -->
+
+              <!-- 반복 block -->
+              <tr>
+                <td>
+                  3
+                </td>
+                <td>
+                  상품번호 / 상품명
+                </td>
+                <td>
+                  배송이 빠릅니다. 잘 사용하겠습니다.
+                </td>
+                <td>
+                  <img th:src="@{../images/my/임시 별점.png}" alt="">
+                </td>
+                <td>
+                  2022-12-6
+                </td>
+              </tr>
+              <!-- 반복 블럭 끝 -->
+            </tbody>
+          </table>
+        </article>
+        <div class="page">
+          <a href="#">이전</a>
+          <a href="#" class="page_current">1</a>
+          <a href="#">2</a>
+          <a href="#">3</a>
+          <a href="#">다음</a>
+        </div>
+
+      </section>
+    </main>
+  </div>
+  <footer th:replace="~{include/footer.html}"></footer>
+</body>
+
+</html>

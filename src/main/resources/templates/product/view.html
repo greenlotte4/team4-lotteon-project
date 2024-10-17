@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<!-- xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.thymeleaf.org/"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" -->
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>롯데ON::롯데 온라인 쇼핑몰</title>
+    <!-- 파비콘 -->
+    <link rel="shortcut icon" type="image/x-icon" href="../images/favicon.ico"/>
+    <link rel="stylesheet" th:href="@{/css/main/common.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main/header.css}"/>
+    <link rel="stylesheet" th:href="@{/css/product/style_product_view.css}"/>
+
+</head>
+<body>
+<div id="bannerTop" class="on" style="background: #e4dfdf;">
+    <article>
+        <a href="#"><img src="../../../images/main/topBanner1.png"/></a>
+        <button class="btnClose">close</button>
+    </article>
+</div>
+<div id="wrapper">
+    <header th:replace="~{include/header.html}"></header>
+    <main class="mainIn cf">
+        <aside>
+
+            <!-- 베스트상품 배너 -->
+            <article class="best">
+                <h1><i class="fas fa-crown"></i>베스트상품</h1>
+                <ol>
+                    <block each="product5, loop :${productSold}">
+                        <li>
+                            <a href="/product/view(prodCate1=${product5.getProdCate1()},prodCate2=${product5.getProdCate2()},prodNo=${product5.getProdNo()},price=${product5.getPrice()})}">
+                                <div class="thumb">
+                                    <i text="${loop.index+1}"></i>
+                                    <img src="/thumbs/+${product5.prodCate1}+'/'+${product5.prodCate2}+'/'+${product5.thumb2}" alt="item1"/>
+                                </div>
+                                <h2 text="${product5.prodName}"></h2>
+                                <div class="org_price">
+                                    <del text="${product5.price}"></del>
+                                    <span text="${product5.discount+'%'}"></span>
+                                </div>
+                                <div class="dis_price">
+                                    <ins text="${product5.getDiscount(product5.price,product5.discount)}"></ins>
+                                    <block if="${product5.delivery == 0}">
+                                        <span class="free">무료배송</span>
+                                    </block>
+                                    <block if="${product5.delivery != 0}">
+                                        <span text=" '배송비:'+${product5.delivery}+'원'"></span>
+                                    </block>
+                                </div>
+                            </a>
+                        </li>
+                    </block>
+                </ol>
+            </article>
+        </aside>
+        <!-- 카테고리/베스트 상품 영역 -->
+
+        <section class="product-view-section">
+            <!-- Breadcrumb -->
+            <div class="breadcrumb">
+                <a href="#">Home</a> &gt;
+                <a href="#">패션·의류·뷰티</a> &gt;
+                <a href="#">남성의류</a>
+            </div>
+
+            <h2 class="section-title">상품보기</h2>
+            <!-- 상품보기 -->
+
+            <section class="product-view">
+
+                <div class="product-image">
+                    <img src="../images/product/image.png" alt="Product Image" />
+                </div>
+                <div class="product-info">
+                    <h2 class="product-title">(내셔널지오그래픽키즈)고급진 벨루가 헤비다운 K234UDW240</h2>
+                    <p>상품번호: 10010118412</p>
+                    <div class="rating">
+                        <span>★★★★★</span> <a href="#">상품리뷰</a> (13)
+                    </div>
+                    <div class="price-section">
+                        <span class="original-price">30,000원</span>
+                        <span class="discount-rate">10% ↓</span>
+                        <span class="discount-price">27,000원</span>
+                    </div>
+                    <div class="shipping-info">
+                        <p>무료배송</p>
+                        <p>모레(금) 7/8 도착 예정</p>
+                    </div>
+                    <div class="product-origin">
+                        <p>원산지: 상세설명 참조</p>
+                    </div>
+                    <div class="quantity-section">
+                        <label for="quantity">수량</label>
+                        <input type="number" id="quantity" name="quantity" min="1" value="1"/>
+                    </div>
+                    <div class="total-price">
+                        총 상품금액: <strong>27,000원</strong>
+                    </div>
+                    <div class="purchase-actions">
+                        <a href="/product/cart.html" class="cart-button">장바구니</a>
+                        <a href="#" class="buy-button">구매하기</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 상품정보 -->
+            <section class="product-details">
+
+                <h3>상품정보</h3>
+                <div class="product-detail-image">
+                    <img src="../images/product/image.png" alt="Product Details Image" />
+                </div>
+
+                <!-- 상품정보제공공시 -->
+                <div id="product-info-public-announcement" class="hidden">
+                    <h3>상품정보제공공시</h3>
+                    <table class="info-table">
+                        <tr>
+                            <th>상품명</th>
+                            <td>내셔널지오그래픽키즈 벨루가 헤비다운</td>
+                        </tr>
+                        <tr>
+                            <th>상품번호</th>
+                            <td>10010118412</td>
+                        </tr>
+                        <tr>
+                            <th>제조사/수입자</th>
+                            <td>내셔널지오그래픽</td>
+                        </tr>
+                        <tr>
+                            <th>원산지</th>
+                            <td>국내</td>
+                        </tr>
+                        <tr>
+                            <th>제조연월</th>
+                            <td>2024년 10월</td>
+                        </tr>
+                        <tr>
+                            <th>품질보증기준</th>
+                            <td>관련 법 및 소비자 분쟁해결 기준에 따름</td>
+                        </tr>
+                        <tr>
+                            <th>A/S 책임자와 전화번호</th>
+                            <td>내셔널지오그래픽 고객센터 (1234-5678)</td>
+                        </tr>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 상품리뷰 -->
+            <section id="additional-product-info">
+                <h3>상품리뷰</h3>
+                <div class="review-list">
+                    <div class="review-item">
+                        <div class="review-header">
+                            <span class="review-author">작성자: kko*****</span>
+                        </div>
+                        <div class="review-rating">★★★★★</div>
+                        <div class="review-content">
+                            <p>적극추천 합니다. 배송이 빠릅니다.</p>
+                            <span class="review-date">2024.10.09</span>
+                        </div>
+                    </div>
+                    <div class="review-item">
+                        <div class="review-header">
+                            <span class="review-author">작성자: kko*****</span>
+                        </div>
+                        <div class="review-rating">★★★★★</div>
+                        <div class="review-content">
+                            <p>적극추천 합니다. 배송이 빠릅니다.</p>
+                            <span class="review-date">2024.10.09</span>
+                        </div>
+                    </div>
+                    <div class="review-item">
+                        <div class="review-header">
+                            <span class="review-author">작성자: kko*****</span>
+                        </div>
+                        <div class="review-rating">★★★★★</div>
+                        <div class="review-content">
+                            <p>적극추천 합니다. 배송이 빠릅니다.</p>
+                            <span class="review-date">2024.10.09</span>
+                        </div>
+                    </div>
+                    <div class="review-item">
+                        <div class="review-header">
+                            <span class="review-author">작성자: kko*****</span>
+                        </div>
+                        <div class="review-rating">★★★★★</div>
+                        <div class="review-content">
+                            <p>적극추천 합니다. 배송이 빠릅니다.</p>
+                            <span class="review-date">2024.10.09</span>
+                        </div>
+                    </div>     <div class="review-item">
+                    <div class="review-header">
+                        <span class="review-author">작성자: kko*****</span>
+                    </div>
+                    <div class="review-rating">★★★★★</div>
+                    <div class="review-content">
+                        <p>적극추천 합니다. 배송이 빠릅니다.</p>
+                        <span class="review-date">2024.10.09</span>
+                    </div>
+                </div>
+                    <!-- 반복되는 리뷰 아이템들 -->
+                    <div class="pagination">
+                        <ul>
+                            <li><a href="#">&lt;</a></li>
+                            <li><a href="#">1</a></li>
+                            <li><a href="#">2</a></li>
+                            <li><a href="#">3</a></li>
+                            <li><a href="#">4</a></li>
+                            <li><a href="#">5</a></li>
+                            <li><a href="#">&gt;</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+
+        </section>
+
+    </main>
+    <footer>
+        <ul>
+            <li><a href="/company/index">회사소개</a></li>
+            <li><a href="#">서비스이용약관</a></li>
+            <li><a href="#">개인정보처리방침</a></li>
+            <li><a href="#">전자금융거래약관</a></li>
+        </ul>
+        <div>
+            <p><img src="../images/main/footer_logo.png" alt="로고"/></p>
+            <p>
+                <strong>(주)롯데ON</strong><br/>- bxSlider
+                대표이사 : 김사무엘상현, 정준호, 강성현<br/>
+                사업자등록번호 : 529-85-00774(롯데쇼핑(주) e커머스사업부)<br/>
+                통신판매업 신고 : 서울송파 제0158호<br>
+                호스팅 서비스사업자 : 롯데쇼핑(주) e커머스사업부
+            </p>
+            <p>
+                <strong>고객센터</strong><br/>
+                Tel : 1899-7000(유료) (평일 09:00~18:00)<br/>
+                Fax : 051-123-4567 | E-mail : lotteon@lotte.net<br/>
+                App Version:[[${appInfo}]]
+            </p>
+        </div>
+    </footer>
+    <button type="button" id="top">상단이동</button>
+</div>
+</body>
+</html>

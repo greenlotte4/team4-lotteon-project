@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<html lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상품현황</title>
+
+    <!--공통 css 부분-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}"/>
+    <!--각 페이지(section) 개별 css-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_order_delivery.css}"/>
+
+</head>
+<body>
+    <header>
+        <div class="header-top">
+            <a href="#" class="logo">
+                <img th:src="@{/images/logo.png}" alt="Logo"/>
+            </a>
+            <nav>
+                <a th:href="@{/member/login}">로그아웃</a>
+                <a th:href="@{/cs/index}">고객센터</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div id="wrapper">
+            <aside>
+                <ul class="sidebar-menu">
+                    <li><a href="#">환경설정</a></li>
+                    <li><a href="#">상품관리</a></li>
+                    <li><a href="#">회원관리</a></li>
+                    <li><a href="#">주문관리</a></li>
+                    <li><a href="#">고객센터</a></li>
+                </ul>
+            </aside>
+ 
+            <!--section-->
+            <section>
+                <div class="breadcrumb">
+                    <a href="#">Home</a> > <a href="#">주문관리</a> > <a href="#" class="location">배송현황</a>
+                </div>
+                <h3>배송현황</h3>
+                <div class="form">
+                    <div class="search-bar">
+                        <select id="search-category" class="dropdown">
+                            <option>송장번호</option>
+                            <option>택배사</option>
+                            <option>수령인</option>
+                        </select>
+                        <input type="text" placeholder="검색어 입력" class="search-input">
+                        <button class="search-btn">검색</button>
+                    </div>
+                    <table class="inquiry-table">
+                        <colgroup>
+                            <col style="width: 10%">
+                            <col style="width: 11%">
+                            <col style="width: 10%">
+                            <col style="width: 10%">
+                            <col style="width: 10%">
+                            <col style="width: 5%">
+                            <col style="width: 10%">
+                            <col style="width: 10%">
+                            <col style="width: 12%">
+                            <col style="width: 10%">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>송장번호</th>
+                                <th>택배사</th>
+                                <th>주문번호</th>
+                                <th>수령인</th>
+                                <th>상품명</th>
+                                <th>건수</th>
+                                <th>물품합계</th>
+                                <th>배송비</th>
+                                <th>배송상태</th>
+                                <th>접수일</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><a href="#">10122102315</a></td>
+                                <td>로젠택배</td>
+                                <td>10121211341</td>
+                                <td>김유신</td>
+                                <td>청바지</td>
+                                <td>3</td>
+                                <td>68,400</td>
+                                <td>무료</td>
+                                <td>배송준비</td>
+                                <td>2024-10-17 10:00:06</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="pagination">
+                        <button class="page-btn">이전</button>
+                        <button class="page-num">1</button>
+                        <button class="page-num">2</button>
+                        <button class="page-num">3</button>
+                        <button class="page-num">4</button>
+                        <button class="page-num">5</button>
+                        <button class="page-btn">다음</button>
+                    </div>
+                </div>
+            </section> 
+            <!-- /Section -->
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 롯데ON. All rights reserved.</p>
+    </footer>
+</body>
+</html>
+

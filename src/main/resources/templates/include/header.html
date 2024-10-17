@@ -1,0 +1,145 @@
+<link rel="stylesheet" th:href="@{/css/include/header.css}"/>
+<header>
+    <div class ="headerWrapper">
+
+        <!-- 로그인, 회원가입, 주문배송, 고객센터 -->
+        <div class="util innerContent">
+            <div class="accountArea">
+                <ul>
+                    <li><a th:href="@{/member/login}">로그인</a></li>
+                    <li><a th:href="@{/member/register}">회원가입</a></li>
+                    <li><a th:href="@{/my/order}">주문배송</a></li>
+                    <li><a th:href="@{/cs/qna/list}">고객센터</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 메인 헤더 -->
+        <div class="main">
+            <div class="main innerContent">
+                <h1 class="logoArea">
+                    <a th:href="@{/index}">
+                        <img src="https://static.lotteon.com/p/common/foCommon/assets/img/logo_lotte-on@2x.png" alt="LOTTE ON">
+                    </a>
+                </h1>
+                <div class="searchAreaWrap">
+                    <div class="searchArea">
+                        <input type="search" id="headerSearchId" placeholder="조셉앤스테이시 베스트가방~50%" aria-label="조셉앤스테이시 베스트가방~50%">
+                        <button type="button" class="btnSearchInner"><span class="blind">검색</span></button>
+                    </div>
+                </div>
+                <div class="buttonArea">
+                    <ul>
+                        <li class="buttonBox">
+                            <button type="button" class="chat">
+                                <img src="https://static.lotteon.com/p/common/foCommon/assets/img/icon_chat_black.svg" alt="챗봇">
+                                <span>챗봇</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button type="button" class="heart">
+                                <img src="https://static.lotteon.com/p/common/foCommon/assets/img/icon_heart_black.svg" alt="나의찜">
+                                <span>나의찜</span>
+                            </button>
+                        </li>
+                        <li>
+                            <a th:href="@{/my/home}">
+                            <button type="button" class="mylotte">
+                                <img src="https://static.lotteon.com/p/common/foCommon/assets/img/icon_my_black.svg" alt="마이롯데">
+                                <span>마이롯데</span>
+                            </button>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a th:href="@{/product/cart}">
+                            <button type="button" class="cart">
+                                <img src="https://static.lotteon.com/p/common/foCommon/assets/img/icon_cart_black.svg" alt="장바구니">
+                                <span>장바구니</span>
+                            </button>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div><!-- main -->
+        </div><!--headerWrapper-->
+
+        <!-- 하위 카테고리 영역 (내비게이터) -->
+        <div class="subWrapper">
+            <div class="sub">
+                <div class="category">
+                    <div class="moreViewWrap">
+                        <button type="button" class="moreView">=</button>
+
+                    </div>
+
+                    <div class="menu">
+                        <ul>
+                            <li class="active"><a href="#">온쇼페</a></li>
+                            <li><a href="#">패션</a></li>
+                            <li><a href="#">뷰티</a></li>
+                            <li><a href="#">라이프</a></li>
+                            <li><a href="#">베스트</a></li>
+                            <li><a href="#">특가</a></li>
+                            <li><a href="#">백화점</a></li>
+                            <li><a href="#">이벤트</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="trending">
+                    <div class="preview">
+                        <span>1</span>
+                        <span>뉴발란스 운동화</span>
+                        <button type="button"><span class="blind">^</span></button>
+                    </div>
+                </div>
+
+            </div><!-- sub -->
+        </div><!-- subWrapper -->
+
+        <!-- 카테고리 -->
+        <div class="here">
+            <div class="categoryMenu">
+                <ul>
+                    <li><a href="#">뷰티</a>
+                        <!-- 2차 메뉴 -->
+                        <ul class="subMenu">
+                            <li><a href="#">럭셔리 스킨케어</a>
+                                <!-- 3차 메뉴 -->
+                                <ul class="subSubMenu">
+                                    <li><a href="#">스킨케어</a></li>
+                                    <li><a href="#">메이크업</a></li>
+                                    <li><a href="#">향수</a></li>
+                                    <li><a href="#">헤어/바디</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#">메이크업</a></li>
+                            <li><a href="#">향수</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">패션</a>
+                        <ul class="subMenu">
+                            <li><a href="#">여성의류</a></li>
+                            <li><a href="#">남성의류</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">식품</a>
+                        <ul class="subMenu">
+                            <li><a href="#">간편음식</a></li>
+                            <li><a href="#">신선류</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a href="#">생활/건강</a></li>
+                </ul>
+            </div>
+        </div>
+</header>
+<script>
+    const moreViewButton = document.querySelector('.moreView');
+    const categoryMenu = document.querySelector('.categoryMenu');
+
+    moreViewButton.addEventListener('click', function() {
+        categoryMenu.classList.toggle('open');
+    });
+</script>

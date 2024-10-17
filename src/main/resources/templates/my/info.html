@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<!-- xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.thymeleaf.org/"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" -->
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>롯데ON::롯데 온라인 쇼핑몰</title>
+  <link rel="stylesheet" href="../css/my/myInfo.css" />
+  <link rel="stylesheet" href="../css/my/myInfo_info.css" />
+</head>
+
+<body>
+  <div id="wrapper">
+    <main>
+      <header th:replace="~{include/my_header.html}"></header>
+      <!--어사이드-->
+      <div th:replace="~{my/my_aside.html}"></div>
+      <section class="myInfo_sec">
+        <div th:replace="~{my/banner.html}"></div>
+        <article class="myInfo_Info myInfo_Article">
+          <div class="myInfo_ArticleTitle"><span>나의 설정</span></div>
+          <form action="#" class="myInfoForm" method="post">
+            <table border="1">
+              <tr>
+                <td>사용자 ID</td>
+                <td>
+                  <span>abc***</span>
+                </td>
+              </tr>
+              <tr>
+                <td>비밀번호</td>
+                <td><button type="button">비밀번호 수정</button></td>
+              </tr>
+              <tr>
+                <td>이름</td>
+                <td>
+                  <span>홍 *동</span>
+                </td>
+              </tr>
+              <tr>
+                <td>생년월일</td>
+                <td>
+                  <span>1983년 05월 03일</span>
+                </td>
+              </tr>
+              <tr>
+                <td>이메일</td>
+                <td>
+                  <input type="text" class="myInfo_email" placeholder="abc123" />
+                  @
+                  <input type="text" class="myInfo_email" placeholder="naver.com" />
+                  <select name="email_com">
+                    <option>naver.com</option>
+                    <option>gmail.com</option>
+                    <option>hotmail.com</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td>휴대폰</td>
+                <td>
+                  <input type="text" class="inputHp" placeholder="010"/>-
+                  <input type="text" class="inputHp" placeholder="1234" />-
+                  <input type="text" class="inputHp" placeholder="1234" />
+                  <button type="button" class="HpButton">수정하기</button>
+                </td>
+              </tr>
+              <tr>
+                <td>주소</td>
+                <td>
+                  <input type="text" placeholder="우편번호" />
+                  <button type="button" id="btnZip">우편번호찾기</button>
+                  <input type="text" class="myInfo_address" placeholder="주소 검색" />
+                  <input type="text" class="myInfo_address" placeholder="상세주소 입력" />
+                </td>
+              </tr>
+              <tr>
+                <td>탈퇴</td>
+                <td>
+                  <button type="button" class="secessionBtn">탈퇴하기</button>
+                </td>
+              </tr>
+            </table>
+            <div class="Myinfo_modify">
+              <button type="button">수정하기</button>
+            </div>
+          </form>
+        </article>
+      </section>
+    </main>
+  </div>
+  <footer th:replace="~{include/footer.html}"></footer>
+</body>
+
+</html>

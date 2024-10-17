@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org/"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login</title>
+    <link rel="stylesheet" th:href="@{css/user/common.css}"/>
+    <link rel="stylesheet" th:href="@{/css/member/login.css}"/>
+
+</head>
+<style>
+
+
+
+
+</style>
+<body>
+<main>
+    <div class="login-container">
+        <h2 class="titlogin">
+            <span class="tit">로그인</span>
+        </h2>
+        <div class="login-section" style="padding-top: 20px;">
+            <div class="login-image-container"> <!-- 새 컨테이너 추가 -->
+                <!-- 로그인 폼 -->
+                <div class="login-form">
+                    <div>
+                        <div class="input-group">
+                            <label for="userid">아이디</label>
+                            <input type="text" id="userid" placeholder="아이디를 입력해주세요">
+                        </div>
+                        <div class="input-group">
+                            <label for="userpwd">비밀번호</label>
+                            <input type="password" id="userpwd" placeholder="비밀번호를 입력해주세요">
+                        </div>
+                    </div>
+                    <div class="login-btn-container">
+                        <a href="#"><img th:src="@{/images/member/member_btn_login.gif}"></a>
+                    </div>
+                    <div class="options">
+                        <input type="checkbox" id="auto-login">
+                        <label for="auto-login">자동 로그인</label>
+                        <span>|</span>
+                        <a href="#">아이디 찾기</a>
+                        <span>|</span>
+                        <a href="#">비밀번호 찾기</a>
+                        <span>|</span>
+                        <a href="#">회원가입</a>
+                    </div>
+                </div>
+
+                <!-- 이미지 섹션 -->
+                <div class="image-section">
+                    <img th:src="@{/images/member/member_login_banner.jpg}" alt="광고 또는 이미지">
+                </div>
+            </div>
+        </div>
+        <div class="certifi_logo">
+            <img th:src="@{/images/member/member_certifi_logo.gif}" alt="인증로고">
+        </div>
+    </div>
+</main>
+<footer>
+    <ul>
+        <li><a href="/company/index">회사소개</a></li>
+        <li><a href="#">서비스이용약관</a></li>
+        <li><a href="#">개인정보처리방침</a></li>
+        <li><a href="#">전자금융거래약관</a></li>
+    </ul>
+    <div>
+        <p><img src="images/main/footer_logo.png" alt="로고"/></p>
+        <p>
+            <strong>(주)롯데ON</strong><br/>- bxSlider
+            대표이사 : 김사무엘상현, 정준호, 강성현<br/>
+            사업자등록번호 : 529-85-00774(롯데쇼핑(주) e커머스사업부)<br/>
+            통신판매업 신고 : 서울송파 제0158호<br>
+            호스팅 서비스사업자 : 롯데쇼핑(주) e커머스사업부
+        </p>
+        <p>
+            <strong>고객센터</strong><br/>
+            Tel : 1899-7000(유료) (평일 09:00~18:00)<br/>
+            Fax : 051-123-4567 | E-mail : lotteon@lotte.net<br/>
+            App Version:[[${appInfo}]]
+        </p>
+    </div>
+</footer>
+<button type="button" id="top">상단이동</button>
+</body>
+</html>

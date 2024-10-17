@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>공지사항 보기</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/cs/qna_write.css}" />
+  </head>
+  <body>
+    <section id="section_wrapper">
+      <div id="category">
+        <a href="#">회원</a>
+        <a>회원 관련 문의내용입니다.</h>
+      </div>
+      <table>
+        <tr>
+          <td>문의유형</td>
+          <td>
+            <select name="firstType" id="firstType">
+              <option disabled hidden selected>1차 유형</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+            </select>
+            <select name="firstType" id="firstType">
+              <option disabled hidden selected>2차 유형</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>제목</td>
+          <td><textarea name="title" id="writeTitle" placeholder="제목을 입력합니다."></textarea></td>
+        </tr>
+        <tr>
+          <td>내용</td>
+          <td><textarea name="content" id="writeContent" placeholder="내용을 입력합니다."></textarea></td>
+        </tr>
+      </table>
+      <div>
+        <a href="#"><button id="btnCancel">취소하기</button></a>
+        <button id="btnSubmit">등록하기</button>
+      </div>
+    </section>
+  </body>
+</html>

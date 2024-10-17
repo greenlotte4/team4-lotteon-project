@@ -1,0 +1,17 @@
+.myInfo_Qna{
+  height :auto;
+}
+
+
+
+.myInfo_Qna td{
+  padding: 18px;
+}
+
+.myInfo_Qna .qna_answer{
+  color: #808080;
+}
+
+.myInfo_Qna .answerd {
+  color: #00B050;
+}

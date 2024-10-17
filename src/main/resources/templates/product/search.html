@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<!-- xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.thymeleaf.org/"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" -->
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>롯데ON::롯데 온라인 쇼핑몰</title>
+  <!-- 파비콘 -->
+  <link rel="shortcut icon" type="image/x-icon" href="../images/favicon.ico"/>
+  <link rel="stylesheet" th:href="@{/css/main/common.css}"/>
+  <link rel="stylesheet" th:href="@{/css/include/header.css}"/>
+  <link rel="stylesheet" th:href="@{/css/product/style_product_search.css}"/>
+
+</head>
+<body>
+<div id="bannerTop" class="on" style="background: #e4dfdf">
+  <article>
+    <a href="#"><img src="../../../images/main/topBanner1.png" /></a>
+    <button class="btnClose">close</button>
+  </article>
+</div>
+<div id="wrapper">
+  <header th:replace="~{include/header.html}"></header>
+  <main class="mainIn cf">
+    <aside>
+
+      <!-- 베스트상품 배너 -->
+      <article class="best">
+        <h1><i class="fas fa-crown"></i>베스트상품</h1>
+        <ol>
+          <block each="product5, loop :${productSold}">
+            <li>
+              <a
+                      href="/product/view(prodCate1=${product5.getProdCate1()},prodCate2=${product5.getProdCate2()},prodNo=${product5.getProdNo()},price=${product5.getPrice()})}"
+              >
+                <div class="thumb">
+                  <i text="${loop.index+1}"></i>
+                  <img
+                          src="/thumbs/+${product5.prodCate1}+'/'+${product5.prodCate2}+'/'+${product5.thumb2}"
+                          alt="item1"
+                  />
+                </div>
+                <h2 text="${product5.prodName}"></h2>
+                <div class="org_price">
+                  <del text="${product5.price}"></del>
+                  <span text="${product5.discount+'%'}"></span>
+                </div>
+                <div class="dis_price">
+                  <ins
+                          text="${product5.getDiscount(product5.price,product5.discount)}"
+                  ></ins>
+                  <block if="${product5.delivery == 0}">
+                    <span class="free">무료배송</span>
+                  </block>
+                  <block if="${product5.delivery != 0}">
+                        <span
+                                text=" '배송비:'+${product5.delivery}+'원'"
+                        ></span>
+                  </block>
+                </div>
+              </a>
+            </li>
+          </block>
+        </ol>
+      </article>
+    </aside>
+    <!-- 카테고리/베스트 상품 영역 -->
+    <section class="product-list-section">
+      <!-- Breadcrumb -->
+      <div class="breadcrumb">
+        <a href="#">Home</a> &gt; <a href="#">상품검색</a> &gt;
+        <a href="#" id="currentPage">검색결과</a>
+      </div>
+
+      <!-- 상품 목록 제목 -->
+      <h2 class="section-title">상품검색결과</h2>
+
+      <table>
+        <tr>
+          <td>
+            <span id="item">셔츠</span> 검색결과
+            <span id="totalSearchedNum"
+            >(총 : <span id="searchedNum">20</span>건)</span
+            >
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div>
+              <input type="text" name="keyword" id="keyword" />
+              <button id="btnSearch">검색</button>
+            </div>
+            <input
+                    type="checkbox"
+                    name="prodName"
+                    class="checkbox prodName"
+            />상품명
+            <input
+                    type="checkbox"
+                    name="prodName"
+                    class="checkbox description"
+            />설명
+            <input
+                    type="checkbox"
+                    name="prodName"
+                    class="checkbox price"
+            />가격 <input type="text" name="minPrice" id="minPrice" /> ~
+            <input type="text" name="maxPrice" id="maxPrice" />
+          </td>
+        </tr>
+      </table>
+
+      <!-- 상품 정렬 옵션 -->
+      <div class="sort-options">
+        <div class="sort-left">
+          <a href="#" class="sort-link">인기순</a>
+          <a href="#" class="sort-link">신상품순</a>
+          <a href="#" class="sort-link">판매순</a>
+          <a href="#" class="sort-link">낮은가격순</a>
+          <a href="#" class="sort-link">할인율순</a>
+        </div>
+
+        <div class="sort-view-options">
+          <span class="view-count">VIEW</span>
+          <a href="/product/list.html" class="sort-linkRight">목록보기</a>
+          <a href="/product/list_grid.html" class="sort-linkRight"
+          >바둑보기</a
+          >
+        </div>
+      </div>
+
+      <!-- 상품목록 -->
+      <div class="product-list">
+        <!-- 상품 1 -->
+        <div class="product-item">
+          <div class="product-image">
+            <img src="../images/product/image.png" alt="Product Image" />
+          </div>
+
+          <a href="/product/view.html" class="product-details">
+            <h3 class="product-name">상품명</h3>
+            <p class="product-description">간단한 상품 설명</p>
+            <div class="price-info">
+              <span class="original-price">30,000원</span>
+              <span class="discount-rate">10% ↓</span>
+              <span class="product-price">27,000원</span>
+            </div>
+            <div class="shipping-info">
+              <span class="shipping-cost">무료배송</span>
+            </div>
+          </a>
+
+          <div class="seller-info">
+            <p>판매자</p>
+            <span class="seller-badge">고객만족우수</span>
+            <div class="rating">상품평 ⭐⭐⭐⭐</div>
+          </div>
+        </div>
+
+        <!-- 상품 3 -->
+        <div class="product-item">
+          <div class="product-image">
+            <img src="../images/product/image2.png" alt="Product Image" />
+          </div>
+          <div class="product-details">
+            <h3 class="product-name">상품명</h3>
+            <p class="product-description">간단한 상품 설명</p>
+            <div class="price-info">
+              <span class="original-price">30,000원</span>
+              <span class="discount-rate">10% ↓</span>
+              <span class="product-price">27,000원</span>
+            </div>
+            <div class="shipping-info">
+              <span class="shipping-cost">배송비 2,500원</span>
+            </div>
+          </div>
+          <div class="seller-info">
+            <p>판매자</p>
+            <span class="seller-badge">고객만족우수</span>
+            <div class="rating">상품평 ⭐⭐⭐⭐</div>
+          </div>
+        </div>
+        <!-- 상품 4 -->
+        <div class="product-item">
+          <div class="product-image">
+            <img src="../images/product/image.png" alt="Product Image" />
+          </div>
+          <div class="product-details">
+            <h3 class="product-name">상품명</h3>
+            <p class="product-description">간단한 상품 설명</p>
+            <div class="price-info">
+              <span class="original-price">30,000원</span>
+              <span class="discount-rate">10% ↓</span>
+              <span class="product-price">27,000원</span>
+            </div>
+            <div class="shipping-info">
+              <span class="shipping-cost">배송비 2,500원</span>
+            </div>
+          </div>
+          <div class="seller-info">
+            <p>판매자</p>
+            <span class="seller-badge">고객만족우수</span>
+            <div class="rating">상품평 ⭐⭐⭐⭐⭐</div>
+          </div>
+        </div>
+        <!-- 상품 4 -->
+        <div class="product-item">
+          <div class="product-image">
+            <img src="../images/product/image2.png" alt="Product Image" />
+          </div>
+          <div class="product-details">
+            <h3 class="product-name">상품명</h3>
+            <p class="product-description">간단한 상품 설명</p>
+            <div class="price-info">
+              <span class="original-price">30,000원</span>
+              <span class="discount-rate">10% ↓</span>
+              <span class="product-price">27,000원</span>
+            </div>
+            <div class="shipping-info">
+              <span class="shipping-cost">배송비 2,500원</span>
+            </div>
+          </div>
+          <div class="seller-info">
+            <p>판매자</p>
+            <span class="seller-badge">고객만족우수</span>
+            <div class="rating">상품평 ⭐⭐⭐⭐⭐</div>
+          </div>
+        </div>
+        <!-- 페이지네이션 -->
+      </div>
+      <div class="pagination">
+        <ul>
+          <li><a href="#">&lt;</a></li>
+          <li><a href="#">1</a></li>
+          <li><a href="#">2</a></li>
+          <li><a href="#">3</a></li>
+          <li><a href="#">4</a></li>
+          <li><a href="#">5</a></li>
+          <li><a href="#">&gt;</a></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <ul>
+      <li><a href="/company/index">회사소개</a></li>
+      <li><a href="#">서비스이용약관</a></li>
+      <li><a href="#">개인정보처리방침</a></li>
+      <li><a href="#">전자금융거래약관</a></li>
+    </ul>
+    <div>
+      <p><img src="../images/main/footer_logo.png" alt="로고" /></p>
+      <p>
+        <strong>(주)롯데ON</strong><br />- bxSlider 대표이사 : 김사무엘상현,
+        정준호, 강성현<br />
+        사업자등록번호 : 529-85-00774(롯데쇼핑(주) e커머스사업부)<br />
+        통신판매업 신고 : 서울송파 제0158호<br />
+        호스팅 서비스사업자 : 롯데쇼핑(주) e커머스사업부
+      </p>
+      <p>
+        <strong>고객센터</strong><br />
+        Tel : 1899-7000(유료) (평일 09:00~18:00)<br />
+        Fax : 051-123-4567 | E-mail : lotteon@lotte.net<br />
+        App Version:[[${appInfo}]]
+      </p>
+    </div>
+  </footer>
+  <button type="button" id="top">상단이동</button>
+</div>
+</body>
+</html>

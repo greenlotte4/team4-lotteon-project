@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>고객센터 메인</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/cs/index.css}" />
+  </head>
+  <body>
+    <section id="section_wrapper">
+      <!-- Main Title Section -->
+      <section class="main-title-section">
+        <p>롯데 ON</p>
+        <span>이 도와드릴게요!</span>
+      </section>
+
+      <!-- 공지사항 Section -->
+      <section id="notification-section">
+        <table>
+          <thead>
+            <tr>
+              <th>
+                <span>공지사항</span>
+                <div>
+                  <!-- 공지사항 링크 / 화살표 이미지 링크 필요 -->
+                  <a th:href="@{/cs/notice/list}">전체보기</a>
+                  <a th:href="@{/cs/notice/list}" class="viewAll"></a>
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- <tr th:each=""> 5개씩 출력 -->
+            <tr>
+              <td>
+                <a href="#">[안내] 해외결제사 창 문자주의</a>
+                <span class="rdate">22.10.31</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="#">[안내] 해외결제사 창 문자주의</a>
+                <span class="rdate">22.10.31</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 자주하는 질문 Section -->
+      <section id="faq-section">
+        <table>
+          <thead>
+            <th>
+              <span>자주하는질문</span>
+              <span>
+                <!-- 자주하는질문 링크 / 화살표 이미지 링크 필요 -->
+                <a th:href="@{/cs/faq/list}">전체보기</a>
+                <a th:href="@{/cs/faq/list}" class="viewAll"></a>
+              </span>
+            </th>
+          </thead>
+          <tbody>
+            <tr>
+              <td id="faq-td">
+                <div>
+                  <a href="#" class="image member"></a>
+                  <a href="#">회원</a>
+                </div>
+                <div>
+                  <a href="#" class="image coupon"></a>
+                  <a href="#">쿠폰 / 이벤트</a>
+                </div>
+                <div>
+                  <a href="#" class="image order"></a>
+                  <a href="#">주문 / 결제</a>
+                </div>
+                <div>
+                  <a href="#" class="image delivery"></a>
+                  <a href="#">배송</a>
+                </div>
+                <div>
+                  <a href="#" class="image refund"></a>
+                  <a href="#">취소 / 반품 / 환불</a>
+                </div>
+                <div>
+                  <a href="#" class="image safe"></a>
+                  <a href="#">안전결제</a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 문의하기 Section -->
+      <section id="inquiry-section">
+        <table>
+          <thead>
+            <th>
+              <span>문의하기</span>
+              <span>
+                <!-- 문의하기 링크 / 화살표 이미지 링크 필요 -->
+                <a th:href="@{/cs/qna/list}">전체보기</a>
+                <a th:href="@{/cs/qna/list}" class="viewAll"></a>
+              </span>
+            </th>
+          </thead>
+          <tbody>
+            <tr>
+              <!-- 5개씩 출력 -->
+              <td class="inquiry-td">
+                <a href="#">[안내] 해외결제사 창 문자주의</a>
+                <div>
+                  <span>chh**</span>
+                  <!-- 유저 아이디 마스킹 처리 -->
+                  <span class="r-date">22.10.31</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="inquiry-td">
+                <a href="#">[안내] 해외결제사 창 문자주의</a>
+                <div>
+                  <span>chh**</span>
+                  <span class="r-date">22.10.31</span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <a href="#" id="inquiry-write">문의글 작성 ></a>
+      </section>
+
+      <!-- 1:1 상담안내 Section -->
+      <section id="consultation-section">
+        <table>
+          <thead>
+            <th>
+              <span>1:1 상담안내</span>
+            </th>
+          </thead>
+          <tbody>
+            <tr>
+              <td id="consultation-td">
+                <div class="consultation-div">
+                  <span class="big"> 이용안내 </span>
+                  <div>
+                    <div>일반회원 / 비회원</div>
+                    <div>
+                      <span class="big">1566-0001</span>
+                      <span>(평일 09:00 ~ 18:00)</span>
+                    </div>
+                  </div>
+                  <div>
+                    <div>스마일클럽 전용</div>
+                    <div>
+                      <span class="big">1566-0002</span>
+                      <span>(365일 09:00 ~ 18:00)</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="consultation-div">
+                  <span class="big"> 판매상담이용안내 </span>
+                  <div>
+                    <div>판매고객</div>
+                    <div>
+                      <span class="big">1566-5700</span>
+                      <span>(평일 09:00 ~ 18:00)</span>
+                    </div>
+                  </div>
+                  <!-- 판매자가입및서류접수안내 페이지 링크 필요 -->
+                  <a href="#" class="big">판매자가입및서류접수안내></a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </section>
+  </body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<!-- xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.thymeleaf.org/"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" -->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login</title>
+    <link rel="stylesheet" th:href="@{css/user/common.css}" />
+    <link rel="stylesheet" th:href="@{../css/member/register.css}" />
+</head>
+
+<body>
+    <main>
+        <<div class="main-wrapper">
+
+            <div class="main-box">
+                <section class="register">
+                    <form action="#" method="POST">
+                        <table border="1">
+                            <caption>일반 회원가입</caption>
+                            <tr>
+                                <td>아이디</td>
+                                <td>
+                                    <input type="text" name="uid" placeholder="아이디 입력"/> <span> 영문, 숫자 4~12자 설정</span>
+                                    <span class="resultId"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>비밀번호</td>
+                                <td>
+                                    <input type="password" name="pass1" placeholder="비밀번호 입력"/>  <span> 영문, 숫자, 특수문자 8~12자 설정</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>비밀번호 확인</td>
+                                <td>
+                                    <input type="password" name="pass2" placeholder="비밀번호 확인 입력"/>
+                                    <span class="resultPass"></span>
+                                </td>
+                            </tr>
+                        </table>
+                        <table border="1">
+                            <tr>
+                                <td>이름</td>
+                                <td>
+                                    <input type="text" name="name" placeholder="이름 입력"/>
+                                    <span class="resultName"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>성별</td>
+                                <td>
+                                    <div class="gender-selection">
+                                        <input type="radio" name="gender" value="man">남
+                                        <input type="radio" name="gender" value="woman">여
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>E-Mail</td>
+                                <td>
+                                    <input type="email" name="email" placeholder="이메일 입력"/>
+            </div>
+            </td>
+            </tr>
+            <tr>
+                <td>휴대폰</td>
+                <td>
+                    <input type="text" name="hp" placeholder="- 포함 13자리 입력" minlength="13" maxlength="13" />
+                    <span class="resultHp"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>주소</td>
+                <td>
+                    <div>
+                        <input type="text" name="zip" id="zip" placeholder="우편번호검색클릭" readonly/>
+                    </div>
+                    <div>
+                        <input type="text" name="addr1" id="addr1" placeholder="주소를 검색하세요." readonly/>
+                    </div>
+                    <div>
+                        <input type="text" name="addr2" id="addr2" placeholder="상세주소를 입력하세요."/>
+                    </div>
+                </td>
+            </tr>
+            </table>
+            <div>
+                <input type="button" class="normalbtn"></button>
+            </div>
+            </form>
+            </section>
+        </div>
+    </main>
+
+</body>
+
+</html>

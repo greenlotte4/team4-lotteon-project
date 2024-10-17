@@ -1,0 +1,100 @@
+a {
+  text-decoration: none; /* 링크의 밑줄 제거 */
+  color: inherit; /* 링크의 색상 제거 */
+}
+body {
+  font-family: "Malgun Gothic", sans-serif;
+  font-size: 12px;
+  width: 1200px;
+  margin: 0 auto;
+}
+#section_wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 800px;
+}
+#category {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  width: 720px;
+}
+
+#category > a:first-child {
+  font-size: 20px;
+  font-weight: 900;
+  margin-bottom: 10px;
+}
+
+#category > a:nth-child(2) {
+  font-size: 12px;
+  margin-bottom: 15px;
+  color: gray;
+}
+
+table {
+  width: 720px;
+  border: 1px solid rgba(160, 159, 159, 0.961);
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.faq-Table {
+  padding: 0px 10px 10px 10px;
+}
+
+tr {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid gainsboro;
+}
+
+.last-Tr {
+  border: none;
+}
+
+td {
+  width: 100%;
+}
+
+td > a {
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.thead {
+  font-size: 20px;
+  font-weight: 900;
+}
+
+#showMore {
+  width: 100%;
+  border: none;
+  background-color: white;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+#showLess {
+  width: 100%;
+  border: none;
+  background-color: white;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+#showMoreOrLess {
+  width: 100%;
+  text-align: center;
+}
+
+img {
+  width: 15px;
+  height: 12px;
+  margin-right: 3px;
+}

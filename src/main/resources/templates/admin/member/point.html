@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+  rel="stylesheet"
+/>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>관리자 회원 포인트</title>
+
+    <!--공통 css 부분-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}" />
+    <!--각 페이지(section) 개별 css-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_member_point.css}" />
+  </head>
+  <body>
+    <header>
+      <div class="header-top">
+        <a href="#" class="logo">
+          <img th:src="@{/images/logo.png}" alt="Logo"/>
+        </a>
+        <nav>
+          <a href="#">로그아웃</a>
+          <a href="#">고객센터</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <div id="wrapper">
+        <aside>
+          <ul class="sidebar-menu">
+            <li><a href="#">환경설정</a></li>
+            <li><a href="#">상품관리</a></li>
+            <li><a href="#">회원관리</a></li>
+            <li><a href="#">주문관리</a></li>
+            <li><a href="#">고객센터</a></li>
+          </ul>
+        </aside>
+
+        <!--section-->
+        <section>
+          <div class="breadcrumb">
+            <a href="#">Home</a> > <a href="#">회원관리</a> >
+            <a href="#" class="location">포인트관리</a>
+          </div>
+          <h3>포인트관리</h3>
+          <div class="form">
+            <div class="search-bar">
+              <select id="search-category" class="dropdown">
+                <option>아이디</option>
+                <option>이름</option>
+                <option>이메일</option>
+                <option>휴대폰</option>
+              </select>
+              <input
+                type="text"
+                placeholder="키워드 입력"
+                class="search-input"
+              />
+              <button class="search-btn">검색</button>
+            </div>
+
+            <table class="inquiry-table">
+              <colgroup>
+                <col style="width: 4%" />
+                <col style="width: 8%" />
+                <col style="width: 9%" />
+                <col style="width: 8%" />
+                <col style="width: 8%" />
+                <col style="width: 9%" />
+                <col style="width: 9%" />
+                <col style="width: 9%" />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>
+                    <input type="checkbox" class="chkbox" style="width: 12px" />
+                  </th>
+                  <th>번호</th>
+                  <th>아이디</th>
+                  <th>이름</th>
+                  <th>지급 포인트</th>
+                  <th>누적 포인트</th>
+                  <th>지급 내용</th>
+                  <th>지급 날짜</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <input type="checkbox" class="chkbox" style="width: 12px" />
+                  </td>
+                  <td>5</td>
+                  <td>xxx...</td>
+                  <td>정우성</td>
+                  <td>1,000</td>
+                  <td>15,000</td>
+                  <td>구매확정 포인트 지급</td>
+                  <td>0000-00-00 00:00:00</td>
+                </tr>
+                <tr>
+                  <td>
+                    <input type="checkbox" class="chkbox" style="width: 12px" />
+                  </td>
+                  <td>4</td>
+                  <td>xxx...</td>
+                  <td>이나영</td>
+                  <td>1,000</td>
+                  <td>1,200</td>
+                  <td>이벤트 참여</td>
+                  <td>0000-00-00 00:00:00</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="buttons">
+              <a href="#" id="openRegisterModalBtn" class="write-btn"
+                >선택삭제</a
+              >
+            </div>
+
+            <div class="pagination">
+              <button class="page-btn">이전</button>
+              <button class="page-num">1</button>
+              <button class="page-num">2</button>
+              <button class="page-num">3</button>
+              <button class="page-num">4</button>
+              <button class="page-num">5</button>
+              <button class="page-btn">다음</button>
+            </div>
+          </div>
+        </section>
+        <!-- /Section -->
+      </div>
+    </main>
+    <footer>
+      <p>&copy; 2024 롯데ON. All rights reserved.</p>
+    </footer>
+  </body>
+</html>

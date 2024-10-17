@@ -1,0 +1,170 @@
+a {
+  text-decoration: none; /* 링크의 밑줄 제거 */
+  color: inherit; /* 링크의 색상 제거 */
+}
+body {
+  font-family: "Malgun Gothic", sans-serif;
+  font-size: 12px;
+  width: 1200px;
+  margin: 0 auto;
+}
+#section_wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.main-title-section {
+  text-align: center;
+}
+.main-title-section p {
+  font-size: 2rem;
+  font-weight: bolder;
+  color: #d82a2a;
+  display: inline;
+}
+.main-title-section span {
+  font-size: 2rem;
+  font-weight: bolder;
+}
+section {
+  background-color: #ffffff;
+  padding: 10px 0px 10px 0px;
+}
+table {
+  width: 800px;
+  border-collapse: collapse;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  background-color: #ffffff;
+}
+thead th {
+  background-color: #ffffff;
+  padding: 10px;
+  text-align: left;
+
+  border-top: 1px solid #ddd;
+}
+tbody td {
+  padding: 5px 10px 5px 15px;
+}
+.all {
+  text-align: right;
+}
+th {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+th > span:first-child {
+  font-size: 20px;
+  font-weight: 900;
+}
+#faq-td {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+#faq-td > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+.r-date {
+  color: gray;
+}
+.inquiry-td {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+#consultation-td {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+.consultation-div {
+  width: 260px;
+  height: 140px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-content: space-evenly;
+}
+.big {
+  font-size: 20px;
+  font-weight: 900;
+}
+#inquiry-write {
+  margin-left: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #0070c0;
+}
+
+.image {
+  display: inline;
+  width: 100px;
+  height: 100px;
+  background-image: url(/lotteon/images/cs/cs_sprites.png);
+  background-size: 820px 1095px;
+  margin-bottom: 5px;
+}
+
+.member {
+  background-position: 0px -101px;
+}
+.member:hover{
+  background-position: 0px -201px;
+
+}
+
+.coupon {
+  background-position: -201px -101px;
+}
+.coupon:hover {
+  background-position: -201px -201px;
+}
+
+.order {
+  background-position: -100px -101px;
+}
+.order:hover {
+  background-position: -100px -201px;
+}
+
+.delivery {
+  background-position: -301px -101px;
+}
+.delivery:hover {
+  background-position: -301px -201px;
+}
+
+.refund {
+  background-position: -401px -101px;
+}
+.refund:hover {
+  background-position: -401px -201px;
+}
+
+.safe {
+  background-position: -703px -101px;
+}
+.safe:hover {
+  background-position: -703px -201px;
+}
+
+.viewAll {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  background-image: url(/lotteon/images/cs/cs_sprites.png);
+  background-size: 520px 640px;
+  background-position: -158px -175px;
+}
+
+a:hover{
+  text-decoration: underline;
+}

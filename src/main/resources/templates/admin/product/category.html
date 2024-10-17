@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>카테고리 관리</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!--공통 css 부분-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}"/>
+    <!--각 페이지(section) 개별 css-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_product_category.css}"/>
+
+
+</head>
+<body>
+<header>
+    <div class="header-top">
+        <a href="#" class="logo">
+            <img th:src="@{/images/logo.png}" alt="Logo"/>
+        </a>
+        <nav>
+            <a href="#">로그아웃</a>
+            <a href="#">고객센터</a>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <div id="wrapper">
+        <aside>
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="#">환경설정</a>
+                    <ul class="submenu">
+                        <li><a href="#">기본설정</a></li>
+                        <li><a href="#">배너관리</a></li>
+                        <li><a href="#">약관관리</a></li>
+                        <li><a href="#">버전이력</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">상품관리</a>
+                    <ul class="submenu">
+                        <li><a href="#">상품목록</a></li>
+                        <li><a href="#">상품등록</a></li>
+                        <li><a href="#">카테고리</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">회원관리</a></li>
+                <li><a href="#">주문관리</a></li>
+                <li>
+                    <a href="#">고객센터</a>
+                    <ul class="submenu">
+                        <li><a href="#">공지사항</a></li>
+                        <li><a href="#">자주묻는질문</a></li>
+                        <li><a href="#">문의하기</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- 카테고리 추가 영역 -->
+        <section>
+            <h3>카테고리</h3>
+
+            <div class="form">
+                <div class="version-header">
+                    <h4>카테고리 관리</h4>
+                    <p class="sub-title">쇼핑몰 메인, 상품 페이지 사이드 카테고리 메뉴입니다.</p>
+                </div>
+
+                <!-- 카테고리 추가 영역 -->
+                <div class="category-input-container">
+                    <select id="categoryDepth" class="dropdown">
+                        <option value="1">1차 카테고리</option>
+                        <option value="2">2차 카테고리</option>
+                        <option value="3">3차 카테고리</option>
+                    </select>
+                    <select id="parentCategorySelect" disabled class="dropdown">
+                        <option value="">상위 카테고리를 선택하세요</option>
+                    </select>
+                    <input type="text" id="newCategoryInput"  class="newCategoryInput" placeholder="카테고리 이름을 입력하세요">
+                    <button class="add-btn" id="addCategoryBtn">카테고리 추가</button>
+                </div>
+
+                <section class="category-section">
+                    <!-- 카테고리 구조 -->
+                    <ul id="category-list" class="deps1">
+                        <li data-depth="1" data-name="여성패션" class="category-item" draggable="true">
+                            <span class="toggle-btn">▶</span>여성패션
+                            <button class="delete-btn">X</button>
+                            <ul class="sub-category subcategory-list">
+                                <li data-depth="2" data-name="브랜드의류" class="deps2 subcategory-item" draggable="true">
+                                    <span class="toggle-btn">▶</span>브랜드의류
+                                    <button class="delete-btn">X</button>
+                                    <ul class="sub-sub-category">
+                                        <li data-depth="3" data-name="신상품" class="deps3 category-item" draggable="true">신상품 <button class="delete-btn">X</button></li>
+                                        <li data-depth="3" data-name="베스트" class="deps3 category-item" draggable="true">베스트 <button class="delete-btn">X</button></li>
+                                    </ul>
+                                </li>
+                                <li data-depth="2" data-name="보세의류" class="deps2 subcategory-item" draggable="true">
+                                    <span class="toggle-btn">▶</span>보세의류
+                                    <button class="delete-btn">X</button>
+                                    <ul class="sub-sub-category">
+                                        <li data-depth="3" data-name="신품" class="deps3 category-item" draggable="true">신품 <button class="delete-btn">X</button></li>
+                                        <li data-depth="3" data-name="베트" class="deps3 category-item" draggable="true">베트 <button class="delete-btn">X</button></li>
+                                    </ul>
+
+                                </li>
+                            </ul>
+                        </li>
+                        <li data-depth="2" data-name="남성패션" class="category-item" draggable="true">
+                            <span class="toggle-btn">▶</span>남성패션
+                            <button class="delete-btn">X</button>
+                            <ul class="sub-category subcategory-list">
+                                <li data-depth="2" data-name="브랜드의류" class="deps2 subcategory-item" draggable="true">
+                                    <span class="toggle-btn">▶</span>브랜드의류
+                                    <button class="delete-btn">X</button>
+                                    <ul class="sub-sub-category">
+                                        <li data-depth="3" data-name="상품" class="deps3 category-item" draggable="true">상품 <button class="delete-btn">X</button></li>
+                                        <li data-depth="3" data-name="스트" class="deps3 category-item" draggable="true">스트 <button class="delete-btn">X</button></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section><!-- category-section -->
+                <div class="desc">
+                    <p class="sub-title-desc">카테고리 메뉴 순서를 변경할 때 드래그 앤 드롭으로 1차, 2차 카테고리 메뉴 이동 후 수정하기를 클릭합니다.</p>
+                </div>
+                <div class="buttons">
+                    <button type="submit" class="write-btn">수정하기</button>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2024 롯데ON. All rights reserved.</p>
+</footer>
+
+<script>
+
+    document.querySelectorAll('.sidebar-menu > li').forEach(function (menuItem) {
+        menuItem.addEventListener('mouseenter', function () {
+            const submenu = menuItem.querySelector('.submenu');
+            if (submenu) {
+                submenu.style.display = 'block';
+            }
+        });
+
+        menuItem.addEventListener('mouseleave', function () {
+            const submenu = menuItem.querySelector('.submenu');
+            if (submenu) {
+                submenu.style.display = 'none';
+            }
+        });
+    });
+
+    // 드래그 앤 드롭 기능
+    const categoryList = document.getElementById('category-list');
+    let draggedElement = null; // 드래그한 요소를 저장할 변수
+
+    // 드래그 시작
+    categoryList.addEventListener('dragstart', function(event) {
+        const target = event.target.closest('.category-item, .subcategory-item'); // 가장 가까운 드래그 가능한 요소 찾기
+        if (target) {
+            draggedElement = target; // 드래그할 요소를 저장
+            event.dataTransfer.effectAllowed = 'move';
+            draggedElement.classList.add('dragging'); // 드래그 클래스 추가
+        }
+    });
+
+    // 드래그 오버
+    categoryList.addEventListener('dragover', function(event) {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'move';
+    });
+
+    // 드래그 종료
+    categoryList.addEventListener('dragleave', function(event) {
+        const target = event.target.closest('.category-item, .subcategory-item'); // 가장 가까운 드래그 가능한 요소 찾기
+        if (target) {
+            target.classList.remove('dragging');
+        }
+    });
+
+    // 드롭
+    categoryList.addEventListener('drop', function(event) {
+        event.preventDefault();
+        const targetElement = event.target.closest('.category-item, .subcategory-item');
+
+        if (targetElement && draggedElement) {
+            if (targetElement !== draggedElement) {
+                if (targetElement.classList.contains('subcategory-item') || targetElement.classList.contains('deps3')) {
+                    const subcategoryList = targetElement.closest('ul');
+                    subcategoryList.insertBefore(draggedElement, targetElement.nextSibling);
+                } else {
+                    categoryList.insertBefore(draggedElement, targetElement.nextSibling);
+                }
+            }
+        }
+
+        // 드래그한 요소가 존재할 경우에만 클래스를 제거합니다.
+        if (draggedElement) {
+            draggedElement.classList.remove('dragging');
+            draggedElement = null; // 드래그한 요소를 초기화
+        }
+    });
+
+    const parentCategorySelect = document.getElementById('parentCategorySelect');
+    const categoryDepthSelect = document.getElementById('categoryDepth');
+
+    // 카테고리 Depth에 따라 상위 카테고리 선택할 수 있게 함
+    categoryDepthSelect.addEventListener('change', function() {
+        const depth = categoryDepthSelect.value;
+
+        // 1차 카테고리일 때는 상위 카테고리 선택을 비활성화
+        if (depth === '1') {
+            parentCategorySelect.disabled = true;
+            parentCategorySelect.innerHTML = `<option value="">상위 카테고리 없음</option>`;
+        } else {
+            parentCategorySelect.disabled = false;
+            updateParentCategoryOptions(depth);
+        }
+    });
+
+    // 상위 카테고리 선택창 업데이트
+    function updateParentCategoryOptions(depth) {
+        parentCategorySelect.innerHTML = '';
+
+        const categoryListItems = document.querySelectorAll(`#category-list li[data-depth="${depth - 1}"]`);
+        categoryListItems.forEach(item => {
+            const categoryName = item.getAttribute('data-name');
+            parentCategorySelect.innerHTML += `<option value="${categoryName}">${categoryName}</option>`;
+        });
+    }
+
+    // 카테고리 추가 기능
+    document.getElementById('addCategoryBtn').addEventListener('click', function() {
+        const categoryName = document.getElementById('newCategoryInput').value.trim();
+        const categoryDepth = document.getElementById('categoryDepth').value;
+        const selectedParent = parentCategorySelect.value;
+
+        if (categoryName !== "") {
+            const newCategory = document.createElement('li');
+            newCategory.setAttribute('data-depth', categoryDepth);
+            newCategory.setAttribute('data-name', categoryName);
+
+            // 카테고리 깊이에 따라 적절한 클래스를 추가
+            if (categoryDepth == '1') {
+                newCategory.classList.add('deps1');
+                newCategory.innerHTML = `<span class="toggle-btn">▶</span>${categoryName} <button class="delete-btn">X</button>`;
+                document.getElementById('category-list').appendChild(newCategory);
+            } else if (categoryDepth == '2') {
+                newCategory.classList.add('deps2');
+                newCategory.innerHTML = `<span class="toggle-btn">▶</span>${categoryName} <button class="delete-btn">X</button>`;
+                const parentCategory = document.querySelector(`li[data-name="${selectedParent}"] > ul`);
+                if (!parentCategory) {
+                    const subCategoryList = document.createElement('ul');
+                    subCategoryList.classList.add('sub-category');
+                    document.querySelector(`li[data-name="${selectedParent}"]`).appendChild(subCategoryList);
+                    subCategoryList.appendChild(newCategory);
+                } else {
+                    parentCategory.appendChild(newCategory);
+                }
+            } else if (categoryDepth == '3') {
+                newCategory.classList.add('deps3');
+                newCategory.innerHTML = `${categoryName} <button class="delete-btn">X</button>`;
+                const parentCategory = document.querySelector(`li[data-name="${selectedParent}"] > ul`);
+                if (parentCategory) {
+                    parentCategory.appendChild(newCategory);
+                }
+            }
+
+            // 카테고리 추가 후 입력 필드 초기화
+            document.getElementById('newCategoryInput').value = '';
+
+            // 추가한 카테고리를 보이게 하기
+            const toggleBtn = newCategory.querySelector('.toggle-btn');
+            if (toggleBtn) {
+                toggleBtn.click(); // 서브 카테고리를 펼치기
+            }
+        }
+    });
+
+    // 토글 기능
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('toggle-btn')) {
+            const subMenu = e.target.nextElementSibling.nextElementSibling;
+            if (subMenu) {
+                subMenu.style.display = subMenu.style.display === 'none' ? 'block' : 'none';
+                e.target.textContent = e.target.textContent === '▶' ? '▼' : '▶';
+            }
+        }
+    });
+
+
+</script>
+</body>
+</html>

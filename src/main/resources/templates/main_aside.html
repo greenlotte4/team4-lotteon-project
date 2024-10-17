@@ -1,0 +1,99 @@
+<!-- 카테고리/베스트 상품 영역 -->
+<!-- aside css -->
+<link rel="stylesheet" th:href="@{/css/aside/aside_main.css}" />
+<!-- 아이콘 스크립트 -->
+<script src="https://kit.fontawesome.com/20962f3e4b.js" crossorigin="anonymous"></script>
+<aside class="aside">
+    <!-- 베스트상품 배너 -->
+    <article class="best">
+        <h1><i class="fas fa-crown"></i>베스트상품</h1>
+        <ol>
+            <!-- 상품만큼 반복 -->
+            <!-- 반복시 i값(인덱스) 증가 필요 -->
+            <!-- 반복 블럭 시작 -->
+            <li>
+                <a href="#">
+
+                    <div class="best_num">
+                        <i>1</i>
+                    </div>
+                    <div class="thumb">
+                        <img th:src="@{/images/my/임시 이미지.png}" alt="item1" />
+                    </div>
+                    <div class="aside_desc">
+                        <h2>사과</h2>
+                        <div class="org_price">
+                            <!-- 기본가격 -->
+                            <del>5000</del>
+                            <!-- 깎이는 퍼센트 -->
+                            <span>20</span>
+                        </div>
+                        <div class="dis_price">
+                            <!-- 계산된 가격 -->
+                            <ins>3000</ins>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            <!-- 반복 블럭 끝 -->
+
+            <!-- 반복 블럭 시작 -->
+            <li>
+                <a href="#">
+                    <div class="best_num">
+                        <i>2</i>
+                    </div>
+                    <div class="thumb">
+                        <img th:src="@{/images/my/임시 이미지.png}" alt="item1" />
+                    </div>
+
+                    <div class="aside_desc">
+
+                        <h2>사과</h2>
+                        <div class="org_price">
+                            <!-- 기본가격 -->
+                            <del>5000</del>
+                            <!-- 깎이는 퍼센트 -->
+                            <span>20</span>
+                        </div>
+                        <div class="dis_price">
+                            <!-- 계산된 가격 -->
+                            <ins>3000</ins>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            <!-- 반복 블럭 끝 -->
+
+            <!-- 반복 블럭 시작 -->
+            <li>
+                <a href="#">
+                    <div class="best_num">
+                        <i>3</i>
+                    </div>
+                    <div class="thumb">
+                        <img th:src="@{/images/my/임시 이미지.png}" alt="item1" />
+                    </div>
+                    <div class="aside_desc">
+
+                        <h2>사과</h2>
+
+                        <div class="org_price">
+                            <!-- 기본가격 -->
+                            <del>5000</del>
+                            <!-- 깎이는 퍼센트 -->
+                            <span>20</span>
+                        </div>
+                        <div class="dis_price">
+                            <!-- 계산된 가격 -->
+                            <ins>3000</ins>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            <!-- 반복 블럭 끝 -->
+
+        </ol>
+    </article>
+</aside>
+<!-- aside 끝! -->
