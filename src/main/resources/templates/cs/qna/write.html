@@ -8,21 +8,26 @@
     <link rel="stylesheet" th:href="@{/css/cs/qna_write.css}" />
   </head>
   <body>
-    <section id="section_wrapper">
-      <div id="category">
-        <a href="#">회원</a>
-        <a>회원 관련 문의내용입니다.</h>
+  <header th:replace="~{/include/my_header.html}"></header>
+  <div id="wrapper">
+    <th:block th:replace="~{/cs/aside/aside_qna.html}"></th:block>
+  <section id="section_wrapper">
+    <div id="category">
+      <p>회원<br><span class="subtitle">회원 관련 문의 내용입니다.</span></p>
+      <div class="breadcrumb">
+        <a href="#">Home</a> > <a href="#" class="location">공지사항</a>
       </div>
+    </div>
       <table>
         <tr>
           <td>문의유형</td>
           <td>
-            <select name="firstType" id="firstType">
+            <select name="category1" id="category1">
               <option disabled hidden selected>1차 유형</option>
               <option value="1">1</option>
               <option value="2">2</option>
             </select>
-            <select name="firstType" id="firstType">
+            <select name="category2" id="category2">
               <option disabled hidden selected>2차 유형</option>
               <option value="1">1</option>
               <option value="2">2</option>
@@ -43,5 +48,7 @@
         <button id="btnSubmit">등록하기</button>
       </div>
     </section>
+  </div>
+  <footer th:replace="~{/include/footer.html}"></footer>
   </body>
 </html>

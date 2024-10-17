@@ -8,41 +8,41 @@ public class CustomerServiceController {
 
     @GetMapping("/cs/index")
     public String cs(){
-        return "cs/index";
+        return "/cs/index";
     }
 
     @GetMapping("/cs/notice/list")
     public String notice(){
-        return "cs/notice/list";
+        return "/cs/notice/list";
     }
 
     @GetMapping("/cs/notice/view")
     public String noticeView(){
-        return "cs/notice/view";
+        return "/cs/notice/view";
     }
 
     @GetMapping("/cs/faq/list")
     public String faq(){
-        return "cs/faq/list";
+        return "/cs/faq/list";
     }
 
     @GetMapping("/cs/faq/view")
     public String faqView(){
-        return "cs/faq/view";
+        return "/cs/faq/view";
     }
 
     @GetMapping("/cs/qna/list")
     public String qna(){
-        return "cs/qna/list";
+        return "/cs/qna/list";
     }
 
     @GetMapping("/cs/qna/view")
     public String qnaView(){
-        return "cs/qna/view";
+        return "/cs/qna/view";
     }
 
     @GetMapping("/cs/qna/write")
     public String qnaWrite(){
-        return "cs/qna/write";
+        return "/cs/qna/write";
     }
 }

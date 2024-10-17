@@ -1,100 +1,175 @@
 a {
-  text-decoration: none; /* 링크의 밑줄 제거 */
-  color: inherit; /* 링크의 색상 제거 */
+    text-decoration: none; /* 링크의 밑줄 제거 */
+    color: inherit; /* 링크의 색상 제거 */
 }
+
+a:hover {
+    text-decoration: underline;
+}
+
 body {
-  font-family: "Malgun Gothic", sans-serif;
-  font-size: 12px;
-  width: 1200px;
-  margin: 0 auto;
+    font-family: "Malgun Gothic", sans-serif;
+    font-size: 12px;
+    margin: 0 auto;
 }
+
+/* Wrapper 설정 */
+#wrapper {
+    display: flex;
+    width: 1200px;
+    margin: 40px auto;
+}
+
+/* 사이드바 스타일 */
+aside {
+    border: 1px solid #ede6db;
+    box-sizing: border-box;
+    width: 220px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-menu li {
+    margin-bottom: 3px;
+    position: relative;
+}
+
+.sidebar-menu a {
+    text-decoration: none;
+    color: #2b2e4a;
+    font-size: 17px;
+    font-weight: bold;
+    padding: 10px;
+    display: block;
+    background-color: #ffffff;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar-menu a:hover {
+    background-color: #f5f5f5;
+    font-weight: 900;
+}
+
 #section_wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 800px;
+    min-height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+    border: 1px solid #ede6db;
+    box-sizing: border-box;
+    border-radius: 10px;
+    margin-left: 10px;
 }
+
+.location {
+    font-weight: bold;
+}
+
 #category {
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-  width: 720px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 10px;
+    width: 100%;
 }
 
-#category > a:first-child {
-  font-size: 20px;
-  font-weight: 900;
-  margin-bottom: 10px;
+#category > p {
+    font-size: 20px;
+    font-weight: 900;
+    margin-bottom: 10px;
 }
 
-#category > a:nth-child(2) {
-  font-size: 12px;
-  margin-bottom: 15px;
-  color: gray;
+#category span {
+    font-size: 12px;
+    margin-bottom: 15px;
+    color: gray;
+    margin-top: 50px;
 }
 
 table {
-  width: 720px;
-  border: 1px solid rgba(160, 159, 159, 0.961);
-  border-radius: 10px;
-  margin-bottom: 20px;
+    width: 100%;
+    border: 1px solid rgba(160, 159, 159, 0.961);
+    border-radius: 10px;
+    margin-top: 10px;
+    margin-bottom: 20px;
 }
 
 .faq-Table {
-  padding: 0px 10px 10px 10px;
+    width: 100%;
+    padding: 0 10px 10px 10px;
 }
 
 tr {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 10px;
-  border-bottom: 1px solid gainsboro;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid gainsboro;
 }
 
 .last-Tr {
-  border: none;
+    border: none;
 }
 
 td {
-  width: 100%;
+    width: 100%;
 }
 
 td > a {
-  font-size: 13px;
-  font-weight: bold;
+    font-size: 13px;
+    font-weight: bold;
 }
 
 .thead {
-  font-size: 20px;
-  font-weight: 900;
+    font-size: 20px;
+    font-weight: 900;
 }
 
 #showMore {
-  width: 100%;
-  border: none;
-  background-color: white;
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: bold;
+    height: 100%;
+    width: 100%;
+    border: none;
+    background-color: white;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: bold;
 }
 
 #showLess {
-  width: 100%;
-  border: none;
-  background-color: white;
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: bold;
+    height: 100%;
+    width: 100%;
+    border: none;
+    background-color: white;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: bold;
 }
 
-#showMoreOrLess {
-  width: 100%;
-  text-align: center;
+.showMoreOrLess {
+    height: 100%;
+    width: 100%;
+    text-align: center;
+}
+
+#showLess:hover, #showMore:hover {
+    color: rgba(0, 0, 255, 0.64);
+    font-weight: bolder;
 }
 
 img {
-  width: 15px;
-  height: 12px;
-  margin-right: 3px;
+    width: 15px;
+    height: 12px;
+    margin-right: 3px;
 }

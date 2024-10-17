@@ -5,13 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>공지사항 목록</title>
     <link rel="stylesheet" th:href="@{/css/common.css}" />
-    <link rel="stylesheet" th:href="@{/css/cs/qna_list.css}" />
+    <link rel="stylesheet" th:href="@{/css/cs/cs_common.css}" />
   </head>
   <body>
+  <header th:replace="~{/include/my_header.html}"></header>
+  <div id="wrapper">
+    <th:block th:replace="~{/cs/aside/aside_qna.html}"></th:block>
     <section id="section_wrapper">
+    <div id="titleAndTable">
       <div id="category">
-        <a href="#">회원</a>
-        <a>회원 관련 문의내용입니다.</a>
+        <p>회원<br><span class="subtitle">회원 관련 문의 내용입니다.</span></p>
+        <div class="breadcrumb">
+          <a href="#">Home</a> > <a href="#" class="location">공지사항</a>
+        </div>
       </div>
       <table>
         <!-- th:each -->
@@ -30,7 +36,10 @@
         </tr>
       </table>
       <button id="btnQNA">문의하기</button>
+    </div>
       <div>이전 1 2 3 4 5 다음<!-- paging 처리 들어갈 자리 --></div>
     </section>
+  </div>
+  <footer th:replace="~{/include/footer.html}"></footer>
   </body>
 </html>
