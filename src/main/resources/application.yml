@@ -53,6 +53,5 @@ spring:
         cache: false
         check-template-location: true
         enabled: true
-        prefix: classpath:/templates/
+        prefix: classpath:/templates
         suffix: .html
-

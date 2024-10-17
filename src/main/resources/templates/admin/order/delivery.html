@@ -15,106 +15,239 @@
 
 </head>
 <body>
-    <header>
-        <div class="header-top">
-            <a href="#" class="logo">
-                <img th:src="@{/images/logo.png}" alt="Logo"/>
-            </a>
-            <nav>
-                <a th:href="@{/member/login}">로그아웃</a>
-                <a th:href="@{/cs/index}">고객센터</a>
-            </nav>
-        </div>
-    </header>
+<header>
+    <div class="header-top">
+        <a href="#" class="logo">
+            <img th:src="@{/images/logo.png}" alt="Logo"/>
+        </a>
+        <nav>
+            <a th:href="@{/member/login}">로그아웃</a>
+            <a th:href="@{/cs/index}">고객센터</a>
+        </nav>
+    </div>
+</header>
 
-    <main>
-        <div id="wrapper">
-            <aside>
-                <ul class="sidebar-menu">
-                    <li><a href="#">환경설정</a></li>
-                    <li><a href="#">상품관리</a></li>
-                    <li><a href="#">회원관리</a></li>
-                    <li><a href="#">주문관리</a></li>
-                    <li><a href="#">고객센터</a></li>
-                </ul>
-            </aside>
- 
-            <!--section-->
-            <section>
-                <div class="breadcrumb">
-                    <a href="#">Home</a> > <a href="#">주문관리</a> > <a href="#" class="location">배송현황</a>
-                </div>
-                <h3>배송현황</h3>
-                <div class="form">
-                    <div class="search-bar">
-                        <select id="search-category" class="dropdown">
-                            <option>송장번호</option>
-                            <option>택배사</option>
-                            <option>수령인</option>
-                        </select>
-                        <input type="text" placeholder="검색어 입력" class="search-input">
-                        <button class="search-btn">검색</button>
-                    </div>
-                    <table class="inquiry-table">
-                        <colgroup>
-                            <col style="width: 10%">
-                            <col style="width: 11%">
-                            <col style="width: 10%">
-                            <col style="width: 10%">
-                            <col style="width: 10%">
-                            <col style="width: 5%">
-                            <col style="width: 10%">
-                            <col style="width: 10%">
-                            <col style="width: 12%">
-                            <col style="width: 10%">
-                        </colgroup>
-                        <thead>
-                            <tr>
-                                <th>송장번호</th>
-                                <th>택배사</th>
-                                <th>주문번호</th>
-                                <th>수령인</th>
-                                <th>상품명</th>
-                                <th>건수</th>
-                                <th>물품합계</th>
-                                <th>배송비</th>
-                                <th>배송상태</th>
-                                <th>접수일</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><a href="#">10122102315</a></td>
-                                <td>로젠택배</td>
-                                <td>10121211341</td>
-                                <td>김유신</td>
-                                <td>청바지</td>
-                                <td>3</td>
-                                <td>68,400</td>
-                                <td>무료</td>
-                                <td>배송준비</td>
-                                <td>2024-10-17 10:00:06</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div class="pagination">
-                        <button class="page-btn">이전</button>
-                        <button class="page-num">1</button>
-                        <button class="page-num">2</button>
-                        <button class="page-num">3</button>
-                        <button class="page-num">4</button>
-                        <button class="page-num">5</button>
-                        <button class="page-btn">다음</button>
-                    </div>
-                </div>
-            </section> 
-            <!-- /Section -->
-        </div>
-    </main>
+<main>
+    <div id="wrapper">
+        <aside>
+            <ul class="sidebar-menu">
+                <li><a href="#">환경설정</a></li>
+                <li><a href="#">상품관리</a></li>
+                <li><a href="#">회원관리</a></li>
+                <li><a href="#">주문관리</a></li>
+                <li><a href="#">고객센터</a></li>
+            </ul>
+        </aside>
 
-    <footer>
-        <p>&copy; 2024 롯데ON. All rights reserved.</p>
-    </footer>
+        <!--section-->
+        <section>
+            <div class="breadcrumb">
+                <a href="#">Home</a> > <a href="#">주문관리</a> > <a href="#" class="location">배송현황</a>
+            </div>
+            <h3>배송현황</h3>
+            <div class="form">
+                <div class="search-bar">
+                    <select id="search-category" class="dropdown">
+                        <option>송장번호</option>
+                        <option>택배사</option>
+                        <option>수령인</option>
+                    </select>
+                    <input type="text" placeholder="검색어 입력" class="search-input">
+                    <button class="search-btn">검색</button>
+                </div>
+                <table class="inquiry-table">
+                    <colgroup>
+                        <col style="width: 10%">
+                        <col style="width: 11%">
+                        <col style="width: 10%">
+                        <col style="width: 9%">
+                        <col style="width: 10%">
+                        <col style="width: 7%">
+                        <col style="width: 10%">
+                        <col style="width: 10%">
+                        <col style="width: 11%">
+                        <col style="width: 10%">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>송장번호</th>
+                        <th>택배사</th>
+                        <th>주문번호</th>
+                        <th>수령인</th>
+                        <th>상품명</th>
+                        <th>건수</th>
+                        <th>물품합계</th>
+                        <th>배송비</th>
+                        <th>배송상태</th>
+                        <th>접수일</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <a href="#" onclick="openDeliveryDetailModal()">10121211341</a> <!-- 주문번호 클릭 시 모달 오픈 -->
+                        </td>
+                        <td>로젠택배</td>
+                        <td>10121211341</td>
+                        <td>김유신</td>
+                        <td>청바지</td>
+                        <td>3</td>
+                        <td>68,400</td>
+                        <td>무료</td>
+                        <td>배송준비</td>
+                        <td>2024-10-17 10:00:06</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="pagination">
+                    <button class="page-btn">이전</button>
+                    <button class="page-num">1</button>
+                    <button class="page-num">2</button>
+                    <button class="page-num">3</button>
+                    <button class="page-num">4</button>
+                    <button class="page-num">5</button>
+                    <button class="page-btn">다음</button>
+                </div>
+            </div>
+        </section>
+        <!-- /Section -->
+    </div>
+</main>
+<!-- 배송상세 모달 -->
+<div id="versionModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4>배송상세</h4>
+            <span id="versionModalClose" class="close">&times;</span> <!-- id 추가 -->
+        </div>
+        <div class="modal-body">
+            <div>
+                <h2 class="sub-title">상품정보</h2>
+                <table class="product-info-table">
+                    <colgroup>
+                        <col style="width: 10%">
+                        <col style="width: 2%">
+                        <col style="width: 13%">
+                        <col style="width: 10%">
+                        <col style="width: 9%">
+                        <col style="width: 6%">
+                        <col style="width: 7%">
+                        <col style="width: 7%">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>상품번호</th>
+                        <th>상품명</th>
+                        <th>판매자</th>
+                        <th>가격</th>
+                        <th>수량</th>
+                        <th>배송비</th>
+                        <th>결제금액</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><img src="product_image_1.jpg" alt="상품1" class="product-img"></td>
+                        <td>120120021</td>
+                        <td>청바지</td>
+                        <td>(주)상호명</td>
+                        <td>24,000</td>
+                        <td>3</td>
+                        <td>0</td>
+                        <td>68,400</td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div>
+                <h2 class="sub-title3">배송정보</h2>
+                <table class="delivery-info-table">
+                    <colgroup>
+                        <col style="width: 13%;">
+                        <col style="width: 75%;">
+                    </colgroup>
+                    <tr>
+                        <th>주문번호</th>
+                        <td>
+                            10121211341
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>수령인</th>
+                        <td>
+                            김유신
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>연락처</th>
+                        <td>
+                            010-1234-1234
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>배송지 주소</th>
+                        <td>
+                            부산 부산진구 123-11 10층
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="padding-top: 20px;">택배사</th> <!-- 여백 추가 -->
+                        <td style="padding-top: 20px;">로젠택배</td>
+                    </tr>
+                    <tr>
+                        <th>송장번호</th>
+                        <td>
+                            10122102315
+                        </td>
+                    </tr>
+                    <tr>
+                    <tr class="last-tr">
+                        <th>기타</th>
+                        <td>
+                            감사합니다. 수고하세요.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+<footer>
+    <p>&copy; 2024 롯데ON. All rights reserved.</p>
+</footer>
 </body>
 </html>
+<script>
+    // 전역 변수로 모달 선언
+    var modal = document.getElementById("versionModal");
+
+    // 주문상세 모달 열기 함수
+    function openDeliveryDetailModal() {
+        modal.style.display = "block";
+    }
+
+    // 주문상세 모달 동작
+    document.addEventListener('DOMContentLoaded', function() {
+        var versionCloseBtn = document.getElementById("versionModalClose"); // 버전 모달 닫기 버튼
+
+        // 닫기 버튼(X) 클릭 시 모달 닫기
+        versionCloseBtn.onclick = function() {
+            modal.style.display = "none";
+        };
+
+
+        // 모달 외부 클릭 시 모달 닫기
+        window.onclick = function(event) {
+            var modal = document.getElementById("versionModal");
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        };
+    });
+</script>
 

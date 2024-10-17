@@ -1,4 +1,3 @@
-
 /* 기본 스타일 */
 .product-view-section {
     padding: 20px;
@@ -26,10 +25,30 @@
     height: auto;
 }
 
+.product-title{
+    font-size: 20px;
+    color: black;
+    font-weight:600;
+    margin-bottom: 10px;
+}
+
 .product-info {
     flex: 1; /* 남은 공간을 정보가 차지하도록 조정 */
 }
+.product-info p {
+    font-size:16px;
+}
+.product-number {
+    color : darkgray;
+    font-size : 20px;
+}
+strong {
+    font-size:25px;
+    color : #e74c3c;
+    margin-left: 10px;
+    font-weight:600;
 
+}
 
 .rating {
     font-size: 16px;
@@ -281,4 +300,3 @@
     border-color: #ccc;
     box-sizing: border-box;
 }
-

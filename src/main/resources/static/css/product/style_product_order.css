@@ -286,7 +286,7 @@ textarea{
 }
 
 .checkout-btn {
-    width: 100%;
+    right:0;
     padding: 15px;
     background-color: #d9534f;
     color: white;

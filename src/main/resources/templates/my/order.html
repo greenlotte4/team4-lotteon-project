@@ -15,12 +15,12 @@
 <body>
   <div id="wrapper">
     <main>
-      <header th:replace="~{include/my_header.html}"></header>
+      <header th:replace="~{/include/my_header.html}"></header>
       <!--어사이드-->
-      <div th:replace="~{my/my_aside.html}"></div>
+      <div th:replace="~{/my/my_aside.html}"></div>
 
       <section class="myInfo_sec">
-        <div th:replace="~{my/banner.html}"></div>
+        <div th:replace="~{/my/banner.html}"></div>
         <!-- 최근 주문내역 -->
         <article class="myInfo_recentOrder myInfo_Article">
           <div class="myInfo_ArticleTitle"><span>전체주문내역</span></div>
@@ -183,7 +183,7 @@
       </section>
     </main>
   </div>
-  <footer th:replace="~{include/footer.html}"></footer>
+  <footer th:replace="~{/include/footer.html}"></footer>
 </body>
 
 </html>

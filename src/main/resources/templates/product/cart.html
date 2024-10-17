@@ -12,9 +12,8 @@
     <link rel="shortcut icon" type="image/x-icon" href="../images/favicon.ico"/>
 
     <!-- css -->
-    <link rel="stylesheet" th:href="@{/css/main/common.css}">
+    <link rel="stylesheet" th:href="@{/css/product/product_common.css}">
     <link rel="stylesheet" th:href="@{/css/product/style_product_cart.css}"/>
-    <link rel="stylesheet" th:href="@{/css/include/header.css}"/>
 
     <!-- ui 아이콘 -->
     <script src="https://kit.fontawesome.com/20962f3e4b.js" crossorigin="anonymous"></script>
@@ -27,40 +26,9 @@
     </article>
 </div>
 <div id="wrapper">
-    <header th:replace="~{include/header.html}"></header>
+    <header th:replace="~{/include/header.html}"></header>
     <main class="mainIn cf">
-        <aside>
-            <!-- 베스트상품 배너 -->
-            <article class="best">
-                <h1><i class="fas fa-crown"></i>베스트상품</h1>
-                <ol>
-                    <block each="product5, loop :${productSold}">
-                        <li>
-                            <a href="/product/view(prodCate1=${product5.getProdCate1()},prodCate2=${product5.getProdCate2()},prodNo=${product5.getProdNo()},price=${product5.getPrice()})}">
-                                <div class="thumb">
-                                    <i text="${loop.index+1}"></i>
-                                    <img src="/thumbs/+${product5.prodCate1}+'/'+${product5.prodCate2}+'/'+${product5.thumb2}" alt="item1"/>
-                                </div>
-                                <h2 text="${product5.prodName}"></h2>
-                                <div class="org_price">
-                                    <del text="${product5.price}"></del>
-                                    <span text="${product5.discount+'%'}"></span>
-                                </div>
-                                <div class="dis_price">
-                                    <ins text="${product5.getDiscount(product5.price,product5.discount)}"></ins>
-                                    <block if="${product5.delivery == 0}">
-                                        <span class="free">무료배송</span>
-                                    </block>
-                                    <block if="${product5.delivery != 0}">
-                                        <span text=" '배송비:'+${product5.delivery}+'원'"></span>
-                                    </block>
-                                </div>
-                            </a>
-                        </li>
-                    </block>
-                </ol>
-            </article>
-        </aside>
+        <aside th:replace="~{/main_aside.html}"></aside>
         <!-- 장바구니 영역 -->
         <section class="cart-section">
             <div class="breadcrumb">
@@ -177,35 +145,12 @@
                 </div>
                 <div class="checkout-buttons">
                     <button class="checkout-btn outlined">선택주문(1)</button>
-                    <a href="/product/order.html" class="checkout-btn filled">전체주문</a>
+                    <a th:href="@{/product/order}" class="checkout-btn filled">전체주문</a>
                 </div>
             </aside>
         </section>
     </main>
-    <footer>
-        <ul>
-            <li><a href="/company/index">회사소개</a></li>
-            <li><a href="#">서비스이용약관</a></li>
-            <li><a href="#">개인정보처리방침</a></li>
-            <li><a href="#">전자금융거래약관</a></li>
-        </ul>
-        <div>
-            <p><img src="../images/main/footer_logo.png" alt="로고"/></p>
-            <p>
-                <strong>(주)롯데ON</strong><br/>- bxSlider
-                대표이사 : 김사무엘상현, 정준호, 강성현<br/>
-                사업자등록번호 : 529-85-00774(롯데쇼핑(주) e커머스사업부)<br/>
-                통신판매업 신고 : 서울송파 제0158호<br>
-                호스팅 서비스사업자 : 롯데쇼핑(주) e커머스사업부
-            </p>
-            <p>
-                <strong>고객센터</strong><br/>
-                Tel : 1899-7000(유료) (평일 09:00~18:00)<br/>
-                Fax : 051-123-4567 | E-mail : lotteon@lotte.net<br/>
-                App Version:[[${appInfo}]]
-            </p>
-        </div>
-    </footer>
+    <footer th:replace="~{/include/footer.html}"></footer>
     <button type="button" id="top">상단이동</button>
 </div>
 </body>

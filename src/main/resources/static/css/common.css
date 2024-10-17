@@ -154,7 +154,13 @@ main {
   margin: 0 auto;
   overflow: hidden;
 }
-
+/* 메인 첫번째 섹션 */
+.section-title {
+  margin-top:5px;
+  font-size: 24px;
+  font-weight: bold;
+  padding : 10px;
+}
 /* 왼쪽 카테고리 메뉴 */
 main > aside {
   float: left;

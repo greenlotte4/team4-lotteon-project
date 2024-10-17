@@ -17,15 +17,15 @@
   outline: none;
 }
 
-
-
 /* 왼쪽 카테고리 메뉴 */
 .aside {
+  margin-top:15px;
   float: left;
   width: 200px;
-  height: 2500px;
+  height: auto;
   margin-right : 15px;
 }
+
 
 /* 베스트 배너 */
 .aside > .best {

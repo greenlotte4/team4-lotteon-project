@@ -54,6 +54,11 @@
   padding : 20px;
 }
 
+
+
+
+
+
 /* 판매자 모달 사이즈 */
 .modalDealer {
   width: 600px;
@@ -83,6 +88,47 @@
   opacity: 90%;
 }
 
+/* 반품내역 모달 */
+/* 상품 정보 */
+
+.myInfo_ModalDetail .myInfo_productInfo > img {
+  width: 80px;
+  height: 80px;
+}
+
+.myInfo_returnTable > tbody > tr > td > .myInfo_productInfo > div{
+  text-align: left;
+  margin-left: 10px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.myInfo_returnTable > tbody > tr > td > .myInfo_productInfo > div > p > strong{
+  margin-top: 5px;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+
+.myInfo_returnTable > tbody > tr > .myInfo_chargeMoney >div{
+  display: inline-block;
+  vertical-align: top;
+  margin-right: 10px;
+  text-align: left;
+}
+
+.myInfo_returnTable > tbody > tr > .myInfo_chargeMoney >div > p:nth-child(4){
+  font-weight: bold;
+}
+
+.myInfo_returnTable > tbody > tr > .myInfo_chargeMoney >div:nth-child(2){
+  text-align: right;
+}
+
+.myInfo_returnTable > tbody > tr > .myInfo_chargeMoney >div:nth-child(2) > p::after{
+  content: '원';
+}
+
 
 
 
@@ -95,9 +141,14 @@
   border-collapse: collapse;
 }
 .myInfo_ModalTable tr, .myInfo_ModalTable td {
-  border: 1px solid #b9b9b9;
   text-align: left;
 }
+
+.myInfo_ModalTable td {
+  border-top: 1px solid #b9b9b9;
+  border-bottom: 1px solid #b9b9b9;
+}
+
 
 .myInfo_ModalTable tr > td:nth-child(1) {
   width: 105px;
@@ -108,6 +159,8 @@
   padding: 6px 12px;
   box-sizing: border-box;
 }
+
+
 
 .myInfo_ModalTable input {
   height: 22px;

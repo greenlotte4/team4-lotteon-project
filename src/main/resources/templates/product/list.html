@@ -6,8 +6,7 @@
     <!-- 파비콘 -->
     <link rel="shortcut icon" type="image/x-icon" href="../images/favicon.ico"/>
     <!-- 기본 스타일 -->
-    <link rel="stylesheet" th:href="@{/css/include/header.css}"/>
-    <link rel="stylesheet" th:href="@{/css/main/common.css}"/>
+    <link rel="stylesheet" th:href="@{/css/product/product_common.css}"/>
     <link rel="stylesheet" th:href="@{/css/product/style_product_list_common.css}"/>
 
     <link id="pageStylesheet" rel="stylesheet" th:href="@{/css/product/style_product_list.css}"/>
@@ -27,17 +26,9 @@
     </article>
 </div>
 <div id="wrapper">
-    <header th:replace="~{include/header.html}"></header>
+    <header th:replace="~{/include/header.html}"></header>
     <main class="mainIn cf">
-        <aside>
-            <!-- 베스트상품 배너 -->
-            <article class="best">
-                <h1><i class="fas fa-crown"></i>베스트상품</h1>
-                <ol>
-                    <!-- 상품 목록이 들어갈 자리 -->
-                </ol>
-            </article>
-        </aside>
+        <aside th:replace="~{/main_aside.html}"></aside>
         <!-- 카테고리/베스트 상품 영역 -->
         <section class="product-list-section">
             <!-- Breadcrumb -->
@@ -73,12 +64,12 @@
             <div class="product-list">
                 <div class="product-item">
                     <div class="product-image">
-                        <img src="../images/product/image.png" alt="Product Image" />
+                        <img th:src="@{/images/example.png}" alt="Product Image" />
                     </div>
 
-                    <a href="/product/view.html" class="product-details">
-                        <h3 class="product-name">상품명</h3>
-                        <p class="product-description">간단한 상품 설명</p>
+                    <a th:href="@{/product/view}" class="product-details">
+                        <h3 class="product-name">[코카콜라] 제로콜라 24캔</h3>
+                        <p class="product-description">코카콜라 제로콜라가 단돈 1000원</p>
                         <div class="price-info">
 
                             <span class="original-price">30,000원</span>
@@ -102,11 +93,11 @@
                 <!-- 상품 3 -->
                 <div class="product-item">
                     <div class="product-image">
-                        <img src="../images/product/image2.png" alt="Product Image" />
+                        <img th:src="@{/images/product/product1.png}" alt="Product Image" />
                     </div>
                     <div class="product-details">
-                        <h3 class="product-name">상품명</h3>
-                        <p class="product-description">간단한 상품 설명</p>
+                        <h3 class="product-name">[비비고] 김치 왕교자 315g</h3>
+                        <p class="product-description">맛있고 맛있는 김치 왕교자 한명 먹다 둘이 죽어도 몰라요</p>
                         <div class="price-info">
                             <span class="original-price">30,000원</span>
                             <span class="discount-rate">10% ↓</span>
@@ -127,11 +118,11 @@
                 <!-- 상품 4 -->
                 <div class="product-item">
                     <div class="product-image">
-                        <img src="../images/product/image.png" alt="Product Image" />
+                        <img th:src="@{/images/product/product2.png}" alt="Product Image" />
                     </div>
                     <div class="product-details">
-                        <h3 class="product-name">상품명</h3>
-                        <p class="product-description">간단한 상품 설명</p>
+                        <h3 class="product-name">[샤프란] 사프란 섬유유연제 프레쉬 아로마 3.1L 4개</h3>
+                        <p class="product-description">기분좋은향기 샤프란섬유유연제 프레쉬아로마3.1L 4개</p>
                         <div class="price-info">
                             <span class="original-price">30,000원</span>
                             <span class="discount-rate">10% ↓</span>
@@ -152,11 +143,11 @@
                 <!-- 상품 4 -->
                 <div class="product-item">
                     <div class="product-image">
-                        <img src="../images/product/image2.png" alt="Product Image" />
+                        <img th:src="@{/images/product/product3.png}" alt="Product Image" />
                     </div>
                     <div class="product-details">
-                        <h3 class="product-name">상품명</h3>
-                        <p class="product-description">간단한 상품 설명</p>
+                        <h3 class="product-name">[농심] 육개장사발면12개 + 김치사발면12개 (총24개)</h3>
+                        <p class="product-description">육개장사발면12개 + 김치사발면12개 (총24개)</p>
                         <div class="price-info">
                             <span class="original-price">30,000원</span>
                             <span class="discount-rate">10% ↓</span>
@@ -190,9 +181,7 @@
             </div>
         </section>
     </main>
-    <footer>
-        <!-- footer 내용 -->
-    </footer>
+    <footer th:replace="~{/include/footer.html}"></footer>
     <button type="button" id="top">상단이동</button>
 </div>
 </body>
