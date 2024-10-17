@@ -1,4 +1,4 @@
-package com.lotte4.controller.my;
+package com.lotte4.controller.pagecontroller.my;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

@@ -8,15 +8,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>login</title>
-
+    <title>lotteOn::login</title>
     <link rel="stylesheet" th:href="@{/css/member/login.css}"/>
-
 </head>
-<style>
 
-</style>
-<header th:replace="~{include/mem_header.html}"></header>
+<header th:replace="~{/include/mem_header.html}"></header>
 <body>
 <main>
     <div class="login-container">
@@ -34,7 +30,7 @@
                         <div class="input-group">
                             <input type="password" id="userpwd" placeholder="비밀번호를 입력해주세요">
                         </div>
-                        <button class="loginbtn">로그인하기</button>
+                        <a th:href="@{/member/signup}" class="loginbtn">로그인하기</a>
                     </div>
                     <div class="options">
                         <input type="checkbox" id="auto-login">
@@ -47,8 +43,7 @@
                         <a th:href="@{/member/join}">회원가입</a>
                     </div>
                 </div>
-                <div class="image-section">
-                </div>
+
             </div>
         </div>
         <div class="social">
@@ -65,8 +60,12 @@
             <span class="tit5">구글</span>
         </div>
     </div>
+    <!-- banner section-->
+
     <div class="certifi_logo">
         <img th:src="@{/images/member/member_certifi_logo.gif}">
+    </div>
+    <div class="banner-section">
     </div>
 </main>
 
