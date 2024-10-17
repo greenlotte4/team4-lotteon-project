@@ -6,13 +6,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>약관관리</title>
+  <title>기본설정</title>
 
   <!--공통 css 부분-->
   <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}"/>
   <!--각 페이지(section) 개별 css-->
-  <link rel="stylesheet" th:href="@{/css/admin/style_admin_config_policy.css}"/>
-
+  <link rel="stylesheet" th:href="@{/css/admin/style_admin_config_basic.css}"/>
 
 </head>
 <body>
@@ -23,22 +22,44 @@
     <!--section-->
     <section>
       <div class="breadcrumb">
-        <a href="#">Home</a> > <a href="#">환경설정</a> > <a href="#" class="location">약관관리</a>
+        <a href="#">Home</a> > <a href="#">환경설정</a> > <a href="#" class="location">기본설정</a>
       </div>
-      <h3>약관관리</h3>
+      <h3>기본설정</h3>
 
       <div class="form">
         <div class="version-header">
-          <h4>구매회원 약관</h4>
-          <p class="sub-title">회원가입 및 정책 페이지 노출 약관입니다.</p>
+          <h4>버전정보</h4>
+          <p class="sub-title">현재 사이트 버전입니다.</p>
+        </div>
+
+        <div class="inquiry-section">
+          <table class="inquiry-table">
+            <tr>
+              <td class="label">사이트 버전</td>
+              <td>
+                1.0.1-RELEASE
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="version-header">
+          <h4>사이트</h4>
+          <p class="sub-title">브라우저 탭, 헤더 및 푸터 노출 정보입니다</p>
         </div>
         <form method="post" action="#" >
           <div class="inquiry-section">
             <table class="inquiry-table">
               <tr>
-                <td class="label">약관내용</td>
+                <td class="label">제목</td>
                 <td>
-                  <textarea name="content" value="이약관은 주식회사 롯데 쇼핑몰" rows="5" cols="50"></textarea>
+                  <input type="text" name="title" value="롯데 ON"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="label">부제</td>
+                <td>
+                  <input type="text" name="subtitle" value="더나은쇼핑위한선택" />
                 </td>
               </tr>
             </table>
@@ -49,16 +70,37 @@
         </form>
 
         <div class="version-header">
-          <h4>판매회원 약관</h4>
-          <p class="sub-title">회원가입 및 정책 페이지 노출 약관입니다.</p>
+          <h4>로고</h4>
+          <p class="sub-title">브라우저 탭, 헤더 및 푸터 노출 로고입니다</p>
         </div>
-        <form method="post" action="#" >
+        <form method="post" action="#" enctype="multipart/form-data">
           <div class="inquiry-section">
             <table class="inquiry-table">
               <tr>
-                <td class="label">약관내용</td>
+                <td class="label">헤더로고</td>
                 <td>
-                  <textarea name="content" value="이약관은 주식회사 롯데 쇼핑몰" rows="5" cols="50"></textarea>
+                  <div class="file-upload file">
+                    <input type="file" id="productImage" name="productImages" />
+                    크기 370 x 76 권장
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td class="label">푸터로고</td>
+                <td>
+                  <div class="file-upload file">
+                    <input type="file" id="productImage" name="productImages" />
+                    크기 155 x 36 권장
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td class="label">파비콘</td>
+                <td>
+                  <div class="file-upload file">
+                    <input type="file" id="productImage" name="productImages" />
+                    크기 32 x 32 권장
+                  </div>
                 </td>
               </tr>
             </table>
@@ -69,16 +111,46 @@
         </form>
 
         <div class="version-header">
-          <h4>전자금융거래 약관</h4>
-          <p class="sub-title">회원가입 및 정책 페이지 노출 약관입니다.</p>
+          <h4>기업정보</h4>
+          <p class="sub-title">푸터에 노출되는 기업 정보입니다.</p>
         </div>
-        <form method="post" action="#" >
+        <form method="post" action="#" enctype="multipart/form-data">
           <div class="inquiry-section">
             <table class="inquiry-table">
               <tr>
-                <td class="label">약관내용</td>
+                <td class="label">상호명</td>
                 <td>
-                  <textarea name="content" value="이약관은 주식회사 롯데 쇼핑몰" rows="5" cols="50"></textarea>
+                  <input type="text" name="company" value="롯데쇼핑주식회사"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="label">대표이사</td>
+                <td>
+                  <input type="text" name="ceo" value="홍길동" />
+                </td>
+              </tr>
+              <tr>
+                <td class="label">사업자등록번호</td>
+                <td>
+                  <input type="text" name="eid" value="123-12-12345" />
+                </td>
+              </tr>
+              <tr>
+                <td class="label">통신판매업신고</td>
+                <td>
+                  <input type="text" name="" value="2024-서울강남-1234" />
+                </td>
+              </tr>
+              <tr>
+                <td class="label">기본주소</td>
+                <td>
+                  <input type="text" name="addr1" value="서울특별시강남구테헤란로 507" />
+                </td>
+              </tr>
+              <tr>
+                <td class="label">상세주소</td>
+                <td>
+                  <input type="text" name="addr2" value="{삼성동, WeWork 빌딩} 7층" />
                 </td>
               </tr>
             </table>
@@ -89,16 +161,34 @@
         </form>
 
         <div class="version-header">
-          <h4>위치정보 이용약관</h4>
-          <p class="sub-title">회원가입 및 정책 페이지 노출 약관입니다.</p>
+          <h4>고객센터 정보</h4>
+          <p class="sub-title">푸터에 노출되는 고객센터 정보입니다.</p>
         </div>
         <form method="post" action="#" >
           <div class="inquiry-section">
             <table class="inquiry-table">
               <tr>
-                <td class="label">약관내용</td>
+                <td class="label">전화번호</td>
                 <td>
-                  <textarea name="content" value="이약관은 주식회사 롯데 쇼핑몰" rows="5" cols="50"></textarea>
+                  <input type="text" name="company" value="02-1234-5678"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="label">업무시간</td>
+                <td>
+                  <input type="text" name="ceo" value="평일 09:00 ~ 18:00" />
+                </td>
+              </tr>
+              <tr>
+                <td class="label">이메일</td>
+                <td>
+                  <input type="text" name="eid" value="lotteon@lotte.net" />
+                </td>
+              </tr>
+              <tr>
+                <td class="label">전자금융거래 분쟁담당</td>
+                <td>
+                  <input type="text" name="" value="1234-1234" />
                 </td>
               </tr>
             </table>
@@ -109,16 +199,16 @@
         </form>
 
         <div class="version-header">
-          <h4>개인정보처리방침</h4>
-          <p class="sub-title">회원가입 및 정책 페이지 노출 약관입니다.</p>
+          <h4>카피라이트</h4>
+          <p class="sub-title">푸터에 노출되는 카피라이트 정보입니다.</p>
         </div>
         <form method="post" action="#" >
           <div class="inquiry-section">
             <table class="inquiry-table">
               <tr>
-                <td class="label">약관내용</td>
+                <td class="label">카피라이트</td>
                 <td>
-                  <textarea name="content" value="이약관은 주식회사 롯데 쇼핑몰" rows="5" cols="50"></textarea>
+                  <input type="text" name="copyright" value="Copyright LotteON. All rights reserved"/>
                 </td>
               </tr>
             </table>
@@ -127,6 +217,7 @@
             <button type="submit" class="write-btn">수정하기</button>
           </div>
         </form>
+      </div>
     </section>
     <!-- /Section -->
   </div>
