@@ -60,6 +60,7 @@ textarea {
   border: 1px solid #d82a2a;
   background: #d82a2a;
   color: white;
+  cursor: pointer;
 }
 
 .btnCancel {
@@ -68,6 +69,7 @@ textarea {
   border: 1px solid #d82a2a;
   background: #fdfdfd;
   color: #d82a2a;
+  cursor: pointer;
 }
 
 .header-wrapper {

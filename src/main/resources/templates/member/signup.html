@@ -11,7 +11,7 @@
     <link rel="stylesheet" th:href="@{css/user/common.css}" />
     <link rel="stylesheet" th:href="@{/css/member/signup.css}" />
 </head>
-<header th:replace="~{/include/mem_header.html}"></header>
+<header th:replace="~{include/mem_header.html}"></header>
 <body>
     <main>
         <div class="login-container">
@@ -66,8 +66,8 @@
                             </tr>
                         </table>
                         <div>
-                            <a href="#" class="btnCancel">취소</a>
-                            <a href="#" class="btnNext">다음</a>
+                            <button type="button" onclick="location.href='/lotteon/member/join'" class="btnCancel">취소</button>
+                            <button type="button" onclick="location.href='/lotteon/member/register'" class="btnNext">다음</button>
                         </div>
                     </section>
                 </div>

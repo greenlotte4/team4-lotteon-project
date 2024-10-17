@@ -11,7 +11,7 @@
     <link rel="stylesheet" th:href="@{css/user/common.css}" />
     <link rel="stylesheet" th:href="@{/css/member/join.css}" />
 </head>
-<header th:replace="~{/include/mem_header.html}"></header>
+<header th:replace="~{include/mem_header.html}"></header>
 <body>
     <main>
         <div class="join_container">
@@ -26,7 +26,7 @@
                         <span class="join1">개인구매회원 (외국인포함)</span>
                         <span class="join2">만 14세 이상 가능</span>
                     </div>
-                    <button class="customer">회원가입</button>
+                    <button type="button" onclick="location.href='/lotteon/member/signup'" class="customer">회원가입</button>
                 </div>
                 <div class="selljoin">
                     <div class="seller_join">판매회원가입</div>
@@ -34,12 +34,35 @@
                         <span class="join3">사업자 판매회원</span>
                         <span class="join4">사업자등록증을 보유한 회원</span>
                     </div>
-                    <button class="seller">회원가입</button>
+                    <button type="button" onclick="location.href='/lotteon/member/signup_seller'" class="seller">회원가입</button>
                 </div>
             </div>
         </div>
     </main>
-
+    <footer>
+        <ul>
+            <li><a href="/company/index">회사소개</a></li>
+            <li><a href="#">서비스이용약관</a></li>
+            <li><a href="#">개인정보처리방침</a></li>
+            <li><a href="#">전자금융거래약관</a></li>
+        </ul>
+        <div>
+            <p><img th:src="@{images/main/footer_logo.png}" alt="로고"/></p>
+            <p>
+                <strong>(주)롯데ON</strong><br/>- bxSlider
+                대표이사 : 김사무엘상현, 정준호, 강성현<br/>
+                사업자등록번호 : 529-85-00774(롯데쇼핑(주) e커머스사업부)<br/>
+                통신판매업 신고 : 서울송파 제0158호<br>
+                호스팅 서비스사업자 : 롯데쇼핑(주) e커머스사업부
+            </p>
+            <p>
+                <strong>고객센터</strong><br/>
+                Tel : 1899-7000(유료) (평일 09:00~18:00)<br/>
+                Fax : 051-123-4567 | E-mail : lotteon@lotte.net<br/>
+                App Version:[[${appInfo}]]
+            </p>
+        </div>
+    </footer>
 </body>
 
 </html>

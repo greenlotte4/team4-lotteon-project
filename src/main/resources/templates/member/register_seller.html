@@ -13,11 +13,13 @@
 </head>
 <style>
 </style>
-
+<header th:replace="~{include/mem_header.html}"></header>
 <body>
     <main>
+        <h2 class="titregister">
+            <span class="tit">회원가입</span>
+        </h2>
         <div class="main-wrapper">
-
             <div class="main-box">
                 <section class="register">
                     <form action="#" method="POST">
@@ -46,7 +48,6 @@
                             </tr>
                         </table>
                         <table border="1">
-                            <caption>개인정보 입력</caption>
                             <tr>
                                 <td>회사명</td>
                                 <td>
@@ -66,44 +67,43 @@
                                 <td>
                                     <input type="number" name="BN" placeholder="사업자등록번호 입력" /> <span> - 포함 12자 입력</span>
                                     <span class="resultName"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>전화번호</td>
+                                <td>
+                                    <input type="text" name="hp" placeholder="- 포함 13자리 입력" minlength="13" maxlength="13" />
+                                    <span class="resultHp"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>팩스</td>
+                                <td>
+                                    <input type="text" name="fax" placeholder="팩스번호입력" minlength="13" maxlength="13" />
+                                    <span class="resultHp"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>주소</td>
+                                <td>
+                                    <div>
+                                        <input type="text" name="zip" id="zip" placeholder="우편번호" readonly />
+                                    </div>
+                                    <div>
+                                        <input type="text" name="addr1" id="addr1" placeholder="기본주소검색" readonly />
+                                    </div>
+                                    <div>
+                                        <input type="text" name="addr2" id="addr2" placeholder="상세주소검색" />
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                         <div>
+                            <input type="button" class="sellerbtn">
+                         </div>
+                    </form>
+                </section>
             </div>
-            </td>
-            </tr>
-            <tr>
-                <td>전화번호</td>
-                <td>
-                    <input type="text" name="hp" placeholder="- 포함 13자리 입력" minlength="13" maxlength="13" />
-                    <span class="resultHp"></span>
-                </td>
-            </tr>
-            <tr>
-                <td>팩스</td>
-                <td>
-                    <input type="text" name="fax" placeholder="팩스번호입력" minlength="13" maxlength="13" />
-                    <span class="resultHp"></span>
-                </td>
-            </tr>
-            <tr>
-                <td>주소</td>
-                <td>
-                    <div>
-                        <input type="text" name="zip" id="zip" placeholder="우편번호" readonly />
-                        <button type="button" class="btnZip" onclick="postcode()"><img src="#" alt=""></button>
-                    </div>
-                    <div>
-                        <input type="text" name="addr1" id="addr1" placeholder="기본주소검색" readonly />
-                    </div>
-                    <div>
-                        <input type="text" name="addr2" id="addr2" placeholder="상세주소검색" />
-                    </div>
-                </td>
-            </tr>
-            </table>
-            <div>
-                <input type="button" class="sellerbtn"></button>
-            </div>
-            </form>
-            </section>
         </div>
     </main>
 

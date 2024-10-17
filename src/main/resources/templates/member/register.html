@@ -11,10 +11,13 @@
     <link rel="stylesheet" th:href="@{css/user/common.css}" />
     <link rel="stylesheet" th:href="@{../css/member/register.css}" />
 </head>
-
+<header th:replace="~{include/mem_header.html}"></header>
 <body>
     <main>
-        <<div class="main-wrapper">
+        <h2 class="titregister">
+            <span class="tit">회원가입</span>
+        </h2>
+        <div class="main-wrapper">
 
             <div class="main-box">
                 <section class="register">
@@ -63,36 +66,36 @@
                                 <td>E-Mail</td>
                                 <td>
                                     <input type="email" name="email" placeholder="이메일 입력"/>
-            </div>
-            </td>
-            </tr>
-            <tr>
-                <td>휴대폰</td>
-                <td>
-                    <input type="text" name="hp" placeholder="- 포함 13자리 입력" minlength="13" maxlength="13" />
-                    <span class="resultHp"></span>
-                </td>
-            </tr>
-            <tr>
-                <td>주소</td>
-                <td>
-                    <div>
-                        <input type="text" name="zip" id="zip" placeholder="우편번호검색클릭" readonly/>
-                    </div>
-                    <div>
-                        <input type="text" name="addr1" id="addr1" placeholder="주소를 검색하세요." readonly/>
-                    </div>
-                    <div>
-                        <input type="text" name="addr2" id="addr2" placeholder="상세주소를 입력하세요."/>
-                    </div>
-                </td>
-            </tr>
-            </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>휴대폰</td>
+                                <td>
+                                    <input type="text" name="hp" placeholder="- 포함 13자리 입력" minlength="13" maxlength="13" />
+                                    <span class="resultHp"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>주소</td>
+                                <td>
+                                    <div>
+                                        <input type="text" name="zip" id="zip" placeholder="우편번호검색클릭" readonly/>
+                                    </div>
+                                    <div>
+                                        <input type="text" name="addr1" id="addr1" placeholder="주소를 검색하세요." readonly/>
+                                    </div>
+                                    <div>
+                                        <input type="text" name="addr2" id="addr2" placeholder="상세주소를 입력하세요."/>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
             <div>
                 <input type="button" class="normalbtn"></button>
             </div>
             </form>
             </section>
+            </div>
         </div>
     </main>
 

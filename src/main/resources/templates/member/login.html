@@ -1,22 +1,22 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.thymeleaf.org/"
-        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
-<html lang="en">
+<!-- xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.thymeleaf.org/"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" -->
+<html lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>login</title>
-    <link rel="stylesheet" th:href="@{css/user/common.css}"/>
+
     <link rel="stylesheet" th:href="@{/css/member/login.css}"/>
 
 </head>
 <style>
 
-
-
-
 </style>
+<header th:replace="~{include/mem_header.html}"></header>
 <body>
 <main>
     <div class="login-container">
@@ -24,21 +24,17 @@
             <span class="tit">로그인</span>
         </h2>
         <div class="login-section" style="padding-top: 20px;">
-            <div class="login-image-container"> <!-- 새 컨테이너 추가 -->
+            <div class="login-container2"> <!-- 새 컨테이너 추가 -->
                 <!-- 로그인 폼 -->
                 <div class="login-form">
-                    <div>
+                    <div class="login-input">
                         <div class="input-group">
-                            <label for="userid">아이디</label>
                             <input type="text" id="userid" placeholder="아이디를 입력해주세요">
                         </div>
                         <div class="input-group">
-                            <label for="userpwd">비밀번호</label>
                             <input type="password" id="userpwd" placeholder="비밀번호를 입력해주세요">
                         </div>
-                    </div>
-                    <div class="login-btn-container">
-                        <a href="#"><img th:src="@{/images/member/member_btn_login.gif}"></a>
+                        <button class="loginbtn">로그인하기</button>
                     </div>
                     <div class="options">
                         <input type="checkbox" id="auto-login">
@@ -48,21 +44,32 @@
                         <span>|</span>
                         <a href="#">비밀번호 찾기</a>
                         <span>|</span>
-                        <a href="#">회원가입</a>
+                        <a th:href="@{/member/join}">회원가입</a>
                     </div>
                 </div>
-
-                <!-- 이미지 섹션 -->
                 <div class="image-section">
-                    <img th:src="@{/images/member/member_login_banner.jpg}" alt="광고 또는 이미지">
                 </div>
             </div>
         </div>
-        <div class="certifi_logo">
-            <img th:src="@{/images/member/member_certifi_logo.gif}" alt="인증로고">
+        <div class="social">
+            <span class="tit2">간편하게 시작하기</span>
+        </div>
+        <div class="sociallogin_section">
+            <input type="button" class="kakao_login" style="image">
+            <input type="button" class="naver_login">
+            <input type="button" class="google_login">
+        </div>
+        <div class="login_text">
+            <span class="tit3">카카오</span>
+            <span class="tit4">네이버</span>
+            <span class="tit5">구글</span>
         </div>
     </div>
+    <div class="certifi_logo">
+        <img th:src="@{/images/member/member_certifi_logo.gif}">
+    </div>
 </main>
+
 <footer>
     <ul>
         <li><a href="/company/index">회사소개</a></li>
@@ -71,7 +78,7 @@
         <li><a href="#">전자금융거래약관</a></li>
     </ul>
     <div>
-        <p><img src="images/main/footer_logo.png" alt="로고"/></p>
+        <p><img th:src="@{images/main/footer_logo.png}" alt="로고"/></p>
         <p>
             <strong>(주)롯데ON</strong><br/>- bxSlider
             대표이사 : 김사무엘상현, 정준호, 강성현<br/>

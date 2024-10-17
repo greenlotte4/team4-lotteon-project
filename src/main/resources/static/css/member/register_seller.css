@@ -1,42 +1,6 @@
-
-#bannerTop {
-  display: none;
-  width: 100%;
-  height: 80px;
-  border-bottom: 1px solid #e9e9e9;
-  box-sizing: border-box;
-}
-
-#bannerTop.on {
-  display: block;
-}
-
-#bannerTop>article {
-  position: relative;
-  width: 1200px;
-  height: 100%;
-  margin: 0 auto;
-  overflow: hidden;
-}
-
-#bannerTop>article>.btnClose {
-  position: absolute;
-  right: 0px;
-  top: 0px;
-  width: 40px;
-  height: 40px;
-  background-image: url('images/ico_sprite.png');
-  background-position: -122px -142px;
-  background-color: transparent;
-  font-size: 0;
-  border: none;
-  cursor: pointer;
-}
-
 .register {
   font: normal 12px '돋움';
 }
-
 ul,
 ol {
   list-style: none;
@@ -50,6 +14,17 @@ a {
 input,
 textarea {
   outline: none;
+}
+
+h2 {
+  text-align: center;
+  width: 100%;
+  margin: 18px auto;
+  padding-bottom: 15px;
+}
+
+.tit {
+  font-size: 30px;
 }
 
 
@@ -131,9 +106,9 @@ textarea {
 
 /* 회원가입 */
 .register {
-  width: 600px;
+  width: 780px;
   height: auto;
-  margin: 60px auto;
+  margin: 0px auto;
   overflow: hidden;
 }
 
@@ -141,8 +116,8 @@ textarea {
   width: 100%;
   border-collapse: collapse;
   border-spacing: 0;
-  border-top: 2px solid #111;
   margin-bottom: 10px;
+  border-top: 2px solid #e9e9e9;
 }
 
 .register table caption {
@@ -150,6 +125,9 @@ textarea {
   padding: 10px 0;
   font-weight: bold;
   box-sizing: border-box;
+}
+.register table tr {
+  border: none;
 }
 
 .register table tr>td {
@@ -159,7 +137,7 @@ textarea {
 }
 
 .register table tr>td:nth-child(1) {
-  width: 105px;
+  width: 115px;
   background: #f5f8f9;
 }
 
@@ -197,31 +175,18 @@ textarea {
   vertical-align: bottom;
 }
 
-.register>form>div {
-  float: right;
-}
-
-
-.tit {
-  font-size: 20px;
-}
-
-.titterm {
-  width: 607px;
-  text-align: left;
-  /* 텍스트를 가운데 정렬 */
-  margin: 20px auto 20px auto;
-  /* 중앙 정렬 및 아래쪽 여백 추가 */
-  font-size: 30px;
-  /* 기존 크기를 유지 */
-  border-bottom: 2px solid;
+.register > form > div {
+  margin: 0 auto;
+  width: 427px;
+  background-size: cover
 }
 
 input.sellerbtn {
   border: none;
-  background-image: url('/images/member/member_join_tit_seller.gif');
+  background-image: url(/lotteon/images/member/member_join_tit_seller.gif);
   width: 427px;
   height: 64px;
   margin-top: 38px;
   margin-right: 81px;
+  cursor: pointer;
 }
