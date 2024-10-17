@@ -8,10 +8,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>login</title>
-    <link rel="stylesheet" th:href="@{css/user/common.css}" />
-    <link rel="stylesheet" th:href="@{../css/member/register.css}" />
+    <link rel="stylesheet" th:href="@{/css/member/register.css}" />
 </head>
-<header th:replace="~{include/mem_header.html}"></header>
+<header th:replace="~{/include/mem_header.html}"></header>
 <body>
     <main>
         <h2 class="titregister">
@@ -90,8 +89,8 @@
                                 </td>
                             </tr>
                         </table>
-            <div>
-                <input type="button" class="normalbtn"></button>
+            <div class="registerButton">
+                <a th:href="@{/index}" class="regBtn">회원가입</a>
             </div>
             </form>
             </section>

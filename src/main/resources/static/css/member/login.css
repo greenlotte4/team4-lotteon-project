@@ -1,20 +1,44 @@
+/* 초기화 */
+* {
+  margin: 0;
+  padding: 0;
+  font: normal 12px "Noto Sans CJK KR";
+}
+
+ul,
+ol {
+  list-style: none;
+}
+a {
+  text-decoration: none;
+  color: #111;
+}
+input,
+textarea {
+  outline: none;
+}
+
 body{
   overflow: auto;
   height: 100%;
 }
 
+.logoArea {
+  margin-top: 29px;
+
+}
 main {
   display: flex;
-  flex-direction: column;  /* 세로 방향 플렉스 설정 */
-  justify-content: flex-start;  /* 세로 정렬을 시작점으로 */
-  align-items: center;  /* 가로로 중앙 정렬 */
-  height: 94vh;  /* 화면 전체 높이를 사용 */
-  margin: 0;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: auto;
+  margin: 0 auto;
   padding: 0;
 }
 
 .login-container {
-  height: 838px;
+  height: auto;
   padding: 1px;
   border-radius: 10px;
   width: 777px;
@@ -24,21 +48,22 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 455px;
+  height: auto;
 }
 
-h2 {
+.titlogin {
+  width: 607px;
   text-align: center;
-  width: 105%;
-  margin: 18px auto;
-  padding-bottom: 5px;
+  /* 텍스트를 가운데 정렬 */
+  margin : 0 auto;
+  padding-bottom : 30px;
 }
-
 .tit {
   font-size: 30px;
+  font-weight: bold;
 }
 
-.login-form, .image-section {
+.login-form, .banner-section {
   height: auto; /* 자식 요소에 고정된 높이 대신 자동 높이를 설정 */
 }
 
@@ -48,8 +73,8 @@ h2 {
   padding: 19px;
   box-sizing: border-box;
   border-bottom: 1px solid #dfdfdf;
-  height: 484px;
-  width: 104%;
+  width: 10
+  %;
 }
 
 
@@ -59,7 +84,7 @@ h2 {
   padding: 13px;
   box-sizing: border-box;
   flex-wrap: wrap;
-  height: 334px;
+  height: auto;
   justify-content: center;
   flex-direction: row;
 }
@@ -70,7 +95,6 @@ h2 {
   padding: 10px;
   box-sizing: border-box;
   flex-wrap: nowrap;
-  height: 249px;
   flex-direction: column;
 
 }
@@ -85,36 +109,42 @@ h2 {
 }
 
 .input-group input {
-  padding: 10px;
+
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 15px;
   float: right;
   width: 316px;
-  height: 39px;
+  height: 50px;
+  padding: 0 16px;
+  background-color: #f5f5f5;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #333;
 }
 
 .loginbtn {
-  height: 60px;
-  width: 315px;
+  height: 58px;
+  width: 297px;
   border: none;
-  background-color: #ef2a23;
   line-height: 60px;  /* 버튼 텍스트의 세로 중앙 정렬 */
-  padding: 0;  /* 버튼 안에 여분의 공간 없애기 */
-  margin-top: 10px;
-  line-height: 60px;  /* 버튼 높이와 동일하게 설정해서 수직중앙 정렬 */
+  margin-top: 15px;
   color: #fbf2ff;
+  background-color: #ef2a23;
   border-radius: 10px;
-  font-size: 20px;
+text-align: center;
+  font-size: 18px;
   font-weight: 500;
   cursor: pointer;
 }
 
 .options {
-  margin-top: 2px;
+  margin-top:3px;
   display: flex;
   align-items: center;
   font-size: 14px;
   width: 384px;
+  margin-left:20px;
+  margin-bottom:30px;
 }
 
 .options span {
@@ -124,30 +154,31 @@ h2 {
 
 .options a {
   text-decoration: none;
-  color: #007bff;
+  color: darkgray;
 }
 
-.image-section {
-  display: flex;
+.banner-section {
+  display:flex;
   justify-content: center;
   align-items: center;
-  height: 125px;
-  padding: 0px;
-  background-image: url(/lotteon/images/member/member_login_banner2.png);
+  height: 100px;
+  background-image: url(/lotteon/images/banner/subinbanner.png);
   background-size: contain;
-  margin-top: 1px;
-  width: 779px;
+  margin-top: 50px;
+  width: 1200px;
 }
 
-.image-section img {
+.banner-section img {
   max-width: 100%;
   height: auto;
 }
 
 .certifi_logo {
+
   width: 732px;
   height: 63px;
   margin: 0 auto;
+  margin-top : 200px;
 }
 
 .certifi_logo img {

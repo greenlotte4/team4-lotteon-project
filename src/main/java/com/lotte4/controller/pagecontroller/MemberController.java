@@ -12,7 +12,7 @@ public class MemberController {
     public String login() {
 
         log.info("login");
-            return "member/login";
+            return "/member/login";
     }
 
     @GetMapping("/member/join")
