@@ -130,14 +130,22 @@ strong {
 }
 
 .cart-button {
-    background-color: #ddd;
+    background-color: white;
+    border: 1px solid #ef2a23;
+    box-sizing: border-box;
+    color: #ef2a23;
 }
 
 .buy-button {
-    background-color: #3498db;
+    background-color: #ef2a23;
     color: white;
+    box-sizing: border-box;
+    border: 1px solid #ef2a23;
 }
 
+.buy-button:hover {
+
+}
 /* 상품정보 섹션 */
 .product-details {
     border: 1px solid #ddd;

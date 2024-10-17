@@ -160,19 +160,27 @@ textarea{
 }
 
 .shipping-table button {
-    background-color: rgb(177, 31, 31);
+    background-color:white;
     width: 75px;
-    color: white;
+    color: #ef2a23;
     cursor: pointer;
+    font-size:13px;
     border-radius: 4px;
-    padding: 10px;
-    border: 1px solid white;
+    padding: 8px;
+    border: 1px solid #ef2a23;
     box-sizing: border-box;
 }
 
 .shipping-table button:hover {
 
-    border: 1px solid black;
+    background-color: #ef2a23;
+    width: 75px;
+    color: white;
+    cursor: pointer;
+    font-size:13px;
+    border-radius: 4px;
+    padding: 8px;
+    border: 1px solid #ef2a23;
     box-sizing: border-box;
 }
 .radio input{
@@ -240,7 +248,7 @@ textarea{
 /* 결제 요약 */
 .checkout-summary {
     margin-left:auto;
-
+    height: 293px;
     border:1px solid #ddd;
     background-color: #fff;
     padding: 25px;
@@ -258,7 +266,7 @@ textarea{
     margin-top : 5px;
 }
 .checkout-price {
-    margin-top:40px;
+    margin-top: 10px;
 }
 .checkout-price th {
     font-size:15px;
@@ -286,13 +294,17 @@ textarea{
 }
 
 .checkout-btn {
-    right:0;
-    padding: 15px;
-    background-color: #d9534f;
+
+    background-color: #ef2a23;
     color: white;
-    border: none;
-    font-size: 16px;
+    margin-top:20px;
+    margin-left:140px;
+    border: 1px solid #ef2a23;
+    box-sizing: border-box;
     font-weight: bold;
+    padding: 15px 30px;
+    border-radius: 4px;
+    font-size: 16px;
     cursor: pointer;
 }
 

@@ -244,7 +244,7 @@ textarea{
 /* 결제 요약 */
 .checkout-summary {
     margin-left:auto;
-
+    height: 393px;
     border:1px solid #ddd;
     background-color: #fff;
     padding: 25px;

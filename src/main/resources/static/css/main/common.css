@@ -195,10 +195,9 @@ main {
   justify-content: space-between;
 }
 .main_section > section > h3 > span {
+
   font-weight: bold;
-  font-size: 16px;
-  background-color: #e2bebe49;
-  box-shadow:  0px 0px 10px 4px #e2bebe5d;
+  font-size: 19px;
 }
 
 
