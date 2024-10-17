@@ -14,9 +14,9 @@ public class ConfigController {
     }
 
     //기본설정
-    @GetMapping("/admin/config/basic")
+    @GetMapping("/admin/config/info")
     public String AdminconfigBasic() {
-        return "/admin/config/basic";
+        return "/admin/config/info";
     }
     
     //약관관리
@@ -31,6 +31,10 @@ public class ConfigController {
         return "/admin/config/version";
     }
 
-
+    // 카테고리
+    @GetMapping("/admin/config/category")
+    public String AdminConfigCategory() {
+        return "/admin/config/category";
+    }
 
 }

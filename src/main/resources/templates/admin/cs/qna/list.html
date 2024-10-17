@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<html lang="ko">
+<html lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,30 +16,10 @@
 
 </head>
 <body>
-<header>
-    <div class="header-top">
-        <a href="#" class="logo">
-            <img th:src="@{/images/logo.png}" alt="Logo"/>
-        </a>
-        <nav>
-            <a href="#">로그아웃</a>
-            <a href="#">고객센터</a>
-        </nav>
-    </div>
-</header>
-
+<header th:replace="~{/admin/include/header.html}"></header>
 <main>
     <div id="wrapper">
-        <aside>
-            <ul class="sidebar-menu">
-                <li><a href="#">환경설정</a></li>
-                <li><a href="#">상품관리</a></li>
-                <li><a href="#">회원관리</a></li>
-                <li><a href="#">주문관리</a></li>
-                <li><a href="#">고객센터</a></li>
-            </ul>
-        </aside>
-
+        <aside th:replace="~{/admin/include/aside.html}"></aside>
         <!--section-->
         <section>
             <div class="breadcrumb">
@@ -87,7 +69,9 @@
                         <td>120</td>
                         <td>회원</td>
                         <td>가입</td>
-                        <td class="title">개인회원과 법인회원의 차이가 있나요?</td>
+                        <td class="title">
+                            <a th:href="@{/admin/cs/qna/view}">개인회원과 법인회원에 차이가 있나요?</a>
+                        </td>
                         <td>chh**</td>
                         <td>00.00.00</td>
                         <td>답변완료</td>
@@ -97,7 +81,9 @@
                         <td>120</td>
                         <td>회원</td>
                         <td>가입</td>
-                        <td class="title">개인회원과 법인회원의 차이가 있나요?</td>
+                        <td class="title">
+                            <a th:href="@{/admin/cs/qna/view}">개인회원과 법인회원에 차이가 있나요?</a>
+                        </td>
                         <td>chh**</td>
                         <td>00.00.00</td>
                         <td>답변완료</td>
@@ -107,7 +93,9 @@
                         <td>120</td>
                         <td>회원</td>
                         <td>가입</td>
-                        <td class="title">개인회원과 법인회원의 차이가 있나요?</td>
+                        <td class="title">
+                            <a th:href="@{/admin/cs/qna/view}">개인회원과 법인회원에 차이가 있나요?</a>
+                        </td>
                         <td>chh**</td>
                         <td>00.00.00</td>
                         <td>답변완료</td>
@@ -117,7 +105,9 @@
                         <td>120</td>
                         <td>회원</td>
                         <td>가입</td>
-                        <td class="title">개인회원과 법인회원의 차이가 있나요?</td>
+                        <td class="title">
+                            <a th:href="@{/admin/cs/qna/view}">개인회원과 법인회원에 차이가 있나요?</a>
+                        </td>
                         <td>chh**</td>
                         <td>00.00.00</td>
                         <td>답변완료</td>
@@ -141,9 +131,6 @@
         <!-- /Section -->
     </div>
 </main>
-
-<footer>
-    <p>&copy; 2024 롯데ON. All rights reserved.</p>
-</footer>
+<footer th:replace="~{/admin/include/footer.html}"></footer>
 </body>
 </html>
