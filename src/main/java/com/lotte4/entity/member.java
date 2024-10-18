@@ -1,12 +1,8 @@
 package com.lotte4.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -29,5 +25,27 @@ public class member {
     private String addr2;
     private int point;
     private String updatedAt;
-    private int state;
+    @Enumerated(EnumType.ORDINAL)
+    private status status;
+    @Enumerated(EnumType.ORDINAL)
+    private grade grade;
+
+
+    public enum status{
+        정상, // 0번
+        중지, // 1번
+        휴면, // 2번
+        탈퇴  // 3번
+    }
+
+    public enum grade{
+        ADMIN,  //0번
+        FAMILY, //1번
+        SILVER, //2번
+        GOLD,   //3번
+        VIP,    //4번
+        VVIP,   //5번
+        SELLER, //6번
+    }
+
 }
