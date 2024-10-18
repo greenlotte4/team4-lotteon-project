@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @Builder
 @Table(name = "order")
 public class order {
+
     @Id
     private int order_No;
     private int count;

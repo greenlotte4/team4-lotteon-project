@@ -26,7 +26,8 @@
                         <span class="join1">개인구매회원 (외국인포함)</span>
                         <span class="join2">만 14세 이상 가능</span>
                     </div>
-                    <button type="button" onclick="location.href='/lotteon/member/signup'" class="customer">회원가입</button>
+<!--                    <button type="button" onclick="location.href='/lotteon/member/signup'" class="customer">회원가입</button>-->
+                    <a th:href="@{/member/signup}">회원가입</a>
                 </div>
                 <div class="selljoin">
                     <div class="seller_join">판매회원가입</div>
@@ -34,7 +35,8 @@
                         <span class="join3">사업자 판매회원</span>
                         <span class="join4">사업자등록증을 보유한 회원</span>
                     </div>
-                    <button type="button" onclick="location.href='/lotteon/member/signup_seller'" class="seller">회원가입</button>
+<!--                    <button type="button" onclick="location.href='/lotteon/member/signup_seller'" class="seller">회원가입</button>-->
+                    <a th:href="@{/member/signup_seller}">회원가입</a>
                 </div>
             </div>
         </div>
