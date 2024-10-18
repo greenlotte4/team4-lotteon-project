@@ -73,8 +73,7 @@ main {
   padding: 19px;
   box-sizing: border-box;
   border-bottom: 1px solid #dfdfdf;
-  width: 10
-  %;
+  width: 100%;
 }
 
 
@@ -189,14 +188,15 @@ text-align: center;
 .sociallogin_section{
   display: flex;
   justify-content: center;
-  width: 285px;
+  width: 511px;
   height: 72px;
   flex-direction: row;
   margin: 10px auto;
+  flex-wrap: wrap;
 }
 
 .kakao_login{
-  width: 217px;
+  width: 53px;
   height: 53px;
   border: none;
   background-image: url(/lotteon/images/member/kakaosocial_icon.png);
@@ -206,7 +206,7 @@ text-align: center;
   cursor: pointer;
 }
 .naver_login{
-  width: 217px;
+  width: 53px;
   height: 53px;
   border: none;
   background-image: url(/lotteon/images/member/naversocial_icon.png);
@@ -216,7 +216,7 @@ text-align: center;
   border-radius: 27px;
 }
 .google_login{
-  width: 217px;
+  width: 53px;
   height: 53px;
   border: none;
   background-image: url(/lotteon/images/member/googlesocial_icon.png);
@@ -243,7 +243,7 @@ text-align: center;
 }
 
 .tit4{
-  margin: 0 26px;
+  margin: 0px 36px;
 }
 
 .tit5{
