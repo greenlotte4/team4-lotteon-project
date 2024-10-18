@@ -1,8 +1,6 @@
 package com.lotte4.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -14,9 +12,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @Table(name = "cart")
-public class cart {
+public class Cart {
     @Id
-    private int cart_No;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int cartId;
     // 갯수
     private int count;
     //가격

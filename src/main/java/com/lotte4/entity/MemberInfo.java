@@ -1,12 +1,7 @@
 package com.lotte4.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -16,10 +11,11 @@ import java.time.LocalDateTime;
 @Builder
 @Table(name = "member")
 @Entity
-public class member {
+public class MemberInfo {
 
     @Id
-    private int member_Id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int memberInfoId;
     private String name;
     private int gender;
     private String email;

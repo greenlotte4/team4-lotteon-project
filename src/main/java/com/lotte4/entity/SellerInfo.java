@@ -1,8 +1,6 @@
 package com.lotte4.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -15,9 +13,10 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 @Table(name = "seller")
-public class seller {
+public class SellerInfo {
     @Id
-    private int seller_Id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int sellerInfoId;
     // 회사 이름
     private String comName;
     // 대표자 명
