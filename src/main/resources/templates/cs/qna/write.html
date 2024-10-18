@@ -13,9 +13,9 @@
     <th:block th:replace="~{/cs/aside/aside_qna.html}"></th:block>
   <section id="section_wrapper">
     <div id="category">
-      <p>회원<br><span class="subtitle">회원 관련 문의 내용입니다.</span></p>
+      <p>회원<br><span class="subtitle">회원 관련 문의 내용입니다.</span></p> <!-- 좌측의 회원 부분 2개는 해당 카테고리가 출력되도록 구현. th:if cate1==1 회원 이런 식? -->
       <div class="breadcrumb">
-        <a href="#">Home</a> > <a href="#" class="location">공지사항</a>
+        <a th:href="@{/cs/qna/list}">Home</a> > <a th:href="@{/cs/qna/list}">문의하기</a> > <a th:href="@{/cs/qna/list}" class="location">회원</a>
       </div>
     </div>
       <table>
@@ -24,13 +24,13 @@
           <td>
             <select name="category1" id="category1">
               <option disabled hidden selected>1차 유형</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
+              <option th:value="1">1</option>
+              <option th:value="2">2</option>
             </select>
             <select name="category2" id="category2">
               <option disabled hidden selected>2차 유형</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
+              <option th:value="1">1</option>
+              <option th:value="2">2</option>
             </select>
           </td>
         </tr>
@@ -44,7 +44,7 @@
         </tr>
       </table>
       <div>
-        <a href="#"><button id="btnCancel">취소하기</button></a>
+        <a th:href="@{/cs/qna/list}"><button id="btnCancel">취소하기</button></a>
         <button id="btnSubmit">등록하기</button>
       </div>
     </section>
