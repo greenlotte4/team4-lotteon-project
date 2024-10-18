@@ -55,18 +55,6 @@
                                     </select>
                                 </td>
                             </tr>
-                            <tr>
-                                <td class="label">제목</td>
-                                <td>
-                                    <input type="text" name="title" />
-                                </td>
-                            </tr>
-                            <tr class="content">
-                                <td class="label">내용</td>
-                                <td>
-                                    <textarea name="answer" rows="5" cols="50"></textarea>
-                                </td>
-                            </tr>
                         </table>
                     </div>
 
@@ -129,20 +117,19 @@
                                 <td class="label">상품 이미지</td>
                                 <td>
                                     <div class="file-upload file">
-                                        <input type="file" id="productImage" name="productImages" />
+                                        <input type="file" id="productImage1" name="productImages" />
                                         크기 190 x 190, 상품 목록에 출력될 이미지입니다.
                                     </div>
                                     <div class="file-upload file">
-                                        <input type="file" id="productImage" name="productImages" />
+                                        <input type="file" id="productImage2" name="productImages" />
                                         크기 190 x 190, 상품 메인에 출력될 이미지입니다.
                                     </div>
                                     <div class="file-upload file">
-                                        <input type="file" id="productImage" name="productImages" />
+                                        <input type="file" id="productImage3" name="productImages" />
                                         크기 190 x 190, 상품 상세에 출력될 이미지입니다.
                                     </div>
                                 </td>
                             </tr>
-
                             <tr>
                                 <td class="label">상품 상세정보</td>
                                 <td>
@@ -150,6 +137,14 @@
                                         <input type="file" id="productDetailImage" name="productDetailImage" accept="image/*" onchange="previewImage(event)" />
                                         크기 가로 940px, 높이 제약없음, 크기 최대 1MB
                                     </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">
+                                    상품 옵션 설정
+                                </td>
+                                <td>
+                                    <a id="btnOption">옵션 설정하기</a>
                                 </td>
                             </tr>
                         </table>
@@ -207,53 +202,52 @@
         <!-- /Section -->
     </div>
 </main>
+
+<!-- 버전 등록 모달 -->
+<div id="versionRegisterModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4>옵션 설정</h4>
+            <span id="registerModalClose" class="close">&times;</span>
+        </div>
+        <div class="modal-body">
+            <form id="versionRegisterForm">
+                <table class="modal-table">
+                    <tr>
+                        <th>옵션이름</th>
+                        <td><input type="text" id="option_name" placeholder="옵션명을 입력하세요" required></td>
+                    </tr>
+                    <tr>
+                        <th>옵션 값</th>
+                        <td>
+                            <input type="text" class="option_value" placeholder="옵션 값을 입력하세요." required>
+                            <a id="addOptionValue">값 추가</a>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button id="registerConfirmBtn" class="confirm-btn">등록하기</button>
+        </div>
+    </div>
+</div>
+
 <footer th:replace="~{/admin/include/footer.html}"></footer>
 </body>
 </html>
 
 <script>
-    // 버전확인 모달 동작
-    document.addEventListener('DOMContentLoaded', function() {
-        var modal = document.getElementById("versionModal");
-        var btns = document.querySelectorAll(".edit-btn"); // "확인" 버튼들
-        var versionCloseBtn = document.getElementById("versionModalClose"); // 버전 모달 닫기 버튼
-        var closeButton = document.getElementById("versionCloseBtn");
-
-        // "확인" 버튼 클릭 시 모달 열기
-        btns.forEach(function(btn) {
-            btn.onclick = function() {
-                modal.style.display = "block";
-            };
-        });
-
-        // 닫기 버튼(X) 클릭 시 모달 닫기
-        versionCloseBtn.onclick = function() {
-            modal.style.display = "none";
-        };
-
-        // 하단 닫기 버튼 클릭 시 모달 닫기
-        closeButton.onclick = function() {
-            modal.style.display = "none";
-        };
-
-        // 모달 외부 클릭 시 모달 닫기
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        };
-    });
-
     // 버전 등록 모달 동작
-    document.addEventListener('DOMContentLoaded', function() {
+    window.onload = function() {
         var registerModal = document.getElementById("versionRegisterModal");
-        var registerBtn = document.getElementById("openRegisterModalBtn"); // 등록 버튼
         var registerCloseBtn = document.getElementById("registerModalClose"); // 등록 모달 닫기 버튼
-        var closeButton = document.getElementById("registerCloseBtn"); // 하단 닫기 버튼
         var confirmButton = document.getElementById("registerConfirmBtn");
+        var btnOption = document.getElementById("btnOption"); // 옵션 설정 버튼
+        var addOptionValue = document.getElementById(("addOptionValue")); // 옵션 값 추가 버튼
 
         // 등록 버튼 클릭 시 모달 열기
-        registerBtn.onclick = function() {
+        btnOption.onclick = function() {
             registerModal.style.display = "block";
         };
 
@@ -262,16 +256,16 @@
             registerModal.style.display = "none";
         };
 
-        // 하단 닫기 버튼 클릭 시 모달 닫기
-        closeButton.onclick = function() {
-            registerModal.style.display = "none";
-        };
-
         // 모달 외부 클릭 시 모달 닫기
         window.onclick = function(event) {
             if (event.target == registerModal) {
                 registerModal.style.display = "none";
             }
+        };
+
+        // 값 추가
+        addOptionValue.onclick = function () {
+            addOptionValue.
         };
 
         // 등록 확인 버튼 클릭 시
@@ -290,7 +284,7 @@
                 alert("모든 필드를 입력해주세요.");
             }
         };
-    });
-
+    };
 
 </script>
+
