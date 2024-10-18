@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller()
 public class PolicyController {
 
-    @GetMapping("/policy/buy")
-    public String buy() {
-        return "buyer";
+    @GetMapping("/policy/buyer")
+    public String buyer() {
+        return "/policy/buyer";
     }
 
     @GetMapping("/policy/finance")

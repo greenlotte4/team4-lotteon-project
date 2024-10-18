@@ -1,9 +1,8 @@
 package com.lotte4.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.LocalDateTime;
 
@@ -16,7 +15,17 @@ import java.time.LocalDateTime;
 @Table(name = "user")
 public class user {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int user_Id;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member", referencedColumnName = "member_id")
+    private member member;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "seller_detail", referencedColumnName = "seller_id")
+    private seller seller;
+
     // 아이디
     private String uid;
     // 비밀번호
@@ -31,4 +40,8 @@ public class user {
     //외래키 목록
     private int member_Id;
     private int seller_Id;
+
+
+
+
 }
