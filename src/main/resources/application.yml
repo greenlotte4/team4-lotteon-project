@@ -22,6 +22,7 @@ server:
 spring:
     application:
         name: lotteon-team4
+        version: ${version}
     devtools:
         livereload:
             enabled: true
