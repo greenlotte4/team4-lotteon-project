@@ -2,7 +2,6 @@ package com.lotte4.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.LocalDateTime;
 
@@ -13,18 +12,18 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @Table(name = "user")
-public class user {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int user_Id;
+    private int userId;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member", referencedColumnName = "member_id")
-    private member member;
+    private MemberInfo memberInfo;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_detail", referencedColumnName = "seller_id")
-    private seller seller;
+    private SellerInfo sellerInfo;
 
     // 아이디
     private String uid;
@@ -38,8 +37,8 @@ public class user {
 
 
     //외래키 목록
-    private int member_Id;
-    private int seller_Id;
+    private int memberInfoId;
+    private int sellerInfoId;
 
 
 

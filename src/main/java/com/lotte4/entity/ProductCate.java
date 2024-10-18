@@ -1,6 +1,7 @@
 package com.lotte4.entity;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.*;
@@ -11,16 +12,14 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "board_Cate")
-public class board_Cate {
+@Table(name = "product_Cate")
+public class ProductCate {
     @Id
-    private int board_Cate_Id;
-    //
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int productCateId;
+
     private int parent;
-    // 이름
     private String name;
-
-
     //외래키 목록
     private int child;
 }

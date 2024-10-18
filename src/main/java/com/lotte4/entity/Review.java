@@ -1,8 +1,6 @@
 package com.lotte4.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -14,9 +12,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @Table(name = "review")
-public class review {
+public class Review {
     @Id
-    private int review_No;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int reviewId;
 
     private int reviewStar;
     private String content;
@@ -24,7 +23,7 @@ public class review {
     private LocalDateTime regDate;
 
     //외래키
-    private int prod_No;
-    private int user_Id;
+    private int productId;
+    private int userId;
 
 }

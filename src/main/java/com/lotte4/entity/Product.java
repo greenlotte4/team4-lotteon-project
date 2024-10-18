@@ -1,10 +1,10 @@
 package com.lotte4.entity;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.*;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -13,9 +13,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @Table(name = "product")
-public class product {
+public class Product {
     @Id
-    private int prod_No;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int productId;
 
     private String name;
     private String company;
@@ -33,6 +34,6 @@ public class product {
     private String detail;
     private int status;
     //외래키 목록
-    private int cate_Id;
-    private int seller_Id;
+    private int productCateId;
+    private int sellerInfoId;
 }

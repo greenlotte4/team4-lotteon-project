@@ -3,7 +3,6 @@ package com.lotte4.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-
 @Getter
 @Setter
 @ToString
@@ -11,11 +10,11 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Table(name = "member")
-@Entity
-public class member {
+public class MemberInfo {
 
     @Id
-    private int member_Id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int memberInfoId;
     private String name;
     private int gender;
     private String email;

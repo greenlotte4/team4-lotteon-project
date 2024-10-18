@@ -1,8 +1,6 @@
 package com.lotte4.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -12,9 +10,10 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Table(name = "terms")
-public class terms {
+public class Terms {
     @Id
-    private int terms_No;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int termsId;
     private String term;
     private String tax;
     private String finance;

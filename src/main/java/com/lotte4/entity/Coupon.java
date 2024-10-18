@@ -1,8 +1,6 @@
 package com.lotte4.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -14,9 +12,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @Table(name = "coupon")
-public class coupon {
+public class Coupon {
     @Id
-    private int coupon_Id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int couponId;
     private String couponName;
     private int discountPrice;
     private LocalDateTime useDate;
@@ -25,6 +24,6 @@ public class coupon {
     private String status;
 
     //외래키 목록
-    private int member_Id;
-    private int order_Id;
+    private int memberInfoId;
+    private int orderId;
 }
