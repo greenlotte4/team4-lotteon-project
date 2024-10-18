@@ -46,6 +46,17 @@
     </script>
 <!--슬라이드 끝-->
 
+    <script>
+        $(document).ready(function($) {
+            $(".scroll_move").click(function(event){
+                console.log(".scroll_move");
+                event.preventDefault();
+                $('html,body').animate({scrollTop:$(this.hash).offset().top}, 500);
+            });
+
+        });
+    </script>
+
 </head>
 <body>
 <div id="bannerTop" class="on" style="background: #e4dfdf;">
@@ -91,7 +102,7 @@
 
             <!-- 히트상품 영역 -->
             <section class="hit">
-                <h3><span>히트상품</span></h3>
+                <h3><span class="scroll1" id="scroll1">히트상품</span></h3>
                 <article>
                     <!--반복 시작-->
                     <a th:href="@{/product/view}">
@@ -190,7 +201,7 @@
 
             <!-- 추천상품 영역 -->
             <section class="recommend">
-                <h3><span>추천상품</span></h3>
+                <h3><span class="scroll2" id="scroll2">추천상품</span></h3>
                 <article>
                     <!--반복 시작-->
                     <a href="#">
@@ -337,7 +348,150 @@
 
             <!-- 최신상품 영역 -->
             <section class="new">
-                <h3><span>최신상품</span></h3>
+                <h3><span class="scroll3" id="scroll3">최신상품</span></h3>
+                <article>
+                    <!--반복 시작-->
+                    <a href="#">
+                        <div class="thumb">
+                            <img th:src="@{/images/my/임시 이미지.png}" alt="">
+                        </div>
+                        <h2>상품이름</h2>
+                        <p>상품설명</p>
+                        <div class="org_price">
+                            <del>50000</del>
+                            <span>50%</span>
+                        </div>
+                        <div class="dis_price">
+                            <ins>25000</ins>
+                            <span class="free">무료배송</span>
+                        </div>
+                    </a>
+                    <!--반복 끝-->
+                    <!--반복 시작-->
+                    <a href="#">
+                        <div class="thumb">
+                            <img th:src="@{/images/my/임시 이미지.png}" alt="">
+                        </div>
+                        <h2>상품이름</h2>
+                        <p>상품설명</p>
+                        <div class="org_price">
+                            <del>50000</del>
+                            <span>50%</span>
+                        </div>
+                        <div class="dis_price">
+                            <ins>25000</ins>
+                            <span class="free">무료배송</span>
+                        </div>
+                    </a>
+                    <!--반복 끝-->
+                    <!--반복 시작-->
+                    <a href="#">
+                        <div class="thumb">
+                            <img th:src="@{/images/my/임시 이미지.png}" alt="">
+                        </div>
+                        <h2>상품이름</h2>
+                        <p>상품설명</p>
+                        <div class="org_price">
+                            <del>50000</del>
+                            <span>50%</span>
+                        </div>
+                        <div class="dis_price">
+                            <ins>25000</ins>
+                            <span class="free">무료배송</span>
+                        </div>
+                    </a>
+                    <!--반복 끝-->
+                    <!--반복 시작-->
+                    <a href="#">
+                        <div class="thumb">
+                            <img th:src="@{/images/my/임시 이미지.png}" alt="">
+                        </div>
+                        <h2>상품이름</h2>
+                        <p>상품설명</p>
+                        <div class="org_price">
+                            <del>50000</del>
+                            <span>50%</span>
+                        </div>
+                        <div class="dis_price">
+                            <ins>25000</ins>
+                            <span class="free">무료배송</span>
+                        </div>
+                    </a>
+                    <!--반복 끝-->
+                    <!--반복 시작-->
+                    <a href="#">
+                        <div class="thumb">
+                            <img th:src="@{/images/my/임시 이미지.png}" alt="">
+                        </div>
+                        <h2>상품이름</h2>
+                        <p>상품설명</p>
+                        <div class="org_price">
+                            <del>50000</del>
+                            <span>50%</span>
+                        </div>
+                        <div class="dis_price">
+                            <ins>25000</ins>
+                            <span class="free">무료배송</span>
+                        </div>
+                    </a>
+                    <!--반복 끝-->
+                    <!--반복 시작-->
+                    <a href="#">
+                        <div class="thumb">
+                            <img th:src="@{/images/my/임시 이미지.png}" alt="">
+                        </div>
+                        <h2>상품이름</h2>
+                        <p>상품설명</p>
+                        <div class="org_price">
+                            <del>50000</del>
+                            <span>50%</span>
+                        </div>
+                        <div class="dis_price">
+                            <ins>25000</ins>
+                            <span class="free">무료배송</span>
+                        </div>
+                    </a>
+                    <!--반복 끝-->
+                    <!--반복 시작-->
+                    <a href="#">
+                        <div class="thumb">
+                            <img th:src="@{/images/my/임시 이미지.png}" alt="">
+                        </div>
+                        <h2>상품이름</h2>
+                        <p>상품설명</p>
+                        <div class="org_price">
+                            <del>50000</del>
+                            <span>50%</span>
+                        </div>
+                        <div class="dis_price">
+                            <ins>25000</ins>
+                            <span class="free">무료배송</span>
+                        </div>
+                    </a>
+                    <!--반복 끝-->
+                    <!--반복 시작-->
+                    <a href="#">
+                        <div class="thumb">
+                            <img th:src="@{/images/my/임시 이미지.png}" alt="">
+                        </div>
+                        <h2>상품이름</h2>
+                        <p>상품설명</p>
+                        <div class="org_price">
+                            <del>50000</del>
+                            <span>50%</span>
+                        </div>
+                        <div class="dis_price">
+                            <ins>25000</ins>
+                            <span class="free">무료배송</span>
+                        </div>
+                    </a>
+                    <!--반복 끝-->
+                </article>
+            </section>
+
+
+            <section class="popularity">
+                <h3><span class="scroll4" id="scroll4">인기상품</span></h3>
                 <article>
                     <!--반복 시작-->
                     <a href="#">
@@ -480,9 +634,10 @@
 
 
 
+
             <!-- 할인상품 영역 -->
             <section class="discount">
-                <h3><span>할인상품</span></h3>
+                <h3><span class="scroll5" id="scroll5">할인상품</span></h3>
                 <article>
                     <!--반복 시작-->
                     <a href="#">
@@ -627,10 +782,10 @@
 
     <footer>
         <ul>
-            <li><a href="/company/index">회사소개</a></li>
-            <li><a href="#">서비스이용약관</a></li>
-            <li><a href="#">개인정보처리방침</a></li>
-            <li><a href="#">전자금융거래약관</a></li>
+            <li><a th:href="@{/company/index}">회사소개</a></li>
+            <li><a th:href="@{/policy/buyer}">서비스이용약관</a></li>
+            <li><a th:href="@{/policy/privacy}">개인정보처리방침</a></li>
+            <li><a th:href="@{/policy/finance}">전자금융거래약관</a></li>
         </ul>
         <div>
             <p><img th:src="@{images/main/footer_logo.png}" alt="로고"/></p>

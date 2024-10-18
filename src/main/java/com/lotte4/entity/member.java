@@ -2,6 +2,7 @@ package com.lotte4.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import lombok.*;
 
@@ -14,7 +15,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @Table(name = "member")
+@Entity
 public class member {
+
     @Id
     private int member_Id;
     private String name;
