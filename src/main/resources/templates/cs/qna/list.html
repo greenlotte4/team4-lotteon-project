@@ -16,28 +16,84 @@
       <div id="category">
         <p>회원<br><span class="subtitle">회원 관련 문의 내용입니다.</span></p>
         <div class="breadcrumb">
-          <a href="#">Home</a> > <a href="#" class="location">공지사항</a>
+          <a th:href="@{/cs/qna/list}">Home</a> > <a th:href="@{/cs/qna/list}">문의하기</a> > <a th:href="@{/cs/qna/list}" class="location">회원</a>
         </div>
       </div>
       <table>
         <!-- th:each -->
         <tr class="qna">
-          <td><a href="#">[안내] 해외결제사칭 문자주의</a></td>
+          <td><a th:href="@{/cs/qna/view}">[안내] 해외결제사칭 문자주의</a></td>
           <td class="status_ing">검토중</td>
           <!-- 답변완료 = class="status_finished" -->
           <td>chh**</td>
           <td>00.00.00</td>
         </tr>
         <tr class="qna">
-          <td><a href="#">[안내] 해외결제사칭 문자주의</a></td>
+          <td><a th:href="@{/cs/qna/view}">[안내] 해외결제사칭 문자주의</a></td>
+          <td class="status_ing">검토중</td>
+          <td>chh**</td>
+          <td>00.00.00</td>
+        </tr>
+        <tr class="qna">
+          <td><a th:href="@{/cs/qna/view}">[안내] 해외결제사칭 문자주의</a></td>
+          <td class="status_ing">검토중</td>
+          <td>chh**</td>
+          <td>00.00.00</td>
+        </tr>
+        <tr class="qna">
+          <td><a th:href="@{/cs/qna/view}">[안내] 해외결제사칭 문자주의</a></td>
+          <td class="status_ing">검토중</td>
+          <td>chh**</td>
+          <td>00.00.00</td>
+        </tr>
+        <tr class="qna">
+          <td><a th:href="@{/cs/qna/view}">[안내] 해외결제사칭 문자주의</a></td>
+          <td class="status_ing">검토중</td>
+          <td>chh**</td>
+          <td>00.00.00</td>
+        </tr>
+        <tr class="qna">
+          <td><a th:href="@{/cs/qna/view}">[안내] 해외결제사칭 문자주의</a></td>
+          <td class="status_ing">검토중</td>
+          <td>chh**</td>
+          <td>00.00.00</td>
+        </tr>
+        <tr class="qna">
+          <td><a th:href="@{/cs/qna/view}">[안내] 해외결제사칭 문자주의</a></td>
+          <td class="status_ing">검토중</td>
+          <td>chh**</td>
+          <td>00.00.00</td>
+        </tr>
+        <tr class="qna">
+          <td><a th:href="@{/cs/qna/view}">[안내] 해외결제사칭 문자주의</a></td>
+          <td class="status_ing">검토중</td>
+          <td>chh**</td>
+          <td>00.00.00</td>
+        </tr>
+        <tr class="qna">
+          <td><a th:href="@{/cs/qna/view}">[안내] 해외결제사칭 문자주의</a></td>
+          <td class="status_ing">검토중</td>
+          <td>chh**</td>
+          <td>00.00.00</td>
+        </tr>
+        <tr class="qna">
+          <td><a th:href="@{/cs/qna/view}">[안내] 해외결제사칭 문자주의</a></td>
           <td class="status_ing">검토중</td>
           <td>chh**</td>
           <td>00.00.00</td>
         </tr>
       </table>
-      <button id="btnQNA">문의하기</button>
+      <a th:href="@{/cs/qna/write}" id="toQnaWrite"><button id="btnQNA">문의하기</button></a>
     </div>
-      <div>이전 1 2 3 4 5 다음<!-- paging 처리 들어갈 자리 --></div>
+      <div class="pagination">
+        <button class="page-btn">이전</button>
+        <button class="page-num">1</button>
+        <button class="page-num">2</button>
+        <button class="page-num">3</button>
+        <button class="page-num">4</button>
+        <button class="page-num">5</button>
+        <button class="page-btn">다음</button>
+      </div>
     </section>
   </div>
   <footer th:replace="~{/include/footer.html}"></footer>

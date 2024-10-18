@@ -6,10 +6,10 @@
         <div class="util innerContent">
             <div class="accountArea">
                 <ul>
-                    <li><a href="https://www.lotteon.com/p/member/gate/forwarding/login">로그인</a></li>
-                    <li><a href="https://www.lotteon.com/p/member/join/joinInfm">회원가입</a></li>
-                    <li><a href="https://www.lotteon.com/p/order/mylotte/orderDeliveryList">주문배송</a></li>
-                    <li><a href="https://www.lotteon.com/p/customer/customerCenter/customerMain">고객센터</a></li>
+                    <li><a th:href="@{/member/login}">로그인</a></li>
+                    <li><a th:href="@{/member/join}">회원가입</a></li>
+                    <li><a th:href="@{/my/order}">주문배송</a></li>
+                    <li><a th:href="@{/cs/index}">고객센터</a></li>
                 </ul>
             </div>
         </div>
@@ -18,7 +18,7 @@
         <div class="main">
             <div class="main innerContent">
                 <h1 class="logoArea">
-                    <a href="https://www.lotteon.com/?mall_no=1">
+                    <a th:href="@{/index}">
                         <img src="https://static.lotteon.com/p/common/foCommon/assets/img/logo_lotte-on@2x.png" alt="LOTTE ON">
                     </a>
                 </h1>

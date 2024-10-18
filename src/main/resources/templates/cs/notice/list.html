@@ -14,25 +14,63 @@
     <section id="section_wrapper">
         <div id="titleAndTable">
             <div id="category">
-                <p>전체<br><span class="subtitle">공지사항 전체 내용입니다.</span></p>
+                <p>전체<br><span class="subtitle">공지사항 전체 내용입니다.</span></p> <!-- 좌측의 전체 부분 2개는 해당 카테고리가 출력되도록 구현. th:if cate1==1 고객서비스 이런 식? -->
                 <div class="breadcrumb">
-                    <a href="#">Home</a> > <a href="#" class="location">공지사항</a>
+                    <a th:href="@{/cs/notice/list}">Home</a> > <a th:href="@{/cs/notice/list}">공지사항</a> > <a th:href="@{/cs/notice/list}" class="location">전체</a>
                 </div>
             </div>
             <table>
                 <!-- th:each -->
                 <tr class="notice">
-                    <td><a href="#">[안내] 해외결제사칭 문자주의</a></td>
+                    <td>[안내] <a th:href="@{/cs/notice/view}">해외결제사칭 문자주의</a></td>
                     <td>00.00.00</td>
                 </tr>
                 <tr class="notice">
-                    <td><a href="#">[안내] 해외결제사칭 문자주의</a></td>
+                    <td>[안내] <a th:href="@{/cs/notice/view}">해외결제사칭 문자주의</a></td>
+                    <td>00.00.00</td>
+                </tr>
+                <tr class="notice">
+                    <td>[안내] <a th:href="@{/cs/notice/view}">해외결제사칭 문자주의</a></td>
+                    <td>00.00.00</td>
+                </tr>
+                <tr class="notice">
+                    <td>[안내] <a th:href="@{/cs/notice/view}">해외결제사칭 문자주의</a></td>
+                    <td>00.00.00</td>
+                </tr>
+                <tr class="notice">
+                    <td>[안내] <a th:href="@{/cs/notice/view}">해외결제사칭 문자주의</a></td>
+                    <td>00.00.00</td>
+                </tr>
+                <tr class="notice">
+                    <td>[안내] <a th:href="@{/cs/notice/view}">해외결제사칭 문자주의</a></td>
+                    <td>00.00.00</td>
+                </tr>
+                <tr class="notice">
+                    <td>[안내] <a th:href="@{/cs/notice/view}">해외결제사칭 문자주의</a></td>
+                    <td>00.00.00</td>
+                </tr>
+                <tr class="notice">
+                    <td>[안내] <a th:href="@{/cs/notice/view}">해외결제사칭 문자주의</a></td>
+                    <td>00.00.00</td>
+                </tr>
+                <tr class="notice">
+                    <td>[안내] <a th:href="@{/cs/notice/view}">해외결제사칭 문자주의</a></td>
+                    <td>00.00.00</td>
+                </tr>
+                <tr class="notice">
+                    <td>[안내] <a th:href="@{/cs/notice/view}">해외결제사칭 문자주의</a></td>
                     <td>00.00.00</td>
                 </tr>
             </table>
-        </div>
-        <div>
-            이전 1 2 3 4 5 다음<!-- paging 처리 들어갈 자리 -->
+            <div class="pagination">
+                <button class="page-btn">이전</button>
+                <button class="page-num">1</button>
+                <button class="page-num">2</button>
+                <button class="page-num">3</button>
+                <button class="page-num">4</button>
+                <button class="page-num">5</button>
+                <button class="page-btn">다음</button>
+            </div>
         </div>
     </section>
 </div>
