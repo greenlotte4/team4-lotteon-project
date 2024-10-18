@@ -10,7 +10,6 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Table(name = "member")
-@Entity
 public class MemberInfo {
 
     @Id
@@ -25,5 +24,27 @@ public class MemberInfo {
     private String addr2;
     private int point;
     private String updatedAt;
-    private int state;
+    @Enumerated(EnumType.ORDINAL)
+    private status status;
+    @Enumerated(EnumType.ORDINAL)
+    private grade grade;
+
+
+    public enum status{
+        정상, // 0번
+        중지, // 1번
+        휴면, // 2번
+        탈퇴  // 3번
+    }
+
+    public enum grade{
+        ADMIN,  //0번
+        FAMILY, //1번
+        SILVER, //2번
+        GOLD,   //3번
+        VIP,    //4번
+        VVIP,   //5번
+        SELLER, //6번
+    }
+
 }

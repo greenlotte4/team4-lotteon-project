@@ -91,6 +91,7 @@
 .content__bar{
     display: flex;
     justify-content: space-around;
+
 }
 
 .operation_text tr td {

@@ -15,7 +15,7 @@
     <div id="category">
       <p>회원<br><span>회원 관련 자주 묻는 질문입니다.</span></p>
       <div class="breadcrumb">
-        <a href="#">Home</a> > <a href="#" class="location">자주 묻는 질문</a>
+        <a th:href="@{/cs/faq/list}">Home</a> > <a th:href="@{/cs/faq/list}">자주 묻는 질문</a> > <a th:href="@{/cs/faq/list}" class="location">회원</a>
       </div>
     </div>
       <div class="faq-Table">
@@ -23,13 +23,13 @@
         <table>
           <!-- th:each 기본 3개 출력 / 더보기 시 10개 -->
           <tr class="faq">
-            <td><a href="#"><img th:src="@{/images/cs/Q.png}" alt="Q">개인회원과 법인회원에 차이가 있나요 ?</a></td>
+            <td><a th:href="@{/cs/faq/view}"><img th:src="@{/images/cs/Q.png}" alt="Q">개인회원과 법인회원에 차이가 있나요 ?</a></td>
           </tr>
           <tr class="faq">
-            <td><a href="#"><img th:src="@{/images/cs/Q.png}" alt="Q">개인회원과 법인회원에 차이가 있나요 ?</a></td>
+            <td><a th:href="@{/cs/faq/view}"><img th:src="@{/images/cs/Q.png}" alt="Q">개인회원과 법인회원에 차이가 있나요 ?</a></td>
           </tr>
           <tr class="faq">
-            <td><a href="#"><img th:src="@{/images/cs/Q.png}" alt="Q">개인회원과 법인회원에 차이가 있나요 ?</a></td>
+            <td><a th:href="@{/cs/faq/view}"><img th:src="@{/images/cs/Q.png}" alt="Q">개인회원과 법인회원에 차이가 있나요 ?</a></td>
           </tr>
           <tr class="last-Tr">
             <td class="showMoreOrLess">
@@ -43,13 +43,13 @@
         <table>
           <!-- th:each -->
           <tr class="faq">
-            <td><a href="#"><img th:src="@{/images/cs/Q.png}" alt="Q">개인회원과 법인회원에 차이가 있나요 ?</a></td>
+            <td><a th:href="@{/cs/faq/view}"><img th:src="@{/images/cs/Q.png}" alt="Q">개인회원과 법인회원에 차이가 있나요 ?</a></td>
           </tr>
           <tr class="faq">
-            <td><a href="#"><img th:src="@{/images/cs/Q.png}" alt="Q">개인회원과 법인회원에 차이가 있나요 ?</a></td>
+            <td><a th:href="@{/cs/faq/view}"><img th:src="@{/images/cs/Q.png}" alt="Q">개인회원과 법인회원에 차이가 있나요 ?</a></td>
           </tr>
           <tr class="faq">
-            <td><a href="#"><img th:src="@{/images/cs/Q.png}" alt="Q">개인회원과 법인회원에 차이가 있나요 ?</a></td>
+            <td><a th:href="@{/cs/faq/view}"><img th:src="@{/images/cs/Q.png}" alt="Q">개인회원과 법인회원에 차이가 있나요 ?</a></td>
           </tr>
           <tr class="last-Tr">
             <td class="showMoreOrLess">

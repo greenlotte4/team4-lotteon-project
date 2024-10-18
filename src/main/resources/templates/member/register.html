@@ -13,9 +13,11 @@
 <header th:replace="~{/include/mem_header.html}"></header>
 <body>
     <main>
-        <h2 class="titregister">
-            <span class="tit">회원가입</span>
-        </h2>
+        <div>
+            <h2 class="titregister">
+                <span class="tit">회원가입</span>
+            </h2>
+        </div>
         <div class="main-wrapper">
 
             <div class="main-box">
@@ -56,8 +58,12 @@
                                 <td>성별</td>
                                 <td>
                                     <div class="gender-selection">
-                                        <input type="radio" name="gender" value="man">남
-                                        <input type="radio" name="gender" value="woman">여
+                                        <label>
+                                            <input type="radio" name="gender" value="man">남
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="gender" value="woman">여
+                                        </label>
                                     </div>
                                 </td>
                             </tr>
