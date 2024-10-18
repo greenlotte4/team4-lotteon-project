@@ -1,7 +1,9 @@
 package com.lotte4.controller.pagecontroller.admin.config;
 
+import com.lotte4.entity.Info;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 
 @Controller
@@ -18,7 +20,15 @@ public class ConfigController {
     public String AdminconfigBasic() {
         return "/admin/config/info";
     }
-    
+
+    //기본설정
+    @PostMapping("/admin/config/info")
+    public String AdminConfigInfoInsert(Info info) {
+
+        return "/admin/config/info";
+    }
+
+
     //약관관리
     @GetMapping("/admin/config/policy")
     public String AdminconfigPolicy() {
