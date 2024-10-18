@@ -37,71 +37,114 @@
                         </div>
                     </article>
 
-                    <article class="dashboard-item">
+                    <article class="dashboard-item operation_text dash">
                         <h4>운영현황</h4>
-                        <table class="operation_product">
+                        <table class="operation_product dash_table">
                             <tr>
-                                <th>입금대기</th>
-                                <th>배송준비</th>
-                                <th>취소요청</th>
-                                <th>교환요청</th>
+                                <th class="tb-border">입금대기</th>
+                                <th class="tb-border">배송준비</th>
+                                <th class="tb-border">취소요청</th>
+                                <th class="tb-border">교환요청</th>
                                 <th>반품요청</th>
                             </tr>
-                            <tr>
-                                <td>101건</td>
-                                <td>124건</td>
-                                <td>14건</td>
-                                <td>7건</td>
-                                <td>24건</td>
+                            <tr class="tb-bottom">
+                                <td class="tb-border count">101</td>
+                                <td class="tb-border count">124</td>
+                                <td class="tb-border count">14</td>
+                                <td class="tb-border count">7</td>
+                                <td class="count">24</td>
                             </tr>
                         </table>
-                        <table class="operation_total">
+                        <table class="operation_total operation_table dash_table">
                             <tr>
-                                <th colspan="2">주문건수</th>
-                                <th colspan="2">주문금액</th>
-                                <th colspan="2">회원가입</th>
-                                <th colspan="2">방문자 수</th>
-                                <th colspan="2">신규 게시물</th>
+                                <th colspan="2" class="tb-border">주문건수</th>
+                                <th colspan="2" class="tb-border">주문금액</th>
+                                <th colspan="2" class="tb-border">회원가입</th>
+                                <th colspan="2" class="tb-border">방문자 수</th>
+                                <th colspan="2">문의 게시물</th>
+                            </tr>
+                            <tr class="tb-bottom">
+                                <td colspan="2" class="tb-border count">131</td>
+                                <td colspan="2" class="tb-border count">1,130,000</td>
+                                <td colspan="2" class="tb-border count">1,014</td>
+                                <td colspan="2" class="tb-border count">1,014</td>
+                                <td colspan="2" class="count">14</td>
                             </tr>
                             <tr>
-                                <td colspan="2">131</td>
-                                <td colspan="2">1,130,000원</td>
-                                <td colspan="2">1,014명</td>
-                                <td colspan="2">1,014명</td>
-                                <td colspan="2">14개</td>
-                            </tr>
-                            <tr>
-                                <td>오늘<br>어제</td>
-                                <td>60<br>70</td>
-                                <td>오늘<br>어제</td>
-                                <td>1,200,000<br>2,500,000</td>
-                                <td>오늘<br>어제</td>
-                                <td>102<br>130</td>
-                                <td>오늘<br>어제</td>
-                                <td>1,200<br>1,300</td>
-                                <td>오늘<br>어제</td>
+                                <td class="tb-border">오늘<br>어제</td>
+                                <td class="tb-border">60<br>70</td>
+                                <td class="tb-border">오늘<br>어제</td>
+                                <td class="tb-border">1,200,000<br>2,500,000</td>
+                                <td class="tb-border">오늘<br>어제</td>
+                                <td class="tb-border">102<br>130</td>
+                                <td class="tb-border">어제<br>오늘</td>
+                                <td class="tb-border">1,200<br>1,300</td>
+                                <td class="tb-border">어제<br>오늘</td>
                                 <td>12<br>13</td>
 
                             </tr>
                         </table>
                     </article>
 
-                    <article class="dashboard-item">
-                        <h4>공지사항</h4>
-                        <ul>
-                            <li><a href="#">[안내] 해외결제사 창 문자주의</a></li>
-                            <li><a href="#">[안내] 롯데ON 배송관련 안내</a></li>
-                            <li><a href="#">[안내] 구매확정 안내</a></li>
-                        </ul>
+                    <article class="dashboard-item article">
+                        <h4 class="dash-bottom">공지사항</h4>
+                        <table class="dash-padding">
+                            <tbody>
+                                <tr>
+                                    <td><a href="#">[안내] 해외결제사 창 문자주의</a></td>
+                                    <td>22.10.31</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#">[안내] 롯데ON 배송관련 안내</a></td>
+                                    <td>22.10.31</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#">[안내] 구매확정 안내</a></td>
+                                    <td>22.10.31</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#">[안내] 롯데ON 배송관련 안내</a></td>
+                                    <td>22.10.31</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#">[안내] 구매확정 안내</a></td>
+                                    <td>22.10.31</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </article>
 
-                    <article class="dashboard-item">
-                        <h4>고객문의</h4>
-                        <ul>
-                            <li>[가입] 개인정보 문의 - 22.10.31</li>
-                            <li>[배송] 배송 문의 - 22.10.31</li>
-                            <li>[회원정보] 정보 수정 문의 - 22.10.31</li>
-                        </ul>
+                    <article class="dashboard-item article">
+                        <h4 class="dash-bottom">고객문의</h4>
+                        <table class="dash-padding">
+                            <tbody>
+                            <tr>
+                                <td><a href="#">[가입] 개인정보 문의</a></td>
+                                <td>작성자</td>
+                                <td>22.10.31</td>
+                            </tr>
+                            <tr>
+                                <td><a href="#">[배송] 배송 문의</a></td>
+                                <td>작성자</td>
+                                <td>22.10.31</td>
+                            </tr>
+                            <tr>
+                                <td><a href="#">[회원정보] 정보 수정 문의</a></td>
+                                <td>작성자</td>
+                                <td>22.10.31</td>
+                            </tr>
+                            <tr>
+                                <td><a href="#">[배송] 배송 문의</a></td>
+                                <td>작성자</td>
+                                <td>22.10.31</td>
+                            </tr>
+                            <tr>
+                                <td><a href="#">[회원정보] 정보 수정 문의</a></td>
+                                <td>작성자</td>
+                                <td>22.10.31</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </article>
                 </div>
             </section>

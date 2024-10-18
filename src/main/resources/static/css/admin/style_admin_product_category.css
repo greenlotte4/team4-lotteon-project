@@ -137,12 +137,12 @@ body {
     margin-top: 20px;
 }
 
-ul {
+.form ul {
     list-style-type: none;
     padding-left: 0;
 }
 
-li {
+.form li {
     padding: 10px 0;
 }
 
