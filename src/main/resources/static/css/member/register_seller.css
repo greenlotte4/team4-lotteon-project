@@ -1,100 +1,29 @@
 .register {
-  font: normal 12px '돋움';
+  font: normal 13px '돋움';
 }
-ul,
-ol {
-  list-style: none;
-}
+ul, ol {list-style: none;}
+a {text-decoration: none; color: #111;}
+input, textarea {outline: none;}
 
-a {
-  text-decoration: none;
-  color: #111;
-}
-
-input,
-textarea {
-  outline: none;
+.header-wrapper {
+  height: fit-content;
 }
 
 h2 {
   text-align: center;
   width: 100%;
-  margin: 18px auto;
-  padding-bottom: 15px;
+  margin: 56px auto;
+  padding-bottom: 25px;
 }
 
 .tit {
   font-size: 30px;
 }
 
-
-
-/* 버튼 공통 */
-.btnNext {
-  display: inline-block;
-  padding: 8px;
-  border: 1px solid #bebebe;
-  background: #e9e9e9;
-  color: #111;
-}
-
-.btnSubmit {
-  display: inline-block;
-  padding: 7px;
-  border: 1px solid #bebebe;
-  background: #e9e9e9;
-  color: #111;
-}
-
-.btnWrite {
-  display: inline-block;
-  padding: 7px;
-  border: 1px solid #3b3c3f;
-  background: #4b545e;
-  color: #fff;
-}
-
-.btnCancel {
-  display: inline-block;
-  padding: 8px;
-  border: 1px solid #bebebe;
-  background: #fdfdfd;
-  color: #111;
-}
-
-.btnDelete {
-  display: inline-block;
-  padding: 8px;
-  border: 1px solid #bebebe;
-  background: #fdfdfd;
-  color: #111;
-}
-
-.btnModify {
-  display: inline-block;
-  padding: 8px;
-  border: 1px solid #bebebe;
-  background: #fdfdfd;
-  color: #111;
-}
-
-.btnList {
-  display: inline-block;
-  padding: 8px;
-  border: 1px solid #bebebe;
-  background: #fdfdfd;
-  color: #111;
-}
-
-.header-wrapper {
-  height: fit-content;
-}
-
 .main-wrapper {
   display: flex;
   justify-content: center;
 }
-
 .main-box {
   width: 980px;
   height: calc(100vh - 277px);
@@ -102,14 +31,18 @@ h2 {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 83px;
 }
 
 /* 회원가입 */
 .register {
-  width: 780px;
-  height: auto;
-  margin: 0px auto;
-  overflow: hidden;
+
+  margin-left: 8px;
+  box-sizing: border-box;
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
 .register table {
@@ -119,74 +52,65 @@ h2 {
   margin-bottom: 10px;
   border-top: 2px solid #e9e9e9;
 }
-
 .register table caption {
   text-align: left;
   padding: 10px 0;
   font-weight: bold;
   box-sizing: border-box;
 }
+
 .register table tr {
   border: none;
 }
 
-.register table tr>td {
-  padding: 6px 12px;
-  border: 1px solid #e9e9e9;
+.register table tr > td {
+  padding: 15px;
   box-sizing: border-box;
 }
-
-.register table tr>td:nth-child(1) {
-  width: 115px;
+.register table tr > td:nth-child(1) {
+  width: 124px;
   background: #f5f8f9;
 }
-
-.register table tr .nickInfo {
-  margin-bottom: 6px;
+.registerButton {
+  align-content:center;}
+.regBtn {
+  border: none;
+  padding : 10px 40px;
+  line-height: 21px;
+  margin: 15px auto 0;
+  color: #fbf2ff;
+  background-color: #ef2a23;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+  float: right;
 }
-
+.register table tr .nickInfo {margin-bottom: 6px;}
 .register table input {
-  width: 162px;
-  height: 22px;
-  border: 1px solid #e4eaec;
-  background: #f7f7f7;
-  text-indent: 6px;
+  height: 29px;
+  padding: 10px;
+  font-size: 13px;
+  border: 1px solid #e9e9e9;
+  border-radius: 5px;
+  box-sizing: border-box;
 }
-
-.register table input[name=gender] {
-  display: block;
-  width: 38px;
-  margin: 4px 0;
-}
-
 .register table input[name=addr1] {
   display: block;
   width: 360px;
   margin: 4px 0;
 }
-
 .register table input[name=addr2] {
   display: block;
   width: 360px;
 }
-
 .register table button {
   border: none;
   vertical-align: bottom;
 }
-
 .register > form > div {
   margin: 0 auto;
-  width: 427px;
+  width: 544px;
   background-size: cover
-}
-
-input.sellerbtn {
-  border: none;
-  background-image: url(/lotteon/images/member/member_join_tit_seller.gif);
-  width: 427px;
-  height: 64px;
-  margin-top: 38px;
-  margin-right: 81px;
-  cursor: pointer;
 }
