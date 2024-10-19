@@ -1,6 +1,5 @@
-package com.lotte4.entity;
+package com.lotte4.dto;
 
-import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -9,17 +8,24 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "info_footer")
-public class InfoFooter {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int InfoFooterId;
+public class InfoDTO {
+
+    private int infoId;
+
+    // 제목
+    private String title;
+    private String subTitle;
+
+    // 로고
+    private String headerLogo;
+    private String favicon;
 
     // 기업 정보
     private String footerLogo;
     private String companyName;
-    private String companyOwner;
-    private String MailOrderSalesApprovalNumber;
+    private String companyCeo;
+    private String companyBusinessNumber;
+    private String mosaNumber;
     private String companyAddress;
     private String companyAddress2;
 
