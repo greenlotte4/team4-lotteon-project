@@ -15,20 +15,6 @@ public class ConfigController {
         return "/admin/config/banner";
     }
 
-    //기본설정
-    @GetMapping("/admin/config/info")
-    public String AdminconfigBasic() {
-        return "/admin/config/info";
-    }
-
-    //기본설정
-    @PostMapping("/admin/config/info")
-    public String AdminConfigInfoInsert(Info info) {
-
-        return "/admin/config/info";
-    }
-
-
     //약관관리
     @GetMapping("/admin/config/policy")
     public String AdminconfigPolicy() {

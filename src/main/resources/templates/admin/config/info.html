@@ -13,6 +13,82 @@
   <!--각 페이지(section) 개별 css-->
   <link rel="stylesheet" th:href="@{/css/admin/style_admin_config_basic.css}"/>
 
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+      // 로고 폼은 form-data 형식으로 전송
+      const logoForm = document.querySelector('#logoForm');
+      logoForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(logoForm);
+        fetch(logoForm.action, {
+          method: 'POST',
+          body: formData
+        })
+                .then(response => {
+                  if (!response.ok) throw new Error('네트워크 오류 발생');
+                  return response.json();
+                })
+                .then(responseData => {
+                  alert('로고 수정이 완료되었습니다.');
+                  window.location.reload();
+                })
+                .catch(error => alert('로고 수정 중 오류가 발생했습니다.'));
+      });
+
+      // 일반 폼은 JSON 형식으로 전송
+      const submitJsonForm = (form) => {
+        form.addEventListener('submit', function(event) {
+          event.preventDefault();
+
+          let isModified = false;
+
+          form.querySelectorAll('input[type="text"]').forEach(input => {
+            const originalValue = input.getAttribute('data-original');
+            const currentValue = input.value;
+            if (originalValue !== currentValue) {
+              isModified = true;
+            }
+          });
+
+          if (!isModified) {
+            alert('변경된 사항이 없습니다.');
+            return;
+          }
+
+          const isConfirmed = confirm('정말 수정하시겠습니까?');
+          if (!isConfirmed) return;
+
+          const formData = new FormData(form);
+          const jsonData = {};
+          formData.forEach((value, key) => jsonData[key] = value);
+
+          fetch(form.action, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(jsonData),
+          })
+                  .then(response => {
+                    if (!response.ok) throw new Error('네트워크 오류 발생');
+                    return response.json();
+                  })
+                  .then(responseData => {
+                    alert('수정이 완료되었습니다.');
+                    window.location.reload();
+                  })
+                  .catch(error => alert('수정 중 오류가 발생했습니다.'));
+        });
+      };
+
+      // 일반 폼에 적용
+      const jsonForms = document.querySelectorAll('.json-form');
+      jsonForms.forEach(submitJsonForm);
+
+    });
+  </script>
 </head>
 <body>
 <header th:replace="~{/admin/include/header.html}"></header>
@@ -37,7 +113,7 @@
             <tr>
               <td class="label">사이트 버전</td>
               <td>
-                1.0.1-RELEASE
+                [[${appInfo.appVersion}]]
               </td>
             </tr>
           </table>
@@ -47,19 +123,19 @@
           <h4>사이트</h4>
           <p class="sub-title">브라우저 탭, 헤더 및 푸터 노출 정보입니다</p>
         </div>
-        <form method="post" action="#" >
+        <form class="json-form" id="infoForm" action="/lotteon/admin/config/info" method="post">
           <div class="inquiry-section">
             <table class="inquiry-table">
               <tr>
                 <td class="label">제목</td>
                 <td>
-                  <input type="text" name="title" value="롯데 ON"/>
+                  <input type="text" name="title" th:value="${info.title}" th:attr="data-original=${info.title}"/>
                 </td>
               </tr>
               <tr>
                 <td class="label">부제</td>
                 <td>
-                  <input type="text" name="subtitle" value="더나은쇼핑위한선택" />
+                  <input type="text" name="subTitle" th:value="${info.subTitle}" th:attr="data-original=${info.subTitle}"/>
                 </td>
               </tr>
             </table>
@@ -73,14 +149,14 @@
           <h4>로고</h4>
           <p class="sub-title">브라우저 탭, 헤더 및 푸터 노출 로고입니다</p>
         </div>
-        <form method="post" action="#" enctype="multipart/form-data">
+        <form id="logoForm" action="/lotteon/admin/config/logo" method="post" enctype="multipart/form-data">
           <div class="inquiry-section">
             <table class="inquiry-table">
               <tr>
                 <td class="label">헤더로고</td>
                 <td>
                   <div class="file-upload file">
-                    <input type="file" id="productImage" name="productImages" />
+                    <input type="file" id="headerLogo" name="headerLogo" />
                     크기 370 x 76 권장
                   </div>
                 </td>
@@ -89,7 +165,7 @@
                 <td class="label">푸터로고</td>
                 <td>
                   <div class="file-upload file">
-                    <input type="file" id="productImage" name="productImages" />
+                    <input type="file" id="footerLogo" name="footerLogo"  />
                     크기 155 x 36 권장
                   </div>
                 </td>
@@ -98,7 +174,7 @@
                 <td class="label">파비콘</td>
                 <td>
                   <div class="file-upload file">
-                    <input type="file" id="productImage" name="productImages" />
+                    <input type="file" id="favicon" name="favicon" />
                     크기 32 x 32 권장
                   </div>
                 </td>
@@ -114,43 +190,43 @@
           <h4>기업정보</h4>
           <p class="sub-title">푸터에 노출되는 기업 정보입니다.</p>
         </div>
-        <form method="post" action="#" enctype="multipart/form-data">
+        <form class="json-form" id="companyForm" action="/lotteon/admin/config/company" method="post">
           <div class="inquiry-section">
             <table class="inquiry-table">
               <tr>
                 <td class="label">상호명</td>
                 <td>
-                  <input type="text" name="company" value="롯데쇼핑주식회사"/>
+                  <input type="text" name="companyName" th:value="${info.companyName}" th:attr="data-original=${info.companyName}"/>
                 </td>
               </tr>
               <tr>
                 <td class="label">대표이사</td>
                 <td>
-                  <input type="text" name="ceo" value="홍길동" />
+                  <input type="text" name="companyCeo" th:value="${info.companyCeo}" th:attr="data-original=${info.companyCeo}"/>
                 </td>
               </tr>
               <tr>
                 <td class="label">사업자등록번호</td>
                 <td>
-                  <input type="text" name="eid" value="123-12-12345" />
+                  <input type="text" name="companyBusinessNumber" th:value="${info.companyBusinessNumber}" th:attr="data-original=${info.companyBusinessNumber}"/>
                 </td>
               </tr>
               <tr>
                 <td class="label">통신판매업신고</td>
                 <td>
-                  <input type="text" name="" value="2024-서울강남-1234" />
+                  <input type="text" name="mosaNumber" th:value="${info.mosaNumber}" th:attr="data-original=${info.mosaNumber}"/>
                 </td>
               </tr>
               <tr>
                 <td class="label">기본주소</td>
                 <td>
-                  <input type="text" name="addr1" value="서울특별시강남구테헤란로 507" />
+                  <input type="text" name="companyAddress" th:value="${info.companyAddress}" th:attr="data-original=${info.companyAddress}"/>
                 </td>
               </tr>
               <tr>
                 <td class="label">상세주소</td>
                 <td>
-                  <input type="text" name="addr2" value="{삼성동, WeWork 빌딩} 7층" />
+                  <input type="text" name="companyAddress2" th:value="${info.companyAddress2}" th:attr="data-original=${info.companyAddress2}"/>
                 </td>
               </tr>
             </table>
@@ -164,31 +240,31 @@
           <h4>고객센터 정보</h4>
           <p class="sub-title">푸터에 노출되는 고객센터 정보입니다.</p>
         </div>
-        <form method="post" action="#" >
+        <form class="json-form" id="csForm" action="/lotteon/admin/config/cs" method="post">
           <div class="inquiry-section">
             <table class="inquiry-table">
               <tr>
                 <td class="label">전화번호</td>
                 <td>
-                  <input type="text" name="company" value="02-1234-5678"/>
+                  <input type="text" name="csHp" th:value="${info.csHp}" th:attr="data-original=${info.csHp}"/>
                 </td>
               </tr>
               <tr>
                 <td class="label">업무시간</td>
                 <td>
-                  <input type="text" name="ceo" value="평일 09:00 ~ 18:00" />
+                  <input type="text" name="csWorkingHours" th:value="${info.csWorkingHours}" th:attr="data-original=${info.csWorkingHours}"/>
                 </td>
               </tr>
               <tr>
                 <td class="label">이메일</td>
                 <td>
-                  <input type="text" name="eid" value="lotteon@lotte.net" />
+                  <input type="text" name="csEmail" th:value="${info.csEmail}" th:attr="data-original=${info.csEmail}"/>
                 </td>
               </tr>
               <tr>
                 <td class="label">전자금융거래 분쟁담당</td>
                 <td>
-                  <input type="text" name="" value="1234-1234" />
+                  <input type="text" name="consumer" th:value="${info.consumer}" th:attr="data-original=${info.consumer}"/>
                 </td>
               </tr>
             </table>
@@ -202,13 +278,13 @@
           <h4>카피라이트</h4>
           <p class="sub-title">푸터에 노출되는 카피라이트 정보입니다.</p>
         </div>
-        <form method="post" action="#" >
+        <form class="json-form" id="copyrightForm" action="/lotteon/admin/config/copyright" method="post">
           <div class="inquiry-section">
             <table class="inquiry-table">
               <tr>
                 <td class="label">카피라이트</td>
                 <td>
-                  <input type="text" name="copyright" value="Copyright LotteON. All rights reserved"/>
+                  <input type="text" name="copyright" th:value="${info.copyright}" th:attr="data-original=${info.copyright}"/>
                 </td>
               </tr>
             </table>
@@ -226,87 +302,3 @@
 <footer th:replace="~{/admin/include/footer.html}"></footer>
 </body>
 </html>
-
-<script>
-  // 버전확인 모달 동작
-  document.addEventListener('DOMContentLoaded', function() {
-    var modal = document.getElementById("versionModal");
-    var btns = document.querySelectorAll(".edit-btn"); // "확인" 버튼들
-    var versionCloseBtn = document.getElementById("versionModalClose"); // 버전 모달 닫기 버튼
-    var closeButton = document.getElementById("versionCloseBtn");
-
-    // "확인" 버튼 클릭 시 모달 열기
-    btns.forEach(function(btn) {
-      btn.onclick = function() {
-        modal.style.display = "block";
-      };
-    });
-
-    // 닫기 버튼(X) 클릭 시 모달 닫기
-    versionCloseBtn.onclick = function() {
-      modal.style.display = "none";
-    };
-
-    // 하단 닫기 버튼 클릭 시 모달 닫기
-    closeButton.onclick = function() {
-      modal.style.display = "none";
-    };
-
-    // 모달 외부 클릭 시 모달 닫기
-    window.onclick = function(event) {
-      if (event.target == modal) {
-        modal.style.display = "none";
-      }
-    };
-  });
-
-  // 버전 등록 모달 동작
-  document.addEventListener('DOMContentLoaded', function() {
-    var registerModal = document.getElementById("versionRegisterModal");
-    var registerBtn = document.getElementById("openRegisterModalBtn"); // 등록 버튼
-    var registerCloseBtn = document.getElementById("registerModalClose"); // 등록 모달 닫기 버튼
-    var closeButton = document.getElementById("registerCloseBtn"); // 하단 닫기 버튼
-    var confirmButton = document.getElementById("registerConfirmBtn");
-
-    // 등록 버튼 클릭 시 모달 열기
-    registerBtn.onclick = function() {
-      registerModal.style.display = "block";
-    };
-
-    // 닫기 버튼(X) 클릭 시 모달 닫기
-    registerCloseBtn.onclick = function() {
-      registerModal.style.display = "none";
-    };
-
-    // 하단 닫기 버튼 클릭 시 모달 닫기
-    closeButton.onclick = function() {
-      registerModal.style.display = "none";
-    };
-
-    // 모달 외부 클릭 시 모달 닫기
-    window.onclick = function(event) {
-      if (event.target == registerModal) {
-        registerModal.style.display = "none";
-      }
-    };
-
-    // 등록 확인 버튼 클릭 시
-    confirmButton.onclick = function() {
-      var version = document.getElementById("versionInput").value;
-      var changelog = document.getElementById("changelogInput").value;
-
-      if (version && changelog) {
-        // 등록 로직 추가 (서버 전송 또는 콘솔 출력)
-        console.log("버전:", version);
-        console.log("변경내역:", changelog);
-
-        // 등록 완료 후 모달 닫기
-        registerModal.style.display = "none";
-      } else {
-        alert("모든 필드를 입력해주세요.");
-      }
-    };
-  });
-
-
-</script>

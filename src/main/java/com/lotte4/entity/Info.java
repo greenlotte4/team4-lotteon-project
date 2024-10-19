@@ -9,11 +9,12 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Entity
 @Table(name = "info")
 public class Info {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int InfoId;
+    private int infoId;
 
     // 제목
     private String title;
@@ -23,8 +24,21 @@ public class Info {
     private String headerLogo;
     private String favicon;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "info_footer_id")
-    private InfoFooter infoFooter;
+    // 기업 정보
+    private String footerLogo;
+    private String companyName;
+    private String companyCeo;
+    private String companyBusinessNumber;
+    private String mosaNumber;
+    private String companyAddress;
+    private String companyAddress2;
 
+    // 고객센터 정보
+    private String csHp;
+    private String csWorkingHours;
+    private String csEmail;
+    private String consumer;
+
+    // 카피라이트
+    private String copyright;
 }

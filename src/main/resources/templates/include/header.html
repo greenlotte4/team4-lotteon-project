@@ -19,9 +19,11 @@
         <div class="main">
             <div class="main innerContent">
                 <h1 class="logoArea">
-                    <a th:href="@{/index}">
-                        <img src="https://static.lotteon.com/p/common/foCommon/assets/img/logo_lotte-on@2x.png" alt="LOTTE ON">
-                    </a>
+                    <h1 class="logoArea">
+                        <a th:href="@{/index}">
+                            <img th:src="@{'/uploads/' + ${info.headerLogo}}" alt="LOTTE ON">
+                        </a>
+                    </h1>
                 </h1>
                 <div class="searchAreaWrap">
                     <div class="searchArea">
