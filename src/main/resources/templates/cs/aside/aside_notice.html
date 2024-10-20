@@ -1,10 +1,38 @@
+<link rel="stylesheet" th:href="@{/css/admin/include/style_admin_aside.css}">
 <aside>
-    <link rel="stylesheet" th:href="@{/css/aside/aside_cs.css}"/>
-    <ul class="sidebar-menu">
-        <li><a href="#">전체</a></li>
-        <li><a href="#">고객서비스</a></li>
-        <li><a href="#">안전거래</a></li>
-        <li><a href="#">위해상품</a></li>
-        <li><a href="#">이벤트당첨</a></li>
+    <ul class="sidebar-menu"> <!-- 우선 파라미터 전달해서 데이터 불러오는 방식으로 적어놨습니다. 값은 예시입니다. fetch 쓰셔도 돼요 -->
+        <li>
+            <a th:href="@{/cs/notice/list}">전체</a>
+        </li>
+        <li>
+            <a th:href="@{/cs/notice/list(cate1=${member})}">고객서비스</a>
+        </li>
+        <li>
+            <a th:href="@{/cs/notice/list(cate1=${safeDeal})}">안전거래</a>
+        </li>
+        <li>
+            <a th:href="@{/cs/notice/list(cate1=${harmProd})}">위해상품</a>
+        </li>
+        <li>
+            <a th:href="@{/cs/notice/list(cate1=${eventer})}">이벤트당첨</a>
+        </li>
     </ul>
 </aside>
+
+<script>
+    document.querySelectorAll('.sidebar-menu > li').forEach(function (menuItem) {
+        menuItem.addEventListener('mouseenter', function () {
+            const submenu = menuItem.querySelector('.submenu');
+            if (submenu) {
+                submenu.style.display = 'block';
+            }
+        });
+
+        menuItem.addEventListener('mouseleave', function () {
+            const submenu = menuItem.querySelector('.submenu');
+            if (submenu) {
+                submenu.style.display = 'none';
+            }
+        });
+    });
+</script>
