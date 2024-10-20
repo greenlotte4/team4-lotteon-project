@@ -28,6 +28,7 @@ aside {
     background-color: #ffffff;
     padding: 20px;
     border-radius: 10px;
+    min-height: 650px;
 }
 
 .sidebar-menu {
@@ -51,11 +52,38 @@ aside {
     background-color: #ffffff;
     border-radius: 8px;
     transition: background-color 0.3s ease;
+    margin-top: 12px;
 }
 
 .sidebar-menu a:hover {
     background-color: #f5f5f5;
     font-weight: 900;
+}
+
+.submenu {
+    list-style: none;
+    padding-left: 20px;
+    display: none; /* 처음에는 서브메뉴가 보이지 않음 */
+}
+
+.submenu li {
+    margin-bottom: -13px;
+}
+
+.submenu a {
+    font-size: 13px;
+    font-weight: 400;
+}
+
+.submenu a:hover {
+    font-weight: 700;
+    background-color: #eaeaea;
+}
+
+
+.form {
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 #section_wrapper {

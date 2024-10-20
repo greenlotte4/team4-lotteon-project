@@ -345,3 +345,35 @@
 .confirm-btn:hover {
     background-color: #0056b3;
 }
+
+/* 옵션 설정 */
+.option {
+    margin-bottom: 20px;
+}
+
+.option-values {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.option-value-box {
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    padding: 5px 10px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+}
+
+.option-value-box span {
+    margin-right: 10px;
+}
+
+.delete-value {
+    cursor: pointer;
+    color: red;
+    font-weight: bold;
+}
