@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+@Log4j2
 @RequiredArgsConstructor
 @Controller
 public class ConfigController {
