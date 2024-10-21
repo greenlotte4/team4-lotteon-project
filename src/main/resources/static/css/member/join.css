@@ -12,7 +12,7 @@ main {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-
+  margin-bottom: -77px;
 }
 
 .info1 {
@@ -62,7 +62,7 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 20px;
+  font-size: 18px;
 
 }
 
@@ -74,7 +74,7 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .joininfo {
@@ -83,7 +83,7 @@ main {
   align-items: center; /* 수직 정렬 */
   height: 80px;
   flex-direction: column;
-  margin: 3px;
+  margin: 7px;
 }
 
 .seller, .customer {
@@ -94,6 +94,28 @@ main {
   margin: 9px;
   border: 2px solid #e3e3e3;
   cursor: pointer;
+
+}
+
+.join2 {
+  color: #808080;
+  text-align: left !important;
+}
+
+.join4 {
+  color: #808080;
+  text-align: left !important;
+}
+
+.join-btn {
+  padding: 10px 20px;
+  background-color: #BFBFBF;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  text-decoration: none;
 
 }
 

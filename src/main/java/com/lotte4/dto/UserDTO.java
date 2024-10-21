@@ -21,8 +21,8 @@ import java.time.LocalDateTime;
 public class UserDTO {
 
     private int userId;
-    private MemberInfoDTO memberInfoDTO;
-    private SellerInfoDTO sellerInfoDTO;
+    private MemberInfoDTO memberInfo;
+    private SellerInfoDTO sellerInfo;
 
     private String uid;
     private String pass;
@@ -35,8 +35,8 @@ public class UserDTO {
     public User toEntity() {
         return User.builder()
                 .userId(userId)
-                .memberInfo(memberInfoDTO.toEntity())
-                .sellerInfo(sellerInfoDTO.toEntity())
+                .memberInfo(memberInfo.toEntity())
+                .sellerInfo(sellerInfo.toEntity())
                 .uid(uid)
                 .pass(pass)
                 .role(role)

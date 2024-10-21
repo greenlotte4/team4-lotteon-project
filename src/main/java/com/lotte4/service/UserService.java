@@ -8,7 +8,10 @@ import com.lotte4.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -18,12 +21,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final MemberInfoService memberInfoService;
     private final SellerInfoService sellerInfoService;
+    private final ModelMapper modelMapper;
 
     // 일반회원 회원가입
     public void insertMemberUser(UserDTO userDTO) {
 
         // MemberInfo 저장
-        MemberInfo memberInfo = memberInfoService.insertMemberInfo(userDTO.getMemberInfoDTO());
+        MemberInfo memberInfo = memberInfoService.insertMemberInfo(userDTO.getMemberInfo());
 
         // User 저장
         User user = User.builder()
@@ -45,7 +49,7 @@ public class UserService {
     public void insertSellerUser(UserDTO userDTO) {
 
         // SellerInfo 저장
-        SellerInfo sellerInfo = sellerInfoService.insertSellerInfo(userDTO.getSellerInfoDTO());
+        SellerInfo sellerInfo = sellerInfoService.insertSellerInfo(userDTO.getSellerInfo());
 
         // User 저장
         User user = User.builder()
@@ -62,6 +66,16 @@ public class UserService {
         log.info("selleruser" + user);
 
     }
+
+    // 사용자 조회
+    public UserDTO selectUser(String uid) {
+        return userRepository.findByUid(uid)
+                .map(user -> modelMapper.map(user, UserDTO.class))
+                .orElse(null);
+    }
+
+
+
 
 
 }
