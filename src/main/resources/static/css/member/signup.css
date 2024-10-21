@@ -65,6 +65,14 @@ main {
   margin-bottom: 57px;
 }
 
+.must {
+  color: red;
+}
+
+.option {
+  color: #31859C;
+
+}
 
 /* 약관 */
 .terms {
@@ -126,10 +134,11 @@ main {
 
 .titterm {
   width: 607px;
-  text-align: center;
+  text-align: left;
   /* 텍스트를 가운데 정렬 */
   margin : 0 auto;
   padding-bottom : 30px;
+  border-bottom: 2px solid #d82a2a;
 }
 /* 푸터영역 */
 footer {
