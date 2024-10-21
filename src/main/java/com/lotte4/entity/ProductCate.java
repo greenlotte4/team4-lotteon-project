@@ -1,10 +1,10 @@
 package com.lotte4.entity;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -12,14 +12,29 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Entity
 @Table(name = "product_Cate")
 public class ProductCate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int productCateId;
 
-    private int parent;
+    // 계층
+    private int depth;
+
+
+    // 이름
     private String name;
+
+
     //외래키 목록
-    private int child;
+    // 부모 객체
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "parentId")
+    private ProductCate parent;
+
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
+    private List<ProductCate> children = new ArrayList<>();
+
+
 }

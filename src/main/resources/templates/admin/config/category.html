@@ -47,39 +47,20 @@
                 <section class="category-section">
                     <!-- 카테고리 구조 -->
                     <ul id="category-list" class="deps1">
-                        <li data-depth="1" data-name="여성패션" class="category-item" draggable="true">
-                            <span class="toggle-btn">▶</span>여성패션
+                        <li data-depth="1" class="category-item" draggable="true"  th:each="child : ${productCateDTOList}" th:data-name="${child.getName()}">
+                            <span class="toggle-btn">▶</span>[[${child.getName()}]]
                             <button class="delete-btn">X</button>
-                            <ul class="sub-category subcategory-list">
-                                <li data-depth="2" data-name="브랜드의류" class="deps2 subcategory-item" draggable="true">
-                                    <span class="toggle-btn">▶</span>브랜드의류
-                                    <button class="delete-btn">X</button>
-                                    <ul class="sub-sub-category">
-                                        <li data-depth="3" data-name="신상품" class="deps3 category-item" draggable="true">신상품 <button class="delete-btn">X</button></li>
-                                        <li data-depth="3" data-name="베스트" class="deps3 category-item" draggable="true">베스트 <button class="delete-btn">X</button></li>
-                                    </ul>
-                                </li>
-                                <li data-depth="2" data-name="보세의류" class="deps2 subcategory-item" draggable="true">
-                                    <span class="toggle-btn">▶</span>보세의류
-                                    <button class="delete-btn">X</button>
-                                    <ul class="sub-sub-category">
-                                        <li data-depth="3" data-name="신품" class="deps3 category-item" draggable="true">신품 <button class="delete-btn">X</button></li>
-                                        <li data-depth="3" data-name="베트" class="deps3 category-item" draggable="true">베트 <button class="delete-btn">X</button></li>
-                                    </ul>
 
-                                </li>
-                            </ul>
-                        </li>
-                        <li data-depth="2" data-name="남성패션" class="category-item" draggable="true">
-                            <span class="toggle-btn">▶</span>남성패션
-                            <button class="delete-btn">X</button>
                             <ul class="sub-category subcategory-list">
-                                <li data-depth="2" data-name="브랜드의류" class="deps2 subcategory-item" draggable="true">
-                                    <span class="toggle-btn">▶</span>브랜드의류
+                                <li data-depth="2" class="deps2 subcategory-item" draggable="true" th:each="sub : ${child.getChildren()}" th:data-name="${sub.getName()}">
+                                    <span class="toggle-btn">▶</span>[[${sub.getName()}]]
                                     <button class="delete-btn">X</button>
+
                                     <ul class="sub-sub-category">
-                                        <li data-depth="3" data-name="상품" class="deps3 category-item" draggable="true">상품 <button class="delete-btn">X</button></li>
-                                        <li data-depth="3" data-name="스트" class="deps3 category-item" draggable="true">스트 <button class="delete-btn">X</button></li>
+                                        <li data-depth="3" class="deps3 category-item" draggable="true"  th:each="subChild : ${sub.getChildren()}" th:data-name="${subChild.getName()}">
+                                            [[${subChild.getName()}]]
+                                            <button class="delete-btn">X</button>
+                                        </li>
                                     </ul>
                                 </li>
                             </ul>
@@ -200,6 +181,32 @@
         const categoryName = document.getElementById('newCategoryInput').value.trim();
         const categoryDepth = document.getElementById('categoryDepth').value;
         const selectedParent = parentCategorySelect.value;
+
+        const jsonData = {
+            "name" : categoryName,
+        }
+
+        const queryParams = new URLSearchParams({
+            parent: selectedParent,
+            depth: Number(categoryDepth)
+        });
+
+        fetch('/lotteon/admin/config/category?' + queryParams.toString(),{
+            method:'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonData)
+        })
+            .then(resp => resp.json())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(err=>{
+                console.log(err);
+            });
+
+
 
         if (categoryName !== "") {
             const newCategory = document.createElement('li');
