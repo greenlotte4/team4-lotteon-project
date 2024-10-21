@@ -30,12 +30,6 @@ public class ConfigController {
         return "/admin/config/banner";
     }
 
-    //약관관리
-    @GetMapping("/admin/config/policy")
-    public String AdminconfigPolicy() {
-        return "/admin/config/policy";
-    }
-    
     //버전관리
     @GetMapping("/admin/config/version")
     public String AdminconfigVersion(Model model) {

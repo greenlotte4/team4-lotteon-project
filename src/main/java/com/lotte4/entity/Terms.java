@@ -9,11 +9,13 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Entity
 @Table(name = "terms")
 public class Terms {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int termsId;
+
     private String term;
     private String tax;
     private String finance;
