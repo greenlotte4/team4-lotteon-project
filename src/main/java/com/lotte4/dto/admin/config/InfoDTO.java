@@ -1,4 +1,4 @@
-package com.lotte4.dto;
+package com.lotte4.dto.admin.config;
 
 import lombok.*;
 

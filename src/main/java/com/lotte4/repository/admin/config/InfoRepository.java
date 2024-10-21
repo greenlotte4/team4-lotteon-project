@@ -1,4 +1,4 @@
-package com.lotte4.repository;
+package com.lotte4.repository.admin.config;
 
 import com.lotte4.entity.Info;
 import org.springframework.data.jpa.repository.JpaRepository;

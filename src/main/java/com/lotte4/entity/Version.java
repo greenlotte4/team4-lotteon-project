@@ -2,6 +2,7 @@ package com.lotte4.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -11,27 +12,20 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "board")
-public class Board {
+@Entity
+@Table(name = "version")
+public class Version {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int boardId;
+    private int versionId;
 
     // 유형
-    private String cate;
-    private String type;
-    // 제목
-    private String title;
+    private String versionName;
     // 내용
     private String content;
     // 작성한 시간
+    @CreationTimestamp
     private LocalDateTime regDate;
-    // 작성자 Ip
-    private String regIp;
-    // 상태
-    private int state;
-    // 답변
-    private String comment;
 
     private String uid;
     // TODO : 나중에는 User로 변경

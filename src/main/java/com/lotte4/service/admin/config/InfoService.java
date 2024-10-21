@@ -1,8 +1,8 @@
-package com.lotte4.service;
+package com.lotte4.service.admin.config;
 
-import com.lotte4.dto.InfoDTO;
+import com.lotte4.dto.admin.config.InfoDTO;
 import com.lotte4.entity.Info;
-import com.lotte4.repository.InfoRepository;
+import com.lotte4.repository.admin.config.InfoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -12,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -94,13 +93,13 @@ public class InfoService {
         if (!headerLogo.isEmpty()) {
             String headerLogoFileName = "headerLogo_" + System.currentTimeMillis() + ".png";
             headerLogo.transferTo(new File(uploadDir + headerLogoFileName));
-            info.setHeaderLogo(headerLogoFileName); // 파일명 저장
+            info.setHeaderLogo(headerLogoFileName);
         }
 
         if (!footerLogo.isEmpty()) {
             String footerLogoFileName = "footerLogo_" + System.currentTimeMillis() + ".png";
             footerLogo.transferTo(new File(uploadDir + footerLogoFileName));
-            info.setFooterLogo(footerLogoFileName); // 파일명 저장
+            info.setFooterLogo(footerLogoFileName);
         }
 
         if (!favicon.isEmpty()) {
