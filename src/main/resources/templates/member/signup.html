@@ -24,7 +24,7 @@
                     <section class="terms">
                         <input type="hidden" id="hiddenType" th:value="${type}" />
                         <table>
-                            <caption>(필수) 이용약관</caption>
+                            <caption><span class="must">(필수)</span> 이용약관</caption>
                             <tr>
                                 <td>
                                     <textarea th:text="${type == 1 ? termsDTO.term : (type == 2 ? termsDTO.tax : '')}" readonly></textarea>
@@ -35,7 +35,7 @@
                             </tr>
                         </table>
                         <table>
-                            <caption>(필수) 전자금융 이용약관</caption>
+                            <caption><span class="must">(필수)</span> 전자금융 이용약관</caption>
                             <tr>
                                 <td>
                                     <textarea th:text="${termsDTO.finance}" readonly>개인정보 취급방침</textarea>
@@ -46,7 +46,7 @@
                             </tr>
                         </table>
                         <table>
-                            <caption>(필수) 개인정보 수집동의</caption>
+                            <caption><span class="must">(필수)</span> 개인정보 수집동의</caption>
                             <tr>
                                 <td>
                                     <textarea th:text="${termsDTO.privacy}" readonly>사이트 이용약관</textarea>
@@ -57,7 +57,7 @@
                             </tr>
                         </table>
                         <table th:if="${type == 1}">
-                            <caption>(선택) 위치정보 이용약관</caption>
+                            <caption><span class="option">(선택)</span> 위치정보 이용약관</caption>
                             <tr>
                                 <td>
                                     <textarea th:text="${termsDTO.location}" readonly>사이트 이용약관</textarea>
