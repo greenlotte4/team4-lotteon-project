@@ -16,7 +16,6 @@
   <script>
     document.addEventListener('DOMContentLoaded', function() {
 
-      // 로고 폼은 form-data 형식으로 전송
       const logoForm = document.querySelector('#logoForm');
       logoForm.addEventListener('submit', function(event) {
         event.preventDefault();
@@ -37,7 +36,6 @@
                 .catch(error => alert('로고 수정 중 오류가 발생했습니다.'));
       });
 
-      // 일반 폼은 JSON 형식으로 전송
       const submitJsonForm = (form) => {
         form.addEventListener('submit', function(event) {
           event.preventDefault();

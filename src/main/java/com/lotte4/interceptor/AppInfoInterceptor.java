@@ -1,9 +1,8 @@
 package com.lotte4.interceptor;
 
 import com.lotte4.config.AppInfo;
-import com.lotte4.dto.InfoDTO;
-import com.lotte4.entity.Info;
-import com.lotte4.service.InfoService;
+import com.lotte4.dto.admin.config.InfoDTO;
+import com.lotte4.service.admin.config.InfoService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

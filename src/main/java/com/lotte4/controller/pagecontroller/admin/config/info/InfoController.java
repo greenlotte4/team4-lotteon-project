@@ -1,8 +1,7 @@
 package com.lotte4.controller.pagecontroller.admin.config.info;
 
-import com.lotte4.dto.InfoDTO;
-import com.lotte4.entity.Info;
-import com.lotte4.service.InfoService;
+import com.lotte4.dto.admin.config.InfoDTO;
+import com.lotte4.service.admin.config.InfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;

@@ -1,7 +1,7 @@
 package com.lotte4.config;
 
 import com.lotte4.interceptor.AppInfoInterceptor;
-import com.lotte4.service.InfoService;
+import com.lotte4.service.admin.config.InfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
