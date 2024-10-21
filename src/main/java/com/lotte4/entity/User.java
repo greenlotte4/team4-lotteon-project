@@ -3,6 +3,7 @@ package com.lotte4.entity;
 import com.lotte4.dto.UserDTO;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -25,6 +26,7 @@ public class User {
     // 역할
     private String role;
     //
+    @CreationTimestamp
     private String createdAt;
     private String leaveDate;
 

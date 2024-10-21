@@ -10,6 +10,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Controller
 @Log4j2
@@ -18,15 +22,8 @@ public class InfoController {
 
     private final InfoService infoService;
     //기본설정
-    @GetMapping("/admin/config/info")
-    public String AdminConfigInfoInsert(Model model) {
 
-        InfoDTO infoDTO = infoService.selectInfoDTO();
-        model.addAttribute("info", infoDTO);
-
-        return "/admin/config/info";
-    }
-    // 제목과 부제 수정
+    // 제목과 부제 수정    `
     @PostMapping("/admin/config/info")
     public ResponseEntity<InfoDTO> updateInfo(@RequestBody InfoDTO infoDto) {
 
@@ -57,5 +54,22 @@ public class InfoController {
         InfoDTO updatedInfo = infoService.updateCopyright(infoDto);
         return ResponseEntity.ok(updatedInfo);
     }
-}
+
+        // 로고 파일 업로드 처리
+        @PostMapping("/admin/config/logo")
+        public ResponseEntity<InfoDTO> uploadLogos(@RequestParam("headerLogo") MultipartFile headerLogo,
+                                                   @RequestParam("footerLogo") MultipartFile footerLogo,
+                                                   @RequestParam("favicon") MultipartFile favicon) {
+            try {
+                // 서비스 계층에서 파일 업로드 처리
+                InfoDTO updatedInfo = infoService.uploadLogos(headerLogo, footerLogo, favicon);
+                return ResponseEntity.ok(updatedInfo);
+            } catch (IOException e) {
+                log.error("파일 업로드 중 오류 발생: {}", e.getMessage());
+                return ResponseEntity.status(500).body(null);  // 오류 발생 시 500 상태 반환
+            }
+        }
+    }
+
+
 

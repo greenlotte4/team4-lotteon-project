@@ -33,7 +33,15 @@ footer > div {
     box-sizing: border-box;
     margin: 0 auto;
 }
-
+.logo-image {
+    margin-top: 3px;
+    width: 185px;
+    height: 39px;
+}
+.logo-section {
+    width: 285px;
+    height: 39px;
+}
 footer p {
     float: left;
     height: 100%;

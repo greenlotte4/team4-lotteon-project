@@ -8,14 +8,15 @@
     <link rel="stylesheet" th:href="@{/css/cs/index.css}" />
   </head>
   <body>
-  <header th:replace="~{/include/my_header.html}"></header>
-  <section id="section_wrapper">
-      <!-- Main Title Section -->
-      <section class="main-title-section">
-        <p>롯데 ON</p>
-        <span>이 도와드릴게요!</span>
-      </section>
+  <header th:replace="~{/include/header.html}"></header>
 
+  <main>
+    <section class="main-title-section">
+      <p>롯데 ON</p>
+      <span>이 도와드릴게요!</span>
+    </section>
+    <th:block th:replace="~{/cs/aside/aside.html}"></th:block>
+  <section id="section_wrapper">
       <!-- 공지사항 Section -->
       <section id="notice-section">
         <table>
@@ -279,6 +280,7 @@
         </table>
       </section>
     </section>
+  </main>
   <footer th:replace="~{/include/footer.html}"></footer>
   </body>
 </html>

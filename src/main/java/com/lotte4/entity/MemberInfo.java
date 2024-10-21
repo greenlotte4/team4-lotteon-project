@@ -31,9 +31,11 @@ public class MemberInfo {
 
     @CreationTimestamp
     private String updatedAt;
+    @Builder.Default()
+    private String status = "active";
+    @Builder.Default()
+    private String grade = "family";
 
-    private String status;
-    private String grade;
 //    @Enumerated(EnumType.ORDINAL)
 //    private status status;
 //    @Enumerated(EnumType.ORDINAL)
