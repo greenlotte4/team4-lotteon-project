@@ -29,7 +29,7 @@ public class ProductCate {
 
     //외래키 목록
     // 부모 객체
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parentId")
     private ProductCate parent;
 

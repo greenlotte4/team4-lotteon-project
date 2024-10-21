@@ -14,6 +14,21 @@
     <link rel="stylesheet" th:href="@{/css/admin/style_admin_product_category.css}"/>
 
 
+    <style>
+    </style>
+    <script th:src="@{https://code.jquery.com/jquery-3.7.1.js}"></script>
+    <script th:src="@{https://code.jquery.com/ui/1.14.0/jquery-ui.js}"></script>
+
+
+
+    <script>
+        $( function() {
+            $( ".sortable" ).sortable();
+        } );
+    </script>
+
+
+
 </head>
 <body>
 <header th:replace="~{/admin/include/header.html}"></header>
@@ -45,27 +60,31 @@
                 </div>
 
                 <section class="category-section">
-                    <!-- 카테고리 구조 -->
-                    <ul id="category-list" class="deps1">
-                        <li data-depth="1" class="category-item" draggable="true"  th:each="child : ${productCateDTOList}" th:data-name="${child.getName()}">
-                            <span class="toggle-btn">▶</span>[[${child.getName()}]]
+
+                    <ul id="category-list" class="sortable deps1">
+                        <li data-depth="1" class="ui-state-default category-item" th:each="child : ${productCateDTOList}" th:data-name="${child.getName()}">
+                            <span class="toggle-btn">▶</span>
+                            [[${child.getName()}]]
                             <button class="delete-btn">X</button>
-
-                            <ul class="sub-category subcategory-list">
-                                <li data-depth="2" class="deps2 subcategory-item" draggable="true" th:each="sub : ${child.getChildren()}" th:data-name="${sub.getName()}">
-                                    <span class="toggle-btn">▶</span>[[${sub.getName()}]]
+                            <ul class="sortable sub-category" style="display: none;">
+                                <li data-depth="2" class="ui-state-default deps2 subcategory-item" th:each="sub : ${child.getChildren()}"  th:data-name="${sub.getName()}">
+                                    <span class="toggle-btn">▶</span>
+                                    [[${sub.getName()}]]
                                     <button class="delete-btn">X</button>
-
-                                    <ul class="sub-sub-category">
-                                        <li data-depth="3" class="deps3 category-item" draggable="true"  th:each="subChild : ${sub.getChildren()}" th:data-name="${subChild.getName()}">
+                                    <ul class="sortable sub-sub-category" style="display: none;">
+                                        <li data-depth="3" class="ui-state-default deps3 category-item" th:each="subChild : ${sub.getChildren()}" th:data-name="${subChild.getName()}">
                                             [[${subChild.getName()}]]
                                             <button class="delete-btn">X</button>
+
                                         </li>
                                     </ul>
                                 </li>
                             </ul>
                         </li>
                     </ul>
+
+                    <!-- 카테고리 구조 -->
+
                 </section><!-- category-section -->
                 <div class="desc">
                     <p class="sub-title-desc">카테고리 메뉴 순서를 변경할 때 드래그 앤 드롭으로 1차, 2차 카테고리 메뉴 이동 후 수정하기를 클릭합니다.</p>
@@ -97,56 +116,6 @@
         });
     });
 
-    // 드래그 앤 드롭 기능
-    const categoryList = document.getElementById('category-list');
-    let draggedElement = null; // 드래그한 요소를 저장할 변수
-
-    // 드래그 시작
-    categoryList.addEventListener('dragstart', function(event) {
-        const target = event.target.closest('.category-item, .subcategory-item'); // 가장 가까운 드래그 가능한 요소 찾기
-        if (target) {
-            draggedElement = target; // 드래그할 요소를 저장
-            event.dataTransfer.effectAllowed = 'move';
-            draggedElement.classList.add('dragging'); // 드래그 클래스 추가
-        }
-    });
-
-    // 드래그 오버
-    categoryList.addEventListener('dragover', function(event) {
-        event.preventDefault();
-        event.dataTransfer.dropEffect = 'move';
-    });
-
-    // 드래그 종료
-    categoryList.addEventListener('dragleave', function(event) {
-        const target = event.target.closest('.category-item, .subcategory-item'); // 가장 가까운 드래그 가능한 요소 찾기
-        if (target) {
-            target.classList.remove('dragging');
-        }
-    });
-
-    // 드롭
-    categoryList.addEventListener('drop', function(event) {
-        event.preventDefault();
-        const targetElement = event.target.closest('.category-item, .subcategory-item');
-
-        if (targetElement && draggedElement) {
-            if (targetElement !== draggedElement) {
-                if (targetElement.classList.contains('subcategory-item') || targetElement.classList.contains('deps3')) {
-                    const subcategoryList = targetElement.closest('ul');
-                    subcategoryList.insertBefore(draggedElement, targetElement.nextSibling);
-                } else {
-                    categoryList.insertBefore(draggedElement, targetElement.nextSibling);
-                }
-            }
-        }
-
-        // 드래그한 요소가 존재할 경우에만 클래스를 제거합니다.
-        if (draggedElement) {
-            draggedElement.classList.remove('dragging');
-            draggedElement = null; // 드래그한 요소를 초기화
-        }
-    });
 
     const parentCategorySelect = document.getElementById('parentCategorySelect');
     const categoryDepthSelect = document.getElementById('categoryDepth');
@@ -259,7 +228,38 @@
                 e.target.textContent = e.target.textContent === '▶' ? '▼' : '▶';
             }
         }
+
+        if(e.target.classList.contains('delete-btn')){
+            const liElement = e.target.closest('li');
+            const name = liElement.getAttribute('data-name');
+
+            console.log(name);
+
+            fetch('/lotteon/admin/config/category', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name: name })
+            })
+                .then(resp => resp.text())
+                .then(data => {
+                    console.log(data);
+                    if(data === 'success'){
+                        liElement.remove();
+                        alert("삭제 성공했습니다.");
+                    }
+                    else{
+                        alert("삭제 실패 했습니다.");
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        }
     });
+
+
 
 
 </script>

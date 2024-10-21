@@ -60,13 +60,28 @@ public class ConfigController {
 
     @PostMapping("/admin/config/category")
     @ResponseBody
-    public String AdminconfigCategoryPost(@RequestBody ProductCateDTO productCateDTO, @RequestParam String parent, @RequestParam int depth, Model model) {
+    public String AdminConfigCategoryPost(@RequestBody ProductCateDTO productCateDTO, @RequestParam String parent, @RequestParam int depth, Model model) {
         log.info("productCateDTO : "+productCateDTO);
         log.info("parent : "+parent);
         log.info("depth : "+depth);
 
         categoryService.insertProductCate(productCateDTO, parent, depth);
         return "success";
+    }
+
+    @DeleteMapping("/admin/config/category")
+    @ResponseBody
+    public String AdminConfigCategoryDelete(@RequestBody Map<String, String> requestBody) {
+        String name = requestBody.get("name");
+
+        log.info("name : "+name);
+        boolean value = categoryService.deleteProductCate(name);
+        if(value){
+            return "success";
+        }
+        else{
+            return "fail";
+        }
     }
 
 }

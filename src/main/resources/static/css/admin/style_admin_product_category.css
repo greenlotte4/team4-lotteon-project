@@ -142,7 +142,11 @@ body {
 }
 
 .form li {
-    padding: 10px 0;
+    padding: 10px;
+    border-radius: 10px;
+    margin-right : 30px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
 /* 토글 버튼 */
