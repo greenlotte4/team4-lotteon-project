@@ -1,7 +1,10 @@
 package com.lotte4.entity;
 
+import com.lotte4.dto.AddressDTO;
+import com.lotte4.dto.MemberInfoDTO;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Getter
 @Setter
@@ -9,7 +12,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "member")
+@Table(name = "member_info")
+@Entity
 public class MemberInfo {
 
     @Id
@@ -19,16 +23,21 @@ public class MemberInfo {
     private int gender;
     private String email;
     private String hp;
-    private String zipCode;
-    private String addr1;
-    private String addr2;
-    private int point;
-    private String updatedAt;
-    @Enumerated(EnumType.ORDINAL)
-    private status status;
-    @Enumerated(EnumType.ORDINAL)
-    private grade grade;
 
+    @Embedded
+    private Address address; // address 객체로 분리
+
+    private int point;
+
+    @CreationTimestamp
+    private String updatedAt;
+
+    private String status;
+    private String grade;
+//    @Enumerated(EnumType.ORDINAL)
+//    private status status;
+//    @Enumerated(EnumType.ORDINAL)
+//    private grade grade;
 
     public enum status{
         정상, // 0번
@@ -46,5 +55,21 @@ public class MemberInfo {
         VVIP,   //5번
         SELLER, //6번
     }
+
+    public MemberInfoDTO toDTO() {
+        return MemberInfoDTO.builder()
+                .memberInfoId(this.memberInfoId)
+                .name(this.name)
+                .gender(this.gender)
+                .email(this.email)
+                .hp(this.hp)
+                .address(new AddressDTO(address.getZipCode(), address.getAddr1(), address.getAddr2()))  // Address 포함
+                .point(this.point)
+                .updatedAt(this.updatedAt)
+                .status(this.status)
+                .grade(this.grade)
+                .build();
+    }
+
 
 }

@@ -1,22 +1,21 @@
-package com.lotte4.entity;
+package com.lotte4.dto;
 
-import com.lotte4.dto.SellerInfoDTO;
-import jakarta.persistence.*;
-import lombok.*;
+import com.lotte4.entity.Address;
+import com.lotte4.entity.SellerInfo;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@ToString
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-@Entity
-@Table(name = "seller_info")
-    public class SellerInfo {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class SellerInfoDTO {
+
     private int sellerInfoId;
     // 회사 이름
     private String comName;
@@ -30,18 +29,20 @@ import java.time.LocalDateTime;
     private String hp;
     // 팩스 번호
     private String fax;
-    
-    @Embedded
-    private Address address; // address 객체로 분리
+
+    private AddressDTO address;
+
     // 아이피
     private String regIp;
+
+    @CreationTimestamp
     // 변경 일자
     private String updateAt;
     // 상태
     private int state;
 
-    public SellerInfoDTO toDTO(){
-        return SellerInfoDTO.builder()
+    public SellerInfo toEntity() {
+        return SellerInfo.builder()
                 .sellerInfoId(sellerInfoId)
                 .comName(comName)
                 .ceo(ceo)
@@ -49,12 +50,11 @@ import java.time.LocalDateTime;
                 .bizNumber(bizNumber)
                 .hp(hp)
                 .fax(fax)
+                .address(new Address(address.getZipCode(), address.getAddr1(), address.getAddr2()))
                 .regIp(regIp)
                 .updateAt(updateAt)
                 .state(state)
                 .build();
     }
-
-
 
 }
