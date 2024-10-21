@@ -22,7 +22,7 @@
 
             <div class="main-box">
                 <section class="register">
-                    <form action="#" method="POST">
+                    <form th:action="@{/member/register}" method="post">
                         <table border="1">
                             <caption>일반 회원가입</caption>
                             <tr>
@@ -35,7 +35,7 @@
                             <tr>
                                 <td>비밀번호</td>
                                 <td>
-                                    <input type="password" name="pass1" placeholder="비밀번호 입력"/>  <span> 영문, 숫자, 특수문자 8~12자 설정</span>
+                                    <input type="password" name="pass" placeholder="비밀번호 입력"/>  <span> 영문, 숫자, 특수문자 8~12자 설정</span>
                                 </td>
                             </tr>
                             <tr>
@@ -50,7 +50,7 @@
                             <tr>
                                 <td>이름</td>
                                 <td>
-                                    <input type="text" name="name" placeholder="이름 입력"/>
+                                    <input type="text" name="memberInfoDTO.name" placeholder="이름 입력"/>
                                     <span class="resultName"></span>
                                 </td>
                             </tr>
@@ -59,10 +59,10 @@
                                 <td>
                                     <div class="gender-selection">
                                         <label>
-                                            <input type="radio" name="gender" value="man">남
+                                            <input type="radio" name="memberInfoDTO.gender" value="0">남
                                         </label>
                                         <label>
-                                            <input type="radio" name="gender" value="woman">여
+                                            <input type="radio" name="memberInfoDTO.gender" value="1">여
                                         </label>
                                     </div>
                                 </td>
@@ -70,13 +70,13 @@
                             <tr>
                                 <td>E-Mail</td>
                                 <td>
-                                    <input type="email" name="email" placeholder="이메일 입력"/>
+                                    <input type="email" name="memberInfoDTO.email" placeholder="이메일 입력"/>
                                 </td>
                             </tr>
                             <tr>
                                 <td>휴대폰</td>
                                 <td>
-                                    <input type="text" name="hp" placeholder="- 포함 13자리 입력" minlength="13" maxlength="13" />
+                                    <input type="text" name="memberInfoDTO.hp" placeholder="- 포함 13자리 입력" minlength="13" maxlength="13" />
                                     <span class="resultHp"></span>
                                 </td>
                             </tr>
@@ -84,19 +84,19 @@
                                 <td>주소</td>
                                 <td>
                                     <div>
-                                        <input type="text" name="zip" id="zip" placeholder="우편번호검색클릭" readonly/>
+                                        <input type="text" name="memberInfoDTO.address.zipCode" id="zip" placeholder="우편번호검색클릭" />
                                     </div>
                                     <div>
-                                        <input type="text" name="addr1" id="addr1" placeholder="주소를 검색하세요." readonly/>
+                                        <input type="text" name="memberInfoDTO.address.addr1" id="addr1" placeholder="주소를 검색하세요." />
                                     </div>
                                     <div>
-                                        <input type="text" name="addr2" id="addr2" placeholder="상세주소를 입력하세요."/>
+                                        <input type="text" name="memberInfoDTO.address.addr2" id="addr2" placeholder="상세주소를 입력하세요."/>
                                     </div>
                                 </td>
                             </tr>
                         </table>
             <div class="registerButton">
-                <a th:href="@{/index}" class="regBtn">회원가입</a>
+                <input type="submit" value="회원가입" class="regBtn"/>
             </div>
             </form>
             </section>
