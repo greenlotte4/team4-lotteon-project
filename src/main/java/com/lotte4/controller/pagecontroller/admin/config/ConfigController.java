@@ -1,5 +1,9 @@
 package com.lotte4.controller.pagecontroller.admin.config;
 
+import com.lotte4.dto.ProductCateDTO;
+import com.lotte4.entity.ProductCate;
+import com.lotte4.service.CategoryService;
+import lombok.extern.log4j.Log4j2;
 import com.lotte4.dto.admin.config.VersionDTO;
 import com.lotte4.entity.Info;
 import com.lotte4.service.admin.config.InfoService;
@@ -8,17 +12,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Controller
 public class ConfigController {
 
     private final VersionService versionService;
+    private final CategoryService categoryService;
     //배너관리
     @GetMapping("/admin/config/banner")
     public String AdminconfigBanner() {
@@ -47,8 +51,21 @@ public class ConfigController {
 
     // 카테고리
     @GetMapping("/admin/config/category")
-    public String AdminConfigCategory() {
+    public String AdminConfigCategory(Model model) {
+        List<ProductCateDTO> productCateDTOList = categoryService.getProductCateListWithDepth(1);
+        model.addAttribute("productCateDTOList", productCateDTOList);
         return "/admin/config/category";
+    }
+
+    @PostMapping("/admin/config/category")
+    @ResponseBody
+    public String AdminconfigCategoryPost(@RequestBody ProductCateDTO productCateDTO, @RequestParam String parent, @RequestParam int depth, Model model) {
+        log.info("productCateDTO : "+productCateDTO);
+        log.info("parent : "+parent);
+        log.info("depth : "+depth);
+
+        categoryService.insertProductCate(productCateDTO, parent, depth);
+        return "success";
     }
 
 }
