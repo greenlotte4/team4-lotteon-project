@@ -3,19 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>공지사항 보기</title>
+    <title>문의사항 보기</title>
     <link rel="stylesheet" th:href="@{/css/common.css}">
     <link rel="stylesheet" th:href="@{/css/cs/cs_common.css}" />
   </head>
   <body>
   <header th:replace="~{/include/my_header.html}"></header>
   <div id="wrapper">
-    <th:block th:replace="~{/cs/aside/aside_qna.html}"></th:block>
+    <th:block th:replace="~{/cs/aside/aside_faq.html}"></th:block>
   <section id="section_wrapper">
     <div id="category">
       <p>회원<br><span class="subtitle">회원 관련 문의 내용입니다.</span></p>
       <div class="breadcrumb">
-        <a th:href="@{/cs/qna/list}">Home</a> > <a th:href="@{/cs/qna/list}">문의하기</a> > <a th:href="@{/cs/qna/list}" class="location">회원</a>
+        <a th:href="@{/cs/index}">Home</a> > <a th:href="@{/cs/qna/list}">문의하기</a> > <a th:href="@{/cs/qna/list}" class="location">회원</a>
       </div>
     </div>
       <table>

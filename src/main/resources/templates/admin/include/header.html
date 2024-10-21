@@ -1,8 +1,8 @@
 <link rel="stylesheet" th:href="@{/css/admin/include/style_admin_header.css}">
 <header>
     <div class="header-top">
-        <a th:href="@{/admin/index}" class="logo">
-            <img th:src="@{/images/logo.png}" alt="Logo"/>
+        <a th:href="@{/index}" class="logo">
+            <img th:src="@{'/uploads/' + ${info.headerLogo}}" alt="LOTTE ON">
         </a>
         <nav>
             <a th:href="@{/member/login}">로그아웃</a>

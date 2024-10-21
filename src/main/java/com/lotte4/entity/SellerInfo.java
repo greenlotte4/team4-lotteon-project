@@ -1,5 +1,6 @@
 package com.lotte4.entity;
 
+import com.lotte4.dto.SellerInfoDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,8 +13,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "seller")
-public class SellerInfo {
+@Table(name = "seller_info")
+    public class SellerInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int sellerInfoId;
@@ -29,16 +30,31 @@ public class SellerInfo {
     private String hp;
     // 팩스 번호
     private String fax;
-    // 우편번호
-    private String zipCode;
-    // 주소
-    private String addr1;
-    // 상세주소
-    private String addr2;
+    
+    @Embedded
+    private Address address; // address 객체로 분리
     // 아이피
     private String regIp;
     // 변경 일자
-    private LocalDateTime updateAt;
+    private String updateAt;
     // 상태
     private int state;
+
+    public SellerInfoDTO toDTO(){
+        return SellerInfoDTO.builder()
+                .sellerInfoId(sellerInfoId)
+                .comName(comName)
+                .ceo(ceo)
+                .comNumber(comNumber)
+                .bizNumber(bizNumber)
+                .hp(hp)
+                .fax(fax)
+                .regIp(regIp)
+                .updateAt(updateAt)
+                .state(state)
+                .build();
+    }
+
+
+
 }
