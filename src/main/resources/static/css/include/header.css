@@ -142,7 +142,6 @@ header {
 .buttonArea button span {
     text-align: center;
 }
-
 .category ul {
     display: flex;
     justify-content: center;
@@ -183,8 +182,9 @@ header {
 
     position:absolute;
     background-color: white;
-    width: 280px;
+    width: 200px;
     border: 1px solid #ddd;
+    border-left: 1px solid #EF2A23;
     display: none;
     transition: all 0.3s ease;
 }
@@ -203,7 +203,6 @@ header {
 .categoryMenu li {
 
     padding: 15px;
-    border-bottom: 1px solid #ddd;
     position: relative;
 }
 
@@ -225,8 +224,7 @@ header {
     left: 100%;
     top: 0;
     background-color: white;
-    border-left: 1px solid #ddd;
-    width: 200px;
+    width: 150px;
     display: none;
 }
 
@@ -236,9 +234,7 @@ header {
     left: 100%;
     top: 0;
     background-color: white;
-    border-left: 1px solid #ddd;
-    border-right: 1px solid #ddd;
-    width: 200px;
+    width: 150px;
     display: none;
 }
 
@@ -254,7 +250,6 @@ header {
 
 .subMenu li, .subSubMenu li {
     padding: 10px;
-    border-bottom: 1px solid #ddd;
 }
 
 .subMenu li a, .subSubMenu li a {

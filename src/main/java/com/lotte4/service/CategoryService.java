@@ -4,6 +4,7 @@ import com.lotte4.dto.ProductCateDTO;
 import com.lotte4.entity.ProductCate;
 import com.lotte4.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
@@ -11,6 +12,7 @@ import org.springframework.ui.ModelMap;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
@@ -59,5 +61,16 @@ public class CategoryService {
             productCateDTOList.add(new ProductCateDTO(productCate));
         }
         return productCateDTOList;
+    }
+
+    public boolean deleteProductCate(String name){
+        ProductCate productCate = categoryRepository.findByName(name);
+        if(productCate != null){
+            categoryRepository.delete(productCate);
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }
