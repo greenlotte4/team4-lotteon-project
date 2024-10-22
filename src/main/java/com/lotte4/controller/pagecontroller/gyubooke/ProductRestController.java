@@ -24,13 +24,13 @@ public class ProductRestController {
          return productService.getProductCateByParent(parentId);
     }
 
-    @PostMapping("/admin/product/register/product")
-    public void productRegisterCate(ProductDTO productDTO) {
+    @PostMapping("/admin/product/register")
+    public void productRegisterCate(@RequestBody ProductDTO productDTO) {
         log.info(productDTO);
     }
 
-    @PostMapping("/admin/product/register/productDetail")
-    public void productRegisterCate(ProductDetailDTO productDetailDTO) {
+    @PostMapping("/admin/product/register/detail")
+    public void productRegisterCate(@RequestBody ProductDetailDTO productDetailDTO) {
         log.info(productDetailDTO);
     }
 

@@ -23,7 +23,7 @@ public class ProductDetailDTO {
     private String creator;
     private String country;
     private String warning;
-    private LocalDateTime createDate;
+    private String createDate;
     private String quality;
     private String as;
     private String asPhone;
