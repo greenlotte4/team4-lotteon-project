@@ -1,29 +1,30 @@
 package com.lotte4.controller.pagecontroller.cs;
 
 import com.lotte4.dto.BoardCateDTO;
-import com.lotte4.helper.BoardCategory;
-import com.lotte4.service.BoardCateService;
+import com.lotte4.dto.BoardRegisterDTO;
+import com.lotte4.entity.Board;
+import com.lotte4.service.UserService;
+import com.lotte4.service.board.BoardCateService;
+import com.lotte4.service.board.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Log4j2
 @RequiredArgsConstructor
 @Controller
 public class CsQnaController {
-
+    private final UserService userService;
     private final BoardCateService boardCateService;
-
+    private final BoardService boardService;
     @GetMapping("/cs/qna/write")
     public String qnaWrite(Model model){
         List<BoardCateDTO> cate1 = boardCateService.selectBoardCatesByDepth(1);
@@ -32,5 +33,10 @@ public class CsQnaController {
         return "/cs/qna/write";
     }
 
+    @PostMapping("/cs/qna/write")
+    public String qnaWrite( BoardRegisterDTO dto) {
+        boardService.insertBoardQna(dto);
+        return "redirect:/cs/qna/list"; // 성공적인 삽입 후 상태 코드 200 반환
+    }
     }
 

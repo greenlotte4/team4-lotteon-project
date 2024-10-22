@@ -20,13 +20,13 @@
       </div>
     </div>
 
-    <form method="post" action="/cs/qna/submit">
+    <form th:action="@{/cs/qna/write}" method="POST">
       <table>
         <tr>
           <td>문의유형</td>
           <td>
             <!-- 1차 유형 카테고리 (BoardCategory Enum) -->
-            <select name="category1" id="category1">
+            <select name="cate" id="category1">
               <option disabled hidden selected>1차 유형</option>
               <option th:each="cate : ${cate1}"
                       th:value="${cate.boardCateId}"
@@ -35,10 +35,14 @@
             </select>
 
             <!-- 2차 유형 카테고리 (동적으로 추가됨) -->
-            <select name="category2" id="category2">
+            <select name="type" id="category2">
               <option disabled hidden selected>2차 유형을 선택하세요</option>
             </select>
           </td>
+        </tr>
+        <tr>
+          <td>작성자</td>
+          <td><input type="text" name="uid" value="ekkang" readonly></input></td>
         </tr>
         <tr>
           <td>제목</td>

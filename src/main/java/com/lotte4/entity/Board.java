@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Entity
 @Table(name = "board")
 public class Board {
     @Id
@@ -18,8 +19,10 @@ public class Board {
     private int boardId;
 
     // 유형
-    private String cate;
-    private String type;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="boardCateId")
+    private BoardCate boardCate;
+
     // 제목
     private String title;
     // 내용
@@ -33,6 +36,8 @@ public class Board {
     // 답변
     private String comment;
 
-    private String uid;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="writer")
+    private User user;
     // TODO : 나중에는 User로 변경
 }
