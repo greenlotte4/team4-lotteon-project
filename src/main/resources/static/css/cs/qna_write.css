@@ -10,6 +10,9 @@ body {
   font-size: 12px;
   margin: 0 auto;
 }
+main {
+  margin-top:20px;
+}
 /* Wrapper 설정 */
 #wrapper {
   display: flex;
@@ -59,9 +62,9 @@ aside {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+  width: 975px;
   padding: 20px;
-  border: 1px solid #ede6db;
+  border: 1px solid #ddd;
   box-sizing: border-box;
   border-radius: 10px;
   margin-left: 10px;
@@ -82,6 +85,7 @@ aside {
   align-items: flex-end;
   padding: 10px;
   width: 100%;
+
 }
 
 #category > p {
@@ -98,7 +102,8 @@ aside {
 }
 
 table {
-  width: 100%;
+  width: 95%;
+  height: 560px;
   min-height: 300px;
   border-top: 2px solid #e9e9e9;
   border-collapse: collapse;
@@ -109,18 +114,21 @@ tr {
   padding: 10px;
   border-bottom: 1px solid gainsboro;
 }
-
+td {
+  width: 780px;
+}
 tr > td:first-child {
   width: 80px;
   padding: 15px;
   font-size: 15px;
   font-weight: 900;
   text-align: left;
-  background-color: #f5f7fa
+
 }
 
-td {
-  padding: 7px;
+
+.btnDiv{
+  text-align: center;
 }
 
 #btnCancel {
@@ -153,21 +161,21 @@ select {
 }
 
 #writeTitle {
+  border: 1px solid white;
   width: 95%;
   height: 20px;
-  font-size: 13px;
-  border: 2px solid rgb(212, 210, 210);
+  font-size: 15px;
   padding: 3px;
   resize: none;
 }
 
 #writeContent {
   width: 95%;
-  height: 250px;
+  height: 370px;
   text-align: left;
-  font-size: 13px;
+  font-size: 15px;
   border: 2px solid rgb(212, 210, 210);
-  padding: 3px;
+  padding: 5px;
   resize: none;
 }
 

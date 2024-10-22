@@ -118,7 +118,11 @@ aside {
     margin-left : 10px;
     width: 100%;
 }
+.qimage{
+    width:13px;
+    height: 13px;
 
+}
 #category > p {
     font-size: 17px;
     font-weight: 900;

@@ -1,12 +1,15 @@
 package com.lotte4.controller.pagecontroller.admin.cs;
 
+import com.lotte4.helper.BoardCategory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.Locale;
 
 
 @Controller
 public class QnaController {
-    
     //문의하기 목록
     @GetMapping("/admin/cs/qna/list")
     public String AdminQnaList() {
@@ -24,7 +27,4 @@ public class QnaController {
     public String AdminQnaView() {
         return "/admin/cs/qna/view";
     }
-
-
-
 }

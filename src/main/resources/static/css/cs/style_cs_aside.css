@@ -1,11 +1,9 @@
-/* 사이드바 스타일 */
+
 aside {
-    border: 1px solid #ddd;
     box-sizing: border-box;
     width: 220px;
     background-color: #ffffff;
     padding: 20px;
-    border-radius: 10px;
     min-height: 650px;
 }
 
@@ -20,10 +18,10 @@ aside {
     position: relative;
 }
 .asideTitle {
-    margin-bottom : 10px !important;
+    margin-bottom : 20px !important;
     color: #2b2e4a;
     box-sizing: border-box;
-    font-size: 25px !important;
+    font-size: 26px !important;
 }
 .sidebar-menu a {
     text-decoration: none;
@@ -35,13 +33,13 @@ aside {
     border-radius: 8px;
     transition: background-color 0.3s ease;
     margin-top: 12px;
-    font-weight: bold;
+    font-weight: 500 !important;
 }
 
 .sidebar-menu a:hover {
-    background-color: #f5f5f5;
-    font-weight: 900;
+    font-weight:bold !important;
 }
+
 
 .submenu {
     list-style: none;
@@ -63,8 +61,6 @@ aside {
     background-color: #eaeaea;
 }
 
-
 .form {
     padding-left: 15px;
-    padding-right: 15px;
-}
+    padding-right: 15px;}
