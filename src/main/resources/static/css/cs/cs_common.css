@@ -22,6 +22,7 @@ body {
     justify-content: space-between;
     align-items: center;
     width: 975px;
+    min-height:650px;
     padding: 20px 30px 20px 30px;
     border: 1px solid #ede6db;
     box-sizing: border-box;
@@ -47,7 +48,7 @@ body {
     padding: 10px;
     margin: 0 0 10px 10px;
     width: 100%;
-    border-bottom: 2px solid #d82a2a;
+    /*border-bottom: 2px solid #d82a2a;*/
 }
 
 #category > p {
@@ -62,25 +63,27 @@ body {
     margin-top: 50px;
 }
 .breadcrumb {
+    margin-right: 10px;
     float:right
 }
 .breadcrumb > a {
+
     font-size:15px;
 }
-table {
-    width: 100%;
-    border-collapse: collapse;
-    padding: 20px;
-    border-radius: 10px;
-}
+/*table {*/
+/*    width: 100%;*/
+/*    border-collapse: collapse;*/
+/*    padding: 20px;*/
+/*    border-radius: 10px;*/
+/*}*/
 
-tr {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    border-bottom: 1px solid #cdcdcd;
-    padding: 15px;
-}
+/*tr {*/
+/*    display: flex;*/
+/*    flex-direction: row;*/
+/*    justify-content: space-between;*/
+/*    border-bottom: 1px solid #cdcdcd;*/
+/*    padding: 15px;*/
+/*}*/
 
 #notice_title, #faq_title, #qna_title, #reply_title {
     border-top: 2px solid gainsboro;
@@ -156,9 +159,7 @@ tr {
 #reply{
     min-height: 200px;
 }
-.qna > td:first-child{
-    width: 50%;
-}
+
 /* 페이지네이션 */
 .pagination {
     display: flex;

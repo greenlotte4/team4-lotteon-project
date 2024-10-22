@@ -77,4 +77,3 @@ spring:
                     timeout: 5000
                     starttls:
                         enable: true
-

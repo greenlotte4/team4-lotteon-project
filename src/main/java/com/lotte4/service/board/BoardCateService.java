@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -26,7 +27,11 @@ public class BoardCateService {
                 .map(category -> modelMapper.map(category, BoardCateDTO.class))
                 .collect(Collectors.toList());
     };
+    public BoardCateDTO getCategories(int id) {
+       BoardCate boardCate = boardCateRepository.findByBoardCateId(id);
 
+        return modelMapper.map(boardCate, BoardCateDTO.class);
+    }
     public List<BoardCateDTO> getSubCategories(int parentId) {
         List<BoardCate> subCategories = boardCateRepository.findByParentId(parentId);
         return subCategories.stream()

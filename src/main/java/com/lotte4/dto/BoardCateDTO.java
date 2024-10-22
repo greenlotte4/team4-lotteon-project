@@ -18,7 +18,8 @@ public class BoardCateDTO {
     private int boardCateId;
     private String name;
     private String depth;
-
+    private BoardCateDTO parent;
+    private BoardCateDTO child;
 
 
 

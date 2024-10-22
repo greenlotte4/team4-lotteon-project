@@ -6,6 +6,8 @@ import com.lotte4.entity.Board;
 import com.lotte4.service.UserService;
 import com.lotte4.service.board.BoardCateService;
 import com.lotte4.service.board.BoardService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +23,11 @@ import java.util.List;
 @Log4j2
 @RequiredArgsConstructor
 @Controller
-public class CsQnaController {
+public class  CsQnaController {
     private final UserService userService;
     private final BoardCateService boardCateService;
     private final BoardService boardService;
+
     @GetMapping("/cs/qna/write")
     public String qnaWrite(Model model){
         List<BoardCateDTO> cate1 = boardCateService.selectBoardCatesByDepth(1);
@@ -34,9 +37,10 @@ public class CsQnaController {
     }
 
     @PostMapping("/cs/qna/write")
-    public String qnaWrite( BoardRegisterDTO dto) {
+    public String qnaWrite(BoardRegisterDTO dto, HttpServletRequest req) {
+        dto.setRegIp(req.getRemoteAddr());
         boardService.insertBoardQna(dto);
-        return "redirect:/cs/qna/list"; // 성공적인 삽입 후 상태 코드 200 반환
+        return "redirect:/cs/qna/list";
     }
     }
 

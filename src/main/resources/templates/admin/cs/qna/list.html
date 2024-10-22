@@ -13,7 +13,6 @@
     <!--각 페이지(section) 개별 css-->
     <link rel="stylesheet" th:href="@{/css/admin/style_admin_article_list.css}"/>
 
-
 </head>
 <body>
 <header th:replace="~{/admin/include/header.html}"></header>
@@ -64,53 +63,19 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
+                    <!-- Thymeleaf를 사용하여 boardList 데이터 출력 -->
+                    <tr th:each="board : ${boardList}">
                         <td><input type="checkbox" class="chkbox"></td>
-                        <td>120</td>
-                        <td>회원</td>
-                        <td>가입</td>
+                        <td th:text="${board.boardId}"></td>
+                        <td th:text="${board.cate.parent.name}"></td>
+                        <td th:text="${board.cate.name}"></td>
                         <td class="title">
-                            <a th:href="@{/admin/cs/qna/view}">개인회원과 법인회원에 차이가 있나요?</a>
+                            <!-- TODO : view 작업 이후 a 링크에 id 달기-->
+                            <a th:href="@{/admin/cs/qna/view}" th:text="${board.title}">개인회원과 법인회원에 차이가 있나요?</a>
                         </td>
-                        <td>chh**</td>
-                        <td>00.00.00</td>
-                        <td>답변완료</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" class="chkbox"></td>
-                        <td>120</td>
-                        <td>회원</td>
-                        <td>가입</td>
-                        <td class="title">
-                            <a th:href="@{/admin/cs/qna/view}">개인회원과 법인회원에 차이가 있나요?</a>
-                        </td>
-                        <td>chh**</td>
-                        <td>00.00.00</td>
-                        <td>답변완료</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" class="chkbox"></td>
-                        <td>120</td>
-                        <td>회원</td>
-                        <td>가입</td>
-                        <td class="title">
-                            <a th:href="@{/admin/cs/qna/view}">개인회원과 법인회원에 차이가 있나요?</a>
-                        </td>
-                        <td>chh**</td>
-                        <td>00.00.00</td>
-                        <td>답변완료</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" class="chkbox"></td>
-                        <td>120</td>
-                        <td>회원</td>
-                        <td>가입</td>
-                        <td class="title">
-                            <a th:href="@{/admin/cs/qna/view}">개인회원과 법인회원에 차이가 있나요?</a>
-                        </td>
-                        <td>chh**</td>
-                        <td>00.00.00</td>
-                        <td>답변완료</td>
+                        <td th:text="${board.user.uid}">chh**</td>
+                        <td th:text="${board.regDate}">00.00.00</td>
+                        <td th:text="${board.state}">답변완료</td>
                     </tr>
                     </tbody>
                 </table>
