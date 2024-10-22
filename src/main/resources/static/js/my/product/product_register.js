@@ -1,5 +1,74 @@
 'use strict';
 
+// 카테고리 출력 파트 ------------------------------------------------------------------------------
+
+const category1 = document.querySelector('#category1');
+const category2 = document.querySelector('#category2');
+const category3 = document.querySelector('#category3');
+
+category1.addEventListener('change', function (e) {
+    const parent = e.target.value;
+
+    fetch(`/lotteon/admin/product/register/${parent}`)
+        .then(resp => resp.json())
+        .then(data => {
+            console.log(data)
+            if (category2.childNodes.length !== 1) {
+                category2.innerHTML = "<option value=\"\" disabled selected hidden>2차분류 선택</option>";
+
+                data.forEach(option2 => {
+                    const option = document.createElement('option');
+                    option.value = option2.productCateId;
+                    option.text = option2.name;
+                    category2.appendChild(option);
+                });
+            } else {
+                data.forEach(option2 => {
+                    const option = document.createElement('option');
+                    option.value = option2.productCateId;
+                    option.text = option2.name;
+                    category2.appendChild(option);
+                });
+            }
+        })
+        .catch(err => console.log(err));
+
+
+});
+
+category2.addEventListener('change', function (e) {
+    const parent = e.target.value;
+
+    fetch(`/lotteon/admin/product/register/${parent}`)
+        .then(resp => resp.json())
+        .then(data => {
+            console.log(data)
+
+            if (category3.childNodes.length !== 1) {
+                category3.innerHTML = "<option value=\"\" disabled selected hidden>3차분류 선택</option>";
+
+                data.forEach(option3 => {
+                    const option = document.createElement('option');
+                    option.value = option3.productCateId;
+                    option.text = option3.name;
+                    category3.appendChild(option);
+                });
+            } else {
+                data.forEach(option3 => {
+                    const option = document.createElement('option');
+                    option.value = option3.productCateId;
+                    option.text = option3.name;
+                    category3.appendChild(option);
+                });
+            }
+        })
+        .catch(err => console.log(err));
+
+});
+
+
+// 상품 옵션 입력 파트 ----------------------------------------------------------------------------
+
 const fake_inputs = document.querySelectorAll('.fake_input');
 const option = document.querySelector('#option');
 const option_names = document.querySelectorAll('.option-name');
@@ -17,9 +86,8 @@ option.addEventListener('keydown', function (event) {
         const value = optionValueInput.value.trim();
         let parent = event.target.parentElement;
         let adjacent_name = parent.parentElement.previousElementSibling.querySelector('input').value.trim();
-        console.log(adjacent_name)
 
-        if (adjacent_name === ''){
+        if (adjacent_name === '') {
             alert('옵션명을 입력해주세요')
             optionValueInput.disable();
         }
@@ -80,28 +148,28 @@ addOptionButton.addEventListener('click', function () {
     }
 });
 
+
+// 데이터 전송 파트 --------------------------------------------------------------------------------
+
+
 const product_submit = document.querySelector('#product_submit');
 
 product_submit.addEventListener('onclick', function (e) {
     e.preventDefault();
 
-    // 카테고리 1, 2차 값
-    const category1 = document.querySelector('#category1').value;
-    const category2 = document.querySelector('#category2').value;
-
-    const data1 = {
-        category1 : category1,
-        category2 : category2
-    };
+    const cateId1 = category1.value;
+    const cateId2 = category2.value;
+    const cateId3 = category3.value;
 
     // 상품 정보
-    const prod_name = document.querySelector('#prod_name').value;
-    const prod_description = document.querySelector('#prod_description').value;
+    const name = document.querySelector('#name').value;
+    const description = document.querySelector('#description').value;
+    const company = document.querySelector('#company').value;
     const price = document.querySelector('#price').value;
     const discount = document.querySelector('#discount').value;
     const point = document.querySelector('#point').value;
     const stock = document.querySelector('#stock').value;
-    const deliveryfee = document.querySelector('#deliveryfee').value;
+    const deliveryFee = document.querySelector('#deliveryFee').value;
     const prod_img1 = document.querySelector('#prod_img1').value;
     const prod_img2 = document.querySelector('#prod_img2').value;
     const prod_img3 = document.querySelector('#prod_img3').value;
@@ -124,55 +192,67 @@ product_submit.addEventListener('onclick', function (e) {
         optionMap.set(option_name, optionValueList);
     }
 
-    const date2 = {
-        prod_name : prod_name,
-        prod_description : prod_description,
-        price : price,
-        discount : discount,
-        point : point,
-        stock : stock,
-        deliveryfee : deliveryfee,
-        prod_img1 : prod_img1,
-        prod_img2 : prod_img2,
-        prod_img3 : prod_img3,
-        prod_detail : prod_detail,
-        options : optionMap
+    console.log("optionMap : " + optionMap)
+
+    const data2 = {
+        category1: cateId1,
+        category2: cateId2,
+        category3: cateId3,
+        name: name,
+        description: description,
+        company: company,
+        price: price,
+        discount: discount,
+        point: point,
+        stock: stock,
+        deliveryFee: deliveryFee,
+        prod_img1: prod_img1,
+        prod_img2: prod_img2,
+        prod_img3: prod_img3,
+        prod_detail: prod_detail,
+        options: optionMap
     };
+
+    fetch('lotteon/admin/product/register', {
+        method: 'POST',
+        body: JSON.stringify(data2)
+    })
+        .then(resp => resp.json())
+        .then(data => console.log(data))
+        .catch(err => console.log(err));
 
 
     // 상품정보 제공고시
 
-    const prod_Detail_Condition = document.querySelector('#prod_Detail_Condition').value;
-    const prod_Detail_duty = document.querySelector('#prod_Detail_duty').value;
-    const prod_Detail_receipt = document.querySelector('#prod_Detail_receipt').value;
-    const prod_Detail_gubun = document.querySelector('#prod_Detail_gubun').value;
-    const prod_Detail_brand = document.querySelector('#prod_Detail_brand').value;
-    const prod_Detail_COA = document.querySelector('#prod_Detail_COA').value;
-    const prod_Detail_creator = document.querySelector('#prod_Detail_creator').value;
-    const prod_Detail_country = document.querySelector('#prod_Detail_country').value;
-    const prod_Detail_warning = document.querySelector('#prod_Detail_warning').value;
-    const prod_Detail_create_date = document.querySelector('#prod_Detail_create_date').value;
-    const prod_Detail_quality = document.querySelector('#prod_Detail_quality').value;
-    const prod_Detail_as = document.querySelector('#prod_Detail_as').value;
-    const prod_Detail_asPhone = document.querySelector('#prod_Detail_asPhone').value;
+    const condition = document.querySelector('#condition').value;
+    const duty = document.querySelector('#duty').value;
+    const receipt = document.querySelector('#receipt').value;
+    const sellerType = document.querySelector('#sellerType').value;
+    const brand = document.querySelector('#brand').value;
+    const COA = document.querySelector('#COA').value;
+    const creator = document.querySelector('#creator').value;
+    const country = document.querySelector('#country').value;
+    const warning = document.querySelector('#warning').value;
+    const createDate = document.querySelector('#createDate').value;
+    const quality = document.querySelector('#quality').value;
+    const as = document.querySelector('#as').value;
+    const asPhone = document.querySelector('#asPhone').value;
 
     const data3 = {
-        prod_Detail_Condition : prod_Detail_Condition,
-        prod_Detail_duty : prod_Detail_duty,
-        prod_Detail_receipt : prod_Detail_receipt,
-        prod_Detail_gubun : prod_Detail_gubun,
-        prod_Detail_brand : prod_Detail_brand,
-        prod_Detail_COA : prod_Detail_COA,
-        prod_Detail_creator : prod_Detail_creator,
-        prod_Detail_country : prod_Detail_country,
-        prod_Detail_warning : prod_Detail_warning,
-        prod_Detail_create_date : prod_Detail_create_date,
-        prod_Detail_quality : prod_Detail_quality,
-        prod_Detail_as : prod_Detail_as,
-        prod_Detail_asPhone : prod_Detail_asPhone
+        condition: condition,
+        duty: duty,
+        receipt: receipt,
+        sellerType: sellerType,
+        brand: brand,
+        COA: COA,
+        creator: creator,
+        country: country,
+        warning: warning,
+        createDate: createDate,
+        quality: quality,
+        as: as,
+        asPhone: asPhone
     }
-
-
 
 });
 

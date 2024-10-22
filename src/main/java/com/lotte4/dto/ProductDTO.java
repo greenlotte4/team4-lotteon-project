@@ -1,7 +1,5 @@
-package com.lotte4.entity;
+package com.lotte4.dto;
 
-import com.lotte4.config.MapToJsonConverter;
-import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
@@ -13,13 +11,8 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity
-@Table(name = "product")
-public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ProductDTO {
     private int productId;
-
     private String name;
     private String description;
     private String company;
@@ -35,10 +28,7 @@ public class Product {
     private String img2;
     private String img3;
     private String detail;
-
-    @Convert(converter = MapToJsonConverter.class)
     private Map<String, List<String>> options;
-
     private int status;
 }
 

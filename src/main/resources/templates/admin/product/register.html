@@ -38,9 +38,9 @@
                             <td class="label">1차 분류</td>
                             <td>
                                 <select class="dropdown" id="category1">
-                                    <option>1차분류 선택</option>
-                                    <option>고객서비스</option>
-                                    <option>이벤트 당첨</option>
+                                    <option value="" disabled selected hidden>1차분류 선택</option>
+                                    <option th:each="cate1 : ${productCate1List}" th:value="${cate1.productCateId}"
+                                            th:text="${cate1.name}"></option>
                                 </select>
                             </td>
                         </tr>
@@ -48,9 +48,15 @@
                             <td class="label">2차 분류</td>
                             <td>
                                 <select class="dropdown" id="category2">
-                                    <option>2차분류 선택</option>
-                                    <option>고객서비스</option>
-                                    <option>이벤트 당첨</option>
+                                    <option value="" disabled selected hidden>2차분류 선택</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="label">3차 분류</td>
+                            <td>
+                                <select class="dropdown" id="category3">
+                                    <option value="" disabled selected hidden>3차분류 선택</option>
                                 </select>
                             </td>
                         </tr>
@@ -67,13 +73,13 @@
                         <tr>
                             <td class="label">상품명</td>
                             <td>
-                                <input type="text" name="prod_name" id="prod_name"/>
+                                <input type="text" name="name" id="name"/>
                             </td>
                         </tr>
                         <tr>
                             <td class="label">기본설명</td>
                             <td>
-                                <input type="text" name="prod_description" id="prod_description"/>
+                                <input type="text" name="description" id="description"/>
                             </td>
                         </tr>
                         <tr>
@@ -147,11 +153,11 @@
                                 <div id="option">
                                     <div>
                                         <span>옵션명 :</span>
-                                        <input type="text" class="option-name" placeholder="옵션명을 입력하세요" required>
+                                        <input type="text" class="option-name op" placeholder="옵션명을 입력하세요" required>
                                     </div>
                                     <div class="option-values">
                                         <span>옵션값 :</span>
-                                        <div class="fake_input ">
+                                        <div class="fake_input op">
                                             <input type="text" class="option-value-input input1"
                                                    placeholder="옵션값 입력 후 엔터" required>
                                         </div>
@@ -172,79 +178,90 @@
                         <tr>
                             <td class="label">상품상태</td>
                             <td>
-                                <input type="text" name="prod_Detail_Condition" value="새상품" class="inputmini" id="prod_Detail_Condition"/>
+                                <input type="text" name="condition" value="새상품" class="inputmini"
+                                       id="condition"/>
                             </td>
                         </tr>
                         <tr>
                             <td class="label">부가세 면세여부</td>
                             <td>
-                                <input type="text" name="prod_Detail_duty" value="과세상품" class="inputmini" id="prod_Detail_duty"/>
+                                <input type="text" name="duty" value="과세상품" class="inputmini"
+                                       id="duty"/>
                             </td>
                         </tr>
                         <tr>
                             <td class="label">영수증 발행</td>
                             <td>
-                                <input type="text" name="prod_Detail_receipt" value="발생가능 - 신용카드전표, 온라인현금영수증" id="prod_Detail_receipt"/>
+                                <input type="text" name="receipt" value="발생가능 - 신용카드전표, 온라인현금영수증"
+                                       id="receipt"/>
                             </td>
                         </tr>
                         <tr>
                             <td class="label">사업자구분</td>
                             <td>
-                                <input type="text" name="prod_Detail_gubun" value="사업자판매자" id="prod_Detail_gubun"/>
+                                <input type="text" name="sellerType" value="사업자판매자" id="sellerType"/>
                             </td>
                         </tr>
                         <tr>
                             <td class="label">브랜드</td>
                             <td>
-                                <input type="text" name="prod_Detail_brand" value="사업자판매자" id="prod_Detail_brand"/>
+                                <input type="text" name="brand" value="사업자판매자" id="brand"/>
                             </td>
                         </tr>
                         <tr>
                             <td class="label">원산지</td>
                             <td>
-                                <input type="text" name="prod_Detail_COA" value="국내산" class="inputmini" id="prod_Detail_COA"/>
+                                <input type="text" name="COA" value="국내산" class="inputmini"
+                                       id="COA"/>
                             </td>
                         </tr>
                         <tr>
                             <td class="label">제조자 / 수입국</td>
                             <td>
-                                <input type="text" name="prod_Detail_creator" value="국내산" class="inputmini" id="prod_Detail_creator"/>
+                                <input type="text" name="creator" value="국내산" class="inputmini"
+                                       id="creator"/>
                             </td>
                         </tr>
                         <tr>
                             <td class="label">제조국</td>
                             <td>
-                                <input type="text" name="prod_Detail_country" value="국내산" class="inputmini" id="prod_Detail_country"/>
+                                <input type="text" name="country" value="국내산" class="inputmini"
+                                       id="country"/>
                             </td>
                         </tr>
                         <tr>
                             <td class="label">취급시주의사항</td>
                             <td>
-                                <input type="text" name="prod_Detail_warning" value="국내산" class="inputmini" id="prod_Detail_warning"/>
+                                <input type="text" name="warning" value="국내산" class="inputmini"
+                                       id="warning"/>
                             </td>
                         </tr>
                         <tr>
                             <td class="label">제조연월</td>
                             <td>
-                                <input type="text" name="prod_Detail_create_date" value="국내산" class="inputmini" id="prod_Detail_create_date"/>
+                                <input type="text" name="createDate" value="국내산" class="inputmini"
+                                       id="createDate"/>
                             </td>
                         </tr>
                         <tr>
                             <td class="label">품질보증기준</td>
                             <td>
-                                <input type="text" name="prod_Detail_quality" value="국내산" class="inputmini" id="prod_Detail_quality"/>
+                                <input type="text" name="quality" value="국내산" class="inputmini"
+                                       id="quality"/>
                             </td>
                         </tr>
                         <tr>
                             <td class="label">A/S 책임자</td>
                             <td>
-                                <input type="text" name="prod_Detail_as" value="국내산" class="inputmini" id="prod_Detail_as"/>
+                                <input type="text" name="as" value="국내산" class="inputmini"
+                                       id="as"/>
                             </td>
                         </tr>
                         <tr>
                             <td class="label">전화번호</td>
                             <td>
-                                <input type="text" name="prod_Detail_asPhone" value="국내산" class="inputmini" id="prod_Detail_asPhone"/>
+                                <input type="text" name="asPhone" value="국내산" class="inputmini"
+                                       id="asPhone"/>
                             </td>
                         </tr>
                     </table>

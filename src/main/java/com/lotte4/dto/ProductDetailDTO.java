@@ -1,6 +1,5 @@
-package com.lotte4.entity;
+package com.lotte4.dto;
 
-import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -11,12 +10,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity
-@Table(name = "product_detail")
-public class ProductDetail {
+public class ProductDetailDTO {
     //외래키 & 기본키
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int productDetailId;
 
     private String condition;
