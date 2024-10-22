@@ -1,9 +1,6 @@
 package com.lotte4.entity;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -12,6 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Entity
 @Table(name = "product")
 public class Product {
     @Id
@@ -33,7 +31,4 @@ public class Product {
     private String img3;
     private String detail;
     private int status;
-    //외래키 목록
-    private int productCateId;
-    private int sellerInfoId;
 }

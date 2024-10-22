@@ -65,3 +65,16 @@ spring:
         suffix: .html
 
 
+    mail:
+        host: smtp.gmail.com
+        port: 587
+        username: rkddmsrud27@gmail.com
+        password: wmasglmphptyyshf # google 앱 비밀번호
+        properties:
+            mail:
+                smtp:
+                    auth: true
+                    timeout: 5000
+                    starttls:
+                        enable: true
+

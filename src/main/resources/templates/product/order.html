@@ -11,6 +11,45 @@
     <link rel="shortcut icon" type="image/x-icon" href="../images/favicon.ico"/>
     <link rel="stylesheet" th:href="@{/css/product/product_common.css}"/>
     <link rel="stylesheet" th:href="@{/css/product/style_product_order.css}"/>
+    <script>
+        window.onload = function () {
+            const addPoint = document.getElementById("addPoint");
+            const allPoint = document.getElementById("allPoint");
+            const nowPoint = document.getElementById("nowPoint");
+
+            let maxPoint = parseInt(nowPoint.innerText) || 0;
+
+            addPoint.addEventListener('input', function (){
+                let usedPoint = parseInt(addPoint.value) || 0;
+
+                if (usedPoint < 0) {
+                    usedPoint = 0;
+                    addPoint.value = 0; // 입력값도 0으로 수정
+                }
+
+                // 사용 포인트가 현재 포인트보다 클 경우 최대 포인트로 제한
+                if (usedPoint > maxPoint) {
+                    usedPoint = maxPoint;
+                    addPoint.value = maxPoint; // 입력값도 최대 포인트로 수정
+                }
+
+                // 남은 포인트 동적으로 업데이트
+                nowPoint.innerText = (maxPoint - usedPoint) + 'p';
+            });
+
+            allPoint.addEventListener('click', function (){
+                if (confirm("전체 사용하시겠습니까?")){
+                    alert("전체 사용을 선택하셨습니다.")
+                    addPoint.value = maxPoint;
+                    nowPoint.innerText = '0p';
+                } else{
+                    alert("취소하셨습니다.")
+                }
+            });
+        }
+
+    </script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
 </head>
 <body>
@@ -54,32 +93,6 @@
                     <tbody>
                     <tr>
                         <td class="product-info">
-                            <img src="/images/product/image.png" alt="상품 이미지">
-                            <div class="product-details">
-                                <p class="product-name">[브랜드] 상품명</p>
-                            </div>
-                        </td>
-                        <td>33,000원</td>
-                        <td>
-                            <div class="quantity">
-                                <p>1</p>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="price-info">
-                                <del>33,000원</del>
-                                <span class="discount-price">23,760원</span>
-                            </div>
-                        </td>
-                        <td class="shipping-info">무료배송</td>
-
-                    </tr>
-                    </tbody>
-
-                    <tbody>
-                    <tr>
-
-                        <td class="product-info">
                             <img src="/images/product/image2.png" alt="상품 이미지">
                             <div class="product-details">
                                 <p class="product-name">[브랜드] 상품명</p>
@@ -98,10 +111,8 @@
                             </div>
                         </td>
                         <td class="shipping-info">무료배송</td>
-
                     </tr>
                     </tbody>
-
                 </table>
             </div> <!--cart--->
 
@@ -114,42 +125,29 @@
                             <tr>
                                 <th>현재포인트 : </th>
                                 <td>
-                                    <span>7200p</span>
+                                    <span id="nowPoint">7200p</span>
                                 </td>
                             </tr>
                             <tr>
                                 <th>사용포인트 : </th>
                                 <td>
-                                    <input type="number" step="">
+                                    <div style="display: flex;">
+                                        <input type="number" id="addPoint" step="1000" style="width: 80%;">
+                                        <button id="allPoint">전체<br>사용</button>
+                                    </div>
+                                    <p style="text-align: center; font-size: 10px" >포인트 5000p 미만 사용불가</p>
                                 </td>
                             </tr>
                             <tr>
-                                <th>상품별 쿠폰선택</th>
+                                <th>쿠폰선택</th>
                                 <td>
                                     <select name="etc" id="condition" >
                                         <option value="condition">[브랜드] 10000원 쿠폰</option>
-                                        <option value="condition">[브랜드] 10000원 쿠폰</option>
-                                        <option value="condition">[브랜드] 10000원 쿠폰</option>
-                                        <option value="condition">[브랜드] 10000원 쿠폰</option>
                                     </select>
-
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>주문별 쿠폰선택</th>
-                                <td>
-                                    <select name="etc" id="condition" >
-                                        <option value="condition">[전상품] 10000원 쿠폰</option>
-                                        <option value="condition">[전상품] 20000원 쿠폰</option>
-                                        <option value="condition">[전상품] 1000원 쿠폰</option>
-                                        <option value="condition">[전상품] 2000원 쿠폰</option>
-                                    </select>
-
                                 </td>
                             </tr>
                         </table>
                     </aside>
-
                     <!-- 최종 결제 금액-->
                     <aside class="checkout-summary">
                         <div class="checkout-details">
@@ -187,6 +185,7 @@
                                 <th>수령자</th>
                                 <td>
                                     <input type=text value="수령자"/>
+<!--                                    이부분 추후에 개발 여부 확인 <button type="button">동일인</button>-->
                                 </td>
                             </tr>
                             <tr>
@@ -198,8 +197,20 @@
                             <tr>
                                 <th>우편번호</th>
                                 <td>
-                                    <input type="text" id="zipcode" name="zipcode" required>
-                                    <button type="button">검색</button>
+                                    <input type="text" id="postcode" name="postcode" required>
+                                    <button type="button" id="findPostcodeBtn">검색</button>
+                                    <script>
+                                        var findPostcodeBtn = document.getElementById("findPostcodeBtn");
+                                        findPostcodeBtn.onclick = function() {
+                                            new daum.Postcode({
+                                                oncomplete: function(data) {
+                                                    document.getElementById('postcode').value = data.zonecode;
+                                                    document.getElementById('address').value = data.roadAddress || data.jibunAddress;
+                                                    document.getElementById('detailAddress').focus();
+                                                }
+                                            }).open();
+                                        };
+                                    </script>
                                 </td>
                             </tr>
                             <tr>
@@ -207,18 +218,17 @@
                                 <td>
                                     <input type="text" id="address" name="address" required>
                                 </td>
-
                             </tr>
                             <tr>
                                 <th>상세주소</th>
                                 <td>
-                                    <input type="text" id="address-detail" name="addressDetail" required>
+                                    <input type="text" id="detailAddress" name="detailAddress" required>
                                 </td>
                             </tr>
                             <tr>
                                 <th>배송 메시지</th>
                                 <td>
-                                    <textarea></textarea>
+                                    <textarea class="delivery__text"></textarea>
                                 </td>
                             </tr>
 
@@ -227,19 +237,19 @@
                                 <th>결제방법</th>
                                 <td class ="radio">
                                     <label>
-                                        <input type="radio" th:checked="${deliveryfee == 2000}"/> 카카오페이
+                                        <input type="radio" name="paymentMethod" th:checked="${deliveryfee == 2000}"/> 카카오페이
                                     </label>
                                     <label>
-                                        <input type="radio" th:checked="${deliveryfee == 3000}"/> 토스
+                                        <input type="radio" name="paymentMethod" th:checked="${deliveryfee == 3000}"/> 토스
                                     </label>
                                     <label>
-                                        <input type="radio" th:checked="${deliveryfee == 5000}"/> 페이코</br>
+                                        <input type="radio" name="paymentMethod" th:checked="${deliveryfee == 5000}"/> 페이코</br>
                                     </label>
                                     <label>
-                                        <input type="radio" th:checked="${deliveryfee == 0}"/> 무통장입금
+                                        <input type="radio" name="paymentMethod" th:checked="${deliveryfee == 0}"/> 무통장입금
                                     </label>
                                     <label>
-                                        <input type="radio" th:checked="${deliveryfee == 0}"/> 네이버페이
+                                        <input type="radio" name="paymentMethod" th:checked="${deliveryfee == 0}"/> 네이버페이
                                     </label>
                                 </td>
                             </tr>
@@ -250,10 +260,6 @@
 
         </section>
         </section>
-
-
-
-
     </main>
     <footer th:replace="~{/include/footer.html}"></footer>
     <button type="button" id="top">상단이동</button>

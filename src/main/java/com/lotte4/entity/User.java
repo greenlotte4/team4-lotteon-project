@@ -42,8 +42,8 @@ public class User {
     public UserDTO toDTO() {
         return UserDTO.builder()
                 .userId(userId)
-                .memberInfoDTO(memberInfo.toDTO())
-                .sellerInfoDTO(sellerInfo.toDTO())
+                .memberInfo(memberInfo.toDTO())
+                .sellerInfo(sellerInfo.toDTO())
                 .uid(uid)
                 .pass(pass)
                 .role(role)

@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @Table(name = "coupon")
+@Entity
 public class Coupon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +24,11 @@ public class Coupon {
     private LocalDateTime updateAt;
     private String status;
 
-    //외래키 목록
-    private int memberInfoId;
-    private int orderId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "memberInfoId")
+    private User users;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "orderId")
+    private Order order;
 }
