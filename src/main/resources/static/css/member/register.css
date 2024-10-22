@@ -1,5 +1,6 @@
 .register {
-  font: normal 13px '돋움';
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
 }
 ul, ol {list-style: none;}
 a {text-decoration: none; color: #111;}
@@ -9,15 +10,39 @@ input, textarea {outline: none;}
   height: fit-content;
 }
 
+/* 입력할 때 테두리 색 변경 */
+input:focus {
+  border-color: #d82a2a !important;
+  outline: none !important; /* 기본 포커스 아웃라인 제거 */
+}
+
 h2 {
-  text-align: center;
-  width: 100%;
+  width: 596px;
   margin: 18px auto;
-  padding-bottom: 31px;
+  padding-bottom: 7px;
+  border-bottom: 2px solid #d82a2a; /* 밑줄 추가 */
+  text-align: left;
 }
 
 .tit {
-  font-size: 30px;
+  font-size: 27px;
+}
+
+.register-btns {
+  color: #fbf2ff;
+  background-color: #d82a2a;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  height: 26px;
+  box-sizing: border-box;
+  line-height: 25px;
+}
+
+.option {
+  font-size: 12px;
 }
 
 .main-wrapper {
@@ -36,7 +61,7 @@ h2 {
 
 /* 회원가입 */
 .register {
-
+  margin-top: 44px;
   margin-left: 8px;
   box-sizing: border-box;
   padding: 30px;
@@ -64,12 +89,12 @@ h2 {
 }
 
 .register table tr > td {
-  padding: 15px;
+  padding: 11px;
   box-sizing: border-box;
 }
 .register table tr > td:nth-child(1) {
   width: 124px;
-  background: #f5f8f9;
+  background: #f5f7fa;
 }
 .registerButton {
   align-content:center;}
@@ -79,10 +104,10 @@ h2 {
   line-height: 21px;
   margin: 15px auto 0;
   color: #fbf2ff;
-  background-color: #ef2a23;
-  border-radius: 10px;
+  background-color: #d82a2a;
+  border-radius: 4px;
   text-align: center;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 500;
   cursor: pointer;
   float: right;
@@ -122,7 +147,6 @@ h2 {
 }
 .register table button {
   border: none;
-  vertical-align: bottom;
 }
 .register > form > div {
   margin: 0 auto;
@@ -144,4 +168,16 @@ div.gender-selection {
 .gender-selection label input {
   vertical-align: middle; /* 라디오 버튼을 텍스트와 세로로 정렬 */
   margin-right: 5px; /* 라디오 버튼과 텍스트 사이의 간격 */
+}
+
+.addr {
+  margin-bottom: 5px;
+}
+
+.desc {
+  margin-bottom: -6px;
+}
+
+.auth {
+  margin-top: 3px;
 }
