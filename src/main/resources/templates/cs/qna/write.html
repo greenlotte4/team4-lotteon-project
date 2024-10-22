@@ -1,54 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>문의사항 작성</title>
-    <link rel="stylesheet" th:href="@{/css/common.css}">
-    <link rel="stylesheet" th:href="@{/css/cs/qna_write.css}" />
-  </head>
-  <body>
-  <header th:replace="~{/include/my_header.html}"></header>
-  <div id="wrapper">
-    <th:block th:replace="~{/cs/aside/aside_faq.html}"></th:block>
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>문의하기</title>
+  <link rel="stylesheet" th:href="@{/css/common.css}">
+  <link rel="stylesheet" th:href="@{/css/cs/qna_write.css}"/>
+</head>
+<body>
+<header th:replace="~{/include/header.html}"></header>
+
+<main>
+  <th:block th:replace="~{/cs/aside/aside_qna.html}"></th:block>
   <section id="section_wrapper">
     <div id="category">
-      <p>회원<br><span class="subtitle">회원 관련 문의 내용입니다.</span></p> <!-- 좌측의 회원 부분 2개는 해당 카테고리가 출력되도록 구현. th:if cate1==1 회원 이런 식? -->
+      <p>문의하기</p>
       <div class="breadcrumb">
-        <a th:href="@{/cs/index}">Home</a> > <a th:href="@{/cs/qna/list}">문의하기</a> > <a th:href="@{/cs/qna/list}" class="location">회원</a>
+        <a th:href="@{/cs/index}">Home</a> > <a th:href="@{/cs/qna/list}">문의하기</a> > <a th:href="@{/cs/qna/write}" class="location">문의하기</a>
       </div>
     </div>
+
+    <form method="post" action="/cs/qna/submit">
       <table>
         <tr>
           <td>문의유형</td>
           <td>
+            <!-- 1차 유형 카테고리 (BoardCategory Enum) -->
             <select name="category1" id="category1">
               <option disabled hidden selected>1차 유형</option>
-              <option th:value="1">1</option>
-              <option th:value="2">2</option>
+              <option th:each="cate : ${cate1}"
+                      th:value="${cate.boardCateId}"
+                      th:text="${cate.name}">
+              </option>
             </select>
+
+            <!-- 2차 유형 카테고리 (동적으로 추가됨) -->
             <select name="category2" id="category2">
-              <option disabled hidden selected>2차 유형</option>
-              <option th:value="1">1</option>
-              <option th:value="2">2</option>
+              <option disabled hidden selected>2차 유형을 선택하세요</option>
             </select>
           </td>
         </tr>
         <tr>
           <td>제목</td>
-          <td><textarea name="title" id="writeTitle" placeholder="제목을 입력합니다."></textarea></td>
+          <td><input name="title" id="writeTitle" placeholder="제목을 입력합니다."></input></td>
         </tr>
         <tr>
           <td>내용</td>
           <td><textarea name="content" id="writeContent" placeholder="내용을 입력합니다."></textarea></td>
         </tr>
       </table>
-      <div>
-        <a th:href="@{/cs/qna/list}"><button id="btnCancel">취소하기</button></a>
-        <button id="btnSubmit">등록하기</button>
+
+      <div class="btnDiv">
+        <a th:href="@{/cs/qna/list}"><button type="button" id="btnCancel">취소하기</button></a>
+        <button type="submit" id="btnSubmit">등록하기</button>
       </div>
-    </section>
-  </div>
-  <footer th:replace="~{/include/footer.html}"></footer>
-  </body>
+    </form>
+  </section>
+</main>
+
+<footer th:replace="~{/include/footer.html}"></footer>
+
+<script>
+  // 1차 카테고리 선택 시 2차 카테고리 값을 동적으로 가져와서 설정
+  const category1Select = document.getElementById('category1');
+  const category2Select = document.getElementById('category2');
+
+  category1Select.addEventListener('change', function() {
+    const parentId = this.value;
+
+    // 2차 카테고리 초기화
+    category2Select.innerHTML = '<option disabled hidden selected>2차 유형을 선택하세요</option>';
+
+    // 서버로부터 2차 카테고리 데이터를 가져옴
+    fetch(`/lotteon/cs/qna/subcategories/${parentId}`)
+            .then(response => response.json())
+            .then(data => {
+              console.log(data);
+              data.forEach(subCategory => {
+                const option = document.createElement('option');
+                option.value = subCategory.boardCateId;
+                option.text = subCategory.name;
+                category2Select.appendChild(option);
+              });
+            })
+            .catch(error => console.error('Error fetching subcategories:', error));
+  });
+</script>
+
+</body>
 </html>

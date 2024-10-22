@@ -9,7 +9,8 @@ import org.springframework.stereotype.Repository;
 public interface MemberInfoRepository extends JpaRepository<MemberInfo, Integer> {
 
 
-
+    int countByEmail(String email);
+    int countByHp(String hp);
 
 
 

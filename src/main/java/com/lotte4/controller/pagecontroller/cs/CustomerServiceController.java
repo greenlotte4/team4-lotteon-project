@@ -1,4 +1,4 @@
-package com.lotte4.controller.pagecontroller;
+package com.lotte4.controller.pagecontroller.cs;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,8 +41,5 @@ public class CustomerServiceController {
         return "/cs/qna/view";
     }
 
-    @GetMapping("/cs/qna/write")
-    public String qnaWrite(){
-        return "/cs/qna/write";
-    }
+
 }

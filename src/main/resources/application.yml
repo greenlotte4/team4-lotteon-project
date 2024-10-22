@@ -51,8 +51,8 @@ spring:
             max-file-size: 10MB     # 업로드 파일의 최대 크기
             max-request-size: 15MB  # 요청 전체 크기
             location: uploads/
-            #배포시 아래 경로를 사용
-           #location: /home/ec2-user/uploads
+            # location : /home/ec2-user/uploads/
+           #location: 배포 시 절대 경로로 바꿔주는 것이 좋음
     web:
         resources:
             static-locations:
@@ -64,4 +64,17 @@ spring:
         prefix: classpath:/templates
         suffix: .html
 
+
+    mail:
+        host: smtp.gmail.com
+        port: 587
+        username: rkddmsrud27@gmail.com
+        password: wmasglmphptyyshf # google 앱 비밀번호
+        properties:
+            mail:
+                smtp:
+                    auth: true
+                    timeout: 5000
+                    starttls:
+                        enable: true
 

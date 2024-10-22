@@ -2,6 +2,7 @@ package com.lotte4.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
@@ -10,8 +11,9 @@ import java.time.LocalDateTime;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@SuperBuilder
 @Table(name = "orders")
+@Entity
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,7 +37,18 @@ public class Order {
     private LocalDateTime Date;
     private String couponUse;
 
-    //외래키
-    private int member_id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "memberInfoId") // 이 컬럼은 MemberInfo 엔티티의 id와 매핑되어야 함
+    private MemberInfo memberInfo;
+
+    @OneToOne(mappedBy = "order")
+    private Coupon coupon;
+
+    @OneToOne(mappedBy = "order")
+    private Delivery delivery;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "productId")
+    private Product product;
 
 }

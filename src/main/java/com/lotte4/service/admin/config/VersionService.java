@@ -24,7 +24,9 @@ public class VersionService {
         Version savedVersion = versionRepository.save(modelMapper.map(versionDTO, Version.class));
         return modelMapper.map(savedVersion, VersionDTO.class);
     }
-
+    public boolean selectVersionById(int id){
+        return versionRepository.findById(id).isPresent();
+    }
     public List<VersionDTO> selectAll() {
         // 반환할 리스트 생성
         List<VersionDTO> versionDTOList = new ArrayList<>();
@@ -37,5 +39,13 @@ public class VersionService {
 
         // DTO 리스트 반환
         return versionDTOList;
+    }
+    public boolean deleteVersion(int versionId) {
+        if (versionRepository.existsById(versionId)) {
+            versionRepository.deleteById(versionId);
+            return !versionRepository.existsById(versionId); // 삭제 후 확인
+        } else {
+            throw new IllegalArgumentException("해당 버전이 존재하지 않습니다.");
+        }
     }
 }
