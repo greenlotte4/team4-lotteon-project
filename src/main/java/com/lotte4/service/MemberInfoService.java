@@ -21,6 +21,9 @@ public class MemberInfoService {
 
     // 일반회원 정보 저장
     public MemberInfo insertMemberInfo(MemberInfoDTO memberInfoDTO) {
+        if (memberInfoDTO == null) {
+            throw new IllegalArgumentException("MemberInfoDTO cannot be null");
+        }
 
         log.info("memberInfoDTO: " + memberInfoDTO);
         MemberInfo memberInfo = memberInfoDTO.toEntity();

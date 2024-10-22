@@ -11,4 +11,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     Optional<User> findByUid(String uid);
 
+    // 아이디 중복확인
+    int countByUid(String uid);
+
+
 }
