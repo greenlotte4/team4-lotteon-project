@@ -10,6 +10,10 @@ body {
     font-size: 12px;
     margin: 0 auto;
 }
+main {
+    margin-top:20px;
+    margin-bottom:50px;
+}
 /* Wrapper 설정 */
 #wrapper {
     display: flex;
@@ -17,6 +21,7 @@ body {
     margin: 40px auto;
 }
 #section_wrapper {
+
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -145,10 +150,6 @@ tr {
     background-color: #d82a2a;
     margin-top: 10px;
     cursor: pointer;
-}
-.qimage {
-    width:14px;
-    height:14px;
 }
 #toQnaWrite{
     align-self: flex-end;

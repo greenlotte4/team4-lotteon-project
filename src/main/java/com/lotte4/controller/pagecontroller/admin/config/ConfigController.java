@@ -1,9 +1,12 @@
 package com.lotte4.controller.pagecontroller.admin.config;
 
+
+import com.lotte4.dto.admin.config.InfoDTO;
 import com.lotte4.dto.ProductCateDTO;
 import com.lotte4.entity.ProductCate;
 import com.lotte4.service.CategoryService;
 import lombok.extern.log4j.Log4j2;
+
 import com.lotte4.dto.admin.config.VersionDTO;
 import com.lotte4.entity.Info;
 import com.lotte4.service.admin.config.InfoService;
@@ -21,9 +24,21 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Controller
 public class ConfigController {
-
+    // View반환 Controller
     private final VersionService versionService;
+    private final InfoService infoService;
+
+    @GetMapping("/admin/config/info")
+    public String AdminConfigInfoInsert(Model model) {
+
+        InfoDTO infoDTO = infoService.selectInfoDTO();
+        model.addAttribute("info", infoDTO);
+
+        return "/admin/config/info";
+    }
+
     private final CategoryService categoryService;
+
     //배너관리
     @GetMapping("/admin/config/banner")
     public String AdminconfigBanner() {
@@ -35,7 +50,8 @@ public class ConfigController {
     public String AdminconfigPolicy() {
         return "/admin/config/policy";
     }
-    
+
+
     //버전관리
     @GetMapping("/admin/config/version")
     public String AdminconfigVersion(Model model) {
@@ -44,11 +60,6 @@ public class ConfigController {
         return "/admin/config/version";
     }
 
-    @PostMapping("/admin/config/version")
-    public ResponseEntity<VersionDTO> InsertConfigVersion(@RequestBody VersionDTO versionDTO) {
-        VersionDTO savedVersion = versionService.insertVersion(versionDTO);
-        return ResponseEntity.ok(savedVersion);
-    }
 
     // 카테고리
     @GetMapping("/admin/config/category")
