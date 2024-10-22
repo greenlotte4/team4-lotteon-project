@@ -1,9 +1,11 @@
 package com.lotte4.controller.pagecontroller.my;
 
+import com.lotte4.dto.MemberInfoDTO;
 import com.lotte4.dto.UserDTO;
 import com.lotte4.entity.MemberInfo;
 import com.lotte4.service.MemberInfoService;
 import com.lotte4.service.UserService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.RequestEntity;
@@ -54,17 +56,36 @@ public class MyController {
     }
 
 
-    @ResponseBody
+//    @ResponseBody
+//    @GetMapping("/info")
+//    public ResponseEntity<UserDTO> infoselect(@RequestParam("uid") String uid) {
+//        UserDTO userDTO = userService.selectUser(uid);
+//        if(userDTO != null) {
+//            return ResponseEntity.ok(userDTO);
+//        } else {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
+
+    // 나의설정 (uid를 나중에 principal로 바꿔야함)
     @GetMapping("/info")
-    public ResponseEntity<UserDTO> info(@RequestParam("uid") String uid) {
+    public String info(@RequestParam String uid, Model model) {
+
         UserDTO userDTO = userService.selectUser(uid);
-        if(userDTO != null) {
-            return ResponseEntity.ok(userDTO);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+
+        model.addAttribute("userDTO", userDTO);
+        log.info("userDTO : " + userDTO);
+
+        return "/my/info";
     }
 
+    // 나의설정 정보수정
+    @PostMapping("/info")
+    public ResponseEntity<MemberInfoDTO> updateInfo(@RequestBody MemberInfoDTO memberInfoDTO) {
+
+        MemberInfoDTO updatedMemberInfo = memberInfoService.updateMemberInfo(memberInfoDTO);
+        return ResponseEntity.ok(updatedMemberInfo);
+    }
 
 
 
