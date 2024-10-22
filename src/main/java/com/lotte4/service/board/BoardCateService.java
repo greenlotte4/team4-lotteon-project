@@ -1,9 +1,8 @@
-package com.lotte4.service;
+package com.lotte4.service.board;
 
 import com.lotte4.dto.BoardCateDTO;
-import com.lotte4.entity.Board;
 import com.lotte4.entity.BoardCate;
-import com.lotte4.repository.BoardCateRepository;
+import com.lotte4.repository.board.BoardCateRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;

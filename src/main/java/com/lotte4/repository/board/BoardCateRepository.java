@@ -1,4 +1,4 @@
-package com.lotte4.repository;
+package com.lotte4.repository.board;
 
 import com.lotte4.entity.BoardCate;
 import org.springframework.data.jpa.repository.JpaRepository;
