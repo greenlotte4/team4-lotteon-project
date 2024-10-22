@@ -15,4 +15,7 @@ public interface BoardCateRepository extends JpaRepository<BoardCate, Integer> {
     List<BoardCate> findBoardCateByDepth(int depth);
     @Query("SELECT b FROM BoardCate b WHERE b.parent.boardCateId = :parentId")
     List<BoardCate> findByParentId(@Param("parentId") int parentId);
+    BoardCate findByBoardCateId(int boardCateId);
+
+
 }

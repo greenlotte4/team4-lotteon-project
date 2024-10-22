@@ -3,37 +3,9 @@
 
 <aside>
     <ul class="sidebar-menu"> <!-- 우선 파라미터 전달해서 데이터 불러오는 방식으로 적어놨습니다. 값은 예시입니다. fetch 쓰셔도 돼요 -->
-        <li class="asideTitle">
-           문의하기
-        </li>
-        <li>
-            <a th:href="@{/cs/qna/list(cate1=${member})}">회원</a>
-
-        </li>
-        <li>
-            <a th:href="@{/cs/qna/list}">쿠폰/이벤트</a>
-
-        </li>
-        <li>
-            <a th:href="@{/cs/qna/list}">주문/결제</a>
-
-        </li>
-        <li>
-            <a th:href="@{/cs/qna/list}">배송</a>
-
-        </li>
-        <li>
-            <a th:href="@{/cs/qna/list}">취소/반품/교환</a>
-
-        </li>
-        <li>
-            <a th:href="@{/cs/qna/list}">여행/숙박/항공</a>
-
-        </li>
-        <li>
-            <a th:href="@{/cs/qna/list}">안전거래</a>
-
-        </li>
+        <li class="asideTitle">문의하기</li>
+        <li><a th:href="@{/cs/qna/list}">문의내역</a></li>
+        <li><a th:href="@{/cs/qna/write}">문의작성</a></li>
     </ul>
 </aside>
 

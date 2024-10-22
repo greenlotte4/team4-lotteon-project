@@ -2,6 +2,7 @@ package com.lotte4.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -21,20 +22,18 @@ public class Board {
     // 유형
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="boardCateId")
-    private BoardCate boardCate;
+    private BoardCate cate;
 
     // 제목
     private String title;
-    // 내용
     private String content;
-    // 작성한 시간
-    private LocalDateTime regDate;
-    // 작성자 Ip
-    private String regIp;
-    // 상태
+    private String type;
+
     private int state;
-    // 답변
     private String comment;
+    private String regIp;
+    @CreationTimestamp
+    private LocalDateTime regDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="writer")

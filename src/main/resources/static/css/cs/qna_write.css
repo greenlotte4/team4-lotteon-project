@@ -1,24 +1,11 @@
-a {
-  text-decoration: none; /* 링크의 밑줄 제거 */
-  color: inherit; /* 링크의 색상 제거 */
-}
-a:hover{
-  text-decoration: underline;
-}
-body {
-  font-family: "Malgun Gothic", sans-serif;
-  font-size: 12px;
-  margin: 0 auto;
-}
+
 main {
   margin-top:20px;
 }
-/* Wrapper 설정 */
-#wrapper {
-  display: flex;
-  width: 1200px;
-  margin: 40px auto;
+#category > p {
+  margin-left : 10px;
 }
+
 /* 사이드바 스타일 */
 aside {
   border: 1px solid #ede6db;
@@ -57,6 +44,7 @@ aside {
   font-weight: 900;
 }
 #section_wrapper {
+
   min-height: 500px;
   display: flex;
   flex-direction: column;
@@ -73,39 +61,23 @@ aside {
   font-weight: bold;
 }
 #titleAndTable{
-  width: 100%;
+  width: 95%;
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-#category {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-end;
-  padding: 10px;
-  width: 100%;
-
+  margin-left:10px;
 }
 
-#category > p {
-  font-size: 20px;
-  font-weight: 900;
-  margin-bottom: 10px;
+.breadcrumb {
+  margin-right: 20px;
+  float: right;
 }
-
-#category span {
-  font-size: 12px;
-  margin-bottom: 15px;
-  color: gray;
-  margin-top: 50px;
-}
-
 table {
-  width: 95%;
+  width: 100%;
   height: 560px;
   min-height: 300px;
   border-top: 2px solid #e9e9e9;
+  box-sizing: border-box;
   border-collapse: collapse;
 }
 
@@ -116,10 +88,12 @@ tr {
 }
 td {
   width: 780px;
+
 }
 tr > td:first-child {
+  margin-top:10px;
   width: 80px;
-  padding: 15px;
+  padding: 10px;
   font-size: 15px;
   font-weight: 900;
   text-align: left;
@@ -160,7 +134,7 @@ select {
   height: 30px;
 }
 
-#writeTitle {
+.writeTitle {
   border: 1px solid white;
   width: 95%;
   height: 20px;

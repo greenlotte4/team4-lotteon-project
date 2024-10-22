@@ -7,7 +7,8 @@
   <link rel="stylesheet" th:href="@{/css/common.css}">
   <link rel="stylesheet" th:href="@{/css/cs/cs_common.css}"/>
   <link rel="stylesheet" th:href="@{/css/cs/cs_list.css}"/>
-
+<style>
+ </style>
 </head>
 <body>
 <header th:replace="~{/include/header.html}"></header>
@@ -18,75 +19,48 @@
   <section id="section_wrapper">
     <div id="titleAndTable">
       <div id="category">
-        <p>회원<br><span class="subtitle">회원 관련 문의 내용입니다.</span></p>
+        <p>문의내역<br><span class="subtitle">고객님이 작성하신 문의 내용입니다.</span></p>
         <div class="breadcrumb">
-          <a th:href="@{/cs/index}">Home</a> > <a th:href="@{/cs/qna/list}">문의하기</a> > <a th:href="@{/cs/qna/list}" class="location">회원</a>
+          <a th:href="@{/cs/index}">Home</a> > <a th:href="@{/cs/qna/list}">문의하기</a> > <a th:href="@{/cs/qna/list}" class="location">나의문의</a>
         </div>
       </div>
-      <table>
-        <!-- th:each -->
-        <tr class="qna">
-          <td><a th:href="@{/cs/qna/view}">[안내] 해외결제사칭 문자주의</a></td>
-          <td class="status_ing">검토중</td>
-          <!-- 답변완료 = class="status_finished" -->
-          <td>chh**</td>
-          <td>00.00.00</td>
+      <table class="inquiry-table">
+        <colgroup>
+
+          <col style="width: 8%">
+          <col style="width: 37%">
+          <col style="width: 9%">
+          <col style="width: 10%">
+          <col style="width: 20%">
+
+        </colgroup>
+        <thead>
+        <tr>
+          <th><input type="checkbox" class="chkbox"></th>
+          <th>이름</th>
+          <th>상태</th>
+          <th>작성자</th>
+          <th>작성일</th>
         </tr>
-        <tr class="qna">
-          <td><a th:href="@{/cs/qna/view}">[안내] 해외결제사칭 문자주의</a></td>
-          <td class="status_ing">검토중</td>
-          <td>chh**</td>
-          <td>00.00.00</td>
+        </thead>
+        <tbody>
+        <!-- Thymeleaf를 사용하여 boardList 데이터 출력 -->
+        <tr class = qna th:each="board : ${boards}">
+          <input type="hidden" th:value="${board.boardId}">
+          <td><input type="checkbox" class="chkbox"></td>
+          <td class="title">
+            <!-- TODO : a 링크에 id 달기-->
+            <span>[</span>[[${board.cate.name}]]<span>]&nbsp;</span><a th:href="@{/cs/qna/view/{id}(id=${board.boardId})}" th:text="${board.title}">개인회원과 법인회원에 차이가 있나요?</a>
+          </td>
+          <!-- TODO : enum 처리-->
+          <td class="st1" th:if="${board.state == 0}">검토중</td>
+          <td class="st2" th:if="${board.state == 1}">답변완료</td>
+          <td th:text="${board.user.uid}"></td>
+          <td th:text="${board.regDate}"></td>
         </tr>
-        <tr class="qna">
-          <td><a th:href="@{/cs/qna/view}">[안내] 해외결제사칭 문자주의</a></td>
-          <td class="status_ing">검토중</td>
-          <td>chh**</td>
-          <td>00.00.00</td>
-        </tr>
-        <tr class="qna">
-          <td><a th:href="@{/cs/qna/view}">[안내] 해외결제사칭 문자주의</a></td>
-          <td class="status_ing">검토중</td>
-          <td>chh**</td>
-          <td>00.00.00</td>
-        </tr>
-        <tr class="qna">
-          <td><a th:href="@{/cs/qna/view}">[안내] 해외결제사칭 문자주의</a></td>
-          <td class="status_ing">검토중</td>
-          <td>chh**</td>
-          <td>00.00.00</td>
-        </tr>
-        <tr class="qna">
-          <td><a th:href="@{/cs/qna/view}">[안내] 해외결제사칭 문자주의</a></td>
-          <td class="status_ing">검토중</td>
-          <td>chh**</td>
-          <td>00.00.00</td>
-        </tr>
-        <tr class="qna">
-          <td><a th:href="@{/cs/qna/view}">[안내] 해외결제사칭 문자주의</a></td>
-          <td class="status_ing">검토중</td>
-          <td>chh**</td>
-          <td>00.00.00</td>
-        </tr>
-        <tr class="qna">
-          <td><a th:href="@{/cs/qna/view}">[안내] 해외결제사칭 문자주의</a></td>
-          <td class="status_ing">검토중</td>
-          <td>chh**</td>
-          <td>00.00.00</td>
-        </tr>
-        <tr class="qna">
-          <td><a th:href="@{/cs/qna/view}">[안내] 해외결제사칭 문자주의</a></td>
-          <td class="status_ing">검토중</td>
-          <td>chh**</td>
-          <td>00.00.00</td>
-        </tr>
-        <tr class="qna">
-          <td><a th:href="@{/cs/qna/view}">[안내] 해외결제사칭 문자주의</a></td>
-          <td class="status_ing">검토중</td>
-          <td>chh**</td>
-          <td>00.00.00</td>
-        </tr>
+        </tbody>
       </table>
+
       <a th:href="@{/cs/qna/write}" id="toQnaWrite"><button id="btnQNA">문의하기</button></a>
     </div>
     <div class="pagination">

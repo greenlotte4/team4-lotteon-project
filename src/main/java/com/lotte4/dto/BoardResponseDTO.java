@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class BoardResponseDTO {
     private int boardId;
 
-    private String cate;
+    private BoardCateDTO cate;
     private String type;
     // 제목
     private String title;
