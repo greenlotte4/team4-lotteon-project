@@ -1,0 +1,67 @@
+logging:
+    file:
+        name: /logs/letteon.log
+    level:
+        jdbc:
+            resultsettable: debug
+            sqlonly: debug
+            sqltiming: debug
+        root: info
+        org.springframework.web: debug
+
+server:
+    port: 8080
+    servlet:
+        context-path: /lotteon
+    error:
+        whitelabel:
+            enabled: false
+        path: error
+
+
+spring:
+    application:
+        name: lotteon-team4
+        version: ${version}
+    devtools:
+        livereload:
+            enabled: true
+
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        password: "1234"
+        url: jdbc:mysql://127.0.0.1:3306/lotteon
+        username: root
+
+    jpa:
+        database: mysql
+        hibernate:
+            ddl-auto: update
+            naming:
+                physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        properties:
+            hibernate:
+                format_sql: true
+                show_sql: true
+    servlet:
+        session:
+            timeout: 10m
+        # 파일 업로드 설정
+        multipart:
+            enabled: true
+            max-file-size: 10MB     # 업로드 파일의 최대 크기
+            max-request-size: 15MB  # 요청 전체 크기
+            location: uploads/
+           #location: 배포 시 절대 경로로 바꿔주는 것이 좋음
+    web:
+        resources:
+            static-locations:
+                - classpath:/static/
+    thymeleaf:
+        cache: false
+        check-template-location: true
+        enabled: true
+        prefix: classpath:/templates
+        suffix: .html
+
+

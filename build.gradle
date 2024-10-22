@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.lotte4'
-version = '0.0.2-SNAPSHOT'
+version = '4조 0.0.3-SNAPSHOT'
 
 java {
     toolchain {
@@ -59,6 +59,12 @@ tasks.named('test') {
 
 processResources {
     filesMatching('**/application.yml') {
+        expand(version: version)
+    }
+}
+
+processResources {
+    filesMatching('**/application-dev.yml') {
         expand(version: version)
     }
 }
