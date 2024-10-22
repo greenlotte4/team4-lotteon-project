@@ -12,28 +12,17 @@ category1.addEventListener('change', function (e) {
     fetch(`/lotteon/admin/product/register/${parent}`)
         .then(resp => resp.json())
         .then(data => {
-            console.log(data)
-            if (category2.childNodes.length !== 1) {
-                category2.innerHTML = "<option value=\"\" disabled selected hidden>2차분류 선택</option>";
+            category2.innerHTML = "<option value=\"\" disabled selected hidden>2차분류 선택</option>";
+            category3.innerHTML = "<option value=\"\" disabled selected hidden>3차분류 선택</option>";
 
-                data.forEach(option2 => {
-                    const option = document.createElement('option');
-                    option.value = option2.productCateId;
-                    option.text = option2.name;
-                    category2.appendChild(option);
-                });
-            } else {
-                data.forEach(option2 => {
-                    const option = document.createElement('option');
-                    option.value = option2.productCateId;
-                    option.text = option2.name;
-                    category2.appendChild(option);
-                });
-            }
+            data.forEach(option2 => {
+                const option = document.createElement('option');
+                option.value = option2.productCateId;
+                option.text = option2.name;
+                category2.appendChild(option);
+            });
         })
         .catch(err => console.log(err));
-
-
 });
 
 category2.addEventListener('change', function (e) {
@@ -42,38 +31,24 @@ category2.addEventListener('change', function (e) {
     fetch(`/lotteon/admin/product/register/${parent}`)
         .then(resp => resp.json())
         .then(data => {
-            console.log(data)
-
-            if (category3.childNodes.length !== 1) {
-                category3.innerHTML = "<option value=\"\" disabled selected hidden>3차분류 선택</option>";
-
+            category3.innerHTML = "<option value=\"\" disabled selected hidden>3차분류 선택</option>";
+            if (data !== undefined) {
                 data.forEach(option3 => {
                     const option = document.createElement('option');
                     option.value = option3.productCateId;
                     option.text = option3.name;
                     category3.appendChild(option);
-                });
-            } else {
-                data.forEach(option3 => {
-                    const option = document.createElement('option');
-                    option.value = option3.productCateId;
-                    option.text = option3.name;
-                    category3.appendChild(option);
-                });
+                })
+                    .catch(err => console.log(err));
             }
+
         })
-        .catch(err => console.log(err));
-
 });
-
 
 // 상품 옵션 입력 파트 ----------------------------------------------------------------------------
 
-const fake_inputs = document.querySelectorAll('.fake_input');
 const option = document.querySelector('#option');
 const option_names = document.querySelectorAll('.option-name');
-let oldFake = fake_inputs[fake_inputs.length - 1].classList.value;
-let oldName = option_names[option_names.length - 1].classList.value;
 
 // 옵션값 입력 후 엔터로 추가하는 이벤트
 option.addEventListener('keydown', function (event) {
@@ -129,13 +104,13 @@ addOptionButton.addEventListener('click', function () {
     const option_innerHTML = `
                                         <div>
                                             <span>옵션명 :</span>
-                                            <input type="text" class="${oldName + 1}" placeholder="옵션명을 입력하세요" required>
+                                            <input type="text" class="option-name" placeholder="옵션명을 입력하세요" required>
                                         </div>
                                         <div class="option-values">
                                             <span>옵션값 :</span>
-                                            <div class="${oldFake + 1}">
+                                            <div class="fake_input">
                                                 <input type="text" class="option-value-input"
-                                                       placeholder="옵션값 입력 후 엔터" required>
+                                                       placeholder="옵션값 입력 후 엔터">
                                             </div>
                                         </div>
                                         `;
@@ -151,17 +126,16 @@ addOptionButton.addEventListener('click', function () {
 
 // 데이터 전송 파트 --------------------------------------------------------------------------------
 
+const form = document.querySelector('form');
 
-const product_submit = document.querySelector('#product_submit');
-
-product_submit.addEventListener('onclick', function (e) {
+form.addEventListener('submit', function (e) {
     e.preventDefault();
 
     const cateId1 = category1.value;
     const cateId2 = category2.value;
     const cateId3 = category3.value;
 
-    // 상품 정보
+// 상품 정보
     const name = document.querySelector('#name').value;
     const description = document.querySelector('#description').value;
     const company = document.querySelector('#company').value;
@@ -175,26 +149,11 @@ product_submit.addEventListener('onclick', function (e) {
     const prod_img3 = document.querySelector('#prod_img3').value;
     const prod_detail = document.querySelector('#prod_detail').value;
 
-    // 옵션 리스트
-    const option_names = document.querySelectorAll('.option-name');
-    const option_value_inputs = document.querySelectorAll('.option-value-input');
+// 옵션 리스트
 
-    const optionMap = new Map();
-    let optionValueList = {};
+    // 옵션 아직 못 넣음
 
-    for (const option_name of option_names) {
-        let common = option_name.classList.value.split(" ")[1]
-        for (const option_value_input of option_value_inputs) {
-            if (common.eq(option_value_input.classList.value.split(" ")[1])) {
-                optionValueList.add(option_value_input);
-            }
-        }
-        optionMap.set(option_name, optionValueList);
-    }
-
-    console.log("optionMap : " + optionMap)
-
-    const data2 = {
+    const data1 = {
         category1: cateId1,
         category2: cateId2,
         category3: cateId3,
@@ -210,19 +169,22 @@ product_submit.addEventListener('onclick', function (e) {
         prod_img2: prod_img2,
         prod_img3: prod_img3,
         prod_detail: prod_detail,
-        options: optionMap
     };
 
-    fetch('lotteon/admin/product/register', {
+    console.log("data1 : " + data1.toString());
+
+    fetch('/lotteon/admin/product/register', {
         method: 'POST',
-        body: JSON.stringify(data2)
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data1)
     })
         .then(resp => resp.json())
         .then(data => console.log(data))
-        .catch(err => console.log(err));
+        .catch(err => console.log(err))
 
-
-    // 상품정보 제공고시
+// 상품정보 제공고시
 
     const condition = document.querySelector('#condition').value;
     const duty = document.querySelector('#duty').value;
@@ -238,7 +200,7 @@ product_submit.addEventListener('onclick', function (e) {
     const as = document.querySelector('#as').value;
     const asPhone = document.querySelector('#asPhone').value;
 
-    const data3 = {
+    const data2 = {
         condition: condition,
         duty: duty,
         receipt: receipt,
@@ -252,9 +214,20 @@ product_submit.addEventListener('onclick', function (e) {
         quality: quality,
         as: as,
         asPhone: asPhone
-    }
+    };
+
+    console.log("data2 : " + data2);
+
+    fetch('/lotteon/admin/product/register/detail', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data2)
+    })
+        .then(resp => resp.json())
+        .then(data => console.log(data))
+        .catch(err => console.log(err))
 
 });
-
-
 
