@@ -29,6 +29,16 @@ public class MemberInfoDTO {
     private String status;
     private String grade;
 
+    // 이름 마스킹 처리 메서드
+    public String getMaskedName() {
+        if (name == null || name.length() < 2) {
+            return name; // 이름이 너무 짧은 경우 그대로 반환
+        }
+        // 이름의 첫 글자와 마지막 글자는 그대로 두고, 가운데 글자를 *로 마스킹
+        String maskedName = name.substring(0, 1) + "*".repeat(name.length() - 2) + name.substring(name.length() - 1);
+        return maskedName;
+    }
+
     public MemberInfo toEntity() {
         return MemberInfo.builder()
                 .memberInfoId(this.memberInfoId)

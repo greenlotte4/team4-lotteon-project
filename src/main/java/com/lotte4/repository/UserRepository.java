@@ -9,6 +9,7 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
 
+    // uid로 정보 조회
     Optional<User> findByUid(String uid);
 
     // 아이디 중복확인
