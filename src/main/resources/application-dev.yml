@@ -29,8 +29,8 @@ spring:
 
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
-        password: "Choasa15!"
-        url: jdbc:mysql://13.125.226.80:3306/lotteon
+        password: "1234"
+        url: jdbc:mysql://127.0.0.1:3306/lotteon
         username: root
 
     jpa:
@@ -48,11 +48,11 @@ spring:
             timeout: 10m
         # 파일 업로드 설정
         multipart:
+            enabled: true
             max-file-size: 10MB     # 업로드 파일의 최대 크기
             max-request-size: 15MB  # 요청 전체 크기
             location: uploads/
-            #배포시 아래 경로를 사용
-           #location: /home/ec2-user/uploads
+           #location: 배포 시 절대 경로로 바꿔주는 것이 좋음
     web:
         resources:
             static-locations:

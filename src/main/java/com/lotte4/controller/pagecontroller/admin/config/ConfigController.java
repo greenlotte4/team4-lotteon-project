@@ -1,19 +1,24 @@
 package com.lotte4.controller.pagecontroller.admin.config;
 
+import com.lotte4.dto.BannerDTO;
 import com.lotte4.dto.ProductCateDTO;
 import com.lotte4.entity.ProductCate;
 import com.lotte4.service.CategoryService;
+import com.lotte4.service.admin.config.BannerService;
 import lombok.extern.log4j.Log4j2;
 import com.lotte4.dto.admin.config.VersionDTO;
 import com.lotte4.entity.Info;
 import com.lotte4.service.admin.config.InfoService;
 import com.lotte4.service.admin.config.VersionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -24,11 +29,43 @@ public class ConfigController {
 
     private final VersionService versionService;
     private final CategoryService categoryService;
+    private final BannerService bannerService;
     //배너관리
     @GetMapping("/admin/config/banner")
-    public String AdminconfigBanner() {
+    public String AdminconfigBanner(Model model) {
+        //기본 배너관리 페이지로 이동
+        List<BannerDTO> bannerDTOS = bannerService.getBannersByLocation("MAIN1");
+        model.addAttribute("configBanners", bannerDTOS);
+
         return "/admin/config/banner";
     }
+
+    @GetMapping("/admin/config/banner/{location}")
+    public String AdminconfigBannerWithLocation(@PathVariable String location, Model model) {
+        List<BannerDTO> bannerDTOS = bannerService.getBannersByLocation(location);
+        model.addAttribute("configBanners", bannerDTOS);
+        model.addAttribute("locationNow", location);
+        return "/admin/config/banner";
+    }
+
+    @PostMapping(value = "/admin/config/banner", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<String> AdminconfigBannerWithLocation(
+            @RequestParam("bannerImg") MultipartFile bannerImg,
+            @ModelAttribute BannerDTO bannerDTO, Model model) {
+
+        try {
+            String result = bannerService.insertBanner(bannerDTO,bannerImg);
+            if(result.equals("success")) {
+                return ResponseEntity.ok("success");
+            }else{
+                return ResponseEntity.ok("fail");
+            }
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            return ResponseEntity.ok("fail");
+        }
+    }
+
 
     //약관관리
     @GetMapping("/admin/config/policy")
