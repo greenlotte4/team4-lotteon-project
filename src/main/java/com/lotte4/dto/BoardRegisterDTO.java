@@ -15,7 +15,7 @@ public class BoardRegisterDTO {
 
     private String type;
     private int cate;
-    private int title;
+    private String title;
     private String content;
     private String regIp;
     private int state;

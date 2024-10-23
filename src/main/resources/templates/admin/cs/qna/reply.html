@@ -6,12 +6,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>문의하기 답변</title>
+    <title>문의하기 보기</title>
 
     <!--공통 css 부분-->
     <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}"/>
     <!--각 페이지(section) 개별 css-->
-    <link rel="stylesheet" th:href="@{/css/admin/style_admin_qna_reply.css}"/>
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_article_view.css}"/>
 
 
 </head>
@@ -23,47 +23,43 @@
         <!--section-->
         <section>
             <div class="breadcrumb">
-                <a href="#">Home</a> > <a href="#">고객센터</a> > <a href="#" class="location">문의하기</a>
+                <a th:href="@{/admin/indwx}">Home</a> > <a href="#">고객센터</a> > <a href="#" class="location">문의하기</a>
             </div>
-            <h3>문의하기 답변</h3>
-
+            <h3>문의하기 보기</h3>
             <div class="form">
                 <div class="inquiry-section">
-                    <form action="#" method="post">
-                        <table class="inquiry-table">
-                            <tr>
-                                <td class="label">유형</td>
-                                <td>회원 - 가입</td>
-                            </tr>
-                            <tr>
-                                <td class="label">제목</td>
-                                <td>아이디를 여러개 사용할 수 있나요?</td>
-                            </tr>
-                            <tr class="content">
-                                <td class="label">내용</td>
-                                <td>개인적인 사정으로 아이디를 3개 사용했었는데 사용 가능하나요?</td>
-                            </tr>
-                            <tr class="answer">
-                                <td class="label">답변</td>
-                                <td>
-                                        <textarea name="answer" rows="5" cols="50">대한민국 No.1 오픈마켓 LotteON
-                                        안녕하세요. 고객님께서 LotteON을 이용해 주셔서 감사합니다.
-                                        안타깝게도 개인 회원은 1개 계정만 사용 가능합니다.
-                                        문의하신 내용에 만족하셨나요?</textarea>
-                                </td>
-                            </tr>
-                        </table>
-
-                        <div class="buttons">
-                            <a th:href="@{/admin/cs/qna/list}" class="back-btn">목록</a>
-                            <button class="delete-btn" disabled>삭제</button>
-                            <button type="submit" class="reply-btn">답변등록</button>
-                        </div>
+                    <form th:action="@{/admin/cs/qna/reply/{boardId}(boardId=${board.boardId})}" method="POST">
+                    <table class="inquiry-table">
+                        <tr>
+                            <td class="label">유형</td>
+                            <td>[[${board.cate.parent.name}]]&nbsp;-&nbsp;[[${board.cate.name}]]</td>
+                        </tr>
+                        <tr>
+                            <td class="label">제목</td>
+                            <td th:text="${board.title}"></td>
+                        </tr>
+                        <tr class="content">
+                            <td class="label">내용</td>
+                            <td th:text="${board.content}"></td>
+                        </tr>
+                        <tr class="answer">
+                            <td class="label">답변</td>
+                            <td>
+                                        <textarea name="comment" rows="5" cols="50">
+                                        </textarea>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="buttons">
+                        <a th:href="@{/admin/cs/qna/list}" class="back-btn">목록</a>
+                        <button class="delete-btn" disabled>삭제</button>
+                        <button type="submit" class="reply-btn">답변등록</button>
+                    </div>
                     </form>
                 </div>
             </div>
-        </section>
-        <!--/section-->
+
+        </section><!--/section-->
     </div>
 </main>
 <footer th:replace="~{/admin/include/footer.html}"></footer>

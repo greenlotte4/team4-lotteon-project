@@ -23,7 +23,7 @@
         <!--section-->
         <section>
             <div class="breadcrumb">
-                <a href="#">Home</a> > <a href="#">고객센터</a> > <a href="#" class="location">문의하기</a>
+                <a th:href="@{/admin/indwx}">Home</a> > <a href="#">고객센터</a> > <a href="#" class="location">문의하기</a>
             </div>
             <h3>문의하기 보기</h3>
             <div class="form">
@@ -31,22 +31,19 @@
                     <table class="inquiry-table">
                         <tr>
                             <td class="label">유형</td>
-                            <td>회원 - 가입</td>
+                            <td>[[${board.cate.parent.name}]]&nbsp;-&nbsp;[[${board.cate.name}]]</td>
                         </tr>
                         <tr>
                             <td class="label">제목</td>
-                            <td>아이디를 여러개 사용할 수 있나요?</td>
+                            <td th:text="${board.title}"></td>
                         </tr>
                         <tr class="content">
                             <td class="label">내용</td>
-                            <td>개인적인 사정으로 아이디를 3개 사용했었는데 사용 가능하나요?</td>
+                            <td th:text="${board.content}"></td>
                         </tr>
-                        <tr class="answer">
+                        <tr class="answer" th:if="${board.comment != null}">
                             <td class="label">답변</td>
-                            <td>대한민국 No.1 오픈마켓 LotteON<br>
-                                안녕하세요. 고객님께서 LotteON을 이용해 주셔서 감사합니다.<br>
-                                안타깝게도 개인 회원은 1개 계정만 사용 가능합니다.<br>
-                                문의하신 내용에 만족하셨나요?
+                            <td th:text="${board.comment}">
                             </td>
                         </tr>
                     </table>
@@ -55,9 +52,13 @@
                 <div class="buttons">
                     <button class="delete-btn" disabled>삭제</button>
                     <a th:href="@{/admin/cs/qna/list}" class="back-btn">목록</a>
+                    <a th:if="${board.comment == null}"
+                       th:href="@{/admin/cs/qna/reply/{id}(id=${board.boardId})}"
+                       class="back-btn">답변하기</a>
+
                 </div>
-        </section>
-        <!--/section-->
+            </div>
+        </section><!--/section-->
     </div>
 </main>
 <footer th:replace="~{/admin/include/footer.html}"></footer>
