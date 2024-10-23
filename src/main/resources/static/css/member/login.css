@@ -161,9 +161,8 @@ text-align: center;
   justify-content: center;
   align-items: center;
   height: 100px;
-  background-image: url(/lotteon/images/banner/subinbanner.png);
   background-size: contain;
-  margin-top: 50px;
+  margin-top: 15px;
   width: 1200px;
 }
 
@@ -177,7 +176,7 @@ text-align: center;
   width: 732px;
   height: 63px;
   margin: 0 auto;
-  margin-top : 200px;
+  margin-top : 40px;
 }
 
 .certifi_logo img {

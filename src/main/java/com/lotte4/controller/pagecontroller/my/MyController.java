@@ -2,19 +2,14 @@ package com.lotte4.controller.pagecontroller.my;
 
 import com.lotte4.dto.MemberInfoDTO;
 import com.lotte4.dto.UserDTO;
-import com.lotte4.entity.MemberInfo;
 import com.lotte4.service.MemberInfoService;
 import com.lotte4.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @Log4j2
 @RequiredArgsConstructor

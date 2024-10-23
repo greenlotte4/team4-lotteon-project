@@ -149,7 +149,10 @@ header > .menu > div > ul > li:last-child > a {
 #bannerTop > article{
   text-align: center;
 }
-
+#bannerTop > article > a{
+  height: 80px;
+  display: block;
+}
 
 /* 메인영역 */
 main {
