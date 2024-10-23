@@ -1,5 +1,5 @@
 
-/* 기본 스타일 */
+/* 湲곕낯 �ㅽ��� */
 body {
     font-family: 'Inter', sans-serif;
     line-height: 1.6;
@@ -9,14 +9,14 @@ body {
     color: #333;
 }
 
-/* Wrapper 설정 */
+/* Wrapper �ㅼ젙 */
 #wrapper {
     display: flex;
     width: 1200px;
     margin: 40px auto;
 }
 
-/* 메인 컨텐츠 섹션 */
+/* 硫붿씤 而⑦뀗痢� �뱀뀡 */
 section {
     height: auto;
     flex: 1;
@@ -35,8 +35,8 @@ h3 {
     font-weight: bold;
     color: #2b2e4a;
     margin-bottom: 25px;
-    border-bottom: 2px solid #d82a2a; /* 밑줄 추가 */
-    padding-bottom: 7.12px; /* 텍스트와 밑줄 간의 간격 */
+    border-bottom: 2px solid #d82a2a; /* 諛묒쨪 異붽� */
+    padding-bottom: 7.12px; /* �띿뒪�몄� 諛묒쨪 媛꾩쓽 媛꾧꺽 */
 }
 
 
@@ -64,69 +64,68 @@ h3 {
     text-align: left !important;
 }
 
-/* 입력할 때 테두리 색 변경 */
+/* �낅젰�� �� �뚮몢由� �� 蹂�寃� */
 textarea:focus {
     border-color: #d82a2a !important;
-    outline: none !important; /* 기본 포커스 아웃라인 제거 */
+    outline: none !important; /* 湲곕낯 �ъ빱�� �꾩썐�쇱씤 �쒓굅 */
 }
 
 
-/* 입력할 때 테두리 색 변경 */
+/* �낅젰�� �� �뚮몢由� �� 蹂�寃� */
 input:focus {
     border-color: #d82a2a !important;
-    outline: none !important; /* 기본 포커스 아웃라인 제거 */
+    outline: none !important; /* 湲곕낯 �ъ빱�� �꾩썐�쇱씤 �쒓굅 */
 }
 
 select:focus {
     border-color: #d82a2a !important;
-    outline: none !important; /* 기본 포커스 아웃라인 제거 */
+    outline: none !important; /* 湲곕낯 �ъ빱�� �꾩썐�쇱씤 �쒓굅 */
 }
 
-/* input 요소 스타일 */
+/* input �붿냼 �ㅽ��� */
 input:not([type="file"]):not([type="radio"]) {
-    width: 65%; /* 너비를 테이블 셀에 맞춤 */
-    height: 29px; /* 원하는 높이로 설정 */
-    padding: 10px; /* 안쪽 여백 */
-    font-family: 'Inter', sans-serif; /* 폰트 스타일 유지 */
+    width: 65%; /* �덈퉬瑜� �뚯씠釉� ���� 留욎땄 */
+    height: 29px; /* �먰븯�� �믪씠濡� �ㅼ젙 */
+    padding: 10px; /* �덉そ �щ갚 */
+    font-family: 'Inter', sans-serif; /* �고듃 �ㅽ��� �좎� */
     font-size: 13px;
     border: 1px solid #e9e9e9;
     border-radius: 5px;
-    box-sizing: border-box; /* 패딩이 포함된 크기 계산 */
+    box-sizing: border-box; /* �⑤뵫�� �ы븿�� �ш린 怨꾩궛 */
 }
 
-/* inputmini 요소 스타일 */
+/* inputmini �붿냼 �ㅽ��� */
 .inputmini {
-    width: 13% !important; /* 너비를 테이블 셀에 맞춤 */
-    height: 29px; /* 원하는 높이로 설정 */
-    padding: 10px; /* 안쪽 여백 */
-    font-family: 'Inter', sans-serif; /* 폰트 스타일 유지 */
+    width: 13% !important;
+    height: 29px;
+    padding: 10px;
+    font-family: 'Inter', sans-serif;
     font-size: 13px !important;
     border: 1px solid #e9e9e9;
     border-radius: 5px;
-    box-sizing: border-box; /* 패딩이 포함된 크기 계산 */
+    box-sizing: border-box;
 }
 
-/* date 요소 스타일 */
 .date {
-    width: 29% !important; /* 너비를 테이블 셀에 맞춤 */
-    height: 29px; /* 원하는 높이로 설정 */
-    padding: 10px; /* 안쪽 여백 */
-    font-family: 'Inter', sans-serif; /* 폰트 스타일 유지 */
+    width: 29% !important;
+    height: 29px;
+    padding: 10px;
+    font-family: 'Inter', sans-serif;
     font-size: 13px !important;
     border: 1px solid #e9e9e9;
     border-radius: 5px;
-    box-sizing: border-box; /* 패딩이 포함된 크기 계산 */
+    box-sizing: border-box;
 }
 
 textarea {
-    width: 100%; /* 너비를 테이블 셀에 맞춤 */
-    height: 192px; /* 원하는 높이로 설정 */
-    padding: 10px; /* 안쪽 여백 */
-    font-family: 'Inter', sans-serif; /* 폰트 스타일 유지 */
+    width: 100%;
+    height: 192px;
+    padding: 10px;
+    font-family: 'Inter', sans-serif;
     font-size: 16px;
     border: 1px solid #e9e9e9;
     border-radius: 5px;
-    resize: none; /* 사용자가 크기 조절 못하도록 설정 */
+    resize: none;
     box-sizing: border-box;
 }
 
@@ -137,4 +136,3 @@ textarea {
 .file {
     margin-top: 5px;
 }
-

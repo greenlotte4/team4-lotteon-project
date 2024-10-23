@@ -8,6 +8,7 @@ import com.lotte4.repository.board.BoardRepository;
 import com.lotte4.service.board.BoardCateService;
 import com.lotte4.service.board.BoardService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,19 +20,27 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 import java.util.Locale;
 
+@Log4j2
 @RequiredArgsConstructor
 @Controller
 public class QnaController {
+
     private final BoardCateService boardCateService;
     private final BoardService boardService;
+
     // 관리자 문의하기 목록
     @GetMapping("/admin/cs/{type}/list")
     public String AdminQnaList(Model model, @PathVariable String type) {
+        log.info("listController > "+boardService.selectAllBoardByType(type));
         model.addAttribute("boardList", boardService.selectAllBoardByType(type));
         List<BoardCateDTO> cate1 = boardCateService.selectBoardCatesByDepth(1);
         model.addAttribute("cate1", cate1);
-        return "/admin/cs/qna/list";
+
+
+        return "/admin/cs/"+type+"/list";
+
     }
+
     @ResponseBody
     @GetMapping("/admin/cs/board/list/{type}")
     public ResponseEntity<List<BoardResponseDTO>> AdminQnaList(@PathVariable String type) {
@@ -55,9 +64,9 @@ public class QnaController {
 
     
     //문의하기 보기
-    @GetMapping("/admin/cs/qna/view/{id}")
-    public String adminQnaView(Model model, @PathVariable int id) {
+    @GetMapping("/admin/cs/{type}/view/{id}")
+    public String adminQnaView(Model model, @PathVariable int id, @PathVariable String type) {
         model.addAttribute("board", boardService.selectBoardById(id));
-        return "/admin/cs/qna/view";
+        return "/admin/cs/"+type+"/view";
     }
 }
