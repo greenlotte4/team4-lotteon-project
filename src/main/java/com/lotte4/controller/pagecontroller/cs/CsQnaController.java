@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -33,11 +34,17 @@ public class  CsQnaController {
         return "/cs/qna/write";
     }
 
-    @PostMapping("/cs/qna/write")
-    public String qnaWrite(BoardRegisterDTO dto, HttpServletRequest req) {
+    @PostMapping("/cs/{type}/write")
+    public String qnaWrite(BoardRegisterDTO dto, HttpServletRequest req, @PathVariable String type) {
+
         dto.setRegIp(req.getRemoteAddr());
         boardService.insertBoardQna(dto);
-        return "redirect:/cs/qna/list";
+
+        if(Objects.equals(type, "faq")){
+            return "redirect:/admin/cs/faq/list";
+        }
+        return "redirect:/cs/" +type+ "/list";
+
     }
 
     @GetMapping("/cs/{type}/list")

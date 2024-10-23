@@ -27,7 +27,7 @@
             </div>
             <h3>문의하기 목록</h3>
             <div class="form">
-                <div class="table-controls">
+                <div id="dropdown" class="table-controls">
                       <!-- 1차 유형 카테고리 (BoardCategory Enum) -->
                         <select id="category1">
                             <option>1차 유형</option>
@@ -146,6 +146,7 @@
             event.preventDefault(); // 폼 제출 중단
         }
     });
+    // TODO : 현재는 페이징처리가 없어 이렇게 구현시도 해보았으나 페이징처리가 들어가면 RestController를 이용해 값을 가져와야할 것
     function filterBoardListByCategory() {
         const selectedCategory1 = category1Select.value;  // 선택된 1차 카테고리 값
         const selectedCategory2 = category2Select.value;  // 선택된 2차 카테고리 값

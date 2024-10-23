@@ -29,17 +29,18 @@
             <div class="form">
                 <div class="inquiry-section">
                     <table class="inquiry-table">
+
                         <tr>
                             <td class="label">유형</td>
-                            <td>회원 - 가입</td>
+                            <td>[[${board.cate.parent.name}]]&nbsp;-&nbsp;[[${board.cate.name}]]</td>
                         </tr>
                         <tr>
                             <td class="label">제목</td>
-                            <td>아이디를 여러개 사용할 수 있나요?</td>
+                            <td th:text="${board.title}"></td>
                         </tr>
                         <tr class="content">
                             <td class="label">내용</td>
-                            <td>개인적인 사정으로 아이디를 3개 사용했었는데 사용 가능하나요?</td>
+                            <td th:text="${board.content}"></td>
                         </tr>
 
                     </table>

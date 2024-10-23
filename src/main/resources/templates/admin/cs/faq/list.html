@@ -38,7 +38,6 @@
                         <option>탈퇴</option>
                     </select>
                 </div>
-
                 <table class="inquiry-table">
                     <colgroup>
                         <col style="width: 2%">
@@ -62,62 +61,17 @@
                         <th>관리</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <tr>
+                    <tbody id="boardListBody">
+                    <tr th:each="board : ${boardList}">
                         <td><input type="checkbox" class="chkbox"></td>
-                        <td>120</td>
-                        <td>회원</td>
-                        <td>가입</td>
+                        <td th:text="${board.boardId}"></td>
+                        <td th:text="${board.cate.parent.name}"></td>
+                        <td th:text="${board.cate.boardCateId}"></td>
                         <td class="title">
-                            <a th:href="@{/admin/cs/faq/view}">개인회원과 법인회원에 차이가 있나요?</a>
+                            <a th:href="@{/admin/cs/faq/view/{id}(id=${board.boardId})}" th:text="${board.title}"></a>
                         </td>
-                        <td>120</td>
-                        <td>00.00.00</td>
-                        <td>
-                            <a th:href="@{/admin/cs/faq/modify}" class="edit-btn">수정</a>
-                            <button class="deletebtn">삭제</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" class="chkbox"></td>
-                        <td>120</td>
-                        <td>회원</td>
-                        <td>가입</td>
-                        <td class="title">
-                            <a th:href="@{/admin/cs/faq/view}">개인회원과 법인회원에 차이가 있나요?</a>
-                        </td>
-                        <td>120</td>
-                        <td>00.00.00</td>
-                        <td>
-                            <a th:href="@{/admin/cs/faq/modify}" class="edit-btn">수정</a>
-                            <button class="deletebtn">삭제</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" class="chkbox"></td>
-                        <td>120</td>
-                        <td>회원</td>
-                        <td>가입</td>
-                        <td class="title">
-                            <a th:href="@{/admin/cs/faq/view}">개인회원과 법인회원에 차이가 있나요?</a>
-                        </td>
-                        <td>120</td>
-                        <td>00.00.00</td>
-                        <td>
-                            <a th:href="@{/admin/cs/faq/modify}" class="edit-btn">수정</a>
-                            <button class="deletebtn">삭제</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" class="chkbox"></td>
-                        <td>120</td>
-                        <td>회원</td>
-                        <td>가입</td>
-                        <td class="title">
-                            <a th:href="@{/admin/cs/faq/view}">개인회원과 법인회원에 차이가 있나요?</a>
-                        </td>
-                        <td>120</td>
-                        <td>00.00.00</td>
+                        <td th:text="${board.user.uid}">chh**</td>
+                        <td th:text="${board.regDate}">00.00.00</td>
                         <td>
                             <a th:href="@{/admin/cs/faq/modify}" class="edit-btn">수정</a>
                             <button class="deletebtn">삭제</button>
