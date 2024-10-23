@@ -1,22 +1,18 @@
-package com.lotte4.entity;
+package com.lotte4.dto;
 
-import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+
+
 
 @Getter
 @Setter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder
-@Table(name = "orders")
-@Entity
-public class Order {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@Builder
+public class OrderDTO {
     private int orderId;
     private int count;
     private int price;
@@ -25,7 +21,7 @@ public class Order {
     private int usePoint;
     private int savePoint;
     private int totalPrice;
-    
+
     //색상
     private String option1;
     //사이즈
@@ -37,25 +33,11 @@ public class Order {
     private String recipZip;
     private String recipAddr1;
     private String recipAddr2;
-
-    //결재방법
     private int Pay;
     private int Status;
-    private LocalDateTime Date;
+    private LocalDateTime Date = LocalDateTime.now();;
     private int couponUse;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "memberInfoId")
-    private MemberInfo memberInfo;
-
-    @OneToOne(mappedBy = "order")
-    private Coupon coupon;
-
-    @OneToOne(mappedBy = "order")
-    private Delivery delivery;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "productId")
-    private Product product;
+    private int productId;
+    private int memberInfoId;
 
 }
