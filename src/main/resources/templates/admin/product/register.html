@@ -9,10 +9,10 @@
     <title>상품등록</title>
 
     <!--공통 css 부분-->
-    <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}"/>
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}" required/>
     <!--각 페이지(section) 개별 css-->
-    <link rel="stylesheet" th:href="@{/css/admin/style_admin_product_register.css}"/>
-
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_product_register.css}" required/>
+    <script th:src="@{/js/my/product/product_register.js}" defer></script>
 </head>
 <body>
 <header th:replace="~{/admin/include/header.html}"></header>
@@ -26,32 +26,38 @@
             </div>
             <h3>상품등록</h3>
 
-            <div class="form">
-                <div class="version-header">
-                    <h4>상품분류</h4>
-                    <p class="sub-title">1차, 2차 카테고리 기본분류는 반드시 선택하셔야 합니다.</p>
-                </div>
+            <form>
+                <div class="form">
+                    <div class="version-header">
+                        <h4>상품분류</h4>
+                        <p class="sub-title">1차, 2차 카테고리 기본분류는 반드시 선택하셔야 합니다.</p>
+                    </div>
 
-                <form method="post" action="#" enctype="multipart/form-data">
                     <div class="inquiry-section">
                         <table class="inquiry-table">
                             <tr>
                                 <td class="label">1차 분류</td>
                                 <td>
-                                    <select class="dropdown">
-                                        <option>1차분류 선택</option>
-                                        <option>고객서비스</option>
-                                        <option>이벤트 당첨</option>
+                                    <select class="dropdown" id="category1" required>
+                                        <option value="" disabled selected hidden>1차분류 선택</option>
+                                        <option th:each="cate1 : ${productCate1List}" th:value="${cate1.productCateId}"
+                                                th:text="${cate1.name}"></option>
                                     </select>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">2차 분류</td>
                                 <td>
-                                    <select class="dropdown">
-                                        <option>2차분류 선택</option>
-                                        <option>고객서비스</option>
-                                        <option>이벤트 당첨</option>
+                                    <select class="dropdown" id="category2" required>
+                                        <option value="" disabled selected hidden>2차분류 선택</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">3차 분류</td>
+                                <td>
+                                    <select class="dropdown" id="category3">
+                                        <option value="" disabled selected hidden>3차분류 선택</option>
                                     </select>
                                 </td>
                             </tr>
@@ -68,64 +74,65 @@
                             <tr>
                                 <td class="label">상품명</td>
                                 <td>
-                                    <input type="text" name="name"/>
+                                    <input type="text" name="name" id="name" required/>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">기본설명</td>
                                 <td>
-                                    <input type="text" name="basic"/>
+                                    <input type="text" name="description" id="description" required/>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">제조사</td>
                                 <td>
-                                    <input type="text" name="company"/>
+                                    <input type="text" name="company" id="company" required/>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">상품금액</td>
                                 <td>
-                                    <input type="text" name="price" class="inputmini"/> 원
+                                    <input type="text" name="price" class="inputmini" id="price" required/> 원
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">할인율</td>
                                 <td>
-                                    <input type="text" name="discount" class="inputmini"/> %
+                                    <input type="text" name="discount" class="inputmini" id="discount" required/> %
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">포인트</td>
                                 <td>
-                                    <input type="text" name="point" class="inputmini"/> 원
+                                    <input type="text" name="point" class="inputmini" id="point" required/> 원
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">재고수량</td>
                                 <td>
-                                    <input type="text" name="stock" class="inputmini"/> 개
+                                    <input type="text" name="stock" class="inputmini" id="stock" required/> 개
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">배송비</td>
                                 <td>
-                                    <input type="text" name="delivery" class="inputmini"/> 원
+                                    <input type="text" name="deliveryFee" class="inputmini" id="deliveryFee" required/>
+                                    원
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">상품 이미지</td>
                                 <td>
                                     <div class="file-upload file">
-                                        <input type="file" id="productImage1" name="productImages"/>
+                                        <input type="file" id="prod_img1" name="prod_img1" accept="image/*" required/>
                                         크기 190 x 190, 상품 목록에 출력될 이미지입니다.
                                     </div>
                                     <div class="file-upload file">
-                                        <input type="file" id="productImage2" name="productImages"/>
+                                        <input type="file" id="prod_img2" name="prod_img2" accept="image/*" required/>
                                         크기 190 x 190, 상품 메인에 출력될 이미지입니다.
                                     </div>
                                     <div class="file-upload file">
-                                        <input type="file" id="productImage3" name="productImages"/>
+                                        <input type="file" id="prod_img3" name="prod_img3" accept="image/*" required/>
                                         크기 190 x 190, 상품 상세에 출력될 이미지입니다.
                                     </div>
                                 </td>
@@ -134,8 +141,8 @@
                                 <td class="label">상품 상세정보</td>
                                 <td>
                                     <div class="file-upload">
-                                        <input type="file" id="productDetailImage" name="productDetailImage"
-                                               accept="image/*" onchange="previewImage(event)"/>
+                                        <input type="file" id="prod_detail" name="prod_detail"
+                                               accept="image/*" required/>
                                         크기 가로 940px, 높이 제약없음, 크기 최대 1MB
                                     </div>
                                 </td>
@@ -145,14 +152,17 @@
                                     상품 옵션 설정
                                 </td>
                                 <td>
-                                    <div class="option">
-                                        <span>옵션명:</span>
-                                        <input type="text" id="option-name" placeholder="옵션명을 입력하세요">
-                                        <div class="option-values" id="option-values">
-                                            <span>옵션값:</span>
-                                            <input type="text"
-                                                   id="option-value-input"
-                                                   placeholder="옵션값 입력 후 엔터">
+                                    <div id="option">
+                                        <div>
+                                            <span>옵션명 :</span>
+                                            <input type="text" class="option-name op" placeholder="옵션명을 입력하세요" required>
+                                        </div>
+                                        <div class="option-values">
+                                            <span>옵션값 :</span>
+                                            <div class="fake_input op">
+                                                <input type="text" class="option-value-input op"
+                                                       placeholder="옵션값 입력 후 엔터">
+                                            </div>
                                         </div>
                                     </div>
                                     <button type="button" id="add-option">옵션 추가</button>
@@ -170,31 +180,90 @@
                             <tr>
                                 <td class="label">상품상태</td>
                                 <td>
-                                    <input type="text" name="status" value="새상품" class="inputmini"/>
+                                    <input type="text" name="condition" value="" class="inputmini"
+                                           id="condition" required/>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">부가세 면세여부</td>
                                 <td>
-                                    <input type="text" name="surtaxyn" value="과세상품" class="inputmini"/>
+                                    <input type="text" name="duty" value="" class="inputmini"
+                                           id="duty" required/>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">영수증 발행</td>
                                 <td>
-                                    <input type="text" name="receipt" value="발생가능 - 신용카드전표, 온라인현금영수증"/>
+                                    <input type="text" name="receipt" value=""
+                                           id="receipt" required/>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">사업자구분</td>
                                 <td>
-                                    <input type="text" name="gubun" value="사업자판매자"/>
+                                    <input type="text" name="sellerType" value="" id="sellerType" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">브랜드</td>
+                                <td>
+                                    <input type="text" name="brand" value="" id="brand" required/>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">원산지</td>
                                 <td>
-                                    <input type="text" name="origin" value="국내산" class="inputmini"/>
+                                    <input type="text" name="COA" value="" class="inputmini"
+                                           id="COA" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">제조자 / 수입국</td>
+                                <td>
+                                    <input type="text" name="creator" value="" class="inputmini"
+                                           id="creator" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">제조국</td>
+                                <td>
+                                    <input type="text" name="country" value="" class="inputmini"
+                                           id="country" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">취급시주의사항</td>
+                                <td>
+                                    <input type="text" name="warning" value="" class="inputmini"
+                                           id="warning" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">제조연월</td>
+                                <td>
+                                    <input type="text" name="createDate" value="" class="inputmini"
+                                           id="createDate" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">품질보증기준</td>
+                                <td>
+                                    <input type="text" name="quality" value="" class="inputmini"
+                                           id="quality" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">A/S 책임자</td>
+                                <td>
+                                    <input type="text" name="as" value="" class="inputmini"
+                                           id="as" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">전화번호</td>
+                                <td>
+                                    <input type="text" name="asPhone" value="   " class="inputmini"
+                                           id="asPhone" required/>
                                 </td>
                             </tr>
                         </table>
@@ -205,66 +274,14 @@
                             있습니다.</p>
                     </div>
                     <div class="buttons">
-                        <button type="submit" class="write-btn">등록</button>
+                        <button type="submit" class="write-btn" id="product_submit">등록</button>
                     </div>
-                </form>
-                <!-- /form -->
-            </div>
+                </div>
+            </form>
         </section>
         <!-- /Section -->
     </div>
 </main>
-
 <footer th:replace="~{/admin/include/footer.html}"></footer>
 </body>
 </html>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const optionValueInput = document.getElementById('option-value-input');
-        const optionValuesContainer = document.getElementById('option-values');
-
-        // 옵션값 입력 후 엔터로 추가하는 이벤트
-        optionValueInput.addEventListener('keyup', function (event) {
-            if (event.key === 'Enter' && optionValueInput.value.trim() !== '') {
-                const value = optionValueInput.value.trim();
-
-                // 옵션값 박스 생성
-                const valueBox = document.createElement('div');
-                valueBox.classList.add('option-value-box');
-
-                const valueText = document.createElement('span');
-                valueText.textContent = value;
-
-                // 삭제 버튼 (X자)
-                const deleteButton = document.createElement('span');
-                deleteButton.classList.add('delete-value');
-                deleteButton.textContent = 'X';
-
-                // 삭제 버튼 클릭 시 옵션값 삭제
-                deleteButton.addEventListener('click', function () {
-                    optionValuesContainer.removeChild(valueBox);
-                });
-
-                valueBox.appendChild(valueText);
-                valueBox.appendChild(deleteButton);
-                optionValuesContainer.appendChild(valueBox);
-
-                // 입력창 초기화
-                optionValueInput.value = '';
-            }
-        });
-
-        // 옵션 추가 버튼 (추가 기능을 구현할 수 있지만, 기본적인 설정 예시)
-        const addOptionButton = document.getElementById('add-option');
-        addOptionButton.addEventListener('click', function () {
-            const option_tr = document.getElementById('option_tr');
-            const option_tr_innerHTML = `<tr id="option_tr"> ${option_tr.innerHTML} </tr>`;
-            console.log(option_tr_innerHTML);
-            option_tr.insertAdjacentHTML("afterend", option_tr_innerHTML);
-        });
-
-    });
-
-
-
-</script>

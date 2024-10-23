@@ -3,6 +3,7 @@ package com.lotte4.entity;
 import com.lotte4.dto.SellerInfoDTO;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -36,6 +37,7 @@ import java.time.LocalDateTime;
     // 아이피
     private String regIp;
     // 변경 일자
+    @CreationTimestamp
     private String updateAt;
     // 상태
     private int state;

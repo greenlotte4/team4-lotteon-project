@@ -11,7 +11,6 @@
     <link rel="stylesheet" th:href="@{/css/main/common.css}"/>
     <script src="https://kit.fontawesome.com/20962f3e4b.js" crossorigin="anonymous"></script>
 
-
     <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css}"/>
     <style>
 
@@ -60,8 +59,10 @@
 </head>
 <body>
 <div id="bannerTop" class="on" style="background: #e4dfdf;">
-    <article>
-        <a href="#"><img th:src="@{images/main/topBanner1.png}"/></a>
+    <article th:each="banner : ${banners}" th:if="${banner.location == 'MAIN1'}">
+        <a th:href="${banner.link}">
+            <img th:src="@{'/uploads/' + ${banner.img}}" alt="랜덤 배너 이미지"/>
+        </a>
         <button class="btnClose">close</button>
     </article>
 </div>
@@ -76,20 +77,8 @@
                 <div class="swiper">
                     <div class="swiper-wrapper">
                         <!-- Slides -->
-                        <div class="swiper-slide">
-                            <a href=""><img th:src="@{images/banner/mainBanner1.jpg}" alt="item1"/></a>
-                        </div>
-                        <div class="swiper-slide">
-                            <a href=""><img th:src="@{images/banner/mainBanner2.jpg}" alt="item2"/></a>
-                        </div>
-                        <div class="swiper-slide">
-                            <a href=""><img th:src="@{images/banner/mainBanner3.jpg}" alt="item3"/></a>
-                        </div>
-                        <div class="swiper-slide">
-                            <a href=""><img th:src="@{images/banner/mainBanner4.jpg}" alt="item4"/></a>
-                        </div>
-                        <div class="swiper-slide">
-                            <a href=""><img th:src="@{images/banner/mainBanner5.jpg}" alt="item5"/></a>
+                        <div class="swiper-slide" th:each="banner : ${banners}" th:if="${banner.location == 'MAIN2'}">
+                            <a th:href="${banner.link}"><img th:src="@{'/uploads/' + ${banner.img}}" alt="item1"/></a>
                         </div>
                     </div>
                     <!-- If we need navigation buttons -->

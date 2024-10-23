@@ -21,8 +21,8 @@ import java.time.LocalDateTime;
 public class UserDTO {
 
     private int userId;
-    private MemberInfoDTO memberInfoDTO;
-    private SellerInfoDTO sellerInfoDTO;
+    private MemberInfoDTO memberInfo;
+    private SellerInfoDTO sellerInfo;
 
     private String uid;
     private String pass;
@@ -32,11 +32,21 @@ public class UserDTO {
     private String createdAt;
     private String leaveDate;
 
+    // 사용자 ID 마스킹 처리 메서드
+    public String getMaskedUid() {
+        if (uid == null || uid.length() < 4) {
+            return uid; // ID가 너무 짧은 경우 그대로 반환
+        }
+        // 아이디의 앞 2글자만 남기고, 나머지를 *로 마스킹
+        String maskedUid = uid.substring(0, 2) + "*".repeat(uid.length() - 2);
+        return maskedUid;
+    }
+
     public User toEntity() {
         return User.builder()
                 .userId(userId)
-                .memberInfo(memberInfoDTO.toEntity())
-                .sellerInfo(sellerInfoDTO.toEntity())
+                .memberInfo(memberInfo.toEntity())
+                .sellerInfo(sellerInfo.toEntity())
                 .uid(uid)
                 .pass(pass)
                 .role(role)

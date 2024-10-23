@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>문의사항 보기</title>
-    <link rel="stylesheet" th:href="@{/css/common.css}">
-    <link rel="stylesheet" th:href="@{/css/cs/cs_common.css}" />
-  </head>
-  <body>
-  <header th:replace="~{/include/my_header.html}"></header>
-  <div id="wrapper">
-    <th:block th:replace="~{/cs/aside/aside_faq.html}"></th:block>
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>공지사항 목록</title>
+  <link rel="stylesheet" th:href="@{/css/common.css}">
+  <link rel="stylesheet" th:href="@{/css/cs/cs_common.css}"/>
+  <link rel="stylesheet" th:href="@{/css/cs/cs_list.css}"/>
+
+</head>
+<body>
+<header th:replace="~{/include/header.html}"></header>
+
+
+<main>
+  <th:block th:replace="~{/cs/aside/aside_qna.html}"></th:block>
   <section id="section_wrapper">
     <div id="category">
       <p>회원<br><span class="subtitle">회원 관련 문의 내용입니다.</span></p>
@@ -18,32 +22,32 @@
         <a th:href="@{/cs/index}">Home</a> > <a th:href="@{/cs/qna/list}">문의하기</a> > <a th:href="@{/cs/qna/list}" class="location">회원</a>
       </div>
     </div>
-      <table>
-        <tr id="qna_title">
-          <td>
-            [가입] 가입문의내용<br>
-            <div>
-              chh**  <span class="r-date">2022.11.30</span>
-            </div>
-          </td>
-        </tr>
-        <tr class="content">
-          <td>회원가입 하고 싶어요. 어떻게 해야 하나요?</td>
-        </tr>
-        <tr id="reply_title"> <!-- th:if 답변이 있다면 출력-->
-          <td>
-            ☞[답변] 가입문의내용
-          </td>
-        </tr>
-        <tr class="content" id="reply_content"> <!-- th:if 답변이 있다면 출력-->
-          <td>
-            안녕하세요. 회원님 회원가입하시면 됩니다.
-          </td>
-        </tr>
-      </table>
-      <a th:href="@{/cs/qna/list}"><button id="toList">목록</button></a>
-    </section>
-  </div>
-  <footer th:replace="~{/include/footer.html}"></footer>
-  </body>
+    <table>
+      <tr id="qna_title">
+        <td>
+          [가입] 가입문의내용<br>
+          <div>
+            chh**  <span class="r-date">2022.11.30</span>
+          </div>
+        </td>
+      </tr>
+      <tr class="content">
+        <td>회원가입 하고 싶어요. 어떻게 해야 하나요?</td>
+      </tr>
+      <tr id="reply_title"> <!-- th:if 답변이 있다면 출력-->
+        <td>
+          ☞[답변] 가입문의내용
+        </td>
+      </tr>
+      <tr class="content" id="reply_content"> <!-- th:if 답변이 있다면 출력-->
+        <td>
+          안녕하세요. 회원님 회원가입하시면 됩니다.
+        </td>
+      </tr>
+    </table>
+    <a th:href="@{/cs/qna/list}"><button id="toList">목록</button></a>
+  </section>
+</main>
+<footer th:replace="~{/include/footer.html}"></footer>
+</body>
 </html>

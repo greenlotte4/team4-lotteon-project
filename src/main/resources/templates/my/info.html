@@ -7,8 +7,9 @@
 <head>
   <meta charset="UTF-8" />
   <title>롯데ON::롯데 온라인 쇼핑몰</title>
-  <link rel="stylesheet" href="../css/my/myInfo.css" />
-  <link rel="stylesheet" href="../css/my/myInfo_info.css" />
+  <link rel="stylesheet" th:href="@{/css/my/myInfo.css}" />
+  <link rel="stylesheet" th:href="@{/css/my/myInfo_info.css}" />
+  <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 </head>
 
 <body>
@@ -21,59 +22,47 @@
         <div th:replace="~{/my/banner.html}"></div>
         <article class="myInfo_Info myInfo_Article">
           <div class="myInfo_ArticleTitle"><span>나의 설정</span></div>
-          <form action="#" class="myInfoForm" method="post">
+          <form class="myInfoForm json-form" id="infoForm" action="/lotteon/my/info" method="post">
             <table border="1">
               <tr>
                 <td>사용자 ID</td>
                 <td>
-                  <span>abc***</span>
+                  <span>[[${userDTO.maskedUid}]]</span>
                 </td>
               </tr>
               <tr>
                 <td>비밀번호</td>
-                <td><button type="button">비밀번호 수정</button></td>
+                <td>
+                  <a href="#"><button type="button" class="register-btns">비밀번호 수정</button></a>
+                </td>
               </tr>
               <tr>
                 <td>이름</td>
                 <td>
-                  <span>홍 *동</span>
-                </td>
-              </tr>
-              <tr>
-                <td>생년월일</td>
-                <td>
-                  <span>1983년 05월 03일</span>
+                  <span>[[${userDTO.memberInfo.maskedName}]]</span>
                 </td>
               </tr>
               <tr>
                 <td>이메일</td>
                 <td>
-                  <input type="text" class="myInfo_email" placeholder="abc123" />
-                  @
-                  <input type="text" class="myInfo_email" placeholder="naver.com" />
-                  <select name="email_com">
-                    <option>naver.com</option>
-                    <option>gmail.com</option>
-                    <option>hotmail.com</option>
-                  </select>
+                  <input type="text" th:value="${userDTO.memberInfo.email}" name="memberInfo.email" id="email_input" class="inputHp" readonly />
+                  <button type="button" id="email_btn" class="register-btns">수정하기</button>
                 </td>
               </tr>
               <tr>
                 <td>휴대폰</td>
                 <td>
-                  <input type="text" class="inputHp" placeholder="010"/>-
-                  <input type="text" class="inputHp" placeholder="1234" />-
-                  <input type="text" class="inputHp" placeholder="1234" />
-                  <button type="button" class="HpButton">수정하기</button>
+                  <input type="text" th:value="${userDTO.memberInfo.hp}" name="memberInfo.hp" id="hp_input" minlength="13" maxlength="13" class="inputHp" readonly/>
+                  <button type="button" id="hp_btn" class="register-btns">수정하기</button>
                 </td>
               </tr>
               <tr>
                 <td>주소</td>
                 <td>
-                  <input type="text" placeholder="우편번호" />
-                  <button type="button" id="btnZip">우편번호찾기</button>
-                  <input type="text" class="myInfo_address" placeholder="주소 검색" />
-                  <input type="text" class="myInfo_address" placeholder="상세주소 입력" />
+                  <input type="text" th:value="${userDTO.memberInfo.address.zipCode}" id="zip" name="memberInfo.address.zipCode" placeholder="우편번호" readonly />
+                  <button type="button" id="btnZip" class="register-btns">우편번호 찾기</button>
+                  <input type="text" id="addr1" name="memberInfo.address.addr1" th:value="${userDTO.memberInfo.address.addr1}" class="myInfo_address" placeholder="주소 검색" readonly />
+                  <input type="text" id="addr2" name="memberInfo.address.addr2" th:value="${userDTO.memberInfo.address.addr2}" class="myInfo_address" placeholder="상세주소 입력" />
                 </td>
               </tr>
               <tr>
@@ -93,5 +82,73 @@
   </div>
   <footer th:replace="~{/include/footer.html}"></footer>
 </body>
+<script>
+
+  // 우편번호 검색 기능
+  document.getElementById('btnZip').onclick = function () {
+    new daum.Postcode({
+      oncomplete: function (data) {
+        document.getElementById('zip').value = data.zonecode;
+        document.getElementById('addr1').value = data.roadAddress || data.jibunAddress;
+        document.getElementById('addr2').focus();
+      }
+    }).open();
+  };
+
+  document.addEventListener('DOMContentLoaded', function() {
+
+    // 이메일 수정하기 버튼 클릭시 input창 활성화
+    const emailInput = document.getElementById('email_input');
+    const emailBtn = document.getElementById('email_btn');
+
+    emailBtn.addEventListener('click', function() {
+      emailInput.removeAttribute('readonly');
+      emailInput.focus();
+    });
+
+    // 휴대폰 수정하기 버튼 클릭시 input창 활성화
+    const hpInput = document.getElementById('hp_input');
+    const hpBtn = document.getElementById('hp_btn');
+
+    hpBtn.addEventListener('click', function() {
+      hpInput.removeAttribute('readonly');
+      hpInput.focus();
+    });
+
+    // 정보 수정
+    const infoForm = document.querySelector('#infoForm');
+    infoForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const formData = new FormData(infoForm);
+      fetch(infoForm.action, {
+        method: 'POST',
+        body: formData
+      })
+              .then(response => {
+                if (!response.ok) throw new Error('네트워크 오류 발생');
+                return response.json();
+              })
+              .then(responseData => {
+                alert('정보수정이 완료되었습니다.');
+                window.location.reload();
+              })
+              .catch(error => alert('정보수정 중 오류가 발생했습니다.'));
+    });
+
+
+
+    })
+
+
+
+
+
+
+
+  });
+
+</script>
+
 
 </html>

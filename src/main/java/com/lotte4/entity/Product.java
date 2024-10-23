@@ -1,10 +1,11 @@
 package com.lotte4.entity;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.lotte4.config.MapToJsonConverter;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -12,6 +13,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Entity
 @Table(name = "product")
 public class Product {
     @Id
@@ -19,6 +21,7 @@ public class Product {
     private int productId;
 
     private String name;
+    private String description;
     private String company;
     private int price;
     private int discount;
@@ -32,8 +35,10 @@ public class Product {
     private String img2;
     private String img3;
     private String detail;
+
+    @Convert(converter = MapToJsonConverter.class)
+    private Map<String, List<String>> options;
+
     private int status;
-    //외래키 목록
-    private int productCateId;
-    private int sellerInfoId;
 }
+

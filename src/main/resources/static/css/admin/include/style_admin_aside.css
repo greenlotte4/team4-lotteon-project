@@ -1,6 +1,6 @@
 /* 사이드바 스타일 */
 aside {
-    border: 1px solid #ede6db;
+    border: 1px solid #ddd;
     box-sizing: border-box;
     width: 220px;
     background-color: #ffffff;
@@ -19,18 +19,23 @@ aside {
     margin-bottom: 3px;
     position: relative;
 }
-
+.asideTitle {
+    margin-bottom : 10px !important;
+    color: #2b2e4a;
+    box-sizing: border-box;
+    font-size: 25px !important;
+}
 .sidebar-menu a {
     text-decoration: none;
     color: #2b2e4a;
     font-size: 17px;
-    font-weight: bold;
     padding: 10px;
     display: block;
     background-color: #ffffff;
     border-radius: 8px;
     transition: background-color 0.3s ease;
     margin-top: 12px;
+    font-weight: bold;
 }
 
 .sidebar-menu a:hover {

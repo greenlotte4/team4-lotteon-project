@@ -1,17 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>문의사항 목록</title>
-    <link rel="stylesheet" th:href="@{/css/common.css}" />
-    <link rel="stylesheet" th:href="@{/css/cs/cs_common.css}" />
-  </head>
-  <body>
-  <header th:replace="~{/include/my_header.html}"></header>
-  <div id="wrapper">
-    <th:block th:replace="~{/cs/aside/aside_faq.html}"></th:block>
-    <section id="section_wrapper">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>공지사항 목록</title>
+  <link rel="stylesheet" th:href="@{/css/common.css}">
+  <link rel="stylesheet" th:href="@{/css/cs/cs_common.css}"/>
+  <link rel="stylesheet" th:href="@{/css/cs/cs_list.css}"/>
+
+</head>
+<body>
+<header th:replace="~{/include/header.html}"></header>
+
+
+<main>
+  <th:block th:replace="~{/cs/aside/aside_qna.html}"></th:block>
+  <section id="section_wrapper">
     <div id="titleAndTable">
       <div id="category">
         <p>회원<br><span class="subtitle">회원 관련 문의 내용입니다.</span></p>
@@ -85,17 +89,17 @@
       </table>
       <a th:href="@{/cs/qna/write}" id="toQnaWrite"><button id="btnQNA">문의하기</button></a>
     </div>
-      <div class="pagination">
-        <button class="page-btn">이전</button>
-        <button class="page-num">1</button>
-        <button class="page-num">2</button>
-        <button class="page-num">3</button>
-        <button class="page-num">4</button>
-        <button class="page-num">5</button>
-        <button class="page-btn">다음</button>
-      </div>
-    </section>
-  </div>
-  <footer th:replace="~{/include/footer.html}"></footer>
-  </body>
+    <div class="pagination">
+      <button class="page-btn">이전</button>
+      <button class="page-num">1</button>
+      <button class="page-num">2</button>
+      <button class="page-num">3</button>
+      <button class="page-num">4</button>
+      <button class="page-num">5</button>
+      <button class="page-btn">다음</button>
+    </div>
+  </section>
+</main>
+<footer th:replace="~{/include/footer.html}"></footer>
+</body>
 </html>
