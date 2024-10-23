@@ -61,6 +61,7 @@ public class ConfigController {
         return "/admin/config/banner";
     }
 
+
     @PostMapping(value = "/admin/config/banner", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<String> AdminconfigBannerWithLocation(
             @RequestParam("bannerImg") MultipartFile bannerImg,

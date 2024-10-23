@@ -17,9 +17,11 @@ public class Terms {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int termsId;
 
+
     /////이용약관////////
     // 일반회원일 경우
     @Column(columnDefinition = "TEXT", nullable = false)
+
     private String term;
     // 판매자회원일 경우
     @Column(columnDefinition = "TEXT", nullable = false)

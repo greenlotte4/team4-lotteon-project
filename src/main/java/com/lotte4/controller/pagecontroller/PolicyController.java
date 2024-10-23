@@ -24,6 +24,7 @@ public class PolicyController {
     @GetMapping("/policy/privacy")
     public String privacy() {
         return "/policy/privacy";
+
     }
 
     @GetMapping("/policy/seller")
