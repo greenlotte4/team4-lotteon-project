@@ -13,10 +13,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,6 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Controller
 public class  CsQnaController {
+
     private final UserService userService;
     private final BoardCateService boardCateService;
     private final BoardService boardService;
@@ -32,7 +30,6 @@ public class  CsQnaController {
     public String qnaWrite(Model model){
         List<BoardCateDTO> cate1 = boardCateService.selectBoardCatesByDepth(1);
         model.addAttribute("cate1", cate1);
-
         return "/cs/qna/write";
     }
 
@@ -42,5 +39,21 @@ public class  CsQnaController {
         boardService.insertBoardQna(dto);
         return "redirect:/cs/qna/list";
     }
+
+    @GetMapping("/cs/{type}/list")
+    public String qna(Model model, @PathVariable String type) {
+
+        model.addAttribute("boards", boardService.selectAllBoardByType(type));
+        return "/cs/"+type+"/list";
     }
+
+
+    @GetMapping("/cs/qna/view/{id}")
+    public String qnaView(Model model, @PathVariable int id) {
+
+        model.addAttribute("board", boardService.selectBoardById(id));
+        return "/cs/qna/view";
+    }
+
+}
 

@@ -1,6 +1,7 @@
 package com.lotte4.service.board;
 
 import com.lotte4.dto.BoardCateDTO;
+import com.lotte4.dto.BoardCommentDTO;
 import com.lotte4.dto.BoardRegisterDTO;
 import com.lotte4.dto.BoardResponseDTO;
 import com.lotte4.entity.Board;
@@ -40,7 +41,7 @@ public class BoardService {
         }
         return boardResponseDTOS;
     }
-    // TODO: boardCate 들어가는 거 수정해야함
+
     public Board insertBoardQna(BoardRegisterDTO dto) {
         log.info("insert board qna:" +dto);
         return userRepository.findByUid(dto.getUid())
@@ -57,5 +58,23 @@ public class BoardService {
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
     }
 
+    public BoardResponseDTO selectBoardById(int id){
+        Optional<Board> optBoard = boardRepository.findById(id);
+        if(optBoard.isPresent()){
+            Board board = optBoard.get();
+            BoardResponseDTO boardDTO = modelMapper.map(board, BoardResponseDTO.class);
+            return boardDTO;
+        }
+        return null;
+    }
 
+    public void insertBoardQnaComment(BoardCommentDTO commentDTO) {
+        Optional<Board> existingBoard =boardRepository.findById(commentDTO.getBoardId());
+        if(existingBoard.isPresent()){
+            Board board = existingBoard.get();
+            board.setComment(commentDTO.getComment());
+            board.setState(1); // 답변완료로 상태 수정
+            boardRepository.save(board);
+        }
+    }
 }
