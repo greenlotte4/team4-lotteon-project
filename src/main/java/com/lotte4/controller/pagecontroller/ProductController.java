@@ -21,16 +21,6 @@ public class ProductController {
         return "/product/cart";
     }
 
-    @GetMapping("/product/complete")
-    public String complete(){
-        return "/product/complete";
-    }
-
-    @GetMapping("/product/order")
-    public String order(){
-        return "/product/order";
-    }
-
     @GetMapping("/product/search")
     public String search(){
         return "/product/search";

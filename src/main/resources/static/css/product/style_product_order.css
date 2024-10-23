@@ -311,3 +311,10 @@ textarea{
 .checkout-btn:hover {
     background-color: #c9302c;
 }
+
+.delivery__text {
+    border: 1px solid #ddd;
+    width: 100%;
+    height: 6.25em;
+    resize: none;
+}
