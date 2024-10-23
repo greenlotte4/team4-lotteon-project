@@ -1,4 +1,4 @@
-package com.lotte4.controller.pagecontroller;
+package com.lotte4.controller.pagecontroller.my;
 
 import com.lotte4.dto.UserDTO;
 import com.lotte4.service.MemberInfoService;
