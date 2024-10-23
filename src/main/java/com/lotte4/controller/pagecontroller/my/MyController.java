@@ -67,7 +67,7 @@ public class MyController {
 //        }
 //    }
 
-    // 나의설정 (uid를 나중에 principal로 바꿔야함)
+    // TODO : 나의설정 (uid를 나중에 principal로 바꿔야함)
     @GetMapping("/info")
     public String info(@RequestParam String uid, Model model) {
 
@@ -82,11 +82,12 @@ public class MyController {
     // 나의설정 정보수정
     @PostMapping("/info")
     public ResponseEntity<MemberInfoDTO> updateInfo(@RequestBody MemberInfoDTO memberInfoDTO) {
+        log.info("controller>memberInfoDTO : " + memberInfoDTO);
 
         MemberInfoDTO updatedMemberInfo = memberInfoService.updateMemberInfo(memberInfoDTO);
+        log.info("updatedMemberInfo : " + updatedMemberInfo);
         return ResponseEntity.ok(updatedMemberInfo);
     }
-
 
 
 }
