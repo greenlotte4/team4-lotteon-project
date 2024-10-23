@@ -370,22 +370,21 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 2px;
+    padding: 5px;
     margin: 0 3px 0 3px;
-    height: 20px;
+    height: 15px;
     border-radius: 5px;
-    border: 1px solid #d82a2a;
-    color: #d82a2a;
+    background-color: #b6b5b5;
+    border: none;
+    color: white;
 }
 .delete-value{
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 70%;
-    width: 15px;
+    width: 12px;
+    height: 12px;
     margin-left: 3px;
-    border-radius: 5px;
-    background-color: #d82a2a;
     color: white;
     font-size: 10px;
     font-weight: bold;

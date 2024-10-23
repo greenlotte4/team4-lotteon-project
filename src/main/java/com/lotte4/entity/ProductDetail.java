@@ -19,7 +19,7 @@ public class ProductDetail {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int productDetailId;
 
-    private String condition;
+    private String condition_field;
     private String duty;
     private String receipt;
     private String sellerType;
@@ -30,6 +30,6 @@ public class ProductDetail {
     private String warning;
     private LocalDateTime createDate;
     private String quality;
-    private String as;
+    private String as_field;
     private String asPhone;
 }
