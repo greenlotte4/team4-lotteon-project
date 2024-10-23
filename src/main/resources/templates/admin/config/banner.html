@@ -63,7 +63,7 @@
                     </colgroup>
                     <thead>
                     <tr>
-                        <th><input type="checkbox" class="chkbox"></th>
+                        <th><input type="checkbox" id="selectAll"></th>
                         <th>번호</th>
                         <th>이미지</th>
                         <th>배너정보</th>
@@ -77,7 +77,7 @@
                     </thead>
                     <tbody>
                     <tr th:each="banner, index : ${configBanners}">
-                        <td><input type="checkbox" class="chkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
                         <td>[[${index.index+1}]]</td>
                         <td><a th:href="@{'/uploads/' + ${banner.img}}"><img th:src="@{'/uploads/' + ${banner.img}}" alt="배너 사진" class="product-image"></a></td>
                         <td><span>[[${banner.name}]]</span>
@@ -97,11 +97,12 @@
                                 <button class="deletebtn">비활성</button>
                             </th:blcok>
                         </td>
+                        <input type="hidden" th:value="${banner.bannerId}" class="bannerId"/>
                     </tr>
                     </tbody>
                 </table>
                 <div class="buttons">
-                    <button class="delete-btn" disabled>선택 삭제</button>
+                    <button class="delete-btn" id="deleteBtn">선택 삭제</button>
                     <a href="#" id="openRegisterModalBtn" class="write-btn">배너등록</a>
                 </div>
 
@@ -131,7 +132,7 @@
                     </tr>
                     <tr>
                         <th>배경색</th>
-                        <td><input type="text" id="bannerBackground" placeholder="배너배경색을 입력하세요" name="background" required></td>
+                        <td><input type="color" id="bannerBackground" name="background" required></td>
                     </tr>
                     <tr>
                         <th>배너링크</th>
@@ -259,7 +260,7 @@
                             alert("배너 등록 성공!");
                             const url = formData.get("location");
                             // 추가 작업: 예를 들어 모달 닫기 등
-                            window.location.href = url;
+                            window.location.href = '/lotteon/admin/config/banner/'+url;
                         } else {
                             alert("배너 등록 실패!");
                         }
@@ -271,6 +272,70 @@
                 alert("모든 필드를 입력해주세요.");
             }
         };
+
+        //체크 박스 기능
+        const selectAll = document.getElementById("selectAll");
+        const checkboxes = document.querySelectorAll('.checkbox');
+
+        selectAll.onclick = function(e) {
+            console.log("SELECT ALL");
+            selectAllCheck(e.target);
+        };
+
+        function selectAllCheck(selectAllCheckbox) {
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+        }
+
+        //삭제
+        const deleteBtn = document.getElementById("deleteBtn");
+        deleteBtn.onclick = function (e){
+            e.preventDefault();
+
+            const selectedCheckboxes = document.querySelectorAll('.checkbox:checked');
+            console.log(selectedCheckboxes);
+
+            let selectedIds = [];
+
+            for (let checkbox of selectedCheckboxes) {
+                const row = checkbox.closest('tr');
+                const productNo = parseInt(row.getElementsByClassName('bannerId')[0].value,10);
+                console.log(productNo);
+                selectedIds.push(productNo);
+            }
+
+            if (selectedIds.length === 0) {
+                alert('삭제하려는 상품을 선택하세요.');
+                return;
+            }
+
+            if (!confirm('선택한 상품을 정말 삭제하시겠습니까?')) {
+                return;
+            }
+
+            fetch('/lotteon/admin/config/banner', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(selectedIds)
+            })
+                .then(resp => resp.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('삭제되었습니다.');
+                        location.reload();
+                    } else {
+                        alert('삭제에 실패했습니다.');
+                    }
+                })
+                .catch(err => {
+                    console.error('Error:', err);
+                    alert('삭제 중 오류가 발생했습니다.');
+                });
+        }
+
     });
 
 </script>

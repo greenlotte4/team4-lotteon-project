@@ -308,3 +308,13 @@ strong {
     border-color: #ccc;
     box-sizing: border-box;
 }
+
+.product-banner{
+    margin-top: 5px;
+}
+
+.product-banner > a > img{
+    border-radius: 10px;
+    height: 70px;
+    width: 440px;
+}

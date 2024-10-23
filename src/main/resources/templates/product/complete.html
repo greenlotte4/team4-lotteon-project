@@ -14,10 +14,11 @@
 </head>
 
 <body>
-<div id="bannerTop" class="on" style="background: #e4dfdf;">
-    <article>
-        <a href="#"><img src="../../../images/main/topBanner1.png"/></a>
-        <button class="btnClose">close</button>
+<div id="bannerTop" class="on">
+    <article th:each="banner : ${banners}" th:if="${banner.location == 'MAIN1'}" th:style="'background: ' + ${banner.background}">
+        <a th:href="${banner.link}">
+            <img th:src="@{'/uploads/' + ${banner.img}}" alt="랜덤 배너 이미지"/>
+        </a>
     </article>
 </div>
 <div id="wrapper">

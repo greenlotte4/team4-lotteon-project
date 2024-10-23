@@ -12,8 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Log4j2
 @Service
@@ -36,6 +35,27 @@ public class BannerService {
         List<Banner> banners = bannerRepository.findByLocation(location);
         List<BannerDTO> bannerDTOs = new ArrayList<>();
 
+        for(Banner banner : banners){
+            bannerDTOs.add(modelMapper.map(banner, BannerDTO.class));
+        }
+        return bannerDTOs;
+    }
+
+    public List<BannerDTO> getAllBannersWithLocation(){
+        Random random = new Random();
+        //MAIN2는 전부 삽입
+        List<Banner> banners = bannerRepository.findByLocation("MAIN2");
+        // 슬라이드 배너 랜덤화
+        Collections.shuffle(banners);
+
+        String[] bannerLocationList = {"MAIN1","PRODUCT1","MY1","MEMBER1"};
+        for(String location : bannerLocationList){
+            List<Banner> bannerTMP = bannerRepository.findByLocation(location);
+            if (!bannerTMP.isEmpty()){
+                banners.add(bannerTMP.get(random.nextInt(bannerTMP.size())));
+            }
+        }
+        List<BannerDTO> bannerDTOs = new ArrayList<>();
         for(Banner banner : banners){
             bannerDTOs.add(modelMapper.map(banner, BannerDTO.class));
         }
@@ -66,5 +86,9 @@ public class BannerService {
             return "fail";
         }
         return "success";
+    }
+
+    public void deleteBanner(int bannerId){
+        bannerRepository.deleteById(bannerId);
     }
 }
