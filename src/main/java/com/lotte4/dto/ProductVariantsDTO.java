@@ -21,6 +21,5 @@ public class ProductVariantsDTO {
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
 
-    //외래키 목록
-    private int productNo;
+    private ProductDTO product;
 }

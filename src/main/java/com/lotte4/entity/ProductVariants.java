@@ -9,7 +9,7 @@ import java.util.Map;
 
 @Getter
 @Setter
-@ToString
+@ToString(exclude = {"options"})
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -30,6 +30,7 @@ public class ProductVariants {
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
 
-    //외래키 목록
-    private int productNo;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "productId")
+    private Product product;
 }
