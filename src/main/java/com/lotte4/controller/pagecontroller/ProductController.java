@@ -43,6 +43,7 @@ public class ProductController {
         return "/product/cart";
     }
 
+
     @PostMapping("/product/cart/delete")
     @ResponseBody
     public ResponseEntity<Void> deleteCartItems(@RequestBody Map<String, List<Integer>> requestBody) {
@@ -74,6 +75,7 @@ public class ProductController {
     public String order(){
         return "/product/order";
     }
+
 
     @GetMapping("/product/search")
     public String search(){

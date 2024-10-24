@@ -37,7 +37,7 @@ public class AppInfoInterceptor implements HandlerInterceptor {
             modelAndView.addObject("appInfo", appInfo);  // 기존 AppInfo 객체 추가
             InfoDTO info = infoService.selectInfoDTO();      // InfoDTO 객체 추가
             modelAndView.addObject("info", info);         // 헤더에서 사용할 info 객체 추가
-            List<BannerDTO> banners = bannerService.getAllBanners();    //모든 배너리스트 불러오기
+            List<BannerDTO> banners = bannerService.getAllBannersWithLocation();    //모든 배너리스트 불러오기
             modelAndView.addObject("banners", banners);     // 모든 배너 추가
         }
     }
