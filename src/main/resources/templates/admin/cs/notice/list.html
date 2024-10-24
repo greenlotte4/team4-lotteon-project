@@ -26,11 +26,14 @@
             </div>
             <h3>공지사항 목록</h3>
             <div class="form">
-                <div class="table-controls">
-                    <select class="dropdown">
-                        <option>유형선택</option>
-                        <option>고객서비스</option>
-                        <option>이벤트 당첨</option>
+                <div id="dropdown" class="table-controls">
+                    <!-- 1차 유형 카테고리 (BoardCategory Enum) -->
+                    <select id="category1">
+                        <option>유형</option>
+                        <option th:each="cate : ${cates}"
+                                th:value="${cate.boardCateId}"
+                                th:text="${cate.name}">
+                        </option>
                     </select>
                 </div>
 
@@ -55,63 +58,22 @@
                         <th>관리</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <tr>
+                    <tbody id="boardListBody">
+                    <tr th:each="board : ${boardList}">
                         <td><input type="checkbox" class="chkbox"></td>
-                        <td>120</td>
-                        <td>고객서비스</td>
+                        <td th:text="${board.boardId}"></td>
+                        <td th:text="${board.cate.boardCateId}"></td>
                         <td class="title">
-                            <a th:href="@{/admin/cs/notice/view}">[안내] 해외결제 사칭 문자 주의</a>
+                            <a th:href="@{/admin/cs/notice/view/{id}(id=${board.boardId})}" th:text="${board.title}"></a>
                         </td>
-                        <td>120</td>
-                        <td>00.00.00</td>
+                        <td th:text="${board.user.uid}"></td>
+                        <td th:text="${board.regDate}"></td>
                         <td>
-                            <a th:href="@{/admin/cs/notice/modify}" class="edit-btn">수정</a>
+                            <a th:href="@{/admin/cs/notice/modify/{boardId}(boardId=${board.boardId})}" class="edit-btn">수정</a>
                             <button class="deletebtn">삭제</button>
                         </td>
                     </tr>
-                    <tr>
-                        <td><input type="checkbox" class="chkbox"></td>
-                        <td>120</td>
-                        <td>고객서비스</td>
-                        <td class="title">
-                            <a th:href="@{/admin/cs/notice/view}">[안내] 해외결제 사칭 문자 주의</a>
-                        </td>
-                        <td>120</td>
-                        <td>00.00.00</td>
-                        <td>
-                            <a th:href="@{/admin/cs/notice/modify}" class="edit-btn">수정</a>
-                            <button class="deletebtn">삭제</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" class="chkbox"></td>
-                        <td>120</td>
-                        <td>고객서비스</td>
-                        <td class="title">
-                            <a th:href="@{/admin/cs/notice/view}">[안내] 해외결제 사칭 문자 주의</a>
-                        </td>
-                        <td>120</td>
-                        <td>00.00.00</td>
-                        <td>
-                            <a th:href="@{/admin/cs/notice/modify}" class="edit-btn">수정</a>
-                            <button class="deletebtn">삭제</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" class="chkbox"></td>
-                        <td>120</td>
-                        <td>고객서비스</td>
-                        <td class="title">
-                            <a th:href="@{/admin/cs/notice/view}">[안내] 해외결제 사칭 문자 주의</a>
-                        </td>
-                        <td>120</td>
-                        <td>00.00.00</td>
-                        <td>
-                            <a th:href="@{/admin/cs/notice/modify}" class="edit-btn">수정</a>
-                            <button class="deletebtn">삭제</button>
-                        </td>
-                    </tr>
+
                     </tbody>
                 </table>
                 <div class="buttons">

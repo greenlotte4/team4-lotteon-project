@@ -27,6 +27,7 @@ public class  CsQnaController {
     private final BoardCateService boardCateService;
     private final BoardService boardService;
 
+    // qna 글쓰기
     @GetMapping("/cs/qna/write")
     public String qnaWrite(Model model){
         List<BoardCateDTO> cate1 = boardCateService.selectBoardCatesByDepth(1);
@@ -38,26 +39,32 @@ public class  CsQnaController {
     public String qnaWrite(BoardRegisterDTO dto, HttpServletRequest req, @PathVariable String type) {
 
         dto.setRegIp(req.getRemoteAddr());
-        boardService.insertBoardQna(dto);
-
+        Board savedBoard = boardService.insertBoard(dto);
+        if(savedBoard!=null){
+        if(Objects.equals(type, "qna")){
+            return "redirect:/cs/qna/list";
+        }
         if(Objects.equals(type, "faq")){
             return "redirect:/admin/cs/faq/list";
         }
-        return "redirect:/cs/" +type+ "/list";
+        if(Objects.equals(type, "notice")){
+            return "redirect:/admin/cs/notice/list";
+        }
+        }
+        return null;
 
     }
 
+    // 글목록 : qna, faq
     @GetMapping("/cs/{type}/list")
     public String qna(Model model, @PathVariable String type) {
-
         model.addAttribute("boards", boardService.selectAllBoardByType(type));
         return "/cs/"+type+"/list";
     }
 
-
+    // 글보기 : qna, faq
     @GetMapping("/cs/qna/view/{id}")
     public String qnaView(Model model, @PathVariable int id) {
-
         model.addAttribute("board", boardService.selectBoardById(id));
         return "/cs/qna/view";
     }

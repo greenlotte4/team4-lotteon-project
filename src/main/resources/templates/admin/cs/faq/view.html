@@ -48,7 +48,7 @@
 
                 <div class="buttons">
                     <button class="delete-btn" disabled>삭제</button>
-                    <a th:href="@{/admin/cs/faq/modify}" class="modify-btn">수정</a>
+                    <a th:href="@{/admin/cs/faq/modify/{boardId}(boardId=${board.boardId})}" class="modify-btn">수정</a>
                     <a th:href="@{/admin/cs/faq/list}" class="back-btn">목록</a>
                 </div>
             </div>

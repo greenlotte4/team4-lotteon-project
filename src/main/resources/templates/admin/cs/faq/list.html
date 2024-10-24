@@ -26,17 +26,21 @@
             </div>
             <h3>자주묻는질문 목록</h3>
             <div class="form">
-                <div class="table-controls">
-                    <select class="dropdown">
-                        <option>1차 선택</option>
-                        <option>회원</option>
-                        <option>상품</option>
+                <div id="dropdown" class="table-controls">
+                    <!-- 1차 유형 카테고리 (BoardCategory Enum) -->
+                    <select id="category1">
+                        <option>1차 유형</option>
+                        <option th:each="cate : ${cate1}"
+                                th:value="${cate.boardCateId}"
+                                th:text="${cate.name}">
+                        </option>
                     </select>
-                    <select class="dropdown">
-                        <option>2차 선택</option>
-                        <option>가입</option>
-                        <option>탈퇴</option>
+
+                    <!-- 2차 유형 카테고리 (동적으로 추가됨) -->
+                    <select name="cate" id="category2" required>
+                        <option value="2차 유형" disabled hidden selected>2차 유형</option>
                     </select>
+
                 </div>
                 <table class="inquiry-table">
                     <colgroup>
@@ -73,11 +77,10 @@
                         <td th:text="${board.user.uid}">chh**</td>
                         <td th:text="${board.regDate}">00.00.00</td>
                         <td>
-                            <a th:href="@{/admin/cs/faq/modify}" class="edit-btn">수정</a>
+                            <a th:href="@{/admin/cs/faq/modify/{boardId}(boardId=${board.boardId})}" class="edit-btn">수정</a>
                             <button class="deletebtn">삭제</button>
                         </td>
                     </tr>
-
                     </tbody>
                 </table>
                 <div class="buttons">
@@ -92,3 +95,41 @@
 <footer th:replace="~{/admin/include/footer.html}"></footer>
 </body>
 </html>
+<script>
+    // 1차 카테고리 선택 시 2차 카테고리 값을 동적으로 가져와서 설정
+    const category1Select = document.getElementById('category1');
+    const category2Select = document.getElementById('category2');
+
+    category1Select.addEventListener('change', function() {
+        const parentId = this.value;
+
+        // 2차 카테고리 초기화
+        category2Select.innerHTML = '<option disabled hidden selected>2차 유형</option>';
+
+        // 서버로부터 2차 카테고리 데이터를 가져옴
+        fetch(`/lotteon/cs/qna/subcategories/${parentId}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                data.forEach(subCategory => {
+                    const option = document.createElement('option');
+                    option.value = subCategory.boardCateId;
+                    option.text = subCategory.name;
+                    category2Select.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching subcategories:', error));
+    });
+
+    document.getElementById("myForm").addEventListener("submit", function(event) {
+        const category2 = document.getElementById("category2");
+
+        // category2의 값이 빈 문자열이라면 폼 제출을 막고 경고 메시지 표시
+        if (category2.value === "2차 유형") {
+            alert("카테고리를 선택해주세요.");
+            event.preventDefault(); // 폼 제출 중단
+        }
+    });
+
+
+</script>

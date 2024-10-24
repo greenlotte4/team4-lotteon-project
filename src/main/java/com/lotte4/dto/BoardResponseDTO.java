@@ -16,19 +16,19 @@ import java.time.LocalDateTime;
 public class BoardResponseDTO {
     private int boardId;
 
+    private UserDTO user;
     private BoardCateDTO cate;
+
+    // 자주 묻는 질문인지 고객센터인지
     private String type;
     // 제목
     private String title;
     // 내용
     private String content;
-    // 작성한 시간
     private LocalDateTime regDate;
-    // 작성자 Ip
     private String regIp;
-    // 상태
     private int state;
-    // 답변
     private String comment;
-    private UserDTO user;
+
+
 }
