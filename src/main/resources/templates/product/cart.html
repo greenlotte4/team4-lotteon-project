@@ -66,7 +66,9 @@
                                 <p class="product-name">[브랜드] [[${cart.productVariants.product.name}]]</p>
                             </div>
                         </td>
-                        <td>[[${cart.productVariants.product.options}]]</td>
+                        <td>
+                            <span id="variant-options" th:utext="${cart.productVariants.options}"></span>
+                        </td>
                         <td>
                             <div class="quantity">
                                 <input type="number" id="quantity-[[${cart.cartId}]]" th:value="${cart.count}" onchange="updateTotal([[${cart.cartId}]])" />
@@ -246,6 +248,34 @@
                 alert("삭제 중 오류가 발생했습니다.");
             })
     }
+
+    document.addEventListener("DOMContentLoaded", function (){
+
+        // span 태그에 있는 JSON 문자열을 가져옴
+        const optionsData = document.getElementById("variant-options").textContent.trim();
+
+        // JSON 문자열을 JavaScript 객체로 변환
+        const options = JSON.parse(optionsData);
+
+        // 결과를 저장할 문자열을 초기화
+        let result = '';
+
+        // options 객체의 key-value를 순회하면서 문자열로 만듦
+        for (const key in options) {
+            if (options.hasOwnProperty(key)) {
+                result += key + ': ' + options[key][0] + ', ';
+            }
+        }
+
+        // 마지막 쉼표와 공백 제거
+        result = result.slice(0, -2);
+
+        // span 태그 내부에 결과를 삽입
+        document.getElementById("variant-options").textContent = result;
+
+    });
+
+
 
 
 
