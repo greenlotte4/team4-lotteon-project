@@ -24,7 +24,7 @@ public class ProductDetail {
     private String receipt;
     private String sellerType;
     private String brand;
-    private String COA;
+    private String coa;
     private String creator;
     private String country;
     private String warning;

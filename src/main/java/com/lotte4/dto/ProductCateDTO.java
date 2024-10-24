@@ -19,6 +19,12 @@ public class ProductCateDTO {
     // 이름
     private String name;
 
+    // 계층
+    private int depth; // 추가함(241024 10:25)
+
+    // 부모
+    private ProductCateDTO parent; // 추가함(241024 12:35)
+
     private List<ProductCateDTO> children = new ArrayList<>();
 
     public ProductCateDTO(ProductCate productCate) {

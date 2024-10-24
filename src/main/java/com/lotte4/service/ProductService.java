@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Log4j2
@@ -31,9 +32,10 @@ public class ProductService {
     private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
 
-    public void insertProduct(ProductDTO productDTO) {
+    public ProductDTO insertProduct(ProductDTO productDTO) {
         Product product = modelMapper.map(productDTO, Product.class);
-        productRepository.save(product);
+        Product savedEntity = productRepository.save(product);
+        return modelMapper.map(savedEntity, ProductDTO.class);
     }
 
     public void insertProductDetail(ProductDetailDTO productDetailDTO) {
@@ -64,6 +66,25 @@ public class ProductService {
         return cateForProdRegisterDTOList;
     }
 
+    public ProductDTO getProductById(int productId) {
+        Optional<Product> productOptional = productRepository.findById(productId);
+        if (productOptional.isPresent()) {
+            Product product = productOptional.get();
+            return modelMapper.map(product, ProductDTO.class);
+        }
+        return null;
+    }
+
+    public List<ProductDTO> getAllProducts() {
+        List<Product> productList = productRepository.findAll();
+        List<ProductDTO> productDTOList = new ArrayList<>();
+        for (Product product : productList) {
+            productDTOList.add(modelMapper.map(product, ProductDTO.class));
+        }
+        return productDTOList;
+    }
+
+
     public String uploadProdImg(MultipartFile file) {
 
         String uploadDir = System.getProperty("user.dir") + "/uploads/";
@@ -82,7 +103,7 @@ public class ProductService {
 
             // 파일 저장
             try {
-                file.transferTo(new File(uploadDir + sName));
+                file.transferTo(new File(uploadDir + "prod_img_" + sName));
             } catch (IOException e) {
                 log.error(e);
             }
@@ -92,9 +113,6 @@ public class ProductService {
 
         return null;
     }
-
-
-
 
 
 }

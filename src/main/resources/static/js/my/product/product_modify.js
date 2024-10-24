@@ -239,17 +239,12 @@ form.addEventListener('submit', function (e) {
     formData.append('detail', "detail");
     formData.append('optionsJson', JSON.stringify(optionObj));
 
-    let productId;
-
     fetch('/lotteon/admin/product/register', {
         method: 'POST',
         body: formData
     })
         .then(resp => resp.json())
-        .then(data => {
-            console.log(data)
-            productId = data;
-        })
+        .then(data => console.log(data))
         .catch(err => console.log(err))
 
 
@@ -303,8 +298,6 @@ form.addEventListener('submit', function (e) {
         .catch(err => console.log(err))
 
     alert('등록이 완료되었습니다. 상품 상세 등록 페이지로 이동합니다.')
-
-    window.location.assign('/lotteon/admin/product/registerMore?productId='+productId);
 
 });
 
