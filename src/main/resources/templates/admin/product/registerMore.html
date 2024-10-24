@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<html lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상품상세등록</title>
+
+    <!--공통 css 부분-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}" required/>
+    <!--각 페이지(section) 개별 css-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_product_register.css}" required/>
+    <script th:src="@{/js/my/product/product_register.js}" defer></script>
+</head>
+<body>
+<header th:replace="~{/admin/include/header.html}"></header>
+<main>
+    <div id="wrapper">
+        <aside th:replace="~{/admin/include/aside.html}"></aside>
+        <!--section-->
+        <section>
+            <div class="breadcrumb">
+                <a th:href="@{/admin/index}">Home</a> > <a th:href="@{/admin/product/list}">상품관리</a> > <a
+                    th:href="@{/admin/product/register}" class="location">상품목록</a>
+            </div>
+            <h3>상품상세등록</h3>
+            <form>
+                <table>
+                    <tr>
+                        <td>상품번호</td>
+                        <td>상품옵션</td>
+                        <td>제품고유명</td>
+                        <td>가격</td>
+                        <td>수량</td>
+                    </tr>
+                    <tr th:each="option : ${options}">
+                        <td th:text="${option.getKey()}"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            <div class="buttons">
+                <button type="submit" class="write-btn" id="product_submit">등록</button>
+            </div>
+            </form>
+        </section>
+        <!-- /Section -->
+    </div>
+</main>
+<footer th:replace="~{/admin/include/footer.html}"></footer>
+</body>
+</html>

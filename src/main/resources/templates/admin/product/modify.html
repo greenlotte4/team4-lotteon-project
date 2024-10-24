@@ -11,7 +11,7 @@
     <!--공통 css 부분-->
     <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}" required/>
     <!--각 페이지(section) 개별 css-->
-    <link rel="stylesheet" th:href="@{/css/admin/style_admin_product_register.css}" required/>
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_product_modify.css}" required/>
     <script th:src="@{/js/my/product/product_register.js}" defer></script>
 </head>
 <body>
@@ -22,9 +22,10 @@
         <!--section-->
         <section>
             <div class="breadcrumb">
-                <a th:href="@{/admin/index}">Home</a> > <a th:href="@{/admin/product/list}">상품관리</a> > <a th:href="@{/admin/product/register}" class="location">상품목록</a>
+                <a th:href="@{/admin/index}">Home</a> > <a th:href="@{/admin/product/list}">상품관리</a> > <a
+                    th:href="@{/admin/product/register}" class="location">상품목록</a>
             </div>
-            <h3>상품등록</h3>
+            <h3>상품수정</h3>
 
             <form>
                 <div class="form">
@@ -39,9 +40,8 @@
                                 <td class="label">1차 분류</td>
                                 <td>
                                     <select class="dropdown" id="category1" required>
-                                        <option value="" disabled selected hidden>1차분류 선택</option>
-                                        <option th:each="cate1 : ${productCate1List}" th:value="${cate1.productCateId}"
-                                                th:text="${cate1.name}"></option>
+                                        <option th:if="${productCate.depth == 2}" th:value="${productCate.parent.productCateId}" th:text="${productCate.parent.name}" disabled selected hidden></option>
+                                        <option th:unless="${productCate.depth == 2}" th:value="${parentProductCate.parent.productCateId}" th:text="${parentProductCate.parent.name}" disabled selected hidden></option>
                                     </select>
                                 </td>
                             </tr>
@@ -49,7 +49,9 @@
                                 <td class="label">2차 분류</td>
                                 <td>
                                     <select class="dropdown" id="category2" required>
-                                        <option value="" disabled selected hidden>2차분류 선택</option>
+                                        <option th:if="${productCate.depth==2}" th:value="${productCate.productCateId}" th:text="${productCate.name}" disabled selected hidden></option>
+                                        <option th:unless="${productCate.depth==2}" th:value="${parentProductCate.productCateId}" th:text="${parentProductCate.name}" disabled selected hidden>2차분류 선택
+                                        </option>
                                     </select>
                                 </td>
                             </tr>
@@ -57,7 +59,11 @@
                                 <td class="label">3차 분류</td>
                                 <td>
                                     <select class="dropdown" id="category3">
-                                        <option value="" disabled selected hidden>3차분류 선택</option>
+                                            <option th:if="${productCate.depth==3}" th:value="${productCate.productCateId}"
+                                                    th:text="${productCate.name}" disabled selected hidden>
+                                            </option>
+                                            <option th:unless="${productCate.depth==3}" value="" disabled selected hidden>3차분류 선택
+                                            </option>
                                     </select>
                                 </td>
                             </tr>
@@ -74,37 +80,37 @@
                             <tr>
                                 <td class="label">상품명</td>
                                 <td>
-                                    <input type="text" name="name" id="name" required/>
+                                    <input type="text" name="name" id="name" th:value="${productDTO.name}" required/>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">기본설명</td>
                                 <td>
-                                    <input type="text" name="description" id="description" required/>
+                                    <input type="text" name="description" id="description" th:value="${productDTO.description}" required/>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">제조사</td>
                                 <td>
-                                    <input type="text" name="company" id="company" required/>
+                                    <input type="text" name="company" id="company" th:value="${productDTO.company}" required/>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">상품금액</td>
                                 <td>
-                                    <input type="text" name="price" class="inputmini" id="price" required/> 원
+                                    <input type="text" name="price" class="inputmini" id="price" th:value="${productDTO.price}" required/> 원
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">할인율</td>
                                 <td>
-                                    <input type="text" name="discount" class="inputmini" id="discount" required/> %
+                                    <input type="text" name="discount" class="inputmini" id="discount" th:value="${productDTO.discount}" required/> %
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">포인트</td>
                                 <td>
-                                    <input type="text" name="point" class="inputmini" id="point" required/> 원
+                                    <input type="text" name="point" class="inputmini" id="point" th:value="${productDTO.point}" required/> 원
                                 </td>
                             </tr>
                             <tr>
@@ -116,7 +122,7 @@
                             <tr>
                                 <td class="label">배송비</td>
                                 <td>
-                                    <input type="text" name="deliveryFee" class="inputmini" id="deliveryFee" required/>
+                                    <input type="text" name="deliveryFee" class="inputmini" id="deliveryFee" th:value="${productDTO.deliveryFee}" required/>
                                     원
                                 </td>
                             </tr>

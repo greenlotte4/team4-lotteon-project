@@ -28,7 +28,9 @@ public class ProductDTO {
     private String img2;
     private String img3;
     private String detail;
+    private String sellerInfoId;
     private Map<String, List<String>> options;
     private int status;
+    private int productCate_productCateId;
 }
 

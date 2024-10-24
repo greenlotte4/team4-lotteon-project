@@ -26,7 +26,6 @@ public class Product {
     private int price;
     private int discount;
     private int point;
-    private int stock;
     private int sold;
     private int deliveryFee;
     private int hit;
@@ -35,10 +34,12 @@ public class Product {
     private String img2;
     private String img3;
     private String detail;
+    private String sellerInfoId;
 
     @Convert(converter = MapToJsonConverter.class)
     private Map<String, List<String>> options;
 
     private int status;
+    private int productCate_productCateId;
 }
 

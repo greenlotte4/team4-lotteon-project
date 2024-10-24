@@ -10,14 +10,11 @@ import com.lotte4.service.CategoryService;
 import com.lotte4.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -37,12 +34,16 @@ public class ProductRestController {
 
 
     @PostMapping(value = "/admin/product/register", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public void productRegisterCate(@RequestParam("img_1") MultipartFile img_1,
-                                    @RequestParam("img_2") MultipartFile img_2,
-                                    @RequestParam("img_3") MultipartFile img_3,
-                                    @RequestParam("detail_") MultipartFile detail_,
-                                    @RequestParam("optionsJson") String optionsJson,
-                                    @ModelAttribute ProductDTO productDTO) {
+    public int productRegisterCate(@RequestParam("cateId") int cateId,
+                                   @RequestParam("img_1") MultipartFile img_1,
+                                   @RequestParam("img_2") MultipartFile img_2,
+                                   @RequestParam("img_3") MultipartFile img_3,
+                                   @RequestParam("detail_") MultipartFile detail_,
+                                   @RequestParam("optionsJson") String optionsJson,
+                                   @ModelAttribute ProductDTO productDTO, RedirectAttributes redirectAttributes) {
+
+        // 상품 카테고리 아이디 입력
+        productDTO.setProductCate_productCateId(cateId);
 
         // 'options' JSON 문자열을 Map<String, List<String>>으로 변환
         Map<String, List<String>> optionsMap = null;
@@ -64,7 +65,9 @@ public class ProductRestController {
         productDTO.setImg3(img3);
         productDTO.setDetail(detail);
 
-        productService.insertProduct(productDTO);
+        ProductDTO dto = productService.insertProduct(productDTO);
+
+        return dto.getProductId();
     }
 
     @PostMapping("/admin/product/register/detail")
