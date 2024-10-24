@@ -31,8 +31,8 @@ public class ProductController {
         return "/product/list_grid";
     }
 
-    @GetMapping("/product/cart")
-    public String cart(Model model, @RequestParam("user_id") int user_id){
+    @GetMapping("/product/cart/{user_id}")
+    public String cart(Model model, @PathVariable("user_id") int user_id) {
 
         List<CartDTO> cartList = cartService.getCartByUserId(user_id);
 

@@ -64,8 +64,8 @@ public class MyController {
 //    }
 
     // TODO : 나의설정 (uid를 나중에 principal로 바꿔야함)
-    @GetMapping("/info")
-    public String info(@RequestParam String uid, Model model) {
+    @GetMapping("/info/{uid}")
+    public String info(@PathVariable("uid") String uid, Model model) {
 
         UserDTO userDTO = userService.selectUser(uid);
 
