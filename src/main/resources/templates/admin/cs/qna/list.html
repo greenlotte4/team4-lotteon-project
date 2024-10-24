@@ -117,24 +117,6 @@
                 });
             })
             .catch(error => console.error('Error fetching subcategories:', error));
-        filterBoardListByCategory();
-    //     const selectedCategory1 = this.value;
-    //
-    //     const boardListBody = document.getElementById('boardListBody');
-    //     const rows = boardListBody.querySelectorAll('tr');
-    //     rows.forEach(row => {
-    //         const rowCategoryId = row.getAttribute('data-category-id');
-    //
-    //         // 선택된 카테고리 ID와 비교하여 일치하는 것만 표시, 나머지는 숨김
-    //         if (rowCategoryId === selectedCategory1) {
-    //             row.style.display = '';  // 일치하는 카테고리는 보이기
-    //         } else {
-    //             row.style.display = 'none';  // 일치하지 않는 카테고리는 숨기기
-    //         }
-    //     });
-     });
-    category2Select.addEventListener('change', function() {
-        filterBoardListByCategory();
     });
 
     document.getElementById("myForm").addEventListener("submit", function(event) {
@@ -146,25 +128,6 @@
             event.preventDefault(); // 폼 제출 중단
         }
     });
-    // TODO : 현재는 페이징처리가 없어 이렇게 구현시도 해보았으나 페이징처리가 들어가면 RestController를 이용해 값을 가져와야할 것
-    function filterBoardListByCategory() {
-        const selectedCategory1 = category1Select.value;  // 선택된 1차 카테고리 값
-        const selectedCategory2 = category2Select.value;  // 선택된 2차 카테고리 값
 
-        const boardListBody = document.getElementById('boardListBody');
-        const rows = boardListBody.querySelectorAll('tr');
 
-        rows.forEach(row => {
-            const rowCategory1Id = row.getAttribute('data-category-id'); // 1차 카테고리 ID
-            const rowCategory2Id = row.querySelector('td:nth-child(4)').textContent; // 2차 카테고리 이름
-
-            // 1차, 2차 카테고리 조건에 따라 필터링
-            if ((rowCategory1Id === selectedCategory1 || selectedCategory1 === "1차 유형") &&
-                (rowCategory2Id === selectedCategory2 || selectedCategory2 === "2차 유형")) {
-                row.style.display = '';  // 조건에 맞는 행은 보이기
-            } else {
-                row.style.display = 'none';  // 조건에 맞지 않는 행은 숨기기
-            }
-        });
-    }
 </script>

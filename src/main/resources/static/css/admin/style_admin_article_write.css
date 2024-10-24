@@ -22,7 +22,7 @@
 }
 
 /* 드롭다운 스타일 */
-.dropdown {
+#dropdown > select {
     padding: 8px;
     font-size: 14px;
     margin-right: 2px;

@@ -1,27 +1,26 @@
 package com.lotte4.controller.pagecontroller.admin.cs;
 
+import com.lotte4.service.board.BoardCateService;
+import com.lotte4.service.board.BoardService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-
+@RequiredArgsConstructor
 @Controller
 public class NoticeController {
-    
-    //공지사항 목록
-    @GetMapping("/admin/cs/notice/list")
-    public String AdminNoticeList() {
-        return "/admin/cs/notice/list";
-    }
 
-    //공지사항 보기
-    @GetMapping("/admin/cs/notice/view")
-    public String AdminNoticeView() {
-        return "/admin/cs/notice/view";
-    }
-    
+    private final BoardCateService boardCateService;
+    private final BoardService boardService;
+
+
+    //
     //공지사항 작성
     @GetMapping("/admin/cs/notice/write")
-    public String AdminNoticeWrite() {
+    public String AdminNoticeWrite(Model model) {
+        model.addAttribute("cates",boardCateService.selectBoardCatesByDepth(0));
         return "/admin/cs/notice/write";
     }
 

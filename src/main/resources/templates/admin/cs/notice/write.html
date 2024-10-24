@@ -22,28 +22,30 @@
         <!--section-->
         <section>
             <div class="breadcrumb">
-                <a href="#">Home</a> > <a href="#">고객센터</a> > <a href="#" class="location">공지사항</a>
+                <a th:href="@{admin/cs/notice/board}">Home</a> > <a href="#">고객센터</a> > <a href="#" class="location">공지사항</a>
             </div>
             <h3>공지사항 작성</h3>
 
             <div class="form">
-                <form method="post" action="#">
+                <form method="post" th:action="@{/cs/notice/write}">
                     <div class="inquiry-section">
                         <table class="inquiry-table">
                             <tr>
                                 <td class="label">유형</td>
                                 <td>
-                                    <select class="dropdown" name="type">
-                                        <option>유형 선택</option>
-                                        <option>고객서비스</option>
-                                        <option>이벤트 당첨</option>
-                                    </select>
+                                    <select class="dropdown" name="cate">
+                                        <option>유형</option>
+                                        <option
+                                                th:each="cate : ${cates}"
+                                                th:value="${cate.boardCateId}"
+                                                th:text="${cate.name}">
+                                        </option>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">제목</td>
                                 <td>
-                                    <input type="text" name="title" />
+                                    <input type="text" name="title"/> <input type="hidden" class="writeTitle" name="uid" value="ekkang" readonly/><input type="hidden" name="type"  value="notice" readonly/>
                                 </td>
                             </tr>
                             <tr class="content">

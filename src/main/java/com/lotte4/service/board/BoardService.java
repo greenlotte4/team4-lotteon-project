@@ -11,6 +11,8 @@ import com.lotte4.entity.User;
 import com.lotte4.repository.UserRepository;
 import com.lotte4.repository.board.BoardCateRepository;
 import com.lotte4.repository.board.BoardRepository;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -42,7 +44,7 @@ public class BoardService {
         return boardResponseDTOS;
     }
 
-    public Board insertBoardQna(BoardRegisterDTO dto) {
+    public Board insertBoard(BoardRegisterDTO dto) {
         log.info("insert board qna:" +dto);
         return userRepository.findByUid(dto.getUid())
                 .map(user -> {
@@ -58,14 +60,26 @@ public class BoardService {
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
     }
 
-    public BoardResponseDTO selectBoardById(int id){
-        Optional<Board> optBoard = boardRepository.findById(id);
-        if(optBoard.isPresent()){
-            Board board = optBoard.get();
-            BoardResponseDTO boardDTO = modelMapper.map(board, BoardResponseDTO.class);
-            return boardDTO;
+    @Transactional
+    public Board updateBoard(BoardRegisterDTO dto) {
+        Board existingboard = boardRepository.findById(dto.getBoardId())
+                .orElseThrow(() -> new EntityNotFoundException("해당 ID의 게시판을 찾을 수 없습니다: " + dto.getBoardId()));
+        if(dto.getCate() != existingboard.getCate().getBoardCateId()){
+            existingboard.setCate(boardCateRepository.findByBoardCateId(dto.getCate()));
         }
-        return null;
+        if(dto.getTitle() != existingboard.getTitle()){
+            existingboard.setTitle(dto.getTitle());
+        }
+        if(dto.getContent() != existingboard.getContent()){
+            existingboard.setContent(dto.getContent());
+        }
+        return boardRepository.save(existingboard);
+    }
+
+    public BoardResponseDTO selectBoardById(int id) {
+        return boardRepository.findById(id)
+                .map(board -> modelMapper.map(board, BoardResponseDTO.class))
+                .orElse(null);
     }
 
     public void insertBoardQnaComment(BoardCommentDTO commentDTO) {

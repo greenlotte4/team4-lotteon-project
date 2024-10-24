@@ -38,5 +38,4 @@ public class Board {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="writer")
     private User user;
-    // TODO : 나중에는 User로 변경
 }
