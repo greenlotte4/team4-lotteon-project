@@ -67,7 +67,7 @@
                             </div>
                         </td>
                         <td>
-                            <span id="variant-options" th:utext="${cart.productVariants.options}"></span>
+                            <span id="variant-options" th:text="${cart.productVariants.options}"></span>
                         </td>
                         <td>
                             <div class="quantity">
@@ -253,6 +253,8 @@
 
         // span 태그에 있는 JSON 문자열을 가져옴
         const optionsData = document.getElementById("variant-options").textContent.trim();
+        console.log("optionsData : " + optionsData);
+
 
         // JSON 문자열을 JavaScript 객체로 변환
         const options = JSON.parse(optionsData);
