@@ -15,6 +15,7 @@ import lombok.extern.log4j.Log4j;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -32,12 +33,17 @@ public class UserService {
     private final ModelMapper modelMapper;
     private final JavaMailSender javaMailSender;
     private final MemberInfoRepository memberInfoRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Value("${spring.mail.username}")
     private String sender;
 
     // 일반회원 회원가입
     public void insertMemberUser(UserDTO userDTO) {
+
+        // 비밀번호 인코딩
+        String encoded = passwordEncoder.encode(userDTO.getPass());
+        userDTO.setPass(encoded);
 
         // MemberInfo 저장
         MemberInfo memberInfo = memberInfoService.insertMemberInfo(userDTO.getMemberInfo());
@@ -61,6 +67,10 @@ public class UserService {
     // 판매자 회원가입
     public void insertSellerUser(UserDTO userDTO) {
 
+        // 비밀번호 인코딩
+        String encoded = passwordEncoder.encode(userDTO.getPass());
+        userDTO.setPass(encoded);
+
         // SellerInfo 저장
         SellerInfo sellerInfo = sellerInfoService.insertSellerInfo(userDTO.getSellerInfo());
 
@@ -79,6 +89,29 @@ public class UserService {
         log.info("selleruser" + user);
 
     }
+
+    public UserDTO login(String uid, String pass) {
+        // UserRepository를 사용하여 userId로 사용자 정보 조회
+        Optional<User> userOptional = userRepository.findByUid(uid);
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+
+            // 비밀번호 검증 (PasswordEncoder를 사용하여 매칭 확인)
+            if (passwordEncoder.matches(pass, user.getPass())) {
+                log.info("로그인 성공 - uid: " + uid);
+                // User 엔티티를 UserDTO로 매핑하여 반환
+                return modelMapper.map(user, UserDTO.class);
+            } else {
+                log.warn("비밀번호가 일치하지 않습니다 - uid: " + uid);
+            }
+        } else {
+            log.warn("존재하지 않는 사용자 - uid: " + uid);
+        }
+
+        return null; // 로그인 실패 시 null 반환
+    }
+
 
     // 사용자 조회
     public UserDTO selectUser(String uid) {
