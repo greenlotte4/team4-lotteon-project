@@ -61,15 +61,13 @@ public class BoardController {
     }
 
     @ResponseBody
-    @DeleteMapping("/admin/cs/{type}/delete/{boardId}")
-    public ResponseEntity<String> deleteBoard(@RequestParam int boardId, @PathVariable String type) {
+    @DeleteMapping("/admin/cs/board/delete/{boardId}")
+    public ResponseEntity<String> deleteBoard(@PathVariable int boardId) {
         boolean isDeleted = boardService.deleteBoardByBoardId(boardId);
 
         if (isDeleted) {
-            // 성공 시 200 OK 반환
             return ResponseEntity.ok("Board deleted successfully.");
         } else {
-            // 실패 시 400 Bad Request 반환
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to delete the board.");
         }
     }
