@@ -7,6 +7,7 @@ import com.lotte4.dto.BoardResponseDTO;
 import com.lotte4.entity.Board;
 import com.lotte4.service.board.BoardCateService;
 import com.lotte4.service.board.BoardService;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,21 +35,27 @@ public class BoardController {
 
     // 글목록 - qna,fap
     @GetMapping("/admin/cs/{type}/list")
-    public String AdminQnaList(Model model, @PathVariable String type) {
+    public String AdminQnaList(
+            Model model,
+            @PathVariable String type,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "8") int size) {
 
-        if(Objects.equals(type, "notice")) {
+        if (Objects.equals(type, "notice")) {
             List<BoardCateDTO> cate1 = boardCateService.selectBoardCatesByDepth(0);
             model.addAttribute("cates", cate1);
         }
         if (Objects.equals(type, "faq") || Objects.equals(type, "qna")) {
-
             List<BoardCateDTO> cate1 = boardCateService.selectBoardCatesByDepth(1);
             model.addAttribute("cate1", cate1);
         }
-        List<BoardResponseDTO> boardList = boardService.selectAllBoardByType(type);
-        model.addAttribute("boardList", boardList);
 
-        return "/admin/cs/"+type+"/list";
+        Page<BoardResponseDTO> boardList = boardService.selectAllBoardByType(type, page, size);
+        model.addAttribute("boardList", boardList.getContent());
+        model.addAttribute("totalPages", boardList.getTotalPages());
+        model.addAttribute("currentPage", page);
+
+        return "/admin/cs/" + type + "/list";
     }
     // 글보기 - qna,fap
     @GetMapping("/admin/cs/{type}/view/{id}")

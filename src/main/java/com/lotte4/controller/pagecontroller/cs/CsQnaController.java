@@ -55,12 +55,12 @@ public class  CsQnaController {
 
     }
 
-    // 글목록 : qna, faq
-    @GetMapping("/cs/{type}/list")
-    public String qna(Model model, @PathVariable String type) {
-        model.addAttribute("boards", boardService.selectAllBoardByType(type));
-        return "/cs/"+type+"/list";
-    }
+//    // 글목록 : qna, faq
+//    @GetMapping("/cs/{type}/list")
+//    public String qna(Model model, @PathVariable String type) {
+//        model.addAttribute("boards", boardService.selectAllBoardByType(type));
+//        return "/cs/"+type+"/list";
+//    }
 
     // 글보기 : qna, faq
     @GetMapping("/cs/qna/view/{id}")

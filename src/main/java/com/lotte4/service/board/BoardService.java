@@ -17,6 +17,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -34,15 +37,10 @@ public class BoardService {
     private final BoardCateRepository boardCateRepository;
     private final ModelMapper modelMapper;
     //ProductCate productCate = modelMapper.map(productCateDTO, ProductCate.class);
-    public List<BoardResponseDTO> selectAllBoardByType(String type) {
-
-        List<Board> boardEntities = boardRepository.findByType(type);
-        List<BoardResponseDTO> boardResponseDTOS = new ArrayList<>();
-        for (Board board : boardEntities) {
-            BoardResponseDTO boardResponseDTO = modelMapper.map(board, BoardResponseDTO.class);
-            boardResponseDTOS.add(boardResponseDTO);
-        }
-        return boardResponseDTOS;
+    public Page<BoardResponseDTO> selectAllBoardByType(String type, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Board> boardEntities = boardRepository.findByType(type, pageable);
+        return boardEntities.map(board -> modelMapper.map(board, BoardResponseDTO.class));
     }
 
     public Board insertBoard(BoardRegisterDTO dto) {
