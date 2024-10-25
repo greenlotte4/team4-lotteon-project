@@ -26,15 +26,20 @@ public class BoardCateService {
         return categories.stream()
                 .map(category -> modelMapper.map(category, BoardCateDTO.class))
                 .collect(Collectors.toList());
-    };
+    }
+
+    ;
+
     public BoardCateDTO getCategories(int id) {
-       BoardCate boardCate = boardCateRepository.findByBoardCateId(id);
+        BoardCate boardCate = boardCateRepository.findByBoardCateId(id);
 
         return modelMapper.map(boardCate, BoardCateDTO.class);
     }
+
     public List<BoardCateDTO> getSubCategories(int parentId) {
         List<BoardCate> subCategories = boardCateRepository.findByParentId(parentId);
         return subCategories.stream()
                 .map(subCategory -> modelMapper.map(subCategory, BoardCateDTO.class))
                 .collect(Collectors.toList());
     }
+}
