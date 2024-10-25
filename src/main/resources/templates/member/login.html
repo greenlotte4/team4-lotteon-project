@@ -24,13 +24,15 @@
                 <!-- 로그인 폼 -->
                 <div class="login-form">
                     <div class="login-input">
-                        <div class="input-group">
-                            <input type="text" id="userid" placeholder="아이디를 입력해주세요">
-                        </div>
-                        <div class="input-group">
-                            <input type="password" id="userpwd" placeholder="비밀번호를 입력해주세요">
-                        </div>
-                        <a th:href="@{/member/signup}" class="loginbtn">로그인하기</a>
+                        <form th:action="@{/member/login}" method="post" name="loginForm">
+                            <div class="input-group">
+                                <input type="text" name="uid" id="userid" placeholder="아이디를 입력해주세요">
+                            </div>
+                            <div class="input-group">
+                                <input type="password" name="pass" id="userpwd" placeholder="비밀번호를 입력해주세요">
+                            </div>
+                            <input type="submit" value="로그인하기" class="loginbtn"/>
+                        </form>
                     </div>
                     <div class="options">
                         <input type="checkbox" id="auto-login">
@@ -99,4 +101,24 @@
 </footer>
 <button type="button" id="top">상단이동</button>
 </body>
+
+<script>
+    window.onload = function() {
+        // URL에서 쿼리 파라미터 읽기
+        const urlParams = new URLSearchParams(window.location.search);
+        const success = urlParams.get('success');
+
+        // 성공 파라미터에 따라 alert 표시
+        if (success === '400') {
+            alert('회원 탈퇴가 완료되었습니다.');
+        } else if(success === '102') {
+            alert('비밀번호가 성공적으로 변경되었습니다. 다시 로그인해 주세요.');
+        } else if(success === '100') {
+            alert('로그인에 실패하였습니다. 아이디, 비밀번호를 확인해주세요.');
+        } else if(success === '101') {
+            alert('로그아웃 완료되었습니다.');
+        }
+    };
+</script>
+
 </html>

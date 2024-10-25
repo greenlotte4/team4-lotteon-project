@@ -1,3 +1,5 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <header>
     <link rel="stylesheet" th:href="@{/css/include/header.css}"/>
     <div class ="headerWrapper">
@@ -6,10 +8,18 @@
         <div class="util innerContent">
             <div class="accountArea">
                 <ul>
-                    <li><a th:href="@{/member/login}">로그인</a></li>
-                    <li><a th:href="@{/member/join}">회원가입</a></li>
-                    <li><a th:href="@{/my/order}">주문배송</a></li>
-                    <li><a th:href="@{/cs/index}">고객센터</a></li>
+                    <li sec:authorize="!isAuthenticated()">
+                        <a th:href="@{/member/login}">로그인</a>
+                    </li>
+                    <li sec:authorize="!isAuthenticated()">
+                        <a th:href="@{/member/join}">회원가입</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/my/order}">주문배송</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/cs/index}">고객센터</a>
+                    </li>
                 </ul>
             </div>
         </div>
