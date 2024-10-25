@@ -7,14 +7,14 @@ import com.lotte4.dto.BoardResponseDTO;
 import com.lotte4.entity.Board;
 import com.lotte4.service.board.BoardCateService;
 import com.lotte4.service.board.BoardService;
+import jdk.jshell.Snippet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
@@ -31,11 +31,11 @@ public class BoardController {
     // 글목록 - qna,fap
     @GetMapping("/admin/cs/{type}/list")
     public String AdminQnaList(Model model, @PathVariable String type) {
-        if(Objects.equals(type, "notice")){
+        if(Objects.equals(type, "notice")) {
             List<BoardCateDTO> cate1 = boardCateService.selectBoardCatesByDepth(0);
             model.addAttribute("cates", cate1);
         }
-        if(Objects.equals(type, "faq")) {
+        if (Objects.equals(type, "faq") || Objects.equals(type, "qna")) {
             List<BoardCateDTO> cate1 = boardCateService.selectBoardCatesByDepth(1);
             model.addAttribute("cate1", cate1);
         }
@@ -60,11 +60,25 @@ public class BoardController {
         return "/admin/cs/faq/write";
     }
 
+    @ResponseBody
+    @DeleteMapping("/admin/cs/{type}/delete/{boardId}")
+    public ResponseEntity<String> deleteBoard(@RequestParam int boardId, @PathVariable String type) {
+        boolean isDeleted = boardService.deleteBoardByBoardId(boardId);
+
+        if (isDeleted) {
+            // 성공 시 200 OK 반환
+            return ResponseEntity.ok("Board deleted successfully.");
+        } else {
+            // 실패 시 400 Bad Request 반환
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to delete the board.");
+        }
+    }
+
     // faq 수정
     @GetMapping("/admin/cs/{type}/modify/{boardId}")
     public String AdminCsFaqModify(Model model,@PathVariable int boardId,@PathVariable String type) {
 
-        if(Objects.equals(type, "notice")){
+        if(Objects.equals(type, "notice")) {
             List<BoardCateDTO> cate1 = boardCateService.selectBoardCatesByDepth(0);
             model.addAttribute("cates", cate1);
         }
