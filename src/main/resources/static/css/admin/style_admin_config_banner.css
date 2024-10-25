@@ -332,5 +332,12 @@
     background-color: #6c757d;
 }
 
+.backColor {
+    display: inline-block;
+    width:23px;
+    margin-left: 3px;
+    border: 1px solid black;
+}
+
 
 
