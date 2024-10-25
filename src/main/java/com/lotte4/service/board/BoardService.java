@@ -16,6 +16,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -91,4 +92,20 @@ public class BoardService {
             boardRepository.save(board);
         }
     }
+
+    public boolean deleteBoardByBoardId(int boardId) {
+        try {
+            boardRepository.deleteById(boardId);
+            return true; // 성공적으로 삭제된 경우
+        } catch (EmptyResultDataAccessException e) {
+            // 존재하지 않는 boardId로 삭제 시도 시 예외 발생
+            System.out.println("해당 ID의 게시글이 존재하지 않습니다: " + boardId);
+            return false; // 삭제 실패
+        } catch (Exception e) {
+            // 다른 예외 처리
+            System.out.println("삭제 중 오류가 발생했습니다: " + e.getMessage());
+            return false; // 삭제 실패
+        }
+    }
+
 }
