@@ -116,7 +116,7 @@ addOptionButton.addEventListener('click', function () {
                                         </div>
                                         `;
     const option_name = document.querySelectorAll('.option-name');
-    if (option_name.length < 5) {
+    if (option_name.length < 3) {
         option.insertAdjacentHTML("beforeend", option_innerHTML);
     } else {
         alert('옵션을 더 이상 추가할 수 없습니다.')
@@ -239,7 +239,10 @@ form.addEventListener('submit', function (e) {
     formData.append('detail', "detail");
     formData.append('optionsJson', JSON.stringify(optionObj));
 
+    // 상품 상세 등록 페이지로 이동할 때 들고갈 상품 아이디
     let productId;
+    // 상품 등록 성공 여부
+    let registerSuccess;
 
     fetch('/lotteon/admin/product/register', {
         method: 'POST',
@@ -249,6 +252,9 @@ form.addEventListener('submit', function (e) {
         .then(data => {
             console.log(data)
             productId = data;
+            if (data !== 0){
+                registerSuccess = "success";
+            }
         })
         .catch(err => console.log(err))
 
@@ -271,7 +277,6 @@ form.addEventListener('submit', function (e) {
     const as_field = document.querySelector('#as').value;
     const asPhone = document.querySelector('#asPhone').value;
 
-    console.log("coa : " + coa);
 
     const data2 = {
         condition_field: condition_field,
@@ -291,6 +296,8 @@ form.addEventListener('submit', function (e) {
 
     console.log("data2 : " + data2);
 
+    let registerDetail;
+
     fetch('/lotteon/admin/product/register/detail', {
         method: 'POST',
         headers: {
@@ -299,12 +306,22 @@ form.addEventListener('submit', function (e) {
         body: JSON.stringify(data2)
     })
         .then(resp => resp.json())
-        .then(data => console.log(data))
+        .then(data => {
+            if (data === "success") {
+                registerDetail = "success"
+            }
+            console.log(data);})
         .catch(err => console.log(err))
 
-    alert('등록이 완료되었습니다. 상품 상세 등록 페이지로 이동합니다.')
+    console.log("success1 = " + registerSuccess + " / success2 = " + registerDetail);
 
-    window.location.assign('/lotteon/admin/product/registerMore?productId='+productId);
+    if (registerSuccess === "success" && registerDetail === "success") {
+        alert('상품 등록이 완료되었습니다. 상품 상세 등록 페이지로 이동합니다.');
+        window.location.assign('/lotteon/admin/product/registerMore?productId='+productId);
+
+    } else{
+        alert('상품 등록이 실패하였습니다.')
+    }
 
 });
 

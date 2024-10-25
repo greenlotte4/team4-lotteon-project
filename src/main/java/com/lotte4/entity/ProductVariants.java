@@ -3,6 +3,7 @@ package com.lotte4.entity;
 import com.lotte4.config.MapToJsonConverter;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CurrentTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -27,7 +28,9 @@ public class ProductVariants {
     @Convert(converter = MapToJsonConverter.class)
     private Map<String, String> options; // sku에 대한 옵션(ex 검은색 S / 파란색 L)
 
+    @CurrentTimestamp
     private LocalDateTime created_at;
+
     private LocalDateTime updated_at;
 
     @ManyToOne(fetch = FetchType.LAZY)
