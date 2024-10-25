@@ -1,5 +1,6 @@
 package com.lotte4.service;
 
+import com.lotte4.dto.CartDTO;
 import com.lotte4.dto.UserDTO;
 import com.lotte4.entity.MemberInfo;
 import com.lotte4.entity.SellerInfo;
@@ -19,8 +20,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -164,5 +168,16 @@ public class UserService {
 
         return code + "";
     }
+
+    // role이 member인 회원 목록 select
+    public List<UserDTO> selectUserListByMember(String role) {
+        return userRepository.findByRole(role)
+                .map(userList -> userList.stream()
+                        .map(user -> modelMapper.map(user, UserDTO.class))  // 각 Cart 객체를 CartDTO로 변환
+                        .collect(Collectors.toList())  // List<CartDTO>로 수집
+                )
+                .orElse(Collections.emptyList());  // 데이터가 없을 경우 빈 리스트 반환
+    }
+
 
 }

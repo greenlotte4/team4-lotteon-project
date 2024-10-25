@@ -40,22 +40,20 @@
 
             <table class="inquiry-table">
               <colgroup>
+                <col style="width: 5%" />
+                <col style="width: 7%" />
+                <col style="width: 7%" />
+                <col style="width: 5%" />
+                <col style="width: 7%" />
                 <col style="width: 6%" />
+                <col style="width: 13%" />
+                <!--<col style="width: 9%" />-->
+                <col style="width: 10%" />
+                <col style="width: 5%" />
                 <col style="width: 8%" />
-                <col style="width: 9%" />
-                <col style="width: 9%" />
-                <col style="width: 8%" />
-                <col style="width: 9%" />
-                <col style="width: 9%" />
-                <col style="width: 9%" />
-                <col style="width: 9%" />
-                <col style="width: 14%" />
-                <col style="width: 8%" />
-                <col style="width: 12%" />
               </colgroup>
               <thead>
                 <tr>
-                  <th><input type="checkbox" class="chkbox" /></th>
                   <th>번호</th>
                   <th>아이디</th>
                   <th>이름</th>
@@ -63,123 +61,43 @@
                   <th>등급</th>
                   <th>포인트</th>
                   <th>이메일</th>
-                  <th>휴대폰</th>
+                  <!--<th>휴대폰</th>-->
                   <th>가입일</th>
                   <th>상태</th>
                   <th>관리</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td><input type="checkbox" class="chkbox" /></td>
-                  <td>5</td>
-                  <td>xxx...</td>
-                  <td>정우성</td>
-                  <td>M</td>
-                  <td>
-                    <select name="grade" class="grade">
-                      <option value="VVIP">VVIP</option>
-                      <option value="VIP">VIP</option>
-                      <option value="GOLD">GOLD</option>
-                      <option value="SILVER">SILVER</option>
-                      <option value="FAMILY">FAMILY</option>
-                    </select>
-                  </td>
-                  <td>15,000</td>
-                  <td>xxxxx@...</td>
-                  <td>010...</td>
-                  <td>0000-00-00 00:00:00</td>
+              <tr th:each="user, i:${userList}" >
+                  <td>[[${user.userId}]]</td>
+                  <td>[[${user.uid}]]</td>
+                  <td>[[${user.memberInfo.name}]]</td>
+                  <td>[[${user.memberInfo.gender == 0 ? 'M' : 'F'}]]</td>
+                <td>
+                  <select name="grade" class="grade">
+                    <option value="VVIP" th:selected="${user.memberInfo.grade == 'VVIP'}">VVIP</option>
+                    <option value="VIP" th:selected="${user.memberInfo.grade == 'VIP'}">VIP</option>
+                    <option value="GOLD" th:selected="${user.memberInfo.grade == 'GOLD'}">GOLD</option>
+                    <option value="SILVER" th:selected="${user.memberInfo.grade == 'SILVER'}">SILVER</option>
+                    <option value="FAMILY" th:selected="${user.memberInfo.grade == 'FAMILY'}">FAMILY</option>
+                  </select>
+                </td>
+
+                <td>[[${user.memberInfo.point}]]</td>
+                  <td>[[${user.memberInfo.email}]]</td>
+                  <!--<td>[[${user.memberInfo.hp}]]</td>-->
+                  <td>[[${user.memberInfo.updatedAt}]]</td>
 
 <!--                  글자 색상 스크립트 처리? or th:if-->
-                  <td class="userStatus normal">정상</td>
+                  <td class="userStatus normal">[[${user.memberInfo.status}]]</td>
                   <td>
-                    <a href="#" class="edit-btn">수정</a><br />
+                    <a href="#" id="registerModalBtn" class="edit-btn">수정</a><br />
 <!--                     중지 / 재개 / 비활성 스크립트 처리 or th:if -->
                     <button class="deletebtn">중지</button>
                   </td>
                 </tr>
-                <tr>
-                  <td><input type="checkbox" class="chkbox" /></td>
-                  <td>4</td>
-                  <td>xxx...</td>
-                  <td>이정재</td>
-                  <td>M</td>
-                  <td>
-                    <select name="grade" class="grade">
-                      <option value="VVIP">VVIP</option>
-                      <option value="VIP">VIP</option>
-                      <option value="GOLD">GOLD</option>
-                      <option value="SILVER">SILVER</option>
-                      <option value="FAMILY">FAMILY</option>
-                    </select>
-                  </td>
-                  <td>2,700</td>
-                  <td>xxxxx@...</td>
-                  <td>010...</td>
-                  <td>0000-00-00 00:00:00</td>
-                  <td class="userStatus normal">중지</td>
-                  <td>
-                    <a href="#" class="edit-btn">수정</a><br />
-                    <button class="deletebtn">재개</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td><input type="checkbox" class="chkbox" /></td>
-                  <td>5</td>
-                  <td>xxx...</td>
-                  <td>이나영</td>
-                  <td>F</td>
-                  <td>
-                    <select name="grade" class="grade">
-                      <option value="VVIP">VVIP</option>
-                      <option value="VVIP">VIP</option>
-                      <option value="VVIP">GOLD</option>
-                      <option value="VVIP">SILVER</option>
-                      <option value="VVIP">FAMILY</option>
-                    </select>
-                  </td>
-                  <td>1,200</td>
-                  <td>xxxxx@...</td>
-                  <td>010...</td>
-                  <td>0000-00-00 00:00:00</td>
-                  <td class="userStatus normal">휴면</td>
-                  <td>
-                    <a href="#" class="edit-btn">수정</a><br />
-                    <button class="deletebtn">재개</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td><input type="checkbox" class="chkbox" /></td>
-                  <td>5</td>
-                  <td>xxx...</td>
-                  <td>강동원</td>
-                  <td>M</td>
-                  <td>
-                    <select name="grade" class="grade">
-                      <option value="VVIP">VVIP</option>
-                      <option value="VVIP">VIP</option>
-                      <option value="VVIP">GOLD</option>
-                      <option value="VVIP">SILVER</option>
-                      <option value="VVIP">FAMILY</option>
-                    </select>
-                  </td>
-                  <td>15,000</td>
-                  <td>xxxxx@...</td>
-                  <td>010...</td>
-                  <td>0000-00-00 00:00:00</td>
-                  <td class="userStatus normal">탈퇴</td>
-                  <td>
-                    <a href="#" class="edit-btn">수정</a><br />
-                    <button class="deletebtn">비활성</button>
-                  </td>
-                </tr>
               </tbody>
             </table>
-            <div class="buttons">
-              <a href="#" id="openRegisterModalBtn" class="write-btn"
-                >선택수정</a
-              >
-            </div>
 
             <div class="pagination">
               <button class="page-btn">이전</button>
@@ -328,7 +246,7 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button id="registerConfirmBtn" class="confirm-btn">등록하기</button>
+          <button class="confirm-btn">등록하기</button>
         </div>
       </div>
     </div>
@@ -371,7 +289,7 @@
   // 버전 등록 모달 동작
   document.addEventListener('DOMContentLoaded', function() {
     var registerModal = document.getElementById("versionRegisterModal");
-    var registerBtn = document.getElementById("openRegisterModalBtn"); // 등록 버튼
+    var registerBtn = document.getElementById("registerModalBtn"); // 등록 버튼
     var registerCloseBtn = document.getElementById("registerModalClose"); // 등록 모달 닫기 버튼
     var closeButton = document.getElementById("registerCloseBtn"); // 하단 닫기 버튼
     var confirmButton = document.getElementById("registerConfirmBtn");

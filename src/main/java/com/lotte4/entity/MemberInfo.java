@@ -31,10 +31,9 @@ public class MemberInfo {
 
     @CreationTimestamp
     private String updatedAt;
-    @Builder.Default()
-    private String status = "active";
-    @Builder.Default()
-    private String grade = "family";
+
+    private String status;
+    private String grade;
 
 //    @Enumerated(EnumType.ORDINAL)
 //    private status status;
@@ -56,6 +55,17 @@ public class MemberInfo {
         VIP,    //4번
         VVIP,   //5번
         SELLER, //6번
+    }
+
+    // status와 grade에 디폴트값이 안들어가서 추가
+    @PrePersist
+    public void prePersist() {
+        if (this.status == null) {
+            this.status = "정상";
+        }
+        if (this.grade == null) {
+            this.grade = "FAMILY";
+        }
     }
 
     public MemberInfoDTO toDTO() {

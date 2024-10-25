@@ -9,25 +9,25 @@
             <div class="accountArea">
                 <ul>
                     <li  sec:authorize="isAuthenticated()">
-                        <span>[[${#authentication.name}]]님</span>
+                        <span class="loginname area">[[${#authentication.name}]]님</span>
                     </li>
                     <li sec:authorize="!isAuthenticated()">
-                        <a th:href="@{/member/login}">로그인</a>
+                        <a th:href="@{/member/login}" class="area">로그인</a>
                     </li>
                     <li sec:authorize="hasRole('ADMIN') or hasRole('seller')">
-                        <a th:href="@{/admin/index}">관리자</a>
+                        <a th:href="@{/admin/index}" class="area">관리자</a>
                     </li>
                     <li  sec:authorize="isAuthenticated()">
-                        <a th:href="@{/member/logout}"  id="logout">로그아웃</a>
+                        <a th:href="@{/member/logout}" id="logout" class="area">로그아웃</a>
                     </li>
                     <li sec:authorize="!isAuthenticated()">
-                        <a th:href="@{/member/join}">회원가입</a>
+                        <a th:href="@{/member/join}" class="area">회원가입</a>
                     </li>
                     <li>
-                        <a th:href="@{/my/order}">주문배송</a>
+                        <a th:href="@{/my/order}" class="area">주문배송</a>
                     </li>
                     <li>
-                        <a th:href="@{/cs/index}">고객센터</a>
+                        <a th:href="@{/cs/index}" class="area">고객센터</a>
                     </li>
                 </ul>
             </div>

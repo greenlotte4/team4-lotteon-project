@@ -5,6 +5,14 @@ header {
     background-color: white;
 }
 
+.loginname {
+    font-size: 14px;
+}
+
+.area {
+    color: #757575 !important;
+}
+
 /* main과 sub는 중앙 정렬 */
 .main, .sub, .util {
     max-width: 1200px; /* 최대 너비 */
