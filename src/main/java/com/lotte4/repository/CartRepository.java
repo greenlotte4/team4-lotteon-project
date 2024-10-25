@@ -14,7 +14,7 @@ public interface CartRepository extends JpaRepository<Cart, Integer> {
 
     // Cart findByUserId
     // Cart entity 내의 User 객체의 userId를 기준으로 데이터를 검색
-    Optional<List<Cart>> findByUser_UserId(int user_id);
+    Optional<List<Cart>> findByUser_Uid(String uid);
 
 
 

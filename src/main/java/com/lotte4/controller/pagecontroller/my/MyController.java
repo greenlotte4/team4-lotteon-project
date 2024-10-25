@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @Log4j2
 @RequiredArgsConstructor
 @RequestMapping("/my")
@@ -63,9 +65,14 @@ public class MyController {
 //        }
 //    }
 
-    // TODO : 나의설정 (uid를 나중에 principal로 바꿔야함)
-    @GetMapping("/info/{uid}")
-    public String info(@PathVariable("uid") String uid, Model model) {
+    @GetMapping("/info")
+    public String info(Model model, Principal principal) {
+
+        if (principal == null || principal.getName() == null) {
+            return "redirect:/member/login"; // 로그인 체크
+        }
+
+        String uid = principal.getName(); // principal에서 uid 가져오기
 
         UserDTO userDTO = userService.selectUser(uid);
 

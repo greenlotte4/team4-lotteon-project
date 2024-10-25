@@ -8,10 +8,13 @@
         <div class="util innerContent">
             <div class="accountArea">
                 <ul>
+                    <li  sec:authorize="isAuthenticated()">
+                        <span>[[${#authentication.name}]]님</span>
+                    </li>
                     <li sec:authorize="!isAuthenticated()">
                         <a th:href="@{/member/login}">로그인</a>
                     </li>
-                    <li  sec:authorize="hasRole('ADMIN')">
+                    <li sec:authorize="hasRole('ADMIN') or hasRole('seller')">
                         <a th:href="@{/admin/index}">관리자</a>
                     </li>
                     <li  sec:authorize="isAuthenticated()">
@@ -70,7 +73,7 @@
                         </li>
 
                         <li>
-                            <a th:href="@{/product/cart/4}">
+                            <a th:href="@{/product/cart}">
                             <button type="button" class="cart">
                                 <img src="https://static.lotteon.com/p/common/foCommon/assets/img/icon_cart_black.svg" alt="장바구니">
                                 <span>장바구니</span>
