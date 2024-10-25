@@ -41,7 +41,8 @@ public class Order {
     @JoinColumn(name = "memberInfoId") // 이 컬럼은 MemberInfo 엔티티의 id와 매핑되어야 함
     private MemberInfo memberInfo;
 
-    @OneToOne(mappedBy = "order")
+    @OneToOne
+    @JoinColumn(name = "couponId")
     private Coupon coupon;
 
     @OneToOne(mappedBy = "order")

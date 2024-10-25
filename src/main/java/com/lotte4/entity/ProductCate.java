@@ -35,6 +35,4 @@ public class ProductCate {
 
     @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
     private List<ProductCate> children = new ArrayList<>();
-
-
 }
