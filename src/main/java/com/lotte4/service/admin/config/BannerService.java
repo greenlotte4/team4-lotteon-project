@@ -64,7 +64,7 @@ public class BannerService {
 
     public String insertBanner(BannerDTO bannerDTO, MultipartFile bannerImg) throws IOException {
 
-        String uploadDir = System.getProperty("user.dir") + "/uploads/";
+        String uploadDir = System.getProperty("user.dir") + "/uploads/config/";
 
         File uploadDirectory = new File(uploadDir);
         if (!uploadDirectory.exists()) {
