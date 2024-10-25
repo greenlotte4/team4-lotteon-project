@@ -85,13 +85,22 @@
                     <a th:href="@{/admin/cs/notice/write}" class="write-btn">작성하기</a>
                 </div>
                 <div class="pagination">
-                    <button class="page-btn">이전</button>
-                    <button class="page-num">1</button>
-                    <button class="page-num">2</button>
-                    <button class="page-num">3</button>
-                    <button class="page-num">4</button>
-                    <button class="page-num">5</button>
-                    <button class="page-btn">다음</button>
+                    <button class="page-btn"
+                            th:disabled="${currentPage == 0}"
+                            th:onclick="'window.location.href=\'?page=' + ${currentPage - 1} + '&size=8\''">
+                        이전
+                    </button>
+                    <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                        <button class="page-num"
+                                th:classappend="${i == currentPage} ? 'active'"
+                                th:onclick="'window.location.href=\'?page=' + ${i} + '&size=8\''"
+                                th:text="${i + 1}">1</button>
+                    </span>
+                    <button class="page-btn"
+                            th:disabled="${currentPage + 1 == totalPages}"
+                            th:onclick="'window.location.href=\'?page=' + ${currentPage + 1} + '&size=8\''">
+                        다음
+                    </button>
                 </div>
             </div>
         </section>
