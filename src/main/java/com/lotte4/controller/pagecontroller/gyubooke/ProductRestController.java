@@ -11,12 +11,15 @@ import com.lotte4.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -33,7 +36,7 @@ public class ProductRestController {
     }
 
 
-    @PostMapping(value = "/admin/product/register", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    @PostMapping(value = "/admin/product/register", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public int productRegisterCate(@RequestParam("cateId") int cateId,
                                    @RequestParam("img_1") MultipartFile img_1,
                                    @RequestParam("img_2") MultipartFile img_2,
@@ -49,7 +52,8 @@ public class ProductRestController {
         Map<String, List<String>> optionsMap = null;
         try {
             optionsMap = objectMapper.readValue(optionsJson,
-                    new TypeReference<Map<String, List<String>>>(){});
+                    new TypeReference<Map<String, List<String>>>() {
+                    });
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -66,16 +70,39 @@ public class ProductRestController {
         productDTO.setDetail(detail);
 
         ProductDTO dto = productService.insertProduct(productDTO);
-
-        return dto.getProductId();
+        if (dto != null) {
+            return dto.getProductId();
+        }
+        return 0;
     }
 
     @PostMapping("/admin/product/register/detail")
-    public void productRegisterCate(@RequestBody ProductDetailDTO productDetailDTO) {
+    public ResponseEntity<String> productRegisterCate(@RequestBody ProductDetailDTO productDetailDTO) {
         log.info(productDetailDTO);
-        productService.insertProductDetail(productDetailDTO);
+        ProductDetailDTO dto = productService.insertProductDetail(productDetailDTO);
+        if (dto != null) {
+            return ResponseEntity.ok().body("success");
+        }
+        return ResponseEntity.ok().body("failure");
     }
 
+    @PostMapping("/admin/product/register/more")
+    public ResponseEntity<String> productRegisterMore(@RequestParam String prodONames,
+                                                      @RequestParam String prodPrices,
+                                                      @RequestParam String prodStocks,
+                                                      @RequestParam String mixedValuesList
+    ) {
+
+        log.info(prodONames);
+        log.info(prodPrices);
+        log.info(prodStocks);
+        log.info(mixedValuesList);
+
+        productService.makeProductVariantDTOAndInsert(prodONames, prodPrices, prodStocks, mixedValuesList);
+
+        return ResponseEntity.ok().body("success");
+
+    }
 }
 
 
