@@ -79,7 +79,7 @@
                     <tr th:each="banner, index : ${configBanners}">
                         <td><input type="checkbox" class="checkbox"></td>
                         <td>[[${index.index+1}]]</td>
-                        <td><a th:href="@{'/uploads/' + ${banner.img}}"><img th:src="@{'/uploads/' + ${banner.img}}" alt="배너 사진" class="product-image"></a></td>
+                        <td><a th:href="@{'/uploads/config/' + ${banner.img}}"><img th:src="@{'/uploads/config/' + ${banner.img}}" alt="배너 사진" class="product-image"></a></td>
                         <td><span>[[${banner.name}]]</span>
                             <span>[[${banner.size}]]</span>
                             <span>[[${banner.background}]]<span class="backColor" th:style="'background: ' + ${banner.background}">　　</span></span>

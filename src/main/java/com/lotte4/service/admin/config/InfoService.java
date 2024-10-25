@@ -81,7 +81,7 @@ public class InfoService {
     }
     public InfoDTO uploadLogos(MultipartFile headerLogo, MultipartFile footerLogo, MultipartFile favicon) throws IOException {
         Info info = infoRepository.findById(1).orElseThrow();
-        String uploadDir = System.getProperty("user.dir") + "/uploads/";
+        String uploadDir = System.getProperty("user.dir") + "/uploads/config/";
 
         File uploadDirectory = new File(uploadDir);
         if (!uploadDirectory.exists()) {

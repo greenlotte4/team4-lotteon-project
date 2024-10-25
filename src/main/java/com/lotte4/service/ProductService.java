@@ -87,7 +87,7 @@ public class ProductService {
 
     public String uploadProdImg(MultipartFile file) {
 
-        String uploadDir = System.getProperty("user.dir") + "/uploads/";
+        String uploadDir = System.getProperty("user.dir") + "/uploads/product/";
         File fileUploadPath = new File(uploadDir);
 
         // 파일 업로드 디렉터리가 존재하지 않으면 디렉터리 생성
