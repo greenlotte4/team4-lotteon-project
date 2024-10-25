@@ -58,8 +58,10 @@
                     </tr>
                     </thead>
                     <tbody id="boardListBody">
+
                     <tr th:each="board : ${boardList}">
                         <td><input type="checkbox" class="chkbox" th:data-board-id="${board.boardId}"></td>
+
                         <td th:text="${board.boardId}"></td>
                         <td th:text="${board.cate.parent.name}"></td>
                         <td th:text="${board.cate.boardCateId}"></td>
@@ -94,6 +96,7 @@
 </body>
 </html>
 <script>
+
     document.addEventListener("DOMContentLoaded", function() {
         // 모든 체크박스 요소 가져오기
         const selectAllCheckbox = document.querySelector('.chkbox-select-all');
@@ -194,6 +197,7 @@
             });
         });
     });
+
     // 1차 카테고리 선택 시 2차 카테고리 값을 동적으로 가져와서 설정
     const category1Select = document.getElementById('category1');
     const category2Select = document.getElementById('category2');

@@ -1,18 +1,16 @@
 package com.lotte4.controller.pagecontroller.my;
 
+import com.lotte4.dto.MemberInfoDTO;
 import com.lotte4.dto.UserDTO;
-import com.lotte4.entity.MemberInfo;
 import com.lotte4.service.MemberInfoService;
 import com.lotte4.service.UserService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -54,18 +52,38 @@ public class MyController {
     }
 
 
-    @ResponseBody
-    @GetMapping("/info")
-    public ResponseEntity<UserDTO> info(@RequestParam("uid") String uid) {
+//    @ResponseBody
+//    @GetMapping("/info")
+//    public ResponseEntity<UserDTO> infoselect(@RequestParam("uid") String uid) {
+//        UserDTO userDTO = userService.selectUser(uid);
+//        if(userDTO != null) {
+//            return ResponseEntity.ok(userDTO);
+//        } else {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
+
+    // TODO : 나의설정 (uid를 나중에 principal로 바꿔야함)
+    @GetMapping("/info/{uid}")
+    public String info(@PathVariable("uid") String uid, Model model) {
+
         UserDTO userDTO = userService.selectUser(uid);
-        if(userDTO != null) {
-            return ResponseEntity.ok(userDTO);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+
+        model.addAttribute("userDTO", userDTO);
+        log.info("userDTO : " + userDTO);
+
+        return "/my/info";
     }
 
+    // 나의설정 정보수정
+    @PostMapping("/info")
+    public ResponseEntity<MemberInfoDTO> updateInfo(@RequestBody MemberInfoDTO memberInfoDTO) {
+        log.info("controller>memberInfoDTO : " + memberInfoDTO);
 
+        MemberInfoDTO updatedMemberInfo = memberInfoService.updateMemberInfo(memberInfoDTO);
+        log.info("updatedMemberInfo : " + updatedMemberInfo);
+        return ResponseEntity.ok(updatedMemberInfo);
+    }
 
 
 }

@@ -27,14 +27,26 @@
             <h3>배너관리</h3>
             <div class="form">
                 <div class="tab-container">
-                    <a href="#" class="tab active">메인상단 배너</a>
-                    <a href="#" class="tab">메인슬라이더 배너</a>
-                    <a href="#" class="tab">상품 상세보기 배너</a>
-                    <a href="#" class="tab">회원로그인 배너 </a>
-                    <a href="#" class="tab">마이페이지 배너</a>
+                    <a th:href="@{/admin/config/banner/MAIN1}" class="tab"
+                       th:classappend="${locationNow == 'MAIN1'} ? 'active' : ''">메인상단 배너</a>
+                    <a th:href="@{/admin/config/banner/MAIN2}" class="tab"
+                       th:classappend="${locationNow == 'MAIN2'} ? 'active' : ''">메인슬라이더 배너</a>
+                    <a th:href="@{/admin/config/banner/PRODUCT1}" class="tab"
+                       th:classappend="${locationNow == 'PRODUCT1'} ? 'active' : ''">상품 상세보기 배너</a>
+                    <a th:href="@{/admin/config/banner/MEMBER1}" class="tab"
+                       th:classappend="${locationNow == 'MEMBER1'} ? 'active' : ''">회원로그인 배너 </a>
+                    <a th:href="@{/admin/config/banner/MY1}" class="tab"
+                       th:classappend="${locationNow == 'MY1'} ? 'active' : ''">마이페이지 배너</a>
                 </div>
                 <div class="version-header">
-                    <h4>메인 상단배너</h4>
+                    <th:block th:switch="${locationNow}">
+                        <h4 th:case="'MAIN1'">메인상단 배너</h4>
+                        <h4 th:case="'MAIN2'">메인슬라이더 배너</h4>
+                        <h4 th:case="'PRODUCT1'">상품 상세보기 배너</h4>
+                        <h4 th:case="'MEMBER1'">회원로그인 배너</h4>
+                        <h4 th:case="'MY1'">마이페이지 배너</h4>
+                        <h4 th:case="*">기타 배너</h4>
+                    </th:block>
                 </div>
                 <table class="inquiry-table">
                     <colgroup>
@@ -51,7 +63,7 @@
                     </colgroup>
                     <thead>
                     <tr>
-                        <th><input type="checkbox" class="chkbox"></th>
+                        <th><input type="checkbox" id="selectAll"></th>
                         <th>번호</th>
                         <th>이미지</th>
                         <th>배너정보</th>
@@ -64,25 +76,33 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td><input type="checkbox" class="chkbox"></td>
-                        <td>1</td>
-                        <td><img src="/images/product1.png" alt="배너 사진" class="product-image"></td>
-                        <td>배너명 크기 : 1200 x 80 배경색 : #ffff00 배너링크</td>
-                        <td>MAIN1</td>
-                        <td>2023/01/01</td>
-                        <td>2023/01/07 </td>
-                        <td>13:00</td>
-                        <td>15:00</td>
+                    <tr th:each="banner, index : ${configBanners}">
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td>[[${index.index+1}]]</td>
+                        <td><a th:href="@{'/uploads/' + ${banner.img}}"><img th:src="@{'/uploads/' + ${banner.img}}" alt="배너 사진" class="product-image"></a></td>
+                        <td><span>[[${banner.name}]]</span>
+                            <span>[[${banner.size}]]</span>
+                            <span>[[${banner.background}]]</span>
+                            <span><a th:href="${banner.link}">[[${banner.link}]]</a></span></td>
+                        <td>[[${banner.location}]]</td>
+                        <td>[[${banner.sDate}]]</td>
+                        <td>[[${banner.eDate}]]</td>
+                        <td>[[${banner.sTime}]]</td>
+                        <td>[[${banner.eTime}]]</td>
                         <td>
-                            <a href="#" class="edit-btn">활성</a>
-                            <button class="deletebtn">비활성</button>
+                            <th:block th:if="${banner.state} == 0">
+                                <a href="#" class="edit-btn">활성</a>
+                            </th:block>
+                            <th:blcok th:unless="${banner.state} == 0">
+                                <button class="deletebtn">비활성</button>
+                            </th:blcok>
                         </td>
+                        <input type="hidden" th:value="${banner.bannerId}" class="bannerId"/>
                     </tr>
                     </tbody>
                 </table>
                 <div class="buttons">
-                    <button class="delete-btn" disabled>선택 삭제</button>
+                    <button class="delete-btn" id="deleteBtn">선택 삭제</button>
                     <a href="#" id="openRegisterModalBtn" class="write-btn">배너등록</a>
                 </div>
 
@@ -100,28 +120,28 @@
             <span id="registerModalClose" class="close">&times;</span>
         </div>
         <div class="modal-body">
-            <form id="versionRegisterForm">
+            <form id="versionRegisterForm" action="/lotteon/admin/config/banner" method="post" enctype="multipart/form-data">
                 <table class="modal-table">
                     <tr>
                         <th>배너이름</th>
-                        <td><input type="text" id="versionInput" placeholder="배너명을 입력하세요" required></td>
+                        <td><input type="text" id="bannerName" placeholder="배너명을 입력하세요" name="name" required></td>
                     </tr>
                     <tr>
                         <th>배너크기</th>
-                        <td><input type="text" id="changelogInput" placeholder="배너크기를 입력하세요" required></td>
+                        <td><input type="text" id="bannerSize" placeholder="배너크기를 입력하세요" name="size" required></td>
                     </tr>
                     <tr>
                         <th>배경색</th>
-                        <td><input type="text" id="changelogInput" placeholder="배너배경색을 입력하세요" required></td>
+                        <td><input type="color" id="bannerBackground" name="background" required></td>
                     </tr>
                     <tr>
                         <th>배너링크</th>
-                        <td><input type="text" id="changelogInput" placeholder="배너링크를 입력하세요" required></td>
+                        <td><input type="text" id="bannerLink" placeholder="배너링크를 입력하세요" name="link" required></td>
                     </tr>
                     <tr>
                         <th>배너위치</th>
                         <td>
-                            <select id="search-category" class="dropdown">
+                            <select id="bannerLocation" class="dropdown" name="location">
                                 <option>선택</option>
                                 <option>MAIN1</option>
                                 <option>MAIN2</option>
@@ -134,18 +154,22 @@
                     <tr>
                         <th>노출날짜</th>
                         <td>
-                            <input type="date" id="startDate" class="date" required>
+                            <input type="date" id="startDate" class="date" name="sDate" required>
                             ~
-                            <input type="date" id="endDate" class="date"  required>
+                            <input type="date" id="endDate" class="date" name="eDate" required>
                         </td>
                     </tr>
                     <tr>
                         <th>노출시간</th>
                         <td>
-                            <input type="time" id="startTime" class="date" required>
+                            <input type="time" id="startTime" class="date" name="sTime" required>
                             ~
-                            <input type="time" id="endTime" class="date"  required>
+                            <input type="time" id="endTime" class="date" name="eTime" required>
                         </td>
+                    </tr>
+                    <tr>
+                        <th>배너파일</th>
+                        <td><input type="file" id="bannerImg" name="bannerImg" /></td>
                     </tr>
                 </table>
             </form>
@@ -165,7 +189,7 @@
         var registerModal = document.getElementById("versionRegisterModal");
         var registerBtn = document.getElementById("openRegisterModalBtn"); // 등록 버튼
         var registerCloseBtn = document.getElementById("registerModalClose"); // 등록 모달 닫기 버튼
-        var closeButton = document.getElementById("registerCloseBtn"); // 하단 닫기 버튼
+
         var confirmButton = document.getElementById("registerConfirmBtn");
 
         // 등록 버튼 클릭 시 모달 열기
@@ -178,10 +202,6 @@
             registerModal.style.display = "none";
         };
 
-        // 하단 닫기 버튼 클릭 시 모달 닫기
-        closeButton.onclick = function() {
-            registerModal.style.display = "none";
-        };
 
         // 모달 외부 클릭 시 모달 닫기
         window.onclick = function(event) {
@@ -192,20 +212,130 @@
 
         // 등록 확인 버튼 클릭 시
         confirmButton.onclick = function() {
-            var version = document.getElementById("versionInput").value;
-            var changelog = document.getElementById("changelogInput").value;
+            const formData = new FormData();
 
-            if (version && changelog) {
-                // 등록 로직 추가 (서버 전송 또는 콘솔 출력)
-                console.log("버전:", version);
-                console.log("변경내역:", changelog);
+            formData.append("name", document.getElementById("bannerName").value);
+            formData.append("size", document.getElementById("bannerSize").value);
+            formData.append("background", document.getElementById("bannerBackground").value);
+            formData.append("link", document.getElementById("bannerLink").value);
+            formData.append("location", document.getElementById("bannerLocation").value);
+            formData.append("sDate", document.getElementById("startDate").value);
+            formData.append("eDate", document.getElementById("endDate").value);
+            formData.append("sTime", document.getElementById("startTime").value);
+            formData.append("eTime", document.getElementById("endTime").value);
 
-                // 등록 완료 후 모달 닫기
-                registerModal.style.display = "none";
+            const fileInput = document.getElementById("bannerImg");
+            if (fileInput.files.length > 0) {
+                formData.append("bannerImg", fileInput.files[0]);
+            }
+            // 빈칸 체크
+            if (formData.get("name") &&
+                formData.get("size") &&
+                formData.get("background") &&
+                formData.get("link") &&
+                formData.get("location") &&
+                formData.get("sDate") &&
+                formData.get("eDate") &&
+                formData.get("sTime") &&
+                formData.get("eTime")) {
+
+
+                console.log(formData.get("name"));
+                console.log(formData.get("size"));
+                console.log(formData.get("background"));
+                console.log(formData.get("link"));
+                console.log(formData.get("location"));
+                console.log(formData.get("sDate"));
+                console.log(formData.get("eDate"));
+                console.log(formData.get("sTime"));
+                console.log(formData.get("eTime"));
+
+                fetch('/lotteon/admin/config/banner', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(resp => resp.text())
+                    .then(data => {
+                        if (data.trim() === "success") {
+                            alert("배너 등록 성공!");
+                            const url = formData.get("location");
+                            // 추가 작업: 예를 들어 모달 닫기 등
+                            window.location.href = '/lotteon/admin/config/banner/'+url;
+                        } else {
+                            alert("배너 등록 실패!");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                    });
             } else {
                 alert("모든 필드를 입력해주세요.");
             }
         };
+
+        //체크 박스 기능
+        const selectAll = document.getElementById("selectAll");
+        const checkboxes = document.querySelectorAll('.checkbox');
+
+        selectAll.onclick = function(e) {
+            console.log("SELECT ALL");
+            selectAllCheck(e.target);
+        };
+
+        function selectAllCheck(selectAllCheckbox) {
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+        }
+
+        //삭제
+        const deleteBtn = document.getElementById("deleteBtn");
+        deleteBtn.onclick = function (e){
+            e.preventDefault();
+
+            const selectedCheckboxes = document.querySelectorAll('.checkbox:checked');
+            console.log(selectedCheckboxes);
+
+            let selectedIds = [];
+
+            for (let checkbox of selectedCheckboxes) {
+                const row = checkbox.closest('tr');
+                const productNo = parseInt(row.getElementsByClassName('bannerId')[0].value,10);
+                console.log(productNo);
+                selectedIds.push(productNo);
+            }
+
+            if (selectedIds.length === 0) {
+                alert('삭제하려는 상품을 선택하세요.');
+                return;
+            }
+
+            if (!confirm('선택한 상품을 정말 삭제하시겠습니까?')) {
+                return;
+            }
+
+            fetch('/lotteon/admin/config/banner', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(selectedIds)
+            })
+                .then(resp => resp.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('삭제되었습니다.');
+                        location.reload();
+                    } else {
+                        alert('삭제에 실패했습니다.');
+                    }
+                })
+                .catch(err => {
+                    console.error('Error:', err);
+                    alert('삭제 중 오류가 발생했습니다.');
+                });
+        }
+
     });
 
 </script>

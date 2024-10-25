@@ -25,20 +25,27 @@ public class Order {
     private int usePoint;
     private int savePoint;
     private int totalPrice;
-    // 영수증
+    
+    //색상
+    private String option1;
+    //사이즈
+    private String option2;
+
+    // 배송지
     private String recipName;
     private String recipHp;
-    private String recupZip;
+    private String recipZip;
     private String recipAddr1;
     private String recipAddr2;
 
+    //결재방법
     private int Pay;
     private int Status;
     private LocalDateTime Date;
-    private String couponUse;
+    private int couponUse;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "memberInfoId") // 이 컬럼은 MemberInfo 엔티티의 id와 매핑되어야 함
+    @JoinColumn(name = "memberInfoId")
     private MemberInfo memberInfo;
 
     @OneToOne(mappedBy = "order")

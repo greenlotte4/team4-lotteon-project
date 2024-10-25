@@ -11,52 +11,15 @@
     <link rel="shortcut icon" type="image/x-icon" href="../images/favicon.ico"/>
     <link rel="stylesheet" th:href="@{/css/product/product_common.css}"/>
     <link rel="stylesheet" th:href="@{/css/product/style_product_order.css}"/>
-    <script>
-        window.onload = function () {
-            const addPoint = document.getElementById("addPoint");
-            const allPoint = document.getElementById("allPoint");
-            const nowPoint = document.getElementById("nowPoint");
-
-            let maxPoint = parseInt(nowPoint.innerText) || 0;
-
-            addPoint.addEventListener('input', function (){
-                let usedPoint = parseInt(addPoint.value) || 0;
-
-                if (usedPoint < 0) {
-                    usedPoint = 0;
-                    addPoint.value = 0; // 입력값도 0으로 수정
-                }
-
-                // 사용 포인트가 현재 포인트보다 클 경우 최대 포인트로 제한
-                if (usedPoint > maxPoint) {
-                    usedPoint = maxPoint;
-                    addPoint.value = maxPoint; // 입력값도 최대 포인트로 수정
-                }
-
-                // 남은 포인트 동적으로 업데이트
-                nowPoint.innerText = (maxPoint - usedPoint) + 'p';
-            });
-
-            allPoint.addEventListener('click', function (){
-                if (confirm("전체 사용하시겠습니까?")){
-                    alert("전체 사용을 선택하셨습니다.")
-                    addPoint.value = maxPoint;
-                    nowPoint.innerText = '0p';
-                } else{
-                    alert("취소하셨습니다.")
-                }
-            });
-        }
-
-    </script>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-
+    <script th:src="@{/js/order.js}" defer></script>
 </head>
 <body>
-<div id="bannerTop" class="on" style="background: #e4dfdf;">
-    <article>
-        <a href="#"><img src="../../../images/main/topBanner1.png"/></a>
-        <button class="btnClose">close</button>
+<div id="bannerTop" class="on">
+    <article th:each="banner : ${banners}" th:if="${banner.location == 'MAIN1'}" th:style="'background: ' + ${banner.background}">
+        <a th:href="${banner.link}">
+            <img th:src="@{'/uploads/' + ${banner.img}}" alt="랜덤 배너 이미지"/>
+        </a>
     </article>
 </div>
 <div id="wrapper">
@@ -71,9 +34,9 @@
 
             <!-- Breadcrumb -->
             <div class="breadcrumb">
-                <a href="#">Home</a> &gt;
-                <a href="#">장바구니</a> &gt;
-                <a href="#">주문하기</a>
+                <a th:href="@{/index}">Home</a> &gt;
+                <a th:href="@{/product/cart}">장바구니</a> &gt;
+                <a th:href="@{/product/order}">주문하기</a>
                 <section class="order-section">
             </div>
             <!-- 주문하기 제목 -->
@@ -84,21 +47,41 @@
                     <thead>
                     <tr>
                         <th>상품정보</th>
+                        <th>색상</th>
+                        <th>사이즈</th>
                         <th>판매가</th>
                         <th>수량</th>
                         <th>구매가</th>
                         <th>배송정보</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <tr>
+                    <tbody >
+                    <tr th:each="product : ${product}">
                         <td class="product-info">
-                            <img src="/images/product/image2.png" alt="상품 이미지">
-                            <div class="product-details">
-                                <p class="product-name">[브랜드] 상품명</p>
+                            <img th:src="@{'/uploads/' + ${product.img1}}" alt="상품 이미지">
+                            <div class="product-details" th:text="${product.name}"></div>
+                        </td>
+                        <td>
+                            <div class="product-option1">
+                                <select name="color" class="option1">
+                                    <option th:each="color : ${product.options['색상']}"
+                                            th:value="${color}"
+                                            th:text="${color}">
+                                    </option>
+                                </select>
                             </div>
                         </td>
-                        <td>33,000원</td>
+                        <td>
+                            <div class="product-option2">
+                                <select name="size" class="option2">
+                                    <option th:each="size : ${product.options['사이즈']}"
+                                            th:value="${size}"
+                                            th:text="${size}">
+                                    </option>
+                                </select>
+                            </div>
+                        </td>
+                        <td th:text="${product.price}"></td>
                         <td>
                             <div class="quantity">
                                 <p>1</p>
@@ -106,11 +89,11 @@
                         </td>
                         <td>
                             <div class="price-info">
-                                <del>33,000원</del>
-                                <span class="discount-price">23,760원</span>
+                                <del th:text="${product.price}"></del>
+                                <span class="discount-price" th:text="${product.price}-(${product.price/product.discount})"></span>
                             </div>
                         </td>
-                        <td class="shipping-info">무료배송</td>
+                        <td class="shipping-info" th:text="${product.deliveryFee != null ? product.deliveryFee : '무료배송'}"></td>
                     </tr>
                     </tbody>
                 </table>
@@ -125,14 +108,14 @@
                             <tr>
                                 <th>현재포인트 : </th>
                                 <td>
-                                    <span id="nowPoint">7200p</span>
+                                    <span id="nowPoint">53000p</span>
                                 </td>
                             </tr>
                             <tr>
                                 <th>사용포인트 : </th>
                                 <td>
                                     <div style="display: flex;">
-                                        <input type="number" id="addPoint" step="1000" style="width: 80%;">
+                                        <input type="number" id="addPoint" step="5000" style="width: 80%;">
                                         <button id="allPoint">전체<br>사용</button>
                                     </div>
                                     <p style="text-align: center; font-size: 10px" >포인트 5000p 미만 사용불가</p>
@@ -142,7 +125,12 @@
                                 <th>쿠폰선택</th>
                                 <td>
                                     <select name="etc" id="condition" >
-                                        <option value="condition">[브랜드] 10000원 쿠폰</option>
+                                        <option value="condition">쿠폰 사용 안함</option>
+                                        <option value="condition">[나이키] 20000원 쿠폰</option>
+                                        <option value="condition">[나이키] 10000원 쿠폰</option>
+                                        <option value="condition">[나이키] 5000원 쿠폰</option>
+                                        <option value="condition">[나이키] 3000원 쿠폰</option>
+                                        <option value="condition">[나이키] 2000원 쿠폰</option>
                                     </select>
                                 </td>
                             </tr>
@@ -153,25 +141,26 @@
                         <div class="checkout-details">
                             <table class="checkout-row">
                                 <th><p class="tableTitle">최종 결제</p></th>
-                                <tr class="checkout-column">
+                                <tr class="checkout-column" >
                                     <th>총 판매가</th>
-                                    <td>33,000원</td>
+                                    <td id="all__sold" th:text="${product.price} + '원'"></td>
                                 </tr>
                                 <tr class="checkout-column">
                                     <th>총 할인금액</th>
-                                    <td class="discount">9,240원</td>
+                                    <td class="discount" id="all__discount" th:text="${product.price}-(${product.price/product.discount}) + '원'"></td>
                                 </tr>
                                 <tr class="checkout-column">
                                     <th>배송비</th>
-                                    <td>0원</td>
+                                    <td id="all__deliveryfee" th:text="${product.deliveryFee} + '원'"></td>
                                 </tr>
                                 <tr class="checkout-price">
                                     <th>총 결제 금액</th>
-                                    <td>23,760원</td>
+                                    <td id="all__totalPrice">원</td>
                                 </tr>
+
                             </table>
                         </div>
-                        <a th:href="@{/product/complete}" type="submit" class="checkout-btn">결제하기</a>
+                            <a type="submit" id="checkoutBtn" class="checkout-btn">결제하기</a>
                     </aside>
                 </section> <!-- order-right -->
             </div>
@@ -184,39 +173,27 @@
                             <tr>
                                 <th>수령자</th>
                                 <td>
-                                    <input type=text value="수령자"/>
+                                    <input type=text id="recip__name" placeholder="수령자를 작성해 주세요"/>
 <!--                                    이부분 추후에 개발 여부 확인 <button type="button">동일인</button>-->
                                 </td>
                             </tr>
                             <tr>
                                 <th>휴대폰</th>
                                 <td>
-                                    <input type=text  id="phone-number" value="휴대폰"/>
+                                    <input type=text  id="phone__number" placeholder="수령인 휴대폰번호를 작성해 주세요" maxlength="13"/>
                                 </td>
                             </tr>
                             <tr>
                                 <th>우편번호</th>
                                 <td>
-                                    <input type="text" id="postcode" name="postcode" required>
+                                    <input type="text" id="postcode" name="postcode" required readonly>
                                     <button type="button" id="findPostcodeBtn">검색</button>
-                                    <script>
-                                        var findPostcodeBtn = document.getElementById("findPostcodeBtn");
-                                        findPostcodeBtn.onclick = function() {
-                                            new daum.Postcode({
-                                                oncomplete: function(data) {
-                                                    document.getElementById('postcode').value = data.zonecode;
-                                                    document.getElementById('address').value = data.roadAddress || data.jibunAddress;
-                                                    document.getElementById('detailAddress').focus();
-                                                }
-                                            }).open();
-                                        };
-                                    </script>
                                 </td>
                             </tr>
                             <tr>
                                 <th>기본주소</th>
                                 <td>
-                                    <input type="text" id="address" name="address" required>
+                                    <input type="text" id="address" name="address" required readonly>
                                 </td>
                             </tr>
                             <tr>

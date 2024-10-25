@@ -2,6 +2,8 @@ package com.lotte4.dto;
 
 import lombok.*;
 
+import java.sql.Date;
+import java.sql.Time;
 import java.time.LocalDateTime;
 @Getter
 @Setter
@@ -17,10 +19,9 @@ public class BannerDTO {
     private String background;
     private String link;
     private String location;
-    private String type;
-    private LocalDateTime sDate;
-    private LocalDateTime eDate;
-    private LocalDateTime sTime;
-    private LocalDateTime eTime;
+    private Date sDate;
+    private Date eDate;
+    private String sTime;
+    private String eTime;
     private int state;
 }

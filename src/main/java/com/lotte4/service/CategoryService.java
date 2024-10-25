@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.ModelMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +22,17 @@ public class CategoryService {
 
         ProductCate productCate = categoryRepository.findById(productCateId).orElseThrow(NullPointerException::new);
 
-        return new ProductCateDTO(productCate);
+        return modelMapper.map(productCate, ProductCateDTO.class);
     }
+
+    public int getProductCateIdByName(String name){
+        ProductCate productCate = categoryRepository.findByName(name);
+        if (productCate == null) {
+            return 0;
+        }
+        return productCate.getProductCateId();
+    }
+
 
     public List<ProductCateDTO> getALLProductCate(){
 

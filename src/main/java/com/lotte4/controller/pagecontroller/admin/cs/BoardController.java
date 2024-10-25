@@ -7,7 +7,10 @@ import com.lotte4.dto.BoardResponseDTO;
 import com.lotte4.entity.Board;
 import com.lotte4.service.board.BoardCateService;
 import com.lotte4.service.board.BoardService;
-import jdk.jshell.Snippet;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.PathVariable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -15,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 import java.util.Objects;
@@ -31,11 +35,13 @@ public class BoardController {
     // 글목록 - qna,fap
     @GetMapping("/admin/cs/{type}/list")
     public String AdminQnaList(Model model, @PathVariable String type) {
+
         if(Objects.equals(type, "notice")) {
             List<BoardCateDTO> cate1 = boardCateService.selectBoardCatesByDepth(0);
             model.addAttribute("cates", cate1);
         }
         if (Objects.equals(type, "faq") || Objects.equals(type, "qna")) {
+
             List<BoardCateDTO> cate1 = boardCateService.selectBoardCatesByDepth(1);
             model.addAttribute("cate1", cate1);
         }
@@ -72,11 +78,13 @@ public class BoardController {
         }
     }
 
+
     // faq 수정
     @GetMapping("/admin/cs/{type}/modify/{boardId}")
     public String AdminCsFaqModify(Model model,@PathVariable int boardId,@PathVariable String type) {
 
         if(Objects.equals(type, "notice")) {
+
             List<BoardCateDTO> cate1 = boardCateService.selectBoardCatesByDepth(0);
             model.addAttribute("cates", cate1);
         }

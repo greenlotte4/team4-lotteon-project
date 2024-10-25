@@ -23,7 +23,7 @@
         <!--section-->
         <section>
             <div class="breadcrumb">
-                <a href="#">Home</a> > <a href="#">상품관리</a> > <a href="#" class="location">상품목록</a>
+                <a th:href="@{/admin/index}">Home</a> > <a th:href="@{/admin/product/list}">상품관리</a> > <a th:href="@{/admin/product/list}" class="location">상품목록</a>
             </div>
             <h3>상품현황</h3>
             <div class="form">
@@ -42,13 +42,12 @@
                     <colgroup>
                         <col style="width: 1%">
                         <col style="width: 10%">
-                        <col style="width: 2%">
-                        <col style="width: 16%">
+                        <col style="width: 10%">
+                        <col style="width: 15%">
                         <col style="width: 11%">
                         <col style="width: 9%">
                         <col style="width: 9%">
-                        <col style="width: 7%">
-                        <col style="width: 13%">
+                        <col style="width: 9%">
                         <col style="width: 7%">
                         <col style="width: 10%">
                     </colgroup>
@@ -61,26 +60,24 @@
                         <th>판매가격</th>
                         <th>할인율</th>
                         <th>포인트</th>
-                        <th>재고</th>
                         <th>판매자</th>
                         <th>조회</th>
                         <th>관리</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
+                    <tr th:each="product : ${products}">
                         <td><input type="checkbox" class="chkbox"></td>
-                        <td><img src="/images/product1.png" alt="상품 사진" class="product-image"></td>
-                        <td>201603292</td>
-                        <td>상품명 #1</td>
-                        <td>32,000</td>
-                        <td>10%</td>
-                        <td>320</td>
-                        <td>1,000</td>
-                        <td>(주)다피라</td>
-                        <td>120</td>
+                        <td><img th:src="@{'/uploads/' + ${product.getImg1()}}" alt="상품 사진" class="product-image"></td>
+                        <td th:text="${product.productId}"></td>
+                        <td th:text="${product.name}"></td>
+                        <td th:text="${product.price}"></td>
+                        <td th:text="${product.discount}"></td>
+                        <td th:text="${product.point}"></td>
+                        <td th:text="${product.sellerInfoId}"></td>
+                        <td th:text="${product.hit}"></td>
                         <td>
-                            <a href="#" class="edit-btn">수정</a>
+                            <a th:href="@{/admin/product/modify(productId=${product.productId})}" class="edit-btn">수정</a>
                             <button class="deletebtn">삭제</button>
                         </td>
                     </tr>

@@ -38,5 +38,3 @@ public class BoardCateService {
                 .map(subCategory -> modelMapper.map(subCategory, BoardCateDTO.class))
                 .collect(Collectors.toList());
     }
-
-}

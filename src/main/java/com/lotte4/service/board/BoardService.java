@@ -107,4 +107,5 @@ public class BoardService {
             return false; // 삭제 실패
         }
     }
+
 }
