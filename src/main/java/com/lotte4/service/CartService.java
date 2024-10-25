@@ -32,8 +32,8 @@ public class CartService {
 //    }
 
     // 장바구니 목록 select
-    public List<CartDTO> getCartByUserId(int user_id) {
-        return cartRepository.findByUser_UserId(user_id)
+    public List<CartDTO> getCartByUserId(String uid) {
+        return cartRepository.findByUser_Uid(uid)
                 .map(cartList -> cartList.stream()
                         .map(cart -> modelMapper.map(cart, CartDTO.class))  // 각 Cart 객체를 CartDTO로 변환
                         .collect(Collectors.toList())  // List<CartDTO>로 수집

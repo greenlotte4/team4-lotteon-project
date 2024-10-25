@@ -67,10 +67,10 @@
               <tr>
                 <td>주소</td>
                 <td>
-                  <input type="text" th:value="${userDTO.memberInfo.address.zipCode}" id="zip" name="memberInfo.address.zipCode" placeholder="우편번호" readonly />
+                  <input type="text" th:value="${userDTO.memberInfo.address.zipCode}" id="zip" name="address.zipCode" placeholder="우편번호" readonly />
                   <button type="button" id="btnZip" class="register-btns">우편번호 찾기</button>
-                  <input type="text" id="addr1" name="memberInfo.address.addr1" th:value="${userDTO.memberInfo.address.addr1}" class="myInfo_address" placeholder="주소 검색" readonly />
-                  <input type="text" id="addr2" name="memberInfo.address.addr2" th:value="${userDTO.memberInfo.address.addr2}" class="myInfo_address" placeholder="상세주소 입력" />
+                  <input type="text" id="addr1" name="address.addr1" th:value="${userDTO.memberInfo.address.addr1}" class="myInfo_address" placeholder="주소 검색" readonly />
+                  <input type="text" id="addr2" name="address.addr2" th:value="${userDTO.memberInfo.address.addr2}" class="myInfo_address" placeholder="상세주소 입력" />
                 </td>
               </tr>
               <tr>

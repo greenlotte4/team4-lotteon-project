@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -31,10 +32,15 @@ public class ProductController {
         return "/product/list_grid";
     }
 
-    @GetMapping("/product/cart/{user_id}")
-    public String cart(Model model, @PathVariable("user_id") int user_id) {
+    @GetMapping("/product/cart")
+    public String cart(Model model, Principal principal) {
 
-        List<CartDTO> cartList = cartService.getCartByUserId(user_id);
+        if (principal == null || principal.getName() == null) {
+            return "redirect:/member/login"; // 로그인 체크
+        }
+        String uid = principal.getName(); // principal에서 uid 가져오기
+
+        List<CartDTO> cartList = cartService.getCartByUserId(uid);
 
         model.addAttribute("cartList", cartList);
 
