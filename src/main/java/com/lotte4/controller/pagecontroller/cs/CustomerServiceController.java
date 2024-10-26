@@ -13,19 +13,10 @@ public class CustomerServiceController {
         return "/cs/index";
     }
 
-    @GetMapping("/cs/notice/list")
-    public String notice(){
-        return "/cs/notice/list";
-    }
 
     @GetMapping("/cs/notice/view")
     public String noticeView(){
         return "/cs/notice/view";
-    }
-
-    @GetMapping("/cs/faq/list")
-    public String faq(){
-        return "/cs/faq/list";
     }
 
     @GetMapping("/cs/faq/view")

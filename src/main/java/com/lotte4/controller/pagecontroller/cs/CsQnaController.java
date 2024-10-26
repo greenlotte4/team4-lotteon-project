@@ -2,6 +2,7 @@ package com.lotte4.controller.pagecontroller.cs;
 
 import com.lotte4.dto.BoardCateDTO;
 import com.lotte4.dto.BoardRegisterDTO;
+import com.lotte4.dto.BoardResponseDTO;
 import com.lotte4.entity.Board;
 import com.lotte4.service.UserService;
 import com.lotte4.service.board.BoardCateService;
@@ -10,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -55,12 +57,18 @@ public class  CsQnaController {
 
     }
 
-//    // 글목록 : qna, faq
-//    @GetMapping("/cs/{type}/list")
-//    public String qna(Model model, @PathVariable String type) {
-//        model.addAttribute("boards", boardService.selectAllBoardByType(type));
-//        return "/cs/"+type+"/list";
-//    }
+    // 글목록 : qna, faq
+    @GetMapping("/cs/{type}/list")
+    public String qna(Model model, @PathVariable String type,
+                @RequestParam(defaultValue = "0") int page,
+                @RequestParam(defaultValue = "8") int size){
+        Page<BoardResponseDTO> boardList = boardService.selectAllBoardByType(type, page, size);
+        model.addAttribute("boards", boardList.getContent());
+        model.addAttribute("totalPages", boardList.getTotalPages());
+        model.addAttribute("currentPage", page);
+        return "/cs/"+type+"/list";
+    }
+
 
     // 글보기 : qna, faq
     @GetMapping("/cs/qna/view/{id}")
@@ -68,6 +76,7 @@ public class  CsQnaController {
         model.addAttribute("board", boardService.selectBoardById(id));
         return "/cs/qna/view";
     }
+
 
 }
 

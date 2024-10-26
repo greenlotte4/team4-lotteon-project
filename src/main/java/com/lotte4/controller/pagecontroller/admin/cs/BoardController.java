@@ -86,7 +86,7 @@ public class BoardController {
     }
 
 
-    // faq 수정
+    // faq 수정 - get
     @GetMapping("/admin/cs/{type}/modify/{boardId}")
     public String AdminCsFaqModify(Model model,@PathVariable int boardId,@PathVariable String type) {
 
@@ -106,7 +106,7 @@ public class BoardController {
         return "/admin/cs/"+type+"/modify";
     }
 
-    // 자주묻는질문. - 수정
+    //  faq 수정 - post
     @PostMapping("/admin/cs/{type}/modify")
     public String AdminCsFaqModify(BoardRegisterDTO boardDTO, @PathVariable String type) {
 
@@ -124,7 +124,6 @@ public class BoardController {
     }
     @PostMapping("/admin/cs/qna/reply/{id}")
     public String AdminQnaReply(BoardCommentDTO commentDTO, @PathVariable int id) {
-        log.info("왜 댓글이 안되지"+commentDTO);
         commentDTO.setBoardId(id);
         boardService.insertBoardQnaComment(commentDTO);
         return "redirect:/admin/cs/qna/view/"+id;
@@ -140,12 +139,5 @@ public class BoardController {
     }
 
 
-    // TODO : cate로 바꿔서 list 불러올 떄 동적 처리
-//    @ResponseBody
-//    @GetMapping("/admin/cs/board/list/{type}")
-//    public ResponseEntity<List<BoardResponseDTO>> AdminQnaList(@PathVariable String type) {
-//
-//        return ResponseEntity.ok(boardService.selectAllBoardByType(type));
-//    }
 
 }

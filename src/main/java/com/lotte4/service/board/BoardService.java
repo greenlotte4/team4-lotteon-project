@@ -36,13 +36,19 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final BoardCateRepository boardCateRepository;
     private final ModelMapper modelMapper;
-    //ProductCate productCate = modelMapper.map(productCateDTO, ProductCate.class);
+    // 타입별로 찾는 메서드
     public Page<BoardResponseDTO> selectAllBoardByType(String type, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Board> boardEntities = boardRepository.findByType(type, pageable);
         return boardEntities.map(board -> modelMapper.map(board, BoardResponseDTO.class));
     }
+    // 카테고리 아이디로 찾는 메서드
+    public Page<BoardResponseDTO> selectAllBoardByCateId(int cateId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Board> boardEntities = boardRepository.findByCate_BoardCateId(cateId,pageable);
+        return boardEntities.map(board -> modelMapper.map(board, BoardResponseDTO.class));
 
+    }
     public Board insertBoard(BoardRegisterDTO dto) {
         log.info("insert board qna:" +dto);
         return userRepository.findByUid(dto.getUid())
