@@ -104,8 +104,6 @@ public class ProductRestController {
                                     @RequestParam String optionNames,
                                     @RequestParam String productId
     ) {
-        log.info(productId);
-
         productService.makeProductVariantDTOAndInsert(optionNames, prodONames, prodPrices, prodStocks, mixedValuesList, productId);
 
     }

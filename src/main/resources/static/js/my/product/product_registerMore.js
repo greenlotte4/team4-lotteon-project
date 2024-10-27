@@ -21,7 +21,7 @@ function inputAllOnClick(button) {
     const stockValue = document.querySelector('#input_stock').value;
 
     // actionType에 따라 다른 동작 수행
-    switch(actionType) {
+    switch (actionType) {
         case 'sku':
             const skuConfirm = confirm(`제품고유명을 ${skuValue}로 일괄 등록하시겠습니까?`);
             if (skuConfirm === true) {
@@ -66,7 +66,7 @@ function inputAllOnClick(button) {
 
 // 모든 버튼에 이벤트 리스너 추가
 document.querySelectorAll('.btnInputAll').forEach(button => {
-    button.addEventListener('click', function(e) {
+    button.addEventListener('click', function (e) {
         e.preventDefault();
         inputAllOnClick(this);
     });
@@ -108,13 +108,12 @@ btnSubmit.addEventListener('click', function (e) {
     })
         .then(resp => resp.json())
         .then(data => {
-            if (data.status !== "success") {
-                alert('상세 등록에 실패하였습니다.')
-            }
             console.log(data);
         })
         .catch(err => console.log(err));
 
-    alert('상세 등록이 완료되었습니다!')
+    alert('상세 등록이 완료되었습니다! 상품 목록 페이지로 이동합니다.')
+    window.location.assign('/lotteon/admin/product/list');
+
 });
 
