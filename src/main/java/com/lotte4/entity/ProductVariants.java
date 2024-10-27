@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.CurrentTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -26,7 +27,7 @@ public class ProductVariants {
     private int stock;
 
     @Convert(converter = MapToJsonConverter.class)
-    private Map<String, String> options; // sku에 대한 옵션(ex 검은색 S / 파란색 L)
+    private Map<List<String>, List<String>> options; // sku에 대한 옵션(ex 검은색 S / 파란색 L)
 
     @CurrentTimestamp
     private LocalDateTime created_at;

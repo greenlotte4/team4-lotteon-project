@@ -36,9 +36,9 @@
                     </tr>
                     <tr id="inputAll"  th:value="1" >
                         <td th:each="optionName : ${optionNames}"></td>
-                        <td id="prodNameinputAll"><input type="text"><br><button id="btnProdNameinputAll" >일괄등록</button></td>
-                        <td id="prodPriceinputAll"><input type="text"><br><button id="btnProdPriceinputAll">일괄등록</button></td>
-                        <td id="prodStockinputAll"><input type="text"><br><button id="btnProdStockinputAll">일괄등록</button></td>
+                        <td><input type="text" id="input_sku"><br><button class="btnInputAll" data-type="sku">일괄등록</button></td>
+                        <td><input type="text" id="input_price"><br><button class="btnInputAll" data-type="price">일괄등록</button></td>
+                        <td><input type="text" id="input_stock"><br><button class="btnInputAll" data-type="stock">일괄등록</button></td>
                     </tr>
                     <tr th:each="mixedValues: ${mixedValuesList}" class="optionValues">
                         <td class="mixedValue" th:each="mixedValue : ${mixedValues}" th:text="${mixedValue}"></td>
@@ -48,6 +48,8 @@
                     </tr>
                 </table>
                 <input id="mixedValuesList" type="hidden" th:value="${mixedValuesList}">
+                <input id="optionNames" type="hidden" th:value="${optionNames}">
+                <input id="productId" type="hidden" th:value="${prodId}">
             <div class="buttons">
                 <button type="submit" class="write-btn" id="product_submit">등록</button>
             </div>

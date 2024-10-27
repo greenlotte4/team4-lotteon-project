@@ -19,6 +19,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
+/*
+    2024-10-26
+    전규찬
+     - formdata로 받은 String 값들을 replace / split 함수를 통해 가공하여 원하는
+       데이터 타입으로 변환하는 static 메서드 생성
+*/
+
 @Log4j2
 @Service
 @RequiredArgsConstructor
@@ -30,6 +37,34 @@ public class ProductService {
     private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
 
+    //
+    public static List<String> stringToStringList(String string) {
+
+        List<String> stringList = List.of(string.replace(" ", "").replace("[", "").replace("]", "").replace("\"", "").trim().split(","));
+
+        return stringList;
+    }
+
+    public static List<Integer> stringToIntegerList(String string) {
+
+        List<String> stringList = List.of(string.replace(" ", "").replace("[", "").replace("]", "").replace("\"", "").trim().split(","));
+        List<Integer> intList = stringList.stream().map(Integer::parseInt).toList();
+
+        return intList;
+    }
+
+    public static List<List<String>> stringToListInList(String string) {
+        List<String> stringList = List.of(string.replace(" ", "").replace("\"[[", "").replace("]]\"", "").split("],\\["));
+        List<List<String>> optionValues = new ArrayList<>();
+
+        for (String s : stringList) {
+            List<String> strings = List.of(s.split(","));
+            optionValues.add(strings);
+        }
+
+        return optionValues;
+    }
+
     public ProductDTO insertProduct(ProductDTO productDTO) {
         Product product = modelMapper.map(productDTO, Product.class);
         Product savedEntity = productRepository.save(product);
@@ -40,10 +75,6 @@ public class ProductService {
         ProductDetail productDetail = modelMapper.map(productDetailDTO, ProductDetail.class);
         ProductDetail savedEntity = productDetailRepository.save(productDetail);
         return modelMapper.map(savedEntity, ProductDetailDTO.class);
-    }
-
-    public void insertProductVariants(ProductVariants productVariants) {
-        productVariantsRepository.save(productVariants);
     }
 
     public List<CateForProdRegisterDTO> getProductCateByParent(int productCateId) {
@@ -107,76 +138,43 @@ public class ProductService {
                 log.error(e);
             }
 
-            return sName;
+            return "prod_img_" + sName;
         }
 
         return null;
     }
 
 
-    public void makeProductVariantDTOAndInsert(String prodONames, String prodPrices, String prodStocks, String mixedValuesList) {
+    public void makeProductVariantDTOAndInsert(String optionNames, String prodONames, String prodPrices, String prodStocks, String mixedValuesList, String productId) {
 
-        // substring을 활용하여 String -> List로 변환
-        List<String> names;
-        names = List.of(prodONames.substring(1, prodONames.length() - 1).split(","));
-
-        // substring을 활용하여 String -> List로 변환 + int타입으로 변환
-        List<String> prices1;
-        prices1 = List.of(prodPrices.substring(1, prodPrices.length() - 1).split(","));
-
-        List<String> prices2 = new ArrayList<>(List.of());
-        for (String price : prices1) {
-            prices2.add(price.substring(1, price.length() - 1));
-        }
-        List<Integer> prices3 = prices2.stream().map(Integer::parseInt)  // 각 문자열을 Integer로 변환
-                .toList();
-
-
-        // substring을 활용하여 String -> List로 변환 + int타입으로 변환
-        List<String> stocks1;
-        stocks1 = List.of(prodStocks.substring(1, prodPrices.length() - 1).split(","));
-
-        List<String> stocks2 = new ArrayList<>(List.of());
-        for (String stock : stocks1) {
-            stocks2.add(stock.substring(1, stock.length() - 1));
-        }
-        List<Integer> stocks3 = stocks2.stream().map(Integer::parseInt)  // 각 문자열을 Integer로 변환
-                .toList();
-
-        log.info("mixedValuesList: " + mixedValuesList);
-
-        // substring을 활용하여 String -> List로 변환
-
-         String[] values = mixedValuesList.substring(1, mixedValuesList.length() - 1).split("\\], \\[");
+        // 각 string 들을 알맞은 list 나 map 형식으로 바꿔주기
+        List<String> option_names = stringToStringList(optionNames);
+        List<String> prod_oNames = stringToStringList(prodONames);
+        List<Integer> prod_prices = stringToIntegerList(prodPrices);
+        List<Integer> prod_stocks = stringToIntegerList(prodStocks);
+        List<List<String>> mixed_values_list = stringToListInList(mixedValuesList);
+        int prodId = Integer.parseInt(productId.replace("\"", ""));
 
         // 동일한 인덱스의 값을 동시에 가져오는 반복문
-        for (int i = 0; i < names.size(); i++) {
+        for (int i = 0; i < prod_oNames.size(); i++) {
+
             ProductVariantsDTO productVariantsDTO = new ProductVariantsDTO();
+            Map<List<String>, List<String>> options = new LinkedHashMap<>();
 
-            String sku = names.get(i);
-            int price = prices3.get(i);
-            int stock = stocks3.get(i);
-
-            // 문자열 앞뒤의 대괄호 제거
-            values[i] = values[i].replace("[", "").replace("]", "");
-            String key = values[i].split(", ")[0].toString();
-            String value = values[i].split(", ")[1].toString();
-
-            Map<String, String> options = new HashMap<>();
-
-            options.put(key, value);
+            String sku = prod_oNames.get(i);
+            int price = prod_prices.get(i);
+            int stock = prod_stocks.get(i);
+            options.put(option_names, mixed_values_list.get(i));
 
             productVariantsDTO.setSku(sku);
             productVariantsDTO.setPrice(price);
             productVariantsDTO.setStock(stock);
             productVariantsDTO.setOptions(options);
+            productVariantsDTO.setProduct(getProductById(prodId));
 
             productVariantsRepository.save(modelMapper.map(productVariantsDTO, ProductVariants.class));
         }
     }
-
-
-
 }
 
 

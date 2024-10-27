@@ -1,8 +1,6 @@
 package com.lotte4.dto;
 
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +26,7 @@ public class ProductDTO {
     private String img2;
     private String img3;
     private String detail;
-    private String sellerInfoId;
+    private SellerInfoDTO sellerInfoId;
     private Map<String, List<String>> options;
     private int status;
     private int productCate_productCateId;

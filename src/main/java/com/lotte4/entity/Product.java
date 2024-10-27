@@ -34,7 +34,10 @@ public class Product {
     private String img2;
     private String img3;
     private String detail;
-    private String sellerInfoId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sellerInfoId")
+    private SellerInfo sellerInfoId;
 
     @Convert(converter = MapToJsonConverter.class)
     private Map<String, List<String>> options;
