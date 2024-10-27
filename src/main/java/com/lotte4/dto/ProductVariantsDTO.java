@@ -1,5 +1,9 @@
 package com.lotte4.dto;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -15,10 +19,20 @@ import java.util.Map;
 public class ProductVariantsDTO {
 
     private int variant_id;
-    private String sku; // 제품 고유 네이밍(ex 검은색 S 티셔츠 = GTXEM-101 / 검은색 M 티셔츠 = GTXEM-102)
+
+    @NotBlank(message = "SKU는 필수 항목입니다.")
+    private String sku;
+
+    @Min(value = 0, message = "가격은 0 이상이어야 합니다.")
     private int price;
+
+    @Min(value = 0, message = "재고는 0 이상이어야 합니다.")
     private int stock;
-    private Map<List<String>, List<String>> options; // sku에 대한 옵션(ex 검은색 S / 파란색 L)
+
+    @NotNull(message = "옵션은 필수 항목입니다.")
+    @NotEmpty(message = "옵션은 비어 있을 수 없습니다.")
+    private Map<List<String>, List<String>> options;
+
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
 

@@ -155,6 +155,12 @@ public class ProductService {
         List<List<String>> mixed_values_list = stringToListInList(mixedValuesList);
         int prodId = Integer.parseInt(productId.replace("\"", ""));
 
+        // 리스트 크기 검증
+        int size = prod_oNames.size();
+        if (prod_prices.size() != size || prod_stocks.size() != size || mixed_values_list.size() != size) {
+            throw new IllegalArgumentException("모든 리스트의 크기가 동일해야 합니다.");
+        }
+
         // 동일한 인덱스의 값을 동시에 가져오는 반복문
         for (int i = 0; i < prod_oNames.size(); i++) {
 
