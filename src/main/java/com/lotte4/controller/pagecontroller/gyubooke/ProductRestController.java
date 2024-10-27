@@ -14,12 +14,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -27,8 +25,9 @@ import java.util.stream.Collectors;
 public class ProductRestController {
 
     private final ProductService productService;
-    private final CategoryService categoryService;
     private final ObjectMapper objectMapper;
+
+    Map<String, String> response = new HashMap<>();
 
     @GetMapping("/admin/product/register/{parentId}")
     public List<CateForProdRegisterDTO> registerCategory(@PathVariable int parentId) {
@@ -37,13 +36,13 @@ public class ProductRestController {
 
 
     @PostMapping(value = "/admin/product/register", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public int productRegisterCate(@RequestParam("cateId") int cateId,
-                                   @RequestParam("img_1") MultipartFile img_1,
-                                   @RequestParam("img_2") MultipartFile img_2,
-                                   @RequestParam("img_3") MultipartFile img_3,
-                                   @RequestParam("detail_") MultipartFile detail_,
-                                   @RequestParam("optionsJson") String optionsJson,
-                                   @ModelAttribute ProductDTO productDTO, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<Map<String, Integer>> productRegisterCate(@RequestParam("cateId") int cateId,
+                                                                    @RequestParam("img_1") MultipartFile img_1,
+                                                                    @RequestParam("img_2") MultipartFile img_2,
+                                                                    @RequestParam("img_3") MultipartFile img_3,
+                                                                    @RequestParam("detail_") MultipartFile detail_,
+                                                                    @RequestParam("optionsJson") String optionsJson,
+                                                                    @ModelAttribute ProductDTO productDTO) {
 
         // 상품 카테고리 아이디 입력
         productDTO.setProductCate_productCateId(cateId);
@@ -70,37 +69,44 @@ public class ProductRestController {
         productDTO.setDetail(detail);
 
         ProductDTO dto = productService.insertProduct(productDTO);
+
+        Map<String, Integer> response1 = new HashMap<>();
+
         if (dto != null) {
-            return dto.getProductId();
+            int productId = dto.getProductId();
+            response1.put("productId", productId);
+            return ResponseEntity.ok().body(response1);
         }
-        return 0;
+
+        response1.put("productId", 0);
+        return ResponseEntity.ok().body(response1);
     }
 
     @PostMapping("/admin/product/register/detail")
-    public ResponseEntity<String> productRegisterCate(@RequestBody ProductDetailDTO productDetailDTO) {
+    public ResponseEntity<Map<String, String>> productRegisterCate(@RequestBody ProductDetailDTO productDetailDTO) {
         log.info(productDetailDTO);
         ProductDetailDTO dto = productService.insertProductDetail(productDetailDTO);
+
         if (dto != null) {
-            return ResponseEntity.ok().body("success");
+            response.put("status", "success");
+            return ResponseEntity.ok().body(response);
         }
-        return ResponseEntity.ok().body("failure");
+
+        response.put("status", "failure");
+        return ResponseEntity.ok().body(response);
     }
 
     @PostMapping("/admin/product/register/more")
-    public ResponseEntity<String> productRegisterMore(@RequestParam String prodONames,
-                                                      @RequestParam String prodPrices,
-                                                      @RequestParam String prodStocks,
-                                                      @RequestParam String mixedValuesList
+    public void productRegisterMore(@RequestParam String prodONames,
+                                    @RequestParam String prodPrices,
+                                    @RequestParam String prodStocks,
+                                    @RequestParam String mixedValuesList,
+                                    @RequestParam String optionNames,
+                                    @RequestParam String productId
     ) {
+        log.info(productId);
 
-        log.info(prodONames);
-        log.info(prodPrices);
-        log.info(prodStocks);
-        log.info(mixedValuesList);
-
-        productService.makeProductVariantDTOAndInsert(prodONames, prodPrices, prodStocks, mixedValuesList);
-
-        return ResponseEntity.ok().body("success");
+        productService.makeProductVariantDTOAndInsert(optionNames, prodONames, prodPrices, prodStocks, mixedValuesList, productId);
 
     }
 }

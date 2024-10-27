@@ -1,7 +1,6 @@
 'use strict';
 
 // 카테고리 출력 파트 ------------------------------------------------------------------------------
-
 const category1 = document.querySelector('#category1');
 const category2 = document.querySelector('#category2');
 const category3 = document.querySelector('#category3');
@@ -38,17 +37,15 @@ category2.addEventListener('change', function (e) {
                     option.value = option3.productCateId;
                     option.text = option3.name;
                     category3.appendChild(option);
-                })
-                    .catch(err => console.log(err));
+                });
             }
-
         })
+        .catch(err => console.log(err));
 });
 
 // 상품 옵션 입력 파트 ----------------------------------------------------------------------------
 
 const option = document.querySelector('#option');
-
 
 // 옵션값 입력 후 엔터로 추가하는 이벤트
 option.addEventListener('keydown', function (event) {
@@ -63,8 +60,9 @@ option.addEventListener('keydown', function (event) {
         let adjacent_name = parent.parentElement.previousElementSibling.querySelector('input').value.trim();
 
         if (adjacent_name === '') {
-            alert('옵션명을 입력해주세요')
-            optionValueInput.disable();
+            alert('옵션명을 입력해주세요');
+            optionValueInput.disabled = true;
+            return; // 추가로 진행하지 않도록 함
         }
 
         if (value !== '') {
@@ -95,7 +93,7 @@ option.addEventListener('keydown', function (event) {
             optionValueInput.value = '';
         }
     }
-})
+});
 
 // 옵션 추가 버튼
 const addOptionButton = document.getElementById('add-option');
@@ -103,23 +101,23 @@ addOptionButton.addEventListener('click', function () {
     const option = document.querySelector('#option');
 
     const option_innerHTML = `
-                                        <div>
-                                            <span>옵션명 :</span>
-                                            <input type="text" class="option-name" placeholder="옵션명을 입력하세요" required>
-                                        </div>
-                                        <div class="option-values">
-                                            <span>옵션값 :</span>
-                                            <div class="fake_input">
-                                                <input type="text" class="option-value-input"
-                                                       placeholder="옵션값 입력 후 엔터">
-                                            </div>
-                                        </div>
-                                        `;
+        <div>
+            <span>옵션명 :</span>
+            <input type="text" class="option-name" placeholder="옵션명을 입력하세요" required>
+        </div>
+        <div class="option-values">
+            <span>옵션값 :</span>
+            <div class="fake_input">
+                <input type="text" class="option-value-input"
+                       placeholder="옵션값 입력 후 엔터">
+            </div>
+        </div>
+    `;
     const option_name = document.querySelectorAll('.option-name');
     if (option_name.length < 3) {
         option.insertAdjacentHTML("beforeend", option_innerHTML);
     } else {
-        alert('옵션을 더 이상 추가할 수 없습니다.')
+        alert('옵션을 더 이상 추가할 수 없습니다.');
         addOptionButton.remove();
     }
 });
@@ -128,7 +126,7 @@ addOptionButton.addEventListener('click', function () {
 
 const form = document.querySelector('form');
 
-form.addEventListener('submit', function (e) {
+form.addEventListener('submit', async function (e) {
     e.preventDefault();
 
     const cateId2 = category2.value;
@@ -136,26 +134,24 @@ form.addEventListener('submit', function (e) {
 
     let cateId;
 
-    if (cateId3 === "") {
+    if (!cateId3) {
         cateId = cateId2;
     } else {
         cateId = cateId3;
     }
 
-    console.log(cateId);
+    console.log('Selected Category ID:', cateId);
 
     // 상품 정보
-    const name = document.querySelector('#name').value;
-    const description = document.querySelector('#description').value;
-    const company = document.querySelector('#company').value;
-    const price = document.querySelector('#price').value;
-    const discount = document.querySelector('#discount').value;
-    const point = document.querySelector('#point').value;
-    const stock = document.querySelector('#stock').value;
-    const deliveryFee = document.querySelector('#deliveryFee').value;
+    const name = document.querySelector('#name').value.trim();
+    const description = document.querySelector('#description').value.trim();
+    const company = document.querySelector('#company').value.trim();
+    const price = document.querySelector('#price').value.trim();
+    const discount = document.querySelector('#discount').value.trim();
+    const point = document.querySelector('#point').value.trim();
+    const deliveryFee = document.querySelector('#deliveryFee').value.trim();
 
     // 이미지 파일 파일명 수정
-
     const img_1 = document.querySelector('#prod_img1').files[0];
     const img_2 = document.querySelector('#prod_img2').files[0];
     const img_3 = document.querySelector('#prod_img3').files[0];
@@ -208,24 +204,12 @@ form.addEventListener('submit', function (e) {
 
     const optionObj = Object.fromEntries(optionMap);
 
-    const data1 = {
-        name: name,
-        description: description,
-        company: company,
-        price: price,
-        discount: discount,
-        point: point,
-        stock: stock,
-        deliveryFee: deliveryFee,
-        options: optionObj
-    };
-
     const formData = new FormData();
     formData.append('cateId', cateId);
-    formData.append('img_1', img_1);
-    formData.append('img_2', img_2);
-    formData.append('img_3', img_3);
-    formData.append('detail_', detail_);
+    formData.append('img_1', img_1 || '');
+    formData.append('img_2', img_2 || '');
+    formData.append('img_3', img_3 || '');
+    formData.append('detail_', detail_ || '');
     formData.append('name', name);
     formData.append('description', description);
     formData.append('company', company);
@@ -233,96 +217,76 @@ form.addEventListener('submit', function (e) {
     formData.append('discount', discount);
     formData.append('point', point);
     formData.append('deliveryFee', deliveryFee);
-    formData.append('img1', "1");
-    formData.append('img2', "2");
-    formData.append('img3', "3");
-    formData.append('detail', "detail");
     formData.append('optionsJson', JSON.stringify(optionObj));
 
-    // 상품 상세 등록 페이지로 이동할 때 들고갈 상품 아이디
-    let productId;
-    // 상품 등록 성공 여부
-    let registerSuccess;
+    try {
+        // 첫 번째 POST: 제품 등록
+        const registerResponse = await fetch('/lotteon/admin/product/register', {
+            method: 'POST',
+            body: formData
+        });
 
-    fetch('/lotteon/admin/product/register', {
-        method: 'POST',
-        body: formData
-    })
-        .then(resp => resp.json())
-        .then(data => {
-            console.log(data)
-            productId = data;
-            if (data !== 0){
-                registerSuccess = "success";
-            }
-        })
-        .catch(err => console.log(err))
+        const registerData = await registerResponse.json();
+        console.log('Register Response:', registerData);
 
+        const productId = registerData.productId;
+        if (!productId) {
+            alert('유효한 상품 ID를 받지 못했습니다.');
+            return;
+        }
 
+        // 두 번째 POST: 제품 상세 등록
+        const condition_field = document.querySelector('#condition').value.trim();
+        const duty = document.querySelector('#duty').value.trim();
+        const receipt = document.querySelector('#receipt').value.trim();
+        const sellerType = document.querySelector('#sellerType').value.trim();
+        const brand = document.querySelector('#brand').value.trim();
+        const coa = document.querySelector('#coa').value.trim();
+        const creator = document.querySelector('#creator').value.trim();
+        const country = document.querySelector('#country').value.trim();
+        const warning = document.querySelector('#warning').value.trim();
+        const createDate = document.querySelector('#createDate').value.trim();
+        const quality = document.querySelector('#quality').value.trim();
+        const as_field = document.querySelector('#as').value.trim();
+        const asPhone = document.querySelector('#asPhone').value.trim();
 
+        const data2 = {
+            condition_field: condition_field,
+            duty: duty,
+            receipt: receipt,
+            sellerType: sellerType,
+            brand: brand,
+            coa: coa,
+            creator: creator,
+            country: country,
+            warning: warning,
+            createDate: createDate,
+            quality: quality,
+            as_field: as_field,
+            asPhone: asPhone
+        };
 
-// 상품정보 제공고시
+        const detailResponse = await fetch('/lotteon/admin/product/register/detail', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data2)
+        });
 
-    const condition_field = document.querySelector('#condition').value;
-    const duty = document.querySelector('#duty').value;
-    const receipt = document.querySelector('#receipt').value;
-    const sellerType = document.querySelector('#sellerType').value;
-    const brand = document.querySelector('#brand').value;
-    const coa = document.querySelector('#coa').value;
-    const creator = document.querySelector('#creator').value;
-    const country = document.querySelector('#country').value;
-    const warning = document.querySelector('#warning').value;
-    const createDate = document.querySelector('#createDate').value;
-    const quality = document.querySelector('#quality').value;
-    const as_field = document.querySelector('#as').value;
-    const asPhone = document.querySelector('#asPhone').value;
+        const detailData = await detailResponse.json();
+        console.log('Detail Response:', detailData);
 
+        if (detailData.status !== 'success') {
+            alert(detailData.message || '상품 상세 등록에 실패하였습니다.');
+            return;
+        }
 
-    const data2 = {
-        condition_field: condition_field,
-        duty: duty,
-        receipt: receipt,
-        sellerType: sellerType,
-        brand: brand,
-        coa: coa,
-        creator: creator,
-        country: country,
-        warning: warning,
-        createDate: createDate,
-        quality: quality,
-        as_field: as_field,
-        asPhone: asPhone
-    };
-
-    console.log("data2 : " + data2);
-
-    let registerDetail;
-
-    fetch('/lotteon/admin/product/register/detail', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data2)
-    })
-        .then(resp => resp.json())
-        .then(data => {
-            if (data === "success") {
-                registerDetail = "success"
-            }
-            console.log(data);})
-        .catch(err => console.log(err))
-
-    console.log("success1 = " + registerSuccess + " / success2 = " + registerDetail);
-
-    if (registerSuccess === "success" && registerDetail === "success") {
         alert('상품 등록이 완료되었습니다. 상품 상세 등록 페이지로 이동합니다.');
-        window.location.assign('/lotteon/admin/product/registerMore?productId='+productId);
+        window.location.assign('/lotteon/admin/product/registerMore?productId=' + productId);
 
-    } else{
-        alert('상품 등록이 실패하였습니다.')
+    } catch (err) {
+        console.error('Error during product registration:', err);
+        alert('상품 등록 중 오류가 발생했습니다.');
     }
-
 });
-
-
