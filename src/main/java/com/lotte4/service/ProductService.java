@@ -1,9 +1,6 @@
 package com.lotte4.service;
 
-import com.lotte4.dto.CateForProdRegisterDTO;
-import com.lotte4.dto.ProductDTO;
-import com.lotte4.dto.ProductDetailDTO;
-import com.lotte4.dto.ProductVariantsDTO;
+import com.lotte4.dto.*;
 import com.lotte4.entity.*;
 import com.lotte4.repository.CategoryRepository;
 import com.lotte4.repository.ProductDetailRepository;
@@ -20,10 +17,13 @@ import java.io.IOException;
 import java.util.*;
 
 /*
-    2024-10-26
-    전규찬
-     - formdata로 받은 String 값들을 replace / split 함수를 통해 가공하여 원하는
-       데이터 타입으로 변환하는 static 메서드 생성
+    수정이력
+
+        2024-10-26
+        전규찬 - formdata로 받은 String 값들을 replace / split 함수를 통해 가공하여 원하는
+                데이터 타입으로 변환하는 static 메서드 생성
+
+        - 2024/10/28 강중원 - 카테고리에 따른 상품 불러오기 기능 추가
 */
 
 @Log4j2
@@ -180,6 +180,46 @@ public class ProductService {
 
             productVariantsRepository.save(modelMapper.map(productVariantsDTO, ProductVariants.class));
         }
+    }
+
+    public List<ProductDTO> getProductWithCate(int cate){
+        List<ProductDTO> productDTOList = new ArrayList<>();
+        Optional<ProductCate> productCate = categoryRepository.findById(cate);
+
+
+        log.info(productDTOList.toString());
+
+
+        if (productCate.isPresent()) {
+            // depth가 1 또는 2인 경우, 하위 카테고리의 제품을 가져옴
+            if (productCate.get().getDepth() < 3) {
+                for (ProductCate child : productCate.get().getChildren()) {
+                    // 현재 하위 카테고리에 속한 제품을 가져옴
+                    List<Product> childProducts = productRepository.findByProductCateId(child);
+                    for (Product product : childProducts) {
+                        productDTOList.add(modelMapper.map(product, ProductDTO.class));
+                    }
+
+                    // depth가 1인 경우, 손자 카테고리의 제품을 가져옴
+                    if (child.getDepth() < 2) {
+                        for (ProductCate grandChild : child.getChildren()) {
+                            List<Product> grandChildProducts = productRepository.findByProductCateId(grandChild);
+                            for (Product product : grandChildProducts) {
+                                productDTOList.add(modelMapper.map(product, ProductDTO.class));
+                            }
+                        }
+                    }
+                }
+            }
+
+            // 해당 카테고리에 속한 직접적인 제품도 가져옴
+            List<Product> products = productRepository.findByProductCateId(productCate.get());
+            for (Product product : products) {
+                productDTOList.add(modelMapper.map(product, ProductDTO.class));
+            }
+        }
+        log.info(productDTOList.toString());
+        return productDTOList;
     }
 }
 

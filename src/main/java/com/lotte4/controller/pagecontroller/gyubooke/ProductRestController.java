@@ -26,6 +26,7 @@ public class ProductRestController {
 
     private final ProductService productService;
     private final ObjectMapper objectMapper;
+    private final CategoryService categoryService;
 
     Map<String, String> response = new HashMap<>();
 
@@ -45,7 +46,7 @@ public class ProductRestController {
                                                                     @ModelAttribute ProductDTO productDTO) {
 
         // 상품 카테고리 아이디 입력
-        productDTO.setProductCate_productCateId(cateId);
+        productDTO.setProductCateId(categoryService.getProductCate(cateId));
 
         // 'options' JSON 문자열을 Map<String, List<String>>으로 변환
         Map<String, List<String>> optionsMap = null;

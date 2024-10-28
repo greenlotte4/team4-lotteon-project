@@ -118,15 +118,15 @@
             <div class="categoryMenu">
                 <ul>
                     <li th:each="child : ${productCateDTOList}">
-                        <a href="#">[[${child.getName()}]]</a>
+                        <a th:href="@{'/product/list/' + ${child.getProductCateId}}">[[${child.getName()}]]</a>
                         <!-- 2차 메뉴 -->
                         <ul class="subMenu">
                             <li th:each="sub : ${child.getChildren()}">
-                                <a href="#">[[${sub.getName()}]]</a>
+                                <a th:href="@{'/product/list/' + ${sub.getProductCateId}}">[[${sub.getName()}]]</a>
                                 <!-- 3차 메뉴 -->
                                 <ul class="subSubMenu">
                                     <li th:each="subChild : ${sub.getChildren()}">
-                                        <a href="#">[[${subChild.getName()}]]</a>
+                                        <a th:href="@{'/product/list/' + ${subChild.getProductCateId}}">[[${subChild.getName()}]]</a>
                                     </li>
                                 </ul>
                             </li>

@@ -95,7 +95,7 @@ public class AdminProductController {
     public String AdminProductModify(int productId, Model model) {
 
         ProductDTO productDTO = productService.getProductById(productId);
-        int productCateId = productDTO.getProductCate_productCateId();
+        int productCateId = productDTO.getProductCateId().getProductCateId();
         model.addAttribute("productDTO", productDTO);
 
         ProductCateDTO productCateDTO = categoryService.getProductCate(productCateId);

@@ -43,6 +43,9 @@ public class Product {
     private Map<String, List<String>> options;
 
     private int status;
-    private int productCate_productCateId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "productCateId")
+    private ProductCate productCateId;
 }
 
