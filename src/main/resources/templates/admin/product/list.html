@@ -13,11 +13,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>상품현황</title>
-
     <!--공통 css 부분-->
     <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}"/>
     <!--각 페이지(section) 개별 css-->
     <link rel="stylesheet" th:href="@{/css/admin/style_admin_product_list.css}"/>
+    <script th:src="@{/js/my/admin_product/product_list.js}" defer></script>
 </head>
 <body>
 <header th:replace="~{/admin/include/header.html}"></header>
@@ -71,7 +71,7 @@
                     </thead>
                     <tbody>
                     <tr th:each="product : ${products}">
-                        <td><input type="checkbox" class="chk"></td>
+                        <td><input type="checkbox" class="chk" th:value="${product.productId}"></td>
                         <td><img th:src="@{'/uploads/product/' + ${product.getImg1()}}" alt="상품 사진" class="product-image"></td>
                         <td th:text="${product.productId}"></td>
                         <td th:text="${product.name}"></td>
@@ -82,13 +82,13 @@
                         <td th:text="${product.hit}"></td>
                         <td>
                             <a th:href="@{/admin/product/modify(productId=${product.productId})}" class="edit-btn">수정</a>
-                            <button class="deletebtn">삭제</button>
+                            <button class="deletebtn" th:value="${product.productId}">삭제</button>
                         </td>
                     </tr>
                     </tbody>
                 </table>
                 <div class="buttons">
-                    <button class="delete-btn" disabled>선택 삭제</button>
+                    <button id="delete-btn" disabled>선택 삭제</button>
                     <a th:href="@{/admin/product/register}" class="write-btn">상품등록</a>
                 </div>
 
@@ -109,46 +109,3 @@
 <footer th:replace="~{/admin/include/footer.html}"></footer>
 </body>
 </html>
-<script>
-    const checkAll = document.querySelector('#checkAll');
-
-    checkAll.addEventListener('click', function(){
-
-        const isChecked = checkAll.checked;
-
-        if(isChecked){
-            const checkboxes = document.querySelectorAll('.chk');
-
-            for(const checkbox of checkboxes){
-                checkbox.checked = true;
-            }
-        }
-
-        else{
-            const checkboxes = document.querySelectorAll('.chk');
-            for(const checkbox of checkboxes){
-                checkbox.checked = false;
-            }
-        }
-    })
-
-    const checkboxes = document.querySelectorAll('.chk');
-
-    for(const checkbox of checkboxes){
-        checkbox.addEventListener('click',function(){
-
-            const totalCnt = checkboxes.length;
-
-            const checkedCnt = document.querySelectorAll('.chk:checked').length;
-
-            if(totalCnt === checkedCnt){
-                document.querySelector('#checkAll').checked = true;
-            }
-            else{
-                document.querySelector('#checkAll').checked = false;
-            }
-
-        });
-
-    }
-</script>

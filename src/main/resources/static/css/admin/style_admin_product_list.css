@@ -77,7 +77,7 @@
 }
 
 /* 버튼 스타일 */
-.delete-btn {
+#delete-btn {
     padding: 10px 20px;
     background-color: #d82a2a;
     color: white;
@@ -90,12 +90,8 @@
     }
 }
 
-.delete-btn[disabled] {
-    background-color: #d82a2a;
-
-    &:hover {
-        background-color: rgba(216, 42, 42, 0.8);
-    }
+#delete-btn[disabled] {
+    background-color: grey;
 }
 
 .edit-btn, .deletebtn, .write-btn {

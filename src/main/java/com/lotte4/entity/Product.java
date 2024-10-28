@@ -4,6 +4,7 @@ import com.lotte4.config.MapToJsonConverter;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +39,11 @@ public class Product {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sellerInfoId")
     private SellerInfo sellerInfoId;
+
+    @Builder.Default
+    @ToString.Exclude
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductVariants> productVariants = new ArrayList<>();
 
     @Convert(converter = MapToJsonConverter.class)
     private Map<String, List<String>> options;

@@ -2,6 +2,7 @@ package com.lotte4.controller.pagecontroller.admin.product;
 
 import com.lotte4.dto.ProductCateDTO;
 import com.lotte4.dto.ProductDTO;
+import com.lotte4.dto.Product_V_DTO;
 import com.lotte4.service.CategoryService;
 import com.lotte4.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -55,7 +56,7 @@ public class AdminProductController {
     @GetMapping("/admin/product/registerMore")
     public String AdminProductRegisterMore(int productId, Model model) {
 
-        ProductDTO productDTO = productService.getProductById(productId);
+        Product_V_DTO productDTO = productService.getProductById(productId);
         int prodId = productDTO.getProductId();
         Map<String, List<String>> options = productDTO.getOptions();
 
@@ -94,7 +95,7 @@ public class AdminProductController {
     @GetMapping("/admin/product/modify")
     public String AdminProductModify(int productId, Model model) {
 
-        ProductDTO productDTO = productService.getProductById(productId);
+        Product_V_DTO productDTO = productService.getProductById(productId);
         int productCateId = productDTO.getProductCateId().getProductCateId();
         model.addAttribute("productDTO", productDTO);
 
@@ -110,10 +111,4 @@ public class AdminProductController {
         }
         return "/admin/product/modify";
     }
-
-
-
-
-
-
 }

@@ -96,11 +96,20 @@ public class ProductService {
         return cateForProdRegisterDTOList;
     }
 
-    public ProductDTO getProductById(int productId) {
+    public Product_V_DTO getProductById(int productId) {
         Optional<Product> productOptional = productRepository.findById(productId);
         if (productOptional.isPresent()) {
             Product product = productOptional.get();
-            return modelMapper.map(product, ProductDTO.class);
+            return modelMapper.map(product, Product_V_DTO.class);
+        }
+        return null;
+    }
+    
+    public Product_V_DTO getProductById2(int productId) {
+        Optional<Product> productOptional = productRepository.findById(productId);
+        if (productOptional.isPresent()) {
+            Product product = productOptional.get();
+            return  new Product_V_DTO(product);
         }
         return null;
     }
@@ -114,6 +123,14 @@ public class ProductService {
         return productDTOList;
     }
 
+    public ProductDTO getProductWithoutVariantsById(int productId) {
+        Optional<Product> productOptional = productRepository.findById(productId);
+        if (productOptional.isPresent()) {
+            Product product = productOptional.get();
+            return modelMapper.map(product, ProductDTO.class);
+        }
+        return null;
+    }
 
     public String uploadProdImg(MultipartFile file) {
 
@@ -180,6 +197,15 @@ public class ProductService {
 
             productVariantsRepository.save(modelMapper.map(productVariantsDTO, ProductVariants.class));
         }
+    }
+
+    public String deleteById(int productId) {
+        productRepository.deleteById(productId);
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        if (optionalProduct.isPresent()) {
+            return "failure";
+        }
+        return "success";
     }
 
     public List<ProductDTO> getProductWithCate(int cate){

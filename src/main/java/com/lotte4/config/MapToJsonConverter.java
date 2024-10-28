@@ -48,5 +48,4 @@ public class MapToJsonConverter implements AttributeConverter<Map<String, List<S
         }
     }
 
-
 }

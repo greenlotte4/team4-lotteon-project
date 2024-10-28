@@ -64,7 +64,7 @@
             <!-- 상품 목록 -->
             <div class="product-list">
                 <div class="product-item" th:each="product : ${productDTOList}">
-                    <a href="#">
+                    <a th:href="@{/product/view(productId = ${product.productId})}">
                     <div class="product-image">
                         <img th:src="@{'/uploads/product/' + ${product.img1}}" alt="Product Image" />
                     </div>

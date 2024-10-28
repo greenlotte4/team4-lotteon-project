@@ -44,7 +44,7 @@
                 </div>
                 <div class="product-info">
                     <p class="product-number">상품번호: 10010118412</p>
-                    <h2 class="product-title">[코카콜라] 코카콜라 제로 500ml 24캔</h2>
+                    <h2 class="product-title" th:text="${productDTO.productVariants}"></h2>
 
                     <div class="rating">
                         <span>★★★★★</span> <a href="#">상품리뷰</a> (13)
@@ -60,6 +60,11 @@
                     </div>
                     <div class="product-origin">
                         <p>원산지: 상세설명 참조</p>
+                    </div>
+                    <div class="options-section">
+                        <select name="" id="">
+                            <option value=""></option>
+                        </select>
                     </div>
                     <div class="quantity-section">
                         <label for="quantity">수량</label>
