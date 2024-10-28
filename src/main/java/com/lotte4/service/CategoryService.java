@@ -62,6 +62,7 @@ public class CategoryService {
     }
 
     public List<ProductCateDTO> getProductCateListWithDepth(int depth){
+
         List<ProductCateDTO> productCateDTOList = new ArrayList<>();
         List<ProductCate> productCateList = categoryRepository.findByDepth(depth);
 
@@ -69,9 +70,11 @@ public class CategoryService {
             productCateDTOList.add(new ProductCateDTO(productCate));
         }
         return productCateDTOList;
+
     }
 
     public boolean deleteProductCate(String name){
+
         ProductCate productCate = categoryRepository.findByName(name);
         if(productCate != null){
             categoryRepository.delete(productCate);
@@ -80,5 +83,6 @@ public class CategoryService {
         else {
             return false;
         }
+
     }
 }

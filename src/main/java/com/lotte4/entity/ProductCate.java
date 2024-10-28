@@ -31,6 +31,7 @@ public class ProductCate {
     // 부모 객체
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parentId")
+    @ToString.Exclude
     private ProductCate parent;
 
     @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)

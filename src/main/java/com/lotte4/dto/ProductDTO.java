@@ -29,6 +29,6 @@ public class ProductDTO {
     private SellerInfoDTO sellerInfoId;
     private Map<String, List<String>> options;
     private int status;
-    private int productCate_productCateId;
+    private ProductCateDTO productCateId;
 }
 
