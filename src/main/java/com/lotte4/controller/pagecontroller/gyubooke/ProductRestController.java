@@ -28,7 +28,12 @@ public class ProductRestController {
     private final ObjectMapper objectMapper;
     private final CategoryService categoryService;
 
-    Map<String, String> response = new HashMap<>();
+
+    public static List<Integer> stringToIntegerList(String string) {
+
+        return ProductService.stringToIntegerList(string);
+    }
+
 
     @GetMapping("/admin/product/register/{parentId}")
     public List<CateForProdRegisterDTO> registerCategory(@PathVariable int parentId) {
@@ -87,6 +92,7 @@ public class ProductRestController {
     public ResponseEntity<Map<String, String>> productRegisterCate(@RequestBody ProductDetailDTO productDetailDTO) {
         log.info(productDetailDTO);
         ProductDetailDTO dto = productService.insertProductDetail(productDetailDTO);
+        Map<String, String> response = new HashMap<>();
 
         if (dto != null) {
             response.put("status", "success");
@@ -106,8 +112,49 @@ public class ProductRestController {
                                     @RequestParam String productId
     ) {
         productService.makeProductVariantDTOAndInsert(optionNames, prodONames, prodPrices, prodStocks, mixedValuesList, productId);
-
     }
+
+    @DeleteMapping("/admin/product/delete/{productId}")
+    public ResponseEntity<Map<String, String>> productDelete(@PathVariable int productId) {
+        String status = productService.deleteById(productId);
+        Map<String, String> response = new HashMap<>();
+
+        log.info(status);
+        if (status.equals("success")) {
+            response.put("status", "success");
+        } else {
+            response.put("status", "failure");
+        }
+        return ResponseEntity.ok().body(response);
+    }
+
+    @DeleteMapping("/admin/product/delete")
+    public ResponseEntity<Map<String, String>> selectedProductDelete(@RequestParam String productIds) {
+        log.info("productIds = " + productIds);
+
+        Map<String, String> response = new HashMap<>();
+        int failure = 0;
+        List<Integer> productIdList = stringToIntegerList(productIds);
+        for (Integer productId : productIdList) {
+            String status = productService.deleteById(productId);
+            if (!status.equals("success")) {
+                failure++;
+            }
+        }
+
+        if (failure > 0) {
+            response.put("status", "failure");
+        } else {
+            response.put("status", "success");
+        }
+
+        return ResponseEntity.ok().body(response);
+    }
+
+
+
+
+
 }
 
 

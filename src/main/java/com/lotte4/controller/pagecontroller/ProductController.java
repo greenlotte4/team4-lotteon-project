@@ -2,6 +2,8 @@ package com.lotte4.controller.pagecontroller;
 
 import com.lotte4.dto.CartDTO;
 import com.lotte4.dto.ProductDTO;
+import com.lotte4.dto.ProductVariantsDTO;
+import com.lotte4.dto.Product_V_DTO;
 import com.lotte4.service.CartService;
 import com.lotte4.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -107,7 +109,12 @@ public class ProductController {
     }
 
     @GetMapping("/product/view")
-    public String view(){
+    public String view(int productId, Model model) {
+
+        Product_V_DTO productDTO = productService.getProductById2(productId);
+        log.info("productDTO : " + productDTO);
+        model.addAttribute("productDTO", productDTO);
+
         return "/product/view";
     }
 

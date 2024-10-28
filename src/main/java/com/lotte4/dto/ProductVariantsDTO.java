@@ -1,5 +1,6 @@
 package com.lotte4.dto;
 
+import com.lotte4.entity.ProductVariants;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -7,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -36,5 +38,25 @@ public class ProductVariantsDTO {
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
 
-    private ProductDTO product;
+    private Product_V_DTO product;
+
+    public ProductVariantsDTO(ProductVariants productVariants) {
+        this.variant_id = productVariants.getVariant_id();
+        this.sku = productVariants.getSku();
+        this.price = productVariants.getPrice();
+        this.stock = productVariants.getStock();
+        this.options = productVariants.getOptions();
+        this.created_at = productVariants.getCreated_at();
+        this.updated_at = productVariants.getUpdated_at();
+        // product 필드는 ModelMapper가 자동으로 설정
+        // productVariants 리스트는 ModelMapper가 자동으로 매핑
+    }
+
+    public List<ProductVariantsDTO> setProductVariantsDTOList(List<ProductVariants> productVariants) {
+        List<ProductVariantsDTO> productVariantsDTOS = new ArrayList<>();
+        for (ProductVariants productVariant : productVariants) {
+            productVariantsDTOS.add(new ProductVariantsDTO(productVariant));
+        }
+        return productVariantsDTOS;
+    }
 }
