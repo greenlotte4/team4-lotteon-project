@@ -348,3 +348,6 @@ td.title a:hover {
 #toQnaWrite{
     float:right;
 }
+
+#section_wrapper {
+    display: inline;}

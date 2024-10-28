@@ -19,7 +19,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
+/*
+     이름 : 황수빈(최초 작성자)
+     내용 : csQnaController 생성
 
+     수정이력
+      - 2025/10/29 황수빈 - 카테고리별로 다른 게시물 뿌리기 하는 중
+      - 2025/10/27 김춘추 - OOO 메서드 수정
+*/
 @Log4j2
 @RequiredArgsConstructor
 @Controller
@@ -58,15 +65,28 @@ public class  CsQnaController {
     }
 
     // 글목록 : qna, faq
-    @GetMapping("/cs/{type}/list")
-    public String qna(Model model, @PathVariable String type,
-                @RequestParam(defaultValue = "0") int page,
-                @RequestParam(defaultValue = "8") int size){
-        Page<BoardResponseDTO> boardList = boardService.selectAllBoardByType(type, page, size);
+    @GetMapping({"/cs/{type}/list", "/cs/{type}/list/{cate}"})  // 선택적인 cate 경로 처리
+    public String qna(Model model,
+                      @PathVariable String type,
+                      @PathVariable(required = false) Integer cate, // cate가 없으면 null로 처리
+                      @RequestParam(defaultValue = "0") int page,
+                      @RequestParam(defaultValue = "8") int size) {
+
+        Page<BoardResponseDTO> boardList;
+
+        if (cate == null) {
+            // cate가 없거나 null일 때 전체 보드 가져오기
+            boardList = boardService.selectAllBoardByType(type, page, size);
+        } else {
+            // cate가 있을 때 해당 카테고리에 맞는 보드 가져오기
+            boardList = boardService.selectAllBoardByCateId(cate, page, size);
+        }
+        log.info("왜 카테고리는 안뜨냐 ? "+boardList.getContent());
         model.addAttribute("boards", boardList.getContent());
         model.addAttribute("totalPages", boardList.getTotalPages());
         model.addAttribute("currentPage", page);
-        return "/cs/"+type+"/list";
+
+        return "/cs/" + type + "/list";
     }
 
 
