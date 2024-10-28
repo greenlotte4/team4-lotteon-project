@@ -15,6 +15,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,7 +29,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
+/*
+     날짜 : 2024/10/28
+     이름 : 강은경
+     내용 : UserService 생성
 
+     수정이력
+      - 2024/10/28 강은경 - 관리자 회원목록 기능 검색&페이징 메서드 추가
+*/
 @Log4j2
 @RequiredArgsConstructor
 @Service
@@ -170,14 +181,44 @@ public class UserService {
     }
 
     // role이 member인 회원 목록 select
-    public List<UserDTO> selectUserListByMember(String role) {
-        return userRepository.findByRole(role)
-                .map(userList -> userList.stream()
-                        .map(user -> modelMapper.map(user, UserDTO.class))  // 각 Cart 객체를 CartDTO로 변환
-                        .collect(Collectors.toList())  // List<CartDTO>로 수집
-                )
-                .orElse(Collections.emptyList());  // 데이터가 없을 경우 빈 리스트 반환
+    public Page<UserDTO> selectUserListByMember(String role, int page, int size, String keyword, String searchCategory) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<User> userPage;
+
+        // 검색어가 있는 경우
+        if (keyword != null && !keyword.isEmpty() && searchCategory != null) {
+            switch (searchCategory) {
+                case "uid":
+                    userPage = userRepository.findByRoleAndUidContaining(role, keyword, pageable); // 아이디 검색
+                    break;
+                case "name":
+                    userPage = userRepository.findByRoleAndMemberInfoNameContaining(role, keyword, pageable); // 이름 검색
+                    break;
+                case "email":
+                    userPage = userRepository.findByRoleAndMemberInfoEmailContaining(role, keyword, pageable); // 이메일 검색
+                    break;
+                case "hp":
+                    userPage = userRepository.findByRoleAndMemberInfoHpContaining(role, keyword, pageable); // 이메일 검색
+                    break;
+                default:
+                    userPage = userRepository.findByRole(role, pageable); // 기본적으로 모든 사용자 반환
+                    break;
+            }
+        } else {
+            // 검색어가 없는 경우
+            userPage = userRepository.findByRole(role, pageable);
+        }
+
+        // User 엔티티를 UserDTO로 변환
+        List<UserDTO> userDTOs = userPage.getContent().stream()
+                .map(user -> modelMapper.map(user, UserDTO.class))
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(userDTOs, pageable, userPage.getTotalElements());
     }
 
-
+    // 전체 사용자 수 반환
+    public int getTotalUserCountByRole(String role) {
+        return userRepository.countByRole(role);
+    }
 }

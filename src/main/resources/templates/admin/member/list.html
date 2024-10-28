@@ -24,33 +24,38 @@
           <h3>회원목록</h3>
           <div class="form">
             <div class="search-bar">
-              <select id="search-category" class="dropdown">
-                <option>아이디</option>
-                <option>이름</option>
-                <option>이메일</option>
-                <option>휴대폰</option>
-              </select>
-              <input
-                type="text"
-                placeholder="키워드 입력"
-                class="search-input"
-              />
-              <button class="search-btn">검색</button>
+              <form action="#" th:action="@{/admin/member/list}" method="get"> <!-- GET 방식으로 폼 전송 -->
+                <select id="search-category" name="searchCategory" class="dropdown"> <!-- name 속성 추가 -->
+                  <option value="uid" th:selected="${searchCategory == 'uid'}">아이디</option>
+                  <option value="name" th:selected="${searchCategory == 'name'}">이름</option>
+                  <option value="email" th:selected="${searchCategory == 'email'}">이메일</option>
+                  <option value="hp" th:selected="${searchCategory == 'hp'}">휴대폰</option>
+                </select>
+                <input
+                        type="text"
+                        name="keyword"
+                        placeholder="키워드 입력"
+                        class="search-input"
+                        th:value="${keyword}"
+                />
+                <button type="submit" class="search-btn">검색</button> <!-- type을 submit으로 설정 -->
+              </form>
             </div>
+
 
             <table class="inquiry-table">
               <colgroup>
                 <col style="width: 5%" />
                 <col style="width: 7%" />
-                <col style="width: 7%" />
+                <col style="width: 6%" />
                 <col style="width: 5%" />
-                <col style="width: 7%" />
+                <col style="width: 6%" />
                 <col style="width: 6%" />
                 <col style="width: 13%" />
                 <!--<col style="width: 9%" />-->
                 <col style="width: 10%" />
                 <col style="width: 5%" />
-                <col style="width: 8%" />
+                <col style="width: 7%" />
               </colgroup>
               <thead>
                 <tr>
@@ -68,9 +73,9 @@
                 </tr>
               </thead>
               <tbody>
-              <tr th:each="user, i:${userList}" >
-                  <td>[[${user.userId}]]</td>
-                  <td>[[${user.uid}]]</td>
+              <tr th:each="user, i : ${userList}">
+                <td th:text="${startNo - i.index}"></td> <!-- 번호 역순 출력 -->
+                <td>[[${user.uid}]]</td>
                   <td>[[${user.memberInfo.name}]]</td>
                   <td>[[${user.memberInfo.gender == 0 ? 'M' : 'F'}]]</td>
                 <td>
@@ -86,9 +91,9 @@
                 <td>[[${user.memberInfo.point}]]</td>
                   <td>[[${user.memberInfo.email}]]</td>
                   <!--<td>[[${user.memberInfo.hp}]]</td>-->
-                  <td>[[${user.memberInfo.updatedAt}]]</td>
+                <td th:text="${#strings.substring(user.memberInfo.updatedAt, 0, 19)}"></td>
 
-<!--                  글자 색상 스크립트 처리? or th:if-->
+                <!--                  글자 색상 스크립트 처리? or th:if-->
                   <td class="userStatus normal">[[${user.memberInfo.status}]]</td>
                   <td>
                     <a href="#" id="registerModalBtn" class="edit-btn">수정</a><br />
@@ -98,15 +103,23 @@
                 </tr>
               </tbody>
             </table>
-
             <div class="pagination">
-              <button class="page-btn">이전</button>
-              <button class="page-num">1</button>
-              <button class="page-num">2</button>
-              <button class="page-num">3</button>
-              <button class="page-num">4</button>
-              <button class="page-num">5</button>
-              <button class="page-btn">다음</button>
+              <button class="page-btn"
+                      th:disabled="${currentPage == 0}"
+                      th:onclick="'window.location.href=\'?page=' + ${currentPage - 1} + '&size=5\''">
+                이전
+              </button>
+              <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                        <button class="page-num"
+                                th:classappend="${i == currentPage} ? 'active'"
+                                th:onclick="'window.location.href=\'?page=' + ${i} + '&size=5\''"
+                                th:text="${i + 1}">1</button>
+                    </span>
+              <button class="page-btn"
+                      th:disabled="${currentPage + 1 == totalPages}"
+                      th:onclick="'window.location.href=\'?page=' + ${currentPage + 1} + '&size=5\''">
+                다음
+              </button>
             </div>
           </div>
         </section>
