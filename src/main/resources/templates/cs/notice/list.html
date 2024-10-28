@@ -23,10 +23,17 @@
                 </div>
             </div>
             <table>
+                <thead>
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>유형</th>
+                    <th>내용</th>
+                    <th>작성자</th>
+                    <th>작성일</th>
+                </tr>
+                </thead>
+                <tbody>
                 <tr th:each="board : ${boards}">
-
-                    <td><input type="checkbox" class="chkbox" th:data-board-id="${board.boardId}"></td>
-
                     <td th:text="${board.boardId}"></td>
                     <td th:text="${board.cate.name}"></td>
                     <td class="title">
@@ -34,9 +41,8 @@
                     </td>
                     <td th:text="${board.user.uid}"></td>
                     <td th:text="${board.regDate}"></td>
-
-
                 </tr>
+                </tbody>
             </table>
             <div class="pagination">
                 <button class="page-btn"

@@ -328,3 +328,23 @@ td.title a:hover {
 .st2 {
     color : red;
 }
+
+.buttons{
+    width: 100%;
+}
+
+.delete-btn{
+    float: left;
+    width: 100px;
+    height: 35px;
+    border: 1px solid #d82a2a;
+    color: #d82a2a;
+    font-size: 13px;
+    background-color: white;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+#toQnaWrite{
+    float:right;
+}
