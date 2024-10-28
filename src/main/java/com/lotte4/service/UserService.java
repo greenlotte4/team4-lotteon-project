@@ -181,44 +181,27 @@ public class UserService {
     }
 
     // role이 member인 회원 목록 select
-    public Page<UserDTO> selectUserListByMember(String role, int page, int size, String keyword, String searchCategory) {
+    public Page<UserDTO> selectUserListByMember(String role, int page, int size, String keyword) {
         Pageable pageable = PageRequest.of(page, size);
         Page<User> userPage;
 
-        // 검색어가 있는 경우
-        if (keyword != null && !keyword.isEmpty() && searchCategory != null) {
-            switch (searchCategory) {
-                case "uid":
-                    userPage = userRepository.findByRoleAndUidContaining(role, keyword, pageable); // 아이디 검색
-                    break;
-                case "name":
-                    userPage = userRepository.findByRoleAndMemberInfoNameContaining(role, keyword, pageable); // 이름 검색
-                    break;
-                case "email":
-                    userPage = userRepository.findByRoleAndMemberInfoEmailContaining(role, keyword, pageable); // 이메일 검색
-                    break;
-                case "hp":
-                    userPage = userRepository.findByRoleAndMemberInfoHpContaining(role, keyword, pageable); // 이메일 검색
-                    break;
-                default:
-                    userPage = userRepository.findByRole(role, pageable); // 기본적으로 모든 사용자 반환
-                    break;
-            }
+        // 검색 키워드가 있을 때
+        if (keyword != null && !keyword.isEmpty()) {
+            userPage = userRepository.findByRoleAndUidContainingOrMemberInfoNameContainingOrMemberInfoEmailContainingOrMemberInfoHpContaining(
+                    role, keyword, keyword, keyword, keyword, pageable);
         } else {
-            // 검색어가 없는 경우
+            // 키워드가 없을 경우 기본값으로 모든 사용자 가져오기
             userPage = userRepository.findByRole(role, pageable);
         }
 
         // User 엔티티를 UserDTO로 변환
-        List<UserDTO> userDTOs = userPage.getContent().stream()
-                .map(user -> modelMapper.map(user, UserDTO.class))
-                .collect(Collectors.toList());
-
-        return new PageImpl<>(userDTOs, pageable, userPage.getTotalElements());
+        return userPage.map(user -> modelMapper.map(user, UserDTO.class));
     }
 
-    // 전체 사용자 수 반환
-    public int getTotalUserCountByRole(String role) {
-        return userRepository.countByRole(role);
+    public long getTotalUserCountByRoleAndKeyword(String role, String keyword) {
+        // 사용자 리스트를 가져와서 카운트
+        return selectUserListByMember(role, 0, Integer.MAX_VALUE, keyword).getTotalElements();
     }
+
+
 }

@@ -28,18 +28,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     // role이 member인 회원 목록 select(관리자 회원목록을 위함)
     Page<User> findByRole(String role, Pageable pageable);
 
-    // role이 'member'인 사용자 수를 반환하는 메서드
-    int countByRole(String role);
-
-    // role이 member이고, uid 검색하는 메서드
-    Page<User> findByRoleAndUidContaining(String role, String uid, Pageable pageable); // 아이디 검색
-
-    // role이 member이고, name 검색하는 메서드
-    Page<User> findByRoleAndMemberInfoNameContaining(String role, String name, Pageable pageable); // 이름 검색
-
-    // role이 member이고, email 검색하는 메서드
-    Page<User> findByRoleAndMemberInfoEmailContaining(String role, String email, Pageable pageable); // 이메일 검색
-
-    // role이 member이고, hp 검색하는 메서드
-    Page<User> findByRoleAndMemberInfoHpContaining(String role, String hp, Pageable pageable); // 휴대폰 검색
+    // role이 member이고, keyword 검색하는 메서드 (모든 필드에서 검색)
+    Page<User> findByRoleAndUidContainingOrMemberInfoNameContainingOrMemberInfoEmailContainingOrMemberInfoHpContaining(
+            String role, String uid, String name, String email, String hp, Pageable pageable);
 }

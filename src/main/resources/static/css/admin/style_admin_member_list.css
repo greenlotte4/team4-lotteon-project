@@ -338,8 +338,25 @@
 #userId,
 #userName,
 #userGrade,
-#userEmail,
 #userHp,
-#userPost {
+#userZipcode {
   width: 130px;
+}
+
+.modalUid {
+  width: 405px !important;
+}
+
+.register-btns {
+  color: #fbf2ff;
+  background-color: #d82a2a;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  height: 26px;
+  box-sizing: border-box;
+  line-height: 25px;
+  margin-left: 5px;
 }

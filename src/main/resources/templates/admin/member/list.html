@@ -7,9 +7,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>회원목록</title>
-
     <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}" />
     <link rel="stylesheet" th:href="@{/css/admin/style_admin_member_list.css}" />
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
   </head>
   <body>
   <header th:replace="~{/admin/include/header.html}"></header>
@@ -74,7 +74,7 @@
               </thead>
               <tbody>
               <tr th:each="user, i : ${userList}">
-                <td th:text="${startNo - i.index}"></td> <!-- 번호 역순 출력 -->
+                <td th:text="${startNo - i.index}"></td>
                 <td>[[${user.uid}]]</td>
                   <td>[[${user.memberInfo.name}]]</td>
                   <td>[[${user.memberInfo.gender == 0 ? 'M' : 'F'}]]</td>
@@ -92,15 +92,12 @@
                   <td>[[${user.memberInfo.email}]]</td>
                   <!--<td>[[${user.memberInfo.hp}]]</td>-->
                 <td th:text="${#strings.substring(user.memberInfo.updatedAt, 0, 19)}"></td>
-
-                <!--                  글자 색상 스크립트 처리? or th:if-->
                   <td class="userStatus normal">[[${user.memberInfo.status}]]</td>
-                  <td>
-                    <a href="#" id="registerModalBtn" class="edit-btn">수정</a><br />
-<!--                     중지 / 재개 / 비활성 스크립트 처리 or th:if -->
-                    <button class="deletebtn">중지</button>
-                  </td>
-                </tr>
+                <td>
+                  <a href="#" th:attr="data-uid=${user.uid}" class="edit-btn">수정</a><br />
+                  <button class="deletebtn">중지</button>
+                </td>
+              </tr>
               </tbody>
             </table>
             <div class="pagination">
@@ -128,7 +125,7 @@
     <div id="versionRegisterModal" class="modal">
       <div class="modal-content">
         <div class="modal-header">
-          <h4>배너등록</h4>
+          <h4>회원수정</h4>
           <span id="registerModalClose" class="close">&times;</span>
         </div>
         <div class="modal-body">
@@ -136,13 +133,8 @@
             <table class="modal-table">
               <tr>
                 <th>아이디</th>
-                <td>
-                  <input
-                    type="text"
-                    id="userId"
-                    placeholder="#유저아이디"
-                    required
-                  />
+                <td id="userId" class="modalUid">
+
                 </td>
               </tr>
               <tr>
@@ -151,6 +143,7 @@
                   <input
                     type="text"
                     id="userName"
+                    name="name"
                     placeholder="#유저이름"
                     required
                   />
@@ -159,8 +152,8 @@
               <tr>
                 <th>성별</th>
                 <td>
-                  <input type="radio" class="modal_sex" name="sex" />남
-                  <input type="radio" class="modal_sex" name="sex" />여
+                  <input type="radio" class="modal_sex" name="gender" value="0" />남
+                  <input type="radio" class="modal_sex" name="gender" value="1" />여
                 </td>
               </tr>
               <tr>
@@ -169,17 +162,18 @@
                   <input
                     type="text"
                     id="userGrade"
+                    name="grade"
                     placeholder="#유저등급"
                     required
+                    readonly
                   />
-                  등급 수정은 회원 목록에서 선택수정 가능
+                  &nbsp;등급 수정은 회원 목록에서 선택수정 가능
                 </td>
               </tr>
               <tr></tr>
               <tr>
                 <th>상태</th>
-                 상태마다 글자 색 변경 필요 
-                <td>정상</td>
+                <td id="userStatus"></td>
               </tr>
               <tr>
                 <th>EMAIL</th>
@@ -187,6 +181,7 @@
                   <input
                     type="text"
                     id="userEmail"
+                    name="email"
                     placeholder="#유저이메일"
                     required
                   />
@@ -198,6 +193,7 @@
                   <input
                     type="text"
                     id="userHp"
+                    name="hp"
                     placeholder="#유저휴대폰"
                     required
                   />
@@ -208,11 +204,12 @@
                 <td>
                   <input
                     type="text"
-                    id="userPost"
+                    id="userZipcode"
+                    name="zipCode"
                     placeholder="#유저우편번호"
                     required
                   />
-                    <a href="#" style="color: green">검색</a>
+                  <button type="button" id="btnZip" class="register-btns">우편번호 찾기</button>
                 </td>
               </tr>
               <tr>
@@ -221,6 +218,7 @@
                   <input
                     type="text"
                     id="userAddr1"
+                    name="addr1"
                     placeholder="#유저기본주소"
                     required
                   />
@@ -232,6 +230,7 @@
                   <input
                     type="text"
                     id="userAddr2"
+                    name="addr2"
                     placeholder="#유저상세주소"
                     required
                   />
@@ -239,11 +238,11 @@
               </tr>
               <tr>
                 <th>가입일</th>
-                <td>유저가입일</td>
+                <td id="userUpdatedAt"></td>
               </tr>
               <tr>
                 <th>최근로그인날짜</th>
-                <td>최근로그인날짜</td>
+                <td id="userLastLoginAt"></td>
               </tr>
               <tr>
                 <th>기타</th>
@@ -259,93 +258,130 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button class="confirm-btn">등록하기</button>
+          <button class="confirm-btn">수정하기</button>
         </div>
       </div>
     </div>
   <footer th:replace="~{/admin/include/footer.html}"></footer>
+
+  <script>
+
+    // 우편번호 검색 기능
+    document.getElementById('btnZip').onclick = function () {
+      new daum.Postcode({
+        oncomplete: function (data) {
+          document.getElementById('userZipcode').value = data.zonecode;
+          document.getElementById('userAddr1').value = data.roadAddress || data.jibunAddress;
+          document.getElementById('userAddr2').focus();
+        }
+      }).open();
+    };
+
+    // 회원 수정 모달 동작
+    window.onload = function() {
+      const registerModal = document.getElementById("versionRegisterModal");
+      const registerCloseBtn = document.getElementById("registerModalClose");
+      const confirmButton = document.querySelector(".confirm-btn");
+
+      // 수정 버튼 클릭 시 모달 열기 및 정보 조회
+      const editBtns = document.querySelectorAll(".edit-btn");
+      editBtns.forEach(function(btn) {
+        btn.onclick = function(event) {
+          event.preventDefault(); // 기본 링크 동작 방지
+
+          // UID 가져오기
+          const uid = this.getAttribute('data-uid');
+          console.log('uid:', uid);  // UID 값 확인
+
+          // AJAX 요청으로 사용자 정보 조회
+          fetch(`/lotteon/admin/member/list/${uid}`)  // 여기에 사용자의 정보를 가져오는 API 엔드포인트를 지정
+                  .then(response => response.json())
+                  .then(data => {
+                    console.log('data : ', data);
+
+                    // 사용자 정보가 성공적으로 가져와지면 모달에 채우기
+                    document.getElementById("userId").textContent = data.uid; // 아이디
+                    document.getElementById("userName").value = data.memberInfo.name; // 이름
+
+                    // 성별 값에 따라 라디오 버튼 체크 (0: 남, 1: 여)
+                    const gender = data.memberInfo.gender;
+                    const genderRadios = document.querySelectorAll("input[name='gender']");
+                    // 라디오 버튼 체크 상태 설정
+                    genderRadios.forEach(radio => {
+                      if (gender === 0 && radio.value === "0") {
+                        radio.checked = true; // 남 체크
+                      } else if (gender === 1 && radio.value === "1") {
+                        radio.checked = true; // 여 체크
+                      }
+                    });
+
+                    document.getElementById("userGrade").value = data.memberInfo.grade; // 등급
+                    document.getElementById("userStatus").textContent = data.memberInfo.status; // 상태
+                    document.getElementById("userEmail").value = data.memberInfo.email; // 이메일
+                    document.getElementById("userHp").value = data.memberInfo.hp; // 휴대폰
+                    document.getElementById("userZipcode").value = data.memberInfo.address.zipCode; // 우편번호
+                    document.getElementById("userAddr1").value = data.memberInfo.address.addr1; // 기본주소
+                    document.getElementById("userAddr2").value = data.memberInfo.address.addr2; // 상세주소
+                    const updatedAt = data.memberInfo.updatedAt;  // 가입일
+                    const formattedDate = updatedAt.substring(0, 19);
+                    document.getElementById("userUpdatedAt").textContent = formattedDate;
+                    document.getElementById("userLastLoginAt").textContent = data.memberInfo.lastLoginAt; // 최근로그인날짜
+                    document.getElementById("etc").value = data.memberInfo.etc;
+
+                    // 모달 열기
+                    registerModal.style.display = "block";
+                  })
+                  .catch(error => {
+                    console.error('Error fetching user data:', error);
+                  });
+        };
+      });
+
+      // 모달 닫기 버튼
+      registerCloseBtn.onclick = function() {
+        registerModal.style.display = "none";
+      };
+
+      // 수정하기 버튼 클릭 시 처리
+      confirmButton.onclick = function() {
+        const updatedData = {
+          uid: document.getElementById("userId").value,
+          name: document.getElementById("userName").value,
+          gender: document.querySelector("input[name='gender']:checked").value,
+          email: document.getElementById("userEmail").value,
+          hp: document.getElementById("userHp").value,
+          zipCode: document.getElementById("userZipcode").value,
+          addr1: document.getElementById("userAddr1").value,
+          addr2: document.getElementById("userAddr2").value,
+          // 필요시 다른 필드 추가
+        };
+
+        // AJAX로 수정 요청
+        fetch(`/lotteon/admin/member/update`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(updatedData),
+        })
+                .then(response => {
+                  if (response.ok) {
+                    alert("정상적으로 수정되었습니다.");
+                    // 성공적으로 업데이트 후 모달 닫기
+                    registerModal.style.display = "none";
+
+                    location.reload(); // 페이지 새로 고침
+                  } else {
+                    // 에러 처리
+                    console.error('Error updating user data:', response.statusText);
+                  }
+                })
+                .catch(error => {
+                  console.error('Error:', error);
+                });
+      };
+    };
+  </script>
+
   </body>
 </html>
-<script>
-  // 버전확인 모달 동작
-  document.addEventListener('DOMContentLoaded', function() {
-    var modal = document.getElementById("versionModal");
-    var btns = document.querySelectorAll(".edit-btn"); // "확인" 버튼들
-    var versionCloseBtn = document.getElementById("versionModalClose"); // 버전 모달 닫기 버튼
-    var closeButton = document.getElementById("versionCloseBtn");
-
-    // "확인" 버튼 클릭 시 모달 열기
-    btns.forEach(function(btn) {
-      btn.onclick = function() {
-        modal.style.display = "block";
-      };
-    });
-
-    // 닫기 버튼(X) 클릭 시 모달 닫기
-    versionCloseBtn.onclick = function() {
-      modal.style.display = "none";
-    };
-
-    // 하단 닫기 버튼 클릭 시 모달 닫기
-    closeButton.onclick = function() {
-      modal.style.display = "none";
-    };
-
-    // 모달 외부 클릭 시 모달 닫기
-    window.onclick = function(event) {
-      if (event.target == modal) {
-        modal.style.display = "none";
-      }
-    };
-  });
-
-  // 버전 등록 모달 동작
-  document.addEventListener('DOMContentLoaded', function() {
-    var registerModal = document.getElementById("versionRegisterModal");
-    var registerBtn = document.getElementById("registerModalBtn"); // 등록 버튼
-    var registerCloseBtn = document.getElementById("registerModalClose"); // 등록 모달 닫기 버튼
-    var closeButton = document.getElementById("registerCloseBtn"); // 하단 닫기 버튼
-    var confirmButton = document.getElementById("registerConfirmBtn");
-
-    // 등록 버튼 클릭 시 모달 열기
-    registerBtn.onclick = function() {
-      registerModal.style.display = "flex";
-    };
-
-    // 닫기 버튼(X) 클릭 시 모달 닫기
-    registerCloseBtn.onclick = function() {
-      registerModal.style.display = "none";
-    };
-
-    // 하단 닫기 버튼 클릭 시 모달 닫기
-    closeButton.onclick = function() {
-      registerModal.style.display = "none";
-    };
-
-    // 모달 외부 클릭 시 모달 닫기
-    window.onclick = function(event) {
-      if (event.target == registerModal) {
-        registerModal.style.display = "none";
-      }
-    };
-
-    // 등록 확인 버튼 클릭 시
-    confirmButton.onclick = function() {
-      var version = document.getElementById("versionInput").value;
-      var changelog = document.getElementById("changelogInput").value;
-
-      if (version && changelog) {
-        // 등록 로직 추가 (서버 전송 또는 콘솔 출력)
-        console.log("버전:", version);
-        console.log("변경내역:", changelog);
-
-        // 등록 완료 후 모달 닫기
-        registerModal.style.display = "none";
-      } else {
-        alert("모든 필드를 입력해주세요.");
-      }
-    };
-  });
-
-
-</script>
