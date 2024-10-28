@@ -1,3 +1,12 @@
+/*
+     날짜 : 2024/10/28
+     이름 : 강은경
+     내용 : style_admin_aside.css 생성
+
+     수정이력
+      - 2024/10/28 강은경 - 사이드바 active 스타일 추가
+*/
+
 /* 사이드바 스타일 */
 aside {
     border: 1px solid #ddd;
@@ -63,6 +72,10 @@ aside {
     background-color: #eaeaea;
 }
 
+.sidebar-menu .active {
+    background-color: #f0f0f0; /* 선택된 메뉴의 배경색 */
+    font-weight: bold; /* 선택된 메뉴의 텍스트를 강조 */
+}
 
 .form {
     padding-left: 15px;
