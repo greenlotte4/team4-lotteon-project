@@ -26,8 +26,10 @@ public class MemberInfoDTO {
     private AddressDTO address;
     private int point;
     private String updatedAt;
+    private String lastLoginAt;
     private String status;
     private String grade;
+    private String etc;
 
     // 이름 마스킹 처리 메서드
     public String getMaskedName() {
@@ -49,8 +51,10 @@ public class MemberInfoDTO {
                 .address(new Address(address.getZipCode(), address.getAddr1(), address.getAddr2()))
                 .point(this.point)
                 .updatedAt(this.updatedAt)
+                .lastLoginAt(this.lastLoginAt)
                 .status(this.status)
                 .grade(this.grade)
+                .etc(this.etc)
                 .build();
     }
 

@@ -31,9 +31,11 @@ public class MemberInfo {
 
     @CreationTimestamp
     private String updatedAt;
+    private String lastLoginAt; // 최근 로그인 날짜
 
     private String status;
     private String grade;
+    private String etc;
 
 //    @Enumerated(EnumType.ORDINAL)
 //    private status status;
@@ -78,8 +80,10 @@ public class MemberInfo {
                 .address(new AddressDTO(address.getZipCode(), address.getAddr1(), address.getAddr2()))  // Address 포함
                 .point(this.point)
                 .updatedAt(this.updatedAt)
+                .lastLoginAt(this.lastLoginAt)
                 .status(this.status)
                 .grade(this.grade)
+                .etc(this.etc)
                 .build();
     }
 
