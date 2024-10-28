@@ -63,10 +63,7 @@ public class  CsQnaController {
         return null;
 
     }
-    @GetMapping({"/cs/faq/list_member"})
-    public String faq(){
-        return "/cs/faq/list_member";
-    }
+
     // 글목록 : qna, faq
     @GetMapping({"/cs/{type}/list", "/cs/{type}/list/{cate}"})  // 선택적인 cate 경로 처리
     public String qna(Model model,

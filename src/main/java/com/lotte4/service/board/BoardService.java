@@ -56,7 +56,7 @@ public class BoardService {
             }
         } else {
             // 예외 처리: 카테고리가 존재하지 않을 경우
-            throw new IllegalArgumentException("Invalid category ID: " + cateId);
+            throw new IllegalArgumentException("해당 게시글 카테고리 아이디로 조회된 카테고리가 없습니다.: " + cateId);
         }
 
         return boardEntities.map(board -> modelMapper.map(board, BoardResponseDTO.class));

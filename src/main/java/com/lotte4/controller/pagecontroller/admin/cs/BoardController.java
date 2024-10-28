@@ -42,7 +42,7 @@ public class BoardController {
             @RequestParam(defaultValue = "8") int size) {
 
         if (Objects.equals(type, "notice")) {
-            List<BoardCateDTO> cate1 = boardCateService.selectBoardCatesByDepth(0);
+            List<BoardCateDTO> cate1 = boardCateService.getSubCategories(8);
             model.addAttribute("cates", cate1);
         }
         if (Objects.equals(type, "faq") || Objects.equals(type, "qna")) {
@@ -57,6 +57,17 @@ public class BoardController {
 
         return "/admin/cs/" + type + "/list";
     }
+    @ResponseBody
+    @GetMapping("/board/{cate}")
+    public ResponseEntity<Page<BoardResponseDTO>> selectBoard(
+            @PathVariable(required = false) int cate,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "8") int size) {
+        Page<BoardResponseDTO> boardList = boardService.selectAllBoardByCateId(cate, page, size);
+
+        return ResponseEntity.ok(boardList);
+    }
+
     // 글보기 - qna,fap
     @GetMapping("/admin/cs/{type}/view/{id}")
     public String adminQnaView(Model model, @PathVariable int id, @PathVariable String type) {
