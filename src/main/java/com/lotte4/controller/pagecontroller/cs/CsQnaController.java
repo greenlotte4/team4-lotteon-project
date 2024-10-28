@@ -63,7 +63,10 @@ public class  CsQnaController {
         return null;
 
     }
-
+    @GetMapping({"/cs/faq/list_member"})
+    public String faq(){
+        return "/cs/faq/list_member";
+    }
     // 글목록 : qna, faq
     @GetMapping({"/cs/{type}/list", "/cs/{type}/list/{cate}"})  // 선택적인 cate 경로 처리
     public String qna(Model model,
@@ -81,7 +84,7 @@ public class  CsQnaController {
             // cate가 있을 때 해당 카테고리에 맞는 보드 가져오기
             boardList = boardService.selectAllBoardByCateId(cate, page, size);
         }
-        log.info("왜 카테고리는 안뜨냐 ? "+boardList.getContent());
+        log.info("왜 부모는 안뜨지 ? "+boardList.getContent());
         model.addAttribute("boards", boardList.getContent());
         model.addAttribute("totalPages", boardList.getTotalPages());
         model.addAttribute("currentPage", page);

@@ -45,10 +45,24 @@ public class BoardService {
     // 카테고리 아이디로 찾는 메서드
     public Page<BoardResponseDTO> selectAllBoardByCateId(int cateId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Board> boardEntities = boardRepository.findByCate_BoardCateId(cateId,pageable);
-        return boardEntities.map(board -> modelMapper.map(board, BoardResponseDTO.class));
+        Page<Board> boardEntities;
 
+        Optional<BoardCate> category = boardCateRepository.findById(cateId);
+        if (category.isPresent()) {
+            if (category.get().getParent() == null) {
+                boardEntities = boardRepository.findByCate_Parent_BoardCateId(cateId, pageable);
+            } else {
+                boardEntities = boardRepository.findByCate_BoardCateId(cateId, pageable);
+            }
+        } else {
+            // 예외 처리: 카테고리가 존재하지 않을 경우
+            throw new IllegalArgumentException("Invalid category ID: " + cateId);
+        }
+
+        return boardEntities.map(board -> modelMapper.map(board, BoardResponseDTO.class));
     }
+
+
     public Board insertBoard(BoardRegisterDTO dto) {
         log.info("insert board qna:" +dto);
         return userRepository.findByUid(dto.getUid())
