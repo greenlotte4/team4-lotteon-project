@@ -1,13 +1,11 @@
 package com.lotte4.service.board;
 
-import com.lotte4.dto.BoardCateDTO;
+
 import com.lotte4.dto.BoardCommentDTO;
 import com.lotte4.dto.BoardRegisterDTO;
 import com.lotte4.dto.BoardResponseDTO;
 import com.lotte4.entity.Board;
 import com.lotte4.entity.BoardCate;
-import com.lotte4.entity.ProductCate;
-import com.lotte4.entity.User;
 import com.lotte4.repository.UserRepository;
 import com.lotte4.repository.board.BoardCateRepository;
 import com.lotte4.repository.board.BoardRepository;
@@ -18,14 +16,15 @@ import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -36,12 +35,51 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final BoardCateRepository boardCateRepository;
     private final ModelMapper modelMapper;
-    //ProductCate productCate = modelMapper.map(productCateDTO, ProductCate.class);
+
+    // 타입별로 찾는 메서드
     public Page<BoardResponseDTO> selectAllBoardByType(String type, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Board> boardEntities = boardRepository.findByType(type, pageable);
+
+        if (type.equals("faq") || type.equals("qna")) {
+            int totalElements = (int) boardEntities.getTotalElements();
+            AtomicInteger startNumber = new AtomicInteger(totalElements - (page * size));
+
+            List<BoardResponseDTO> boardListWithRowNumber = boardEntities.stream()
+                    .map(board -> {
+                        BoardResponseDTO dto = modelMapper.map(board, BoardResponseDTO.class);
+                        dto.setRowNumber(startNumber.getAndDecrement()); // AtomicInteger를 사용하여 rowNumber 설정
+                        return dto;
+                    })
+                    .collect(Collectors.toList());
+
+            return new PageImpl<>(boardListWithRowNumber, pageable, boardEntities.getTotalElements());
+        } else {
+            // rowNumber가 필요 없는 경우 그대로 반환
+            return boardEntities.map(board -> modelMapper.map(board, BoardResponseDTO.class));
+        }
+
+    }
+    // 카테고리 아이디로 찾는 메서드
+    public Page<BoardResponseDTO> selectAllBoardByCateId(int cateId, String cate, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Board> boardEntities;
+
+        Optional<BoardCate> category = boardCateRepository.findById(cateId);
+        if (category.isPresent()) {
+            if (category.get().getParent() == null) {
+                boardEntities = boardRepository.findByCate_Parent_BoardCateIdAndType(cateId, cate,  pageable);
+            } else {
+                boardEntities = boardRepository.findByCate_BoardCateIdAndType(cateId,cate, pageable);
+            }
+        } else {
+            // 예외 처리: 카테고리가 존재하지 않을 경우
+            throw new IllegalArgumentException("해당 게시글 카테고리 아이디로 조회된 카테고리가 없습니다.: " + cateId);
+        }
+
         return boardEntities.map(board -> modelMapper.map(board, BoardResponseDTO.class));
     }
+
 
     public Board insertBoard(BoardRegisterDTO dto) {
         log.info("insert board qna:" +dto);
