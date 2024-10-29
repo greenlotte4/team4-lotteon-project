@@ -1,5 +1,6 @@
 package com.lotte4.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lotte4.config.MapToJsonConverter;
 import jakarta.persistence.*;
 import lombok.*;
@@ -42,7 +43,8 @@ public class Product {
 
     @Builder.Default
     @ToString.Exclude
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    @OneToMany(mappedBy = "product", orphanRemoval = true)
     private List<ProductVariants> productVariants = new ArrayList<>();
 
     @Convert(converter = MapToJsonConverter.class)

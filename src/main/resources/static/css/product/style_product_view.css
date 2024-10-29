@@ -15,10 +15,16 @@
 
 .product-image {
     flex: 1;
-    width: 50%; /* 이미지가 전체 공간의 50%를 차지 */
+    width: 460px; /* 이미지가 전체 공간의 50%를 차지 */
     max-width: 50%; /* 추가로 최대 너비도 50%로 설정 */
     margin-right: 20px;
 }
+.product-image > img{
+
+     width: 100%;
+     max-width: 100%;
+     margin-right: 20px;
+ }
 
 .product-image img {
     width: 100%;
@@ -51,6 +57,7 @@ strong {
 }
 
 .rating {
+    margin-top: 10px;
     font-size: 16px;
     margin-bottom: 10px;
 }
