@@ -83,13 +83,12 @@ public class MyController {
     }
 
     // 나의설정 정보수정
-    @PostMapping("/info")
-    public ResponseEntity<MemberInfoDTO> updateInfo(@RequestBody MemberInfoDTO memberInfoDTO) {
+    @PutMapping("/info/update")
+    public ResponseEntity<Void> updateInfo(@RequestBody MemberInfoDTO memberInfoDTO) {
         log.info("controller>memberInfoDTO : " + memberInfoDTO);
 
-        MemberInfoDTO updatedMemberInfo = memberInfoService.updateMemberInfo(memberInfoDTO);
-        log.info("updatedMemberInfo : " + updatedMemberInfo);
-        return ResponseEntity.ok(updatedMemberInfo);
+        memberInfoService.updateMember(memberInfoDTO);
+        return ResponseEntity.ok().build();
     }
 
 

@@ -68,6 +68,7 @@ public class ProductController {
             return "redirect:/member/login"; // 로그인 체크
         }
         String uid = principal.getName(); // principal에서 uid 가져오기
+        log.info("uid : " + uid);
 
         List<CartDTO> cartList = cartService.getCartByUserId(uid);
 
