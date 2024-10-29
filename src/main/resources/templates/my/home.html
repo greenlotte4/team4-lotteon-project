@@ -142,7 +142,7 @@
 
         <!-- 상품평 -->
         <article class="myInfo_Review myInfo_Article">
-          <div class="myInfo_ArticleTitle"><span>상품평</span><a href="#">더보기 ></a></div>
+          <div class="myInfo_ArticleTitle"><span>상품평</span><a th:href="@{/my/review}">더보기 ></a></div>
           <table class="myInfo_ReviewTable myInfo_Table">
             <thead>
               <tr>
@@ -154,65 +154,48 @@
               </tr>
             </thead>
             <tbody>
-              <!-- 반복 block -->
-              <tr>
-                <td>
-                  1
-                </td>
-                <td>
-                  상품번호 / 상품명
-                </td>
-                <td>
-                  배송이 빠릅니다. 잘 사용하겠습니다.
-                </td>
-                <td>
-                  <img th:src="@{../images/my/임시 별점.png}" alt="">
-                </td>
-                <td>
-                  2022-12-10
-                </td>
-              </tr>
-              <!-- 반복 블럭 끝 -->
+            <!-- 반복 block -->
+            <tr th:each="review , i : ${reviewDTOList}"  th:if="${i.index < 3}">
+              <td>
+                [[${i.index+1}]]
+              </td>
+              <td>
+                [[${review.product.productId}]] / [[${review.product.name}]]
+              </td>
+              <td>
+                [[${review.content}]]
+              </td>
+              <td>
+                <th:block th:with="
+                  fullStars=${T(java.lang.Math).floor(review.getReviewStar() / 2)},
+                  halfStar=${review.getReviewStar() % 2 == 1},
+                  emptyStars=${5 - fullStars - (halfStar ? 1 : 0)}">
 
-              <!-- 반복 block -->
-              <tr>
-                <td>
-                  2
-                </td>
-                <td>
-                  상품번호 / 상품명
-                </td>
-                <td>
-                  배송이 빠릅니다. 잘 사용하겠습니다.
-                </td>
-                <td>
-                  <img th:src="@{../images/my/임시 별점.png}" alt="">
-                </td>
-                <td>
-                  2022-12-6
-                </td>
-              </tr>
-              <!-- 반복 블럭 끝 -->
+                  <!-- 전체 별 -->
+                  <th:block th:if="${fullStars > 0}">
+                    <th:block th:each="num : ${#numbers.sequence(1, fullStars)}">
+                      <img th:src="@{/images/review/star.png}" alt="Full Star">
+                    </th:block>
+                  </th:block>
 
-              <!-- 반복 block -->
-              <tr>
-                <td>
-                  3
-                </td>
-                <td>
-                  상품번호 / 상품명
-                </td>
-                <td>
-                  배송이 빠릅니다. 잘 사용하겠습니다.
-                </td>
-                <td>
-                  <img th:src="@{../images/my/임시 별점.png}" alt="">
-                </td>
-                <td>
-                  2022-12-6
-                </td>
-              </tr>
-              <!-- 반복 블럭 끝 -->
+                  <!-- 반 별 -->
+                  <th:block th:if="${halfStar}">
+                    <img th:src="@{/images/review/star_half.png}" alt="Half Star">
+                  </th:block>
+
+                  <!-- 회색 별 -->
+                  <th:block th:if="${emptyStars > 0}">
+                    <th:block th:each="num : ${#numbers.sequence(1, emptyStars)}">
+                      <img th:src="@{/images/review/star_gray.png}" alt="Gray Star">
+                    </th:block>
+                  </th:block>
+
+                </th:block>
+              </td>
+              <td>
+                [[${review.regDateSub}]]
+              </td>
+            </tr>
             </tbody>
           </table>
         </article>

@@ -1,10 +1,13 @@
-package com.lotte4.entity;
+package com.lotte4.dto;
 
-import jakarta.persistence.*;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.*;
 import org.hibernate.annotations.CurrentTimestamp;
 
 import java.time.LocalDateTime;
+
 
 @Getter
 @Setter
@@ -12,11 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity
-@Table(name = "review")
-public class Review {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ReviewDTO {
     private int reviewId;
 
     private int reviewStar;
@@ -31,17 +30,12 @@ public class Review {
 
     private String img3;
 
-    @CurrentTimestamp
     private LocalDateTime regDate;
 
+    private String regDateSub;
     //외래키
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "productId")
-    private Product product;
+    private ProductDTO product;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId")
-    private User user;
-
+    private UserDTO user;
 }

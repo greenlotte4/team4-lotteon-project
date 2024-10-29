@@ -1,8 +1,10 @@
 package com.lotte4.controller.pagecontroller.my;
 
 import com.lotte4.dto.MemberInfoDTO;
+import com.lotte4.dto.ReviewDTO;
 import com.lotte4.dto.UserDTO;
 import com.lotte4.service.MemberInfoService;
+import com.lotte4.service.ReviewService;
 import com.lotte4.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
+
+/*
+
+    - 2024-10-28 강중원 - 리뷰 컨트롤러 수정
+
+ */
 
 @Log4j2
 @RequiredArgsConstructor
@@ -20,11 +29,17 @@ import java.security.Principal;
 @Controller
 public class MyController {
 
+    private final ReviewService reviewService;
     private final MemberInfoService memberInfoService;
     private final UserService userService;
 
     @GetMapping("/home")
-    public String home() {
+    public String home(Model model) {
+
+        //임시 리뷰 추가
+        List<ReviewDTO> reviewDTOList = reviewService.findAllReviews();
+        model.addAttribute("reviewDTOList", reviewDTOList);
+
         return "/my/home";
     }
 
@@ -44,7 +59,10 @@ public class MyController {
     }
 
     @GetMapping("/review")
-    public String review() {
+    public String review(Model model) {
+        List<ReviewDTO> reviewDTOList = reviewService.findAllReviews();
+        model.addAttribute("reviewDTOList", reviewDTOList);
+        log.info(reviewDTOList);
         return "/my/review";
     }
 
