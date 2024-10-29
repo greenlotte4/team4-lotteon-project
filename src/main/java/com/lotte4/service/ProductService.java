@@ -24,6 +24,7 @@ import java.util.*;
                 데이터 타입으로 변환하는 static 메서드 생성
 
         - 2024/10/28 강중원 - 카테고리에 따른 상품 불러오기 기능 추가
+        - 2024/10/29 강중원 - 상위 카테고리 리스트로 불러오는 기능 추가
 */
 
 @Log4j2
@@ -208,6 +209,21 @@ public class ProductService {
         return "success";
     }
 
+    public List<ProductCateDTO> getProductCates(int cate) {
+        List<ProductCateDTO> productCateDTOList = new ArrayList<>();
+        Optional<ProductCate> productCateOpt = categoryRepository.findById(cate);
+        if (productCateOpt.isPresent()) {
+            ProductCate productCate = productCateOpt.get();
+            productCateDTOList.add(modelMapper.map(productCate, ProductCateDTO.class));
+          while (productCate.getParent() != null) {
+              productCate = productCate.getParent();
+              productCateDTOList.add(modelMapper.map(productCate, ProductCateDTO.class));
+          }
+        }
+        Collections.reverse(productCateDTOList);
+        return productCateDTOList;
+    }
+
     public List<ProductDTO> getProductWithCate(int cate){
         List<ProductDTO> productDTOList = new ArrayList<>();
         Optional<ProductCate> productCate = categoryRepository.findById(cate);
@@ -218,7 +234,7 @@ public class ProductService {
 
         if (productCate.isPresent()) {
             // depth가 1 또는 2인 경우, 하위 카테고리의 제품을 가져옴
-            if (productCate.get().getDepth() < 3) {
+            if (productCate.get().getChildren() != null) {
                 for (ProductCate child : productCate.get().getChildren()) {
                     // 현재 하위 카테고리에 속한 제품을 가져옴
                     List<Product> childProducts = productRepository.findByProductCateId(child);
@@ -227,7 +243,7 @@ public class ProductService {
                     }
 
                     // depth가 1인 경우, 손자 카테고리의 제품을 가져옴
-                    if (child.getDepth() < 2) {
+                    if (child.getChildren() != null) {
                         for (ProductCate grandChild : child.getChildren()) {
                             List<Product> grandChildProducts = productRepository.findByProductCateId(grandChild);
                             for (Product product : grandChildProducts) {
