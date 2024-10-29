@@ -92,6 +92,24 @@ public class ConfigController {
         }
     }
 
+    @PutMapping("/admin/config/banner/enable")
+    public ResponseEntity<String> AdminConfigBannerEnable(@RequestBody BannerDTO bannerDTO) {
+        boolean expire = bannerService.expireBannerCheck(bannerDTO);
+        if(expire) {
+            return ResponseEntity.ok("fail");
+        }else{
+            bannerService.updateBannerState(bannerDTO,1);
+            return ResponseEntity.ok("success");
+        }
+    }
+
+    @PutMapping("/admin/config/banner/disable")
+    public ResponseEntity<String> AdminConfigBannerDisable(@RequestBody BannerDTO bannerDTO) {
+        bannerService.updateBannerState(bannerDTO,0);
+        return ResponseEntity.ok("success");
+
+    }
+
     @DeleteMapping("/admin/config/banner")
     public ResponseEntity<Map<String, Object>> AdminconfigBannerDelete(@RequestBody List<Integer> selectedItems, Model model) {
 
