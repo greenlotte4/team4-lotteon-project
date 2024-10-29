@@ -1,9 +1,6 @@
 package com.lotte4.controller.pagecontroller;
 
-import com.lotte4.dto.CartDTO;
-import com.lotte4.dto.ProductDTO;
-import com.lotte4.dto.ProductVariantsDTO;
-import com.lotte4.dto.Product_V_DTO;
+import com.lotte4.dto.*;
 import com.lotte4.service.CartService;
 import com.lotte4.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +39,6 @@ public class ProductController {
         model.addAttribute("productDTOList", productDTOList);
         log.info(productDTOList);
         List<String> cate = new ArrayList<>();
-        cate.add("전체상품");
         model.addAttribute("categories", cate);
         return "/product/list";
     }
@@ -51,7 +47,8 @@ public class ProductController {
     public String listWithCate(@PathVariable int cate, Model model) {
         List<ProductDTO> productDTOList = productService.getProductWithCate(cate);
         model.addAttribute("productDTOList", productDTOList);
-        List<String> cateList = new ArrayList<>();
+
+        List<ProductCateDTO> cateList = productService.getProductCates(cate);
 
         model.addAttribute("categories", cateList);
         log.info(productDTOList);

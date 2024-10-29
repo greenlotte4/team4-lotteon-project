@@ -34,10 +34,10 @@
         <section class="product-list-section">
             <!-- Breadcrumb -->
             <div class="breadcrumb">
-                <a href="#">Home</a> &gt;
+                <a th:href="@{/product/list}">Home</a>
                 <!--카테고리에 따른 블럭추가-->
                 <th:block th:each="cate: ${categories}">
-                    <a th:href="@{/product/list}">[[${cate}]]</a>
+                    &gt; <a th:href="@{'/product/list/' + ${cate.productCateId}}">[[${cate.name}]]</a>
                 </th:block>
             </div>
 
