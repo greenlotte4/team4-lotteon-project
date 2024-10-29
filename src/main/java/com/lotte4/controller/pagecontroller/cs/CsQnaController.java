@@ -82,7 +82,7 @@ public class  CsQnaController {
             // cate가 있을 때 해당 카테고리에 맞는 보드 가져오기
             boardList = boardService.selectAllBoardByCateId(cate, type, page, size);
         }
-        log.info("왜 부모는 안뜨지 ? "+boardList.getContent());
+
         model.addAttribute("boards", boardList.getContent());
         model.addAttribute("totalPages", boardList.getTotalPages());
         model.addAttribute("currentPage", page);

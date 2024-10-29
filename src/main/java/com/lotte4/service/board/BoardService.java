@@ -36,50 +36,52 @@ public class BoardService {
     private final BoardCateRepository boardCateRepository;
     private final ModelMapper modelMapper;
 
-    // 타입별로 찾는 메서드
+    // 글 타입별로 찾는 메서드 ( qna | faq | notice )
     public Page<BoardResponseDTO> selectAllBoardByType(String type, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Board> boardEntities = boardRepository.findByType(type, pageable);
 
-        if (type.equals("faq") || type.equals("qna")) {
-            int totalElements = (int) boardEntities.getTotalElements();
-            AtomicInteger startNumber = new AtomicInteger(totalElements - (page * size));
-
-            List<BoardResponseDTO> boardListWithRowNumber = boardEntities.stream()
-                    .map(board -> {
-                        BoardResponseDTO dto = modelMapper.map(board, BoardResponseDTO.class);
-                        dto.setRowNumber(startNumber.getAndDecrement()); // AtomicInteger를 사용하여 rowNumber 설정
-                        return dto;
-                    })
-                    .collect(Collectors.toList());
-
-            return new PageImpl<>(boardListWithRowNumber, pageable, boardEntities.getTotalElements());
-        } else {
-            // rowNumber가 필요 없는 경우 그대로 반환
-            return boardEntities.map(board -> modelMapper.map(board, BoardResponseDTO.class));
-        }
-
+        return applyRowNumber(boardEntities, pageable, page, size);
     }
-    // 카테고리 아이디로 찾는 메서드
-    public Page<BoardResponseDTO> selectAllBoardByCateId(int cateId, String cate, int page, int size) {
+
+    // 카테고리 아이디로 찾는 메서드 (부모 카테고리, 자식 카테고리 공용)
+    public Page<BoardResponseDTO> selectAllBoardByCateId(int cateId, String type, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Board> boardEntities;
-
         Optional<BoardCate> category = boardCateRepository.findById(cateId);
+
         if (category.isPresent()) {
+            // 부모가 null - 부모 카테고리 (depth=1) => board의 카테고리의 상위로 조회해야함 (ex) '회원' 으로 조회)
             if (category.get().getParent() == null) {
-                boardEntities = boardRepository.findByCate_Parent_BoardCateIdAndType(cateId, cate,  pageable);
+                boardEntities = boardRepository.findByCate_Parent_BoardCateIdAndType(cateId, type, pageable);
             } else {
-                boardEntities = boardRepository.findByCate_BoardCateIdAndType(cateId,cate, pageable);
+            // 부모가 존재 - 자식 카테고리 (depth=2) => board의 카테고리로 조회해야함 (ex) '회원 가입' 으로 조회)
+                boardEntities = boardRepository.findByCate_BoardCateIdAndType(cateId, type, pageable);
             }
+
         } else {
-            // 예외 처리: 카테고리가 존재하지 않을 경우
+
             throw new IllegalArgumentException("해당 게시글 카테고리 아이디로 조회된 카테고리가 없습니다.: " + cateId);
         }
 
-        return boardEntities.map(board -> modelMapper.map(board, BoardResponseDTO.class));
+        return applyRowNumber(boardEntities, pageable, page, size);
     }
 
+    // rowNumber - 게시글 번호 인덱스를 넣어주기 위한 함수
+    private Page<BoardResponseDTO> applyRowNumber(Page<Board> boardEntities, Pageable pageable, int page, int size) {
+        int totalElements = (int) boardEntities.getTotalElements();
+        AtomicInteger startNumber = new AtomicInteger(totalElements - (page * size));
+
+        List<BoardResponseDTO> boardListWithRowNumber = boardEntities.stream()
+                .map(board -> {
+                    BoardResponseDTO dto = modelMapper.map(board, BoardResponseDTO.class);
+                    dto.setRowNumber(startNumber.getAndDecrement()); // rowNumber 설정
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(boardListWithRowNumber, pageable, boardEntities.getTotalElements());
+    }
 
     public Board insertBoard(BoardRegisterDTO dto) {
         log.info("insert board qna:" +dto);
