@@ -426,3 +426,29 @@
 .location {
     font-weight: bold;
 }
+
+.variant-options {
+    color: #757575;
+}
+
+.horizontal-list {
+    list-style-type: none; /* 기본 점을 없앰 */
+    padding: 0; /* 패딩 제거 */
+    margin: 0; /* 마진 제거 */
+    display: flex; /* Flexbox 사용으로 가로 배치 */
+}
+
+.horizontal-list > li {
+    margin-right: 7px; /* 항목 간의 간격 */
+}
+
+.horizontal-list > li:last-child {
+    margin-right: 0; /* 마지막 항목의 간격 없앰 */
+}
+
+.horizontal-list ul {
+    list-style-type: none; /* 서브 항목의 점 없앰 */
+    padding: 0;
+    margin: 0;
+    display: inline; /* 서브 항목을 인라인으로 표시 */
+}
