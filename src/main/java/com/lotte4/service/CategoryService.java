@@ -6,6 +6,7 @@ import com.lotte4.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -61,6 +62,7 @@ public class CategoryService {
         categoryRepository.save(productCate);
     }
 
+    @Cacheable(key = "#category", value = "categories", cacheManager = "cacheManager")
     public List<ProductCateDTO> getProductCateListWithDepth(int depth){
 
         List<ProductCateDTO> productCateDTOList = new ArrayList<>();
