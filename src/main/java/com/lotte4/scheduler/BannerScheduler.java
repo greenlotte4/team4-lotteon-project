@@ -21,7 +21,7 @@ public class BannerScheduler {
     private final BannerService bannerService;
 
     //1분마다 실행
-    @Scheduled(cron = "0 0/1 * * * *")
+    @Scheduled(cron = "0 0/10 * * * *")
     public void bannerCheck() {
         List<BannerDTO> bannerList = bannerService.getAllBanners();
         for (BannerDTO bannerDTO : bannerList) {
