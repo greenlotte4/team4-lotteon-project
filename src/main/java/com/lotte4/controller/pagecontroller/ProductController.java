@@ -1,9 +1,12 @@
 package com.lotte4.controller.pagecontroller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lotte4.dto.*;
 import com.lotte4.service.CartService;
 import com.lotte4.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -31,7 +34,7 @@ public class ProductController {
 
     private final CartService cartService;
     private final ProductService productService;
-
+    private final ObjectMapper objectMapper;
 
     @GetMapping("/product/list")
     public String list(Model model) {
@@ -56,7 +59,7 @@ public class ProductController {
     }
 
     @GetMapping("/product/list_grid")
-    public String listgrid(){
+    public String listgrid() {
         return "/product/list_grid";
     }
 
@@ -88,7 +91,7 @@ public class ProductController {
         log.info("cartItems : " + cartItems);
 
         // cartItems가 null이거나 비어 있을 경우 처리
-        if(cartItems == null || cartItems.isEmpty()) {
+        if (cartItems == null || cartItems.isEmpty()) {
             return ResponseEntity.badRequest().build(); // 잘못된 요청 처리
         }
 
@@ -100,18 +103,20 @@ public class ProductController {
     }
 
 
-
     @GetMapping("/product/search")
-    public String search(){
+    public String search() {
         return "/product/search";
     }
 
     @GetMapping("/product/view")
-    public String view(int productId, Model model) {
+    public String view(int productId, Model model) throws JsonProcessingException {
 
-        Product_V_DTO productDTO = productService.getProductById2(productId);
-        log.info("productDTO : " + productDTO);
+        Product_V_DTO productDTO = productService.getProductById(productId);
+
+        String productDTOJson = objectMapper.writeValueAsString(productDTO);
+        model.addAttribute("productDTOJson", productDTOJson);
         model.addAttribute("productDTO", productDTO);
+
 
         return "/product/view";
     }

@@ -1,5 +1,6 @@
 package com.lotte4.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.lotte4.config.MapToJsonConverter;
 import jakarta.persistence.*;
 import lombok.*;
@@ -37,7 +38,8 @@ public class ProductVariants {
     private LocalDateTime updated_at;
 
     @ToString.Exclude
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "productId")
     private Product product;
 }
