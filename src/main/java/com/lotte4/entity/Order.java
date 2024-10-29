@@ -48,7 +48,8 @@ public class Order {
     @JoinColumn(name = "memberInfoId")
     private MemberInfo memberInfo;
 
-    @OneToOne(mappedBy = "order")
+    @OneToOne
+    @JoinColumn(name = "couponId")
     private Coupon coupon;
 
     @OneToOne(mappedBy = "order")

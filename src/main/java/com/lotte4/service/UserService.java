@@ -1,5 +1,6 @@
 package com.lotte4.service;
 
+import com.lotte4.dto.CartDTO;
 import com.lotte4.dto.UserDTO;
 import com.lotte4.entity.MemberInfo;
 import com.lotte4.entity.SellerInfo;
@@ -14,14 +15,28 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
+/*
+     날짜 : 2024/10/28
+     이름 : 강은경
+     내용 : UserService 생성
 
+     수정이력
+      - 2024/10/28 강은경 - 관리자 회원목록 기능 검색&페이징 메서드 추가
+*/
 @Log4j2
 @RequiredArgsConstructor
 @Service
@@ -164,5 +179,29 @@ public class UserService {
 
         return code + "";
     }
+
+    // role이 member인 회원 목록 select
+    public Page<UserDTO> selectUserListByMember(String role, int page, int size, String keyword) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<User> userPage;
+
+        // 검색 키워드가 있을 때
+        if (keyword != null && !keyword.isEmpty()) {
+            userPage = userRepository.findByRoleAndUidContainingOrMemberInfoNameContainingOrMemberInfoEmailContainingOrMemberInfoHpContaining(
+                    role, keyword, keyword, keyword, keyword, pageable);
+        } else {
+            // 키워드가 없을 경우 기본값으로 모든 사용자 가져오기
+            userPage = userRepository.findByRole(role, pageable);
+        }
+
+        // User 엔티티를 UserDTO로 변환
+        return userPage.map(user -> modelMapper.map(user, UserDTO.class));
+    }
+
+    public long getTotalUserCountByRoleAndKeyword(String role, String keyword) {
+        // 사용자 리스트를 가져와서 카운트
+        return selectUserListByMember(role, 0, Integer.MAX_VALUE, keyword).getTotalElements();
+    }
+
 
 }

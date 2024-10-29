@@ -42,8 +42,10 @@ public class BoardController {
             @RequestParam(defaultValue = "8") int size) {
 
         if (Objects.equals(type, "notice")) {
+
             List<BoardCateDTO> cates = boardCateService.getSubCategories(8);
             model.addAttribute("cates", cates);
+
         }
         if (Objects.equals(type, "faq") || Objects.equals(type, "qna")) {
             List<BoardCateDTO> cate1 = boardCateService.selectBoardCatesByDepth(1);

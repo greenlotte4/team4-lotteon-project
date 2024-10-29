@@ -31,10 +31,11 @@ public class MemberInfo {
 
     @CreationTimestamp
     private String updatedAt;
-    @Builder.Default()
-    private String status = "active";
-    @Builder.Default()
-    private String grade = "family";
+    private String lastLoginAt; // 최근 로그인 날짜
+
+    private String status;
+    private String grade;
+    private String etc;
 
 //    @Enumerated(EnumType.ORDINAL)
 //    private status status;
@@ -58,6 +59,17 @@ public class MemberInfo {
         SELLER, //6번
     }
 
+    // status와 grade에 디폴트값이 안들어가서 추가
+    @PrePersist
+    public void prePersist() {
+        if (this.status == null) {
+            this.status = "정상";
+        }
+        if (this.grade == null) {
+            this.grade = "FAMILY";
+        }
+    }
+
     public MemberInfoDTO toDTO() {
         return MemberInfoDTO.builder()
                 .memberInfoId(this.memberInfoId)
@@ -68,8 +80,10 @@ public class MemberInfo {
                 .address(new AddressDTO(address.getZipCode(), address.getAddr1(), address.getAddr2()))  // Address 포함
                 .point(this.point)
                 .updatedAt(this.updatedAt)
+                .lastLoginAt(this.lastLoginAt)
                 .status(this.status)
                 .grade(this.grade)
+                .etc(this.etc)
                 .build();
     }
 

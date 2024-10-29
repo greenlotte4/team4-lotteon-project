@@ -8,23 +8,26 @@
         <div class="util innerContent">
             <div class="accountArea">
                 <ul>
-                    <li sec:authorize="!isAuthenticated()">
-                        <a th:href="@{/member/login}">로그인</a>
+                    <li  sec:authorize="isAuthenticated()">
+                        <span class="loginname area">[[${#authentication.name}]]님</span>
                     </li>
-                    <li  sec:authorize="hasRole('ADMIN')">
-                        <a th:href="@{/admin/index}">관리자</a>
+                    <li sec:authorize="!isAuthenticated()">
+                        <a th:href="@{/member/login}" class="area">로그인</a>
+                    </li>
+                    <li sec:authorize="hasRole('ADMIN') or hasRole('seller')">
+                        <a th:href="@{/admin/index}" class="area">관리자</a>
                     </li>
                     <li  sec:authorize="isAuthenticated()">
-                        <a th:href="@{/member/logout}"  id="logout">로그아웃</a>
+                        <a th:href="@{/member/logout}" id="logout" class="area">로그아웃</a>
                     </li>
                     <li sec:authorize="!isAuthenticated()">
-                        <a th:href="@{/member/join}">회원가입</a>
+                        <a th:href="@{/member/join}" class="area">회원가입</a>
                     </li>
                     <li>
-                        <a th:href="@{/my/order}">주문배송</a>
+                        <a th:href="@{/my/order}" class="area">주문배송</a>
                     </li>
                     <li>
-                        <a th:href="@{/cs/index}">고객센터</a>
+                        <a th:href="@{/cs/index}" class="area">고객센터</a>
                     </li>
                 </ul>
             </div>
@@ -36,7 +39,7 @@
                 <h1 class="logoArea">
                     <h1 class="logoArea">
                         <a th:href="@{/index}">
-                            <img th:src="@{'/uploads/' + ${info.headerLogo}}" alt="LOTTE ON">
+                            <img th:src="@{'/uploads/config/' + ${info.headerLogo}}" alt="LOTTE ON">
                         </a>
                     </h1>
                 </h1>
@@ -70,7 +73,7 @@
                         </li>
 
                         <li>
-                            <a th:href="@{/product/cart/4}">
+                            <a th:href="@{/product/cart}">
                             <button type="button" class="cart">
                                 <img src="https://static.lotteon.com/p/common/foCommon/assets/img/icon_cart_black.svg" alt="장바구니">
                                 <span>장바구니</span>
@@ -115,15 +118,15 @@
             <div class="categoryMenu">
                 <ul>
                     <li th:each="child : ${productCateDTOList}">
-                        <a href="#">[[${child.getName()}]]</a>
+                        <a th:href="@{'/product/list/' + ${child.getProductCateId}}">[[${child.getName()}]]</a>
                         <!-- 2차 메뉴 -->
                         <ul class="subMenu">
                             <li th:each="sub : ${child.getChildren()}">
-                                <a href="#">[[${sub.getName()}]]</a>
+                                <a th:href="@{'/product/list/' + ${sub.getProductCateId}}">[[${sub.getName()}]]</a>
                                 <!-- 3차 메뉴 -->
                                 <ul class="subSubMenu">
                                     <li th:each="subChild : ${sub.getChildren()}">
-                                        <a href="#">[[${subChild.getName()}]]</a>
+                                        <a th:href="@{'/product/list/' + ${subChild.getProductCateId}}">[[${subChild.getName()}]]</a>
                                     </li>
                                 </ul>
                             </li>

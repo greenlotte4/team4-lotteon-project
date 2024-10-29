@@ -35,6 +35,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final BoardCateRepository boardCateRepository;
     private final ModelMapper modelMapper;
+
     // 타입별로 찾는 메서드
     public Page<BoardResponseDTO> selectAllBoardByType(String type, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -57,6 +58,7 @@ public class BoardService {
             // rowNumber가 필요 없는 경우 그대로 반환
             return boardEntities.map(board -> modelMapper.map(board, BoardResponseDTO.class));
         }
+
     }
     // 카테고리 아이디로 찾는 메서드
     public Page<BoardResponseDTO> selectAllBoardByCateId(int cateId, String cate, int page, int size) {

@@ -64,6 +64,7 @@ public class  CsQnaController {
 
     }
 
+
     // 글목록 : qna, faq
     @GetMapping({"/cs/{type}/list", "/cs/{type}/list/{cate}"})  // 선택적인 cate 경로 처리
     public String qna(Model model,
@@ -88,6 +89,7 @@ public class  CsQnaController {
 
         return "/cs/" + type + "/list";
     }
+
 
 
     // 글보기 : qna, faq

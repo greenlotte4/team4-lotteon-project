@@ -1,10 +1,12 @@
 package com.lotte4.controller.pagecontroller.admin.config;
 
 import com.lotte4.dto.BannerDTO;
+import com.lotte4.dto.TermsDTO;
 import com.lotte4.dto.admin.config.InfoDTO;
 import com.lotte4.dto.ProductCateDTO;
 import com.lotte4.entity.ProductCate;
 import com.lotte4.service.CategoryService;
+import com.lotte4.service.TermsService;
 import com.lotte4.service.admin.config.BannerService;
 import lombok.extern.log4j.Log4j2;
 
@@ -25,7 +27,14 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+/*
+     날짜 : 2024/10/28
+     이름 : 강은경
+     내용 : ConfigController 생성
 
+     수정이력
+      - 2024/10/28 강은경 - terms select&update 메서드 추가
+*/
 @Log4j2
 @RequiredArgsConstructor
 @Controller
@@ -33,6 +42,7 @@ public class ConfigController {
     // View반환 Controller
     private final VersionService versionService;
     private final InfoService infoService;
+    private final TermsService termsService;
 
     @GetMapping("/admin/config/info")
     public String AdminConfigInfoInsert(Model model) {
@@ -105,11 +115,62 @@ public class ConfigController {
     }
 
 
-    //약관관리
+    //약관 관리
     @GetMapping("/admin/config/policy")
-    public String AdminconfigPolicy() {
+    public String AdminconfigPolicy(Model model) {
+
+        TermsDTO termsDTO = termsService.selectTerms();
+        model.addAttribute("termsDTO", termsDTO);
+        log.info("termsDTO : "+termsDTO);
+
         return "/admin/config/policy";
     }
+
+    // 구매회원 약관 정보 수정
+    @PostMapping("/admin/config/term")
+    public ResponseEntity<TermsDTO> updateTerm(@RequestBody TermsDTO termsDTO) {
+        log.info("termsDTO : "+termsDTO);
+        TermsDTO updatedTerm = termsService.updateTerm(termsDTO);
+        return ResponseEntity.ok(updatedTerm);
+
+    }
+
+    // 판매회원 약관 정보 수정
+    @PostMapping("/admin/config/tax")
+    public ResponseEntity<TermsDTO> updateTax(@RequestBody TermsDTO termsDTO) {
+
+        TermsDTO updatedTax = termsService.updateTax(termsDTO);
+        return ResponseEntity.ok(updatedTax);
+
+    }
+
+    // 전자금융거래 약관 정보 수정
+    @PostMapping("/admin/config/finance")
+    public ResponseEntity<TermsDTO> updateFinance(@RequestBody TermsDTO termsDTO) {
+
+        TermsDTO updatedFinance = termsService.updateFinance(termsDTO);
+        return ResponseEntity.ok(updatedFinance);
+
+    }
+
+    // 위치정보 약관 정보 수정
+    @PostMapping("/admin/config/location")
+    public ResponseEntity<TermsDTO> updateLocation(@RequestBody TermsDTO termsDTO) {
+
+        TermsDTO updatedLocation = termsService.updateLocation(termsDTO);
+        return ResponseEntity.ok(updatedLocation);
+
+    }
+
+    // 개인정보처리방침 약관 정보 수정
+    @PostMapping("/admin/config/privacy")
+    public ResponseEntity<TermsDTO> updatePrivacy(@RequestBody TermsDTO termsDTO) {
+
+        TermsDTO updatedPrivacy = termsService.updatePrivacy(termsDTO);
+        return ResponseEntity.ok(updatedPrivacy);
+
+    }
+
 
 
     //버전관리
@@ -154,5 +215,7 @@ public class ConfigController {
             return "fail";
         }
     }
+
+
 
 }

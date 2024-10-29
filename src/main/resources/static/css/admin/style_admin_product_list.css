@@ -44,13 +44,17 @@
 }
 
 .search-btn {
-    padding: 10px 20px;
+    padding: 7px 20px;
     background-color: #d82a2a;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     height: 37px;
+
+    &:hover {
+        background-color: rgba(216, 42, 42, 0.82);
+    }
 }
 
 /* 상품 이미지 스타일 */
@@ -73,17 +77,21 @@
 }
 
 /* 버튼 스타일 */
-.delete-btn {
+#delete-btn {
     padding: 10px 20px;
     background-color: #d82a2a;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+
+    &:hover {
+        background-color: rgba(216, 42, 42, 0.85);
+    }
 }
 
-.delete-btn[disabled] {
-    background-color: #d82a2a;
+#delete-btn[disabled] {
+    background-color: grey;
 }
 
 .edit-btn, .deletebtn, .write-btn {
@@ -99,30 +107,42 @@
     border: 1px solid #d82a2a; /* 지정된 빨간색 테두리 */
     border-radius: 5px; /* 테두리 모서리 둥글게 */
     text-decoration: none; /* 밑줄 제거 */
+
+    &:hover {
+        background-color: #ffecec;
+    }
 }
 
 .deletebtn {
+    font-size: 14px;
     color: white; /* 수정 버튼 글자색 */
     background-color: #d82a2a;
     margin-left: 1px; /* 버튼 사이의 여백 */
     border: 1px solid #d82a2a; /* 지정된 빨간색 테두리 */
     border-radius: 5px; /* 테두리 모서리 둥글게 */
-    margin-top: 4px;
+    margin-top: 5px;
+
+    &:hover {
+        background-color: rgba(216, 42, 42, 0.82);
+    }
 }
 
 .write-btn {
     padding: 6px 19px;
     background-color: white;
     color: #d82a2a;
-    border: none;
     border-radius: 5px;
     border: 1px solid #ef2a23; /* 지정된 빨간색 테두리 */
     cursor: pointer;
     float: right;
     text-decoration: none; /* 밑줄 제거 */
     font-size: 15px;
-}
 
+    &:hover {
+        background-color: #ffecec;
+
+    }
+}
 
 
 /* 페이지네이션 */

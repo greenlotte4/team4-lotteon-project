@@ -9,10 +9,10 @@
     <title>상품상세등록</title>
 
     <!--공통 css 부분-->
-    <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}" required/>
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}"  th:value="1" />
     <!--각 페이지(section) 개별 css-->
-    <link rel="stylesheet" th:href="@{/css/admin/style_admin_product_register.css}" required/>
-    <script th:src="@{/js/my/product/product_register.js}" defer></script>
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_product_registerMore.css}"  th:value="1" />
+    <script th:src="@{/js/my/admin_product/product_registerMore.js}" defer></script>
 </head>
 <body>
 <header th:replace="~{/admin/include/header.html}"></header>
@@ -27,22 +27,29 @@
             </div>
             <h3>상품상세등록</h3>
             <form>
-                <table>
+                <table class="inquiry-table">
                     <tr>
-                        <td>상품번호</td>
-                        <td>상품옵션</td>
-                        <td>제품고유명</td>
-                        <td>가격</td>
-                        <td>수량</td>
+                        <th th:each="optionName : ${optionNames}" th:text="${optionName}"></th>
+                        <th>제품고유명</th>
+                        <th>가격</th>
+                        <th>수량</th>
                     </tr>
-                    <tr th:each="option : ${options}">
-                        <td th:text="${option.getKey()}"></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                    <tr id="inputAll"  th:value="1" >
+                        <td th:each="optionName : ${optionNames}"></td>
+                        <td><input type="text" id="input_sku"><br><button class="btnInputAll" data-type="sku">일괄등록</button></td>
+                        <td><input type="text" id="input_price"><br><button class="btnInputAll" data-type="price">일괄등록</button></td>
+                        <td><input type="text" id="input_stock"><br><button class="btnInputAll" data-type="stock">일괄등록</button></td>
+                    </tr>
+                    <tr th:each="mixedValues: ${mixedValuesList}" class="optionValues">
+                        <td class="mixedValue" th:each="mixedValue : ${mixedValues}" th:text="${mixedValue}"></td>
+                        <td><input  th:value="1"  type="text" class="prodOName"></td>
+                        <td><input  th:value="1"  type="text" class="prodPrice"></td>
+                        <td><input  th:value="1"  type="text" class="prodStock"></td>
                     </tr>
                 </table>
+                <input id="mixedValuesList" type="hidden" th:value="${mixedValuesList}">
+                <input id="optionNames" type="hidden" th:value="${optionNames}">
+                <input id="productId" type="hidden" th:value="${prodId}">
             <div class="buttons">
                 <button type="submit" class="write-btn" id="product_submit">등록</button>
             </div>

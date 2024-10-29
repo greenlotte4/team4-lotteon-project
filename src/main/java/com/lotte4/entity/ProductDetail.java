@@ -2,6 +2,7 @@ package com.lotte4.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CurrentTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -28,6 +29,8 @@ public class ProductDetail {
     private String creator;
     private String country;
     private String warning;
+
+    @CurrentTimestamp
     private LocalDateTime createDate;
     private String quality;
     private String as_field;

@@ -79,10 +79,10 @@
                     <tr th:each="banner, index : ${configBanners}">
                         <td><input type="checkbox" class="checkbox"></td>
                         <td>[[${index.index+1}]]</td>
-                        <td><a th:href="@{'/uploads/' + ${banner.img}}"><img th:src="@{'/uploads/' + ${banner.img}}" alt="배너 사진" class="product-image"></a></td>
+                        <td><a th:href="@{'/uploads/config/' + ${banner.img}}"><img th:src="@{'/uploads/config/' + ${banner.img}}" alt="배너 사진" class="product-image"></a></td>
                         <td><span>[[${banner.name}]]</span>
                             <span>[[${banner.size}]]</span>
-                            <span>[[${banner.background}]]</span>
+                            <span>[[${banner.background}]]<span class="backColor" th:style="'background: ' + ${banner.background}">　　</span></span>
                             <span><a th:href="${banner.link}">[[${banner.link}]]</a></span></td>
                         <td>[[${banner.location}]]</td>
                         <td>[[${banner.sDate}]]</td>
@@ -239,16 +239,6 @@
                 formData.get("sTime") &&
                 formData.get("eTime")) {
 
-
-                console.log(formData.get("name"));
-                console.log(formData.get("size"));
-                console.log(formData.get("background"));
-                console.log(formData.get("link"));
-                console.log(formData.get("location"));
-                console.log(formData.get("sDate"));
-                console.log(formData.get("eDate"));
-                console.log(formData.get("sTime"));
-                console.log(formData.get("eTime"));
 
                 fetch('/lotteon/admin/config/banner', {
                     method: 'POST',

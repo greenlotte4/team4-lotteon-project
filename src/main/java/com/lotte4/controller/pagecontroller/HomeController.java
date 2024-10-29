@@ -22,9 +22,7 @@ public class HomeController {
     @GetMapping(value = {"/", "/index"})
     public String index(Model model) {
 
-        List<ProductCateDTO> productCateDTOList = categoryService.getProductCateListWithDepth(1);
-        model.addAttribute("productCateDTOList", productCateDTOList);
-        log.info(productCateDTOList);
+
 
         return "/index";
     }

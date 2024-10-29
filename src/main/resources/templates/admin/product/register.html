@@ -9,10 +9,10 @@
     <title>상품등록</title>
 
     <!--공통 css 부분-->
-    <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}" required/>
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}"/>
     <!--각 페이지(section) 개별 css-->
-    <link rel="stylesheet" th:href="@{/css/admin/style_admin_product_register.css}" required/>
-    <script th:src="@{/js/my/product/product_register.js}" defer></script>
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_product_register.css}"/>
+    <script th:src="@{/js/my/admin_product/product_register.js}" defer></script>
 </head>
 <body>
 <header th:replace="~{/admin/include/header.html}"></header>
@@ -74,49 +74,43 @@
                             <tr>
                                 <td class="label">상품명</td>
                                 <td>
-                                    <input type="text" name="name" id="name" required/>
+                                    <input type="text" name="name" id="name" value="1" required/>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">기본설명</td>
                                 <td>
-                                    <input type="text" name="description" id="description" required/>
+                                    <input type="text" name="description" id="description" value="1" required/>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">제조사</td>
                                 <td>
-                                    <input type="text" name="company" id="company" required/>
+                                    <input type="text" name="company" id="company" value="1" required/>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">상품금액</td>
                                 <td>
-                                    <input type="text" name="price" class="inputmini" id="price" required/> 원
+                                    <input type="text" name="price" class="inputmini" id="price" value="1" required/> 원
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">할인율</td>
                                 <td>
-                                    <input type="text" name="discount" class="inputmini" id="discount" required/> %
+                                    <input type="text" name="discount" class="inputmini" id="discount" value="1" required/> %
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">포인트</td>
                                 <td>
-                                    <input type="text" name="point" class="inputmini" id="point" required/> 원
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="label">재고수량</td>
-                                <td>
-                                    <input type="text" name="stock" class="inputmini" id="stock" required/> 개
+                                    <input type="text" name="point" class="inputmini" id="point" value="1" required/> 원
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">배송비</td>
                                 <td>
-                                    <input type="text" name="deliveryFee" class="inputmini" id="deliveryFee" required/>
+                                    <input type="text" name="deliveryFee" class="inputmini" id="deliveryFee" value="1" required/>
                                     원
                                 </td>
                             </tr>
@@ -180,89 +174,89 @@
                             <tr>
                                 <td class="label">상품상태</td>
                                 <td>
-                                    <input type="text" name="condition" value="" class="inputmini"
+                                    <input type="text" name="condition" value="1" class="inputmini"
                                            id="condition" required/>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">부가세 면세여부</td>
                                 <td>
-                                    <input type="text" name="duty" value="" class="inputmini"
+                                    <input type="text" name="duty" value="1" class="inputmini"
                                            id="duty" required/>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">영수증 발행</td>
                                 <td>
-                                    <input type="text" name="receipt" value=""
+                                    <input type="text" name="receipt" value="1"
                                            id="receipt" required/>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">사업자구분</td>
                                 <td>
-                                    <input type="text" name="sellerType" value="" id="sellerType" required/>
+                                    <input type="text" name="sellerType" value="1" id="sellerType" required/>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">브랜드</td>
                                 <td>
-                                    <input type="text" name="brand" value="" id="brand" required/>
+                                    <input type="text" name="brand" value="1" id="brand" required/>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">원산지</td>
                                 <td>
-                                    <input type="text" name="coa" value="" class="inputmini"
+                                    <input type="text" name="coa" value="1" class="inputmini"
                                            id="coa" required/>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">제조자 / 수입국</td>
                                 <td>
-                                    <input type="text" name="creator" value="" class="inputmini"
+                                    <input type="text" name="creator" value="1" class="inputmini"
                                            id="creator" required/>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">제조국</td>
                                 <td>
-                                    <input type="text" name="country" value="" class="inputmini"
+                                    <input type="text" name="country" value="1" class="inputmini"
                                            id="country" required/>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">취급시주의사항</td>
                                 <td>
-                                    <input type="text" name="warning" value="" class="inputmini"
+                                    <input type="text" name="warning" value="1" class="inputmini"
                                            id="warning" required/>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">제조연월</td>
                                 <td>
-                                    <input type="text" name="createDate" value="" class="inputmini"
+                                    <input type="text" name="createDate" value="1" class="inputmini"
                                            id="createDate" required/>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">품질보증기준</td>
                                 <td>
-                                    <input type="text" name="quality" value="" class="inputmini"
+                                    <input type="text" name="quality" value="1" class="inputmini"
                                            id="quality" required/>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">A/S 책임자</td>
                                 <td>
-                                    <input type="text" name="as" value="" class="inputmini"
+                                    <input type="text" name="as" value="1" class="inputmini"
                                            id="as" required/>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label">전화번호</td>
                                 <td>
-                                    <input type="text" name="asPhone" value="   " class="inputmini"
+                                    <input type="text" name="asPhone" value="1" class="inputmini"
                                            id="asPhone" required/>
                                 </td>
                             </tr>

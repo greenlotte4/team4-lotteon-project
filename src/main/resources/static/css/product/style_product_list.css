@@ -16,6 +16,13 @@
     transition: all 0.2s ease;
 }
 
+.product-item a {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    transition: all 0.2s ease;
+}
+
 
 .product-image img {
     width: 120px;

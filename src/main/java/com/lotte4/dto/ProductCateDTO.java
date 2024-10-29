@@ -7,6 +7,13 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+
+    -2024-10-28 강중원 - tostring 순환참조 제거
+
+ */
+
+
 @Getter
 @Setter
 @ToString
@@ -23,6 +30,7 @@ public class ProductCateDTO {
     private int depth; // 추가함(241024 10:25)
 
     // 부모
+    @ToString.Exclude
     private ProductCateDTO parent; // 추가함(241024 12:35)
 
     private List<ProductCateDTO> children = new ArrayList<>();

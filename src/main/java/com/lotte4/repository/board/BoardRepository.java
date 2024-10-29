@@ -16,6 +16,8 @@ import java.util.List;
 @Repository
 public interface BoardRepository extends JpaRepository<Board, Integer> {
     Page<Board> findByType(String type, Pageable pageable);
+
     Page<Board> findByCate_BoardCateIdAndType(int CateId,String type, Pageable pageable);
     Page<Board> findByCate_Parent_BoardCateIdAndType(int parentId, String type,Pageable pageable);
+
 }

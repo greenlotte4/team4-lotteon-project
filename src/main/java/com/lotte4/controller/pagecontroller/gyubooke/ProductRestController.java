@@ -11,10 +11,11 @@ import com.lotte4.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,8 +25,15 @@ import java.util.Map;
 public class ProductRestController {
 
     private final ProductService productService;
-    private final CategoryService categoryService;
     private final ObjectMapper objectMapper;
+    private final CategoryService categoryService;
+
+
+    public static List<Integer> stringToIntegerList(String string) {
+
+        return ProductService.stringToIntegerList(string);
+    }
+
 
     @GetMapping("/admin/product/register/{parentId}")
     public List<CateForProdRegisterDTO> registerCategory(@PathVariable int parentId) {
@@ -33,23 +41,24 @@ public class ProductRestController {
     }
 
 
-    @PostMapping(value = "/admin/product/register", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public int productRegisterCate(@RequestParam("cateId") int cateId,
-                                   @RequestParam("img_1") MultipartFile img_1,
-                                   @RequestParam("img_2") MultipartFile img_2,
-                                   @RequestParam("img_3") MultipartFile img_3,
-                                   @RequestParam("detail_") MultipartFile detail_,
-                                   @RequestParam("optionsJson") String optionsJson,
-                                   @ModelAttribute ProductDTO productDTO, RedirectAttributes redirectAttributes) {
+    @PostMapping(value = "/admin/product/register", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Map<String, Integer>> productRegisterCate(@RequestParam("cateId") int cateId,
+                                                                    @RequestParam("img_1") MultipartFile img_1,
+                                                                    @RequestParam("img_2") MultipartFile img_2,
+                                                                    @RequestParam("img_3") MultipartFile img_3,
+                                                                    @RequestParam("detail_") MultipartFile detail_,
+                                                                    @RequestParam("optionsJson") String optionsJson,
+                                                                    @ModelAttribute ProductDTO productDTO) {
 
         // 상품 카테고리 아이디 입력
-        productDTO.setProductCate_productCateId(cateId);
+        productDTO.setProductCateId(categoryService.getProductCate(cateId));
 
         // 'options' JSON 문자열을 Map<String, List<String>>으로 변환
         Map<String, List<String>> optionsMap = null;
         try {
             optionsMap = objectMapper.readValue(optionsJson,
-                    new TypeReference<Map<String, List<String>>>(){});
+                    new TypeReference<Map<String, List<String>>>() {
+                    });
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -67,14 +76,84 @@ public class ProductRestController {
 
         ProductDTO dto = productService.insertProduct(productDTO);
 
-        return dto.getProductId();
+        Map<String, Integer> response1 = new HashMap<>();
+
+        if (dto != null) {
+            int productId = dto.getProductId();
+            response1.put("productId", productId);
+            return ResponseEntity.ok().body(response1);
+        }
+
+        response1.put("productId", 0);
+        return ResponseEntity.ok().body(response1);
     }
 
     @PostMapping("/admin/product/register/detail")
-    public void productRegisterCate(@RequestBody ProductDetailDTO productDetailDTO) {
+    public ResponseEntity<Map<String, String>> productRegisterCate(@RequestBody ProductDetailDTO productDetailDTO) {
         log.info(productDetailDTO);
-        productService.insertProductDetail(productDetailDTO);
+        ProductDetailDTO dto = productService.insertProductDetail(productDetailDTO);
+        Map<String, String> response = new HashMap<>();
+
+        if (dto != null) {
+            response.put("status", "success");
+            return ResponseEntity.ok().body(response);
+        }
+
+        response.put("status", "failure");
+        return ResponseEntity.ok().body(response);
     }
+
+    @PostMapping("/admin/product/register/more")
+    public void productRegisterMore(@RequestParam String prodONames,
+                                    @RequestParam String prodPrices,
+                                    @RequestParam String prodStocks,
+                                    @RequestParam String mixedValuesList,
+                                    @RequestParam String optionNames,
+                                    @RequestParam String productId
+    ) {
+        productService.makeProductVariantDTOAndInsert(optionNames, prodONames, prodPrices, prodStocks, mixedValuesList, productId);
+    }
+
+    @DeleteMapping("/admin/product/delete/{productId}")
+    public ResponseEntity<Map<String, String>> productDelete(@PathVariable int productId) {
+        String status = productService.deleteById(productId);
+        Map<String, String> response = new HashMap<>();
+
+        log.info(status);
+        if (status.equals("success")) {
+            response.put("status", "success");
+        } else {
+            response.put("status", "failure");
+        }
+        return ResponseEntity.ok().body(response);
+    }
+
+    @DeleteMapping("/admin/product/delete")
+    public ResponseEntity<Map<String, String>> selectedProductDelete(@RequestParam String productIds) {
+        log.info("productIds = " + productIds);
+
+        Map<String, String> response = new HashMap<>();
+        int failure = 0;
+        List<Integer> productIdList = stringToIntegerList(productIds);
+        for (Integer productId : productIdList) {
+            String status = productService.deleteById(productId);
+            if (!status.equals("success")) {
+                failure++;
+            }
+        }
+
+        if (failure > 0) {
+            response.put("status", "failure");
+        } else {
+            response.put("status", "success");
+        }
+
+        return ResponseEntity.ok().body(response);
+    }
+
+
+
+
 
 }
 

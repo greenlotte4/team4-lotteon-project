@@ -3,13 +3,17 @@ package com.lotte4.entity;
 import com.lotte4.config.MapToJsonConverter;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CurrentTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @Getter
 @Setter
-@ToString(exclude = {"options"})
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -25,12 +29,15 @@ public class ProductVariants {
     private int stock;
 
     @Convert(converter = MapToJsonConverter.class)
-    private Map<String, String> options; // sku에 대한 옵션(ex 검은색 S / 파란색 L)
+    private Map<List<String>, List<String>> options; // sku에 대한 옵션(ex 검은색 S / 파란색 L)
 
+    @CurrentTimestamp
     private LocalDateTime created_at;
+
     private LocalDateTime updated_at;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "productId")
     private Product product;
 }

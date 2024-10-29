@@ -1,11 +1,21 @@
 package com.lotte4.repository;
 
 import com.lotte4.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
+/*
+     날짜 : 2024/10/28
+     이름 : 강은경
+     내용 : UserRepository 생성
 
+     수정이력
+      - 2024/10/28 강은경 - 관리자 회원목록 기능 검색&페이징 메서드 추가
+*/
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
 
@@ -15,5 +25,10 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     // 아이디 중복확인
     int countByUid(String uid);
 
+    // role이 member인 회원 목록 select(관리자 회원목록을 위함)
+    Page<User> findByRole(String role, Pageable pageable);
 
+    // role이 member이고, keyword 검색하는 메서드 (모든 필드에서 검색)
+    Page<User> findByRoleAndUidContainingOrMemberInfoNameContainingOrMemberInfoEmailContainingOrMemberInfoHpContaining(
+            String role, String uid, String name, String email, String hp, Pageable pageable);
 }
