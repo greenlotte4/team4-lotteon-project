@@ -29,6 +29,7 @@ public class BoardResponseDTO {
     private String regIp;
     private int state;
     private String comment;
+    
 
 
 }
