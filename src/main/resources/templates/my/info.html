@@ -24,12 +24,12 @@
         <article class="myInfo_Info myInfo_Article">
           <div class="myInfo_ArticleTitle"><span>나의 설정</span></div>
           <form class="myInfoForm json-form" id="infoForm" action="/lotteon/my/info" method="post">
-            <input type="hidden" name="memberInfoId" th:value="${userDTO.memberInfo.memberInfoId}">
+            <input type="hidden" name="memberInfoId" id="memberInfoId" th:value="${userDTO.memberInfo.memberInfoId}">
             <table border="1">
               <tr>
                 <td>사용자 ID</td>
                 <td>
-                  <span>[[${userDTO.maskedUid}]]</span>
+                  <span id="userId">[[${userDTO.maskedUid}]]</span>
                 </td>
               </tr>
               <tr>
@@ -41,7 +41,7 @@
               <tr>
                 <td>이름</td>
                 <td>
-                  <span>[[${userDTO.memberInfo.name}]]</span>
+                  <span id="userName" th:text="${userDTO.memberInfo.name}"></span>
                 </td>
               </tr>
               <tr>
@@ -67,10 +67,10 @@
               <tr>
                 <td>주소</td>
                 <td>
-                  <input type="text" th:value="${userDTO.memberInfo.address.zipCode}" id="zip" name="address.zipCode" placeholder="우편번호" readonly />
+                  <input type="text" th:value="${userDTO.memberInfo.address.zipCode}" id="zip" name="zipCode" placeholder="우편번호" readonly />
                   <button type="button" id="btnZip" class="register-btns">우편번호 찾기</button>
-                  <input type="text" id="addr1" name="address.addr1" th:value="${userDTO.memberInfo.address.addr1}" class="myInfo_address" placeholder="주소 검색" readonly />
-                  <input type="text" id="addr2" name="address.addr2" th:value="${userDTO.memberInfo.address.addr2}" class="myInfo_address" placeholder="상세주소 입력" />
+                  <input type="text" id="addr1" name="addr1" th:value="${userDTO.memberInfo.address.addr1}" class="myInfo_address" placeholder="주소 검색" readonly />
+                  <input type="text" id="addr2" name="addr2" th:value="${userDTO.memberInfo.address.addr2}" class="myInfo_address" placeholder="상세주소 입력" />
                 </td>
               </tr>
               <tr>
@@ -152,30 +152,39 @@
     infoForm.addEventListener('submit', function(event) {
       event.preventDefault();
 
-      const formData = new FormData(infoForm);
-      const formObj = {};
+      const updatedData = {
+        uid: document.getElementById("userId").value,
+        memberInfoId: document.getElementById("memberInfoId").value,
+        name: document.getElementById("userName").innerText,
+        email: document.getElementById("email_input").value,
+        hp: document.getElementById("hp_input").value,
+        address: {
+          zipCode: document.getElementById("zip").value,
+          addr1: document.getElementById("addr1").value,
+          addr2: document.getElementById("addr2").value
+        }
+      };
 
-      // FormData를 JSON 형식으로 변환
-      formData.forEach((value, key) => {
-        formObj[key] = value;
-      });
-
-      fetch(infoForm.action, {
-        method: 'POST',
+      // AJAX로 수정 요청
+      fetch(`/lotteon/my/info/update`, {
+        method: 'PUT',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formObj)  // JSON 형식으로 변환하여 전송
+        body: JSON.stringify(updatedData),
       })
               .then(response => {
-                if (!response.ok) throw new Error('네트워크 오류 발생');
-                return response.json();
+                if (response.ok) {
+                  alert("정상적으로 수정되었습니다.");
+                  location.reload(); // 페이지 새로 고침
+                } else {
+                  // 에러 처리
+                  console.error('Error updating user data:', response.statusText);
+                }
               })
-              .then(responseData => {
-                alert('정보수정이 완료되었습니다.');
-                window.location.reload();
-              })
-              .catch(error => alert('정보수정 중 오류가 발생했습니다.'));
+              .catch(error => {
+                console.error('Error:', error);
+              });
     });
 
 
