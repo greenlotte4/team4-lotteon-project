@@ -12,15 +12,12 @@
     <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}"/>
     <!--각 페이지(section) 개별 css-->
     <link rel="stylesheet" th:href="@{/css/admin/style_admin_article_list.css}"/>
-
-
 </head>
 <body>
 <header th:replace="~{/admin/include/header.html}"></header>
 <main>
     <div id="wrapper">
         <aside th:replace="~{/admin/include/aside.html}"></aside>
-        <!--section-->
         <section>
             <div class="breadcrumb">
                 <a href="#">Home</a> > <a href="#">고객센터</a> > <a href="#" class="location">문의하기</a>
@@ -28,20 +25,17 @@
             <h3>문의하기 목록</h3>
             <div class="form">
                 <div id="dropdown" class="table-controls">
-                      <!-- 1차 유형 카테고리 (BoardCategory Enum) -->
-                        <select id="category1">
-                            <option>1차 유형</option>
-                            <option th:each="cate : ${cate1}"
-                                    th:value="${cate.boardCateId}"
-                                    th:text="${cate.name}">
-                            </option>
-                        </select>
+                    <select id="category1">
+                        <option value="1차 유형">1차 유형</option>
+                        <option th:each="cate : ${cate1}"
+                                th:value="${cate.boardCateId}"
+                                th:text="${cate.name}">
+                        </option>
+                    </select>
 
-                        <!-- 2차 유형 카테고리 (동적으로 추가됨) -->
-                        <select name="cate" id="category2" required>
-                            <option value="2차 유형" disabled hidden selected>2차 유형</option>
-                        </select>
-
+                    <select name="cate" id="category2" required>
+                        <option value="2차 유형" disabled hidden selected>2차 유형</option>
+                    </select>
                 </div>
 
                 <table class="inquiry-table">
@@ -58,10 +52,8 @@
                     </tr>
                     </thead>
                     <tbody id="boardListBody">
-
                     <tr th:each="board : ${boardList}">
                         <td><input type="checkbox" class="chkbox" th:data-board-id="${board.boardId}"></td>
-
                         <td th:text="${board.boardId}"></td>
                         <td th:text="${board.cate.parent.name}"></td>
                         <td th:text="${board.cate.name}"></td>
@@ -98,71 +90,54 @@
                 </div>
             </div>
         </section>
-        <!-- /Section -->
     </div>
 </main>
 <footer th:replace="~{/admin/include/footer.html}"></footer>
 </body>
-</html>
+
 <script>
-
     document.addEventListener("DOMContentLoaded", function() {
-        // 모든 체크박스 요소 가져오기
         const selectAllCheckbox = document.querySelector('.chkbox-select-all');
-        const individualCheckboxes = document.querySelectorAll('.chkbox');
         const deleteSelectedButton = document.querySelector('.delete-btn');
+        const boardListBody = document.getElementById('boardListBody');
+        const initialHTML = boardListBody.innerHTML;
+        const category1Select = document.getElementById('category1');
+        const category2Select = document.getElementById('category2');
 
-        // 전체 선택 체크박스 클릭 이벤트
-        selectAllCheckbox.addEventListener('click', function() {
-            individualCheckboxes.forEach(checkbox => {
+        selectAllCheckbox.addEventListener('click', function () {
+            document.querySelectorAll('.chkbox').forEach(checkbox => {
                 checkbox.checked = selectAllCheckbox.checked;
             });
-            toggleDeleteButtonState(); // 선택 삭제 버튼 상태 업데이트
+            toggleDeleteButtonState();
         });
 
-        // 개별 체크박스 클릭 이벤트
-        individualCheckboxes.forEach(checkbox => {
-            checkbox.addEventListener('click', function() {
-                // 모든 체크박스가 선택되어 있는지 확인
-                const allChecked = Array.from(individualCheckboxes).every(chk => chk.checked);
-                selectAllCheckbox.checked = allChecked;
-
-                toggleDeleteButtonState(); // 선택 삭제 버튼 상태 업데이트
-            });
+        document.querySelectorAll('.chkbox').forEach(checkbox => {
+            checkbox.addEventListener('click', toggleDeleteButtonState);
         });
 
-        // 선택 삭제 버튼 상태 업데이트
         function toggleDeleteButtonState() {
-            const anyChecked = Array.from(individualCheckboxes).some(chk => chk.checked);
+            const anyChecked = Array.from(document.querySelectorAll('.chkbox')).some(chk => chk.checked);
             deleteSelectedButton.disabled = !anyChecked;
         }
 
-        // 선택 삭제 버튼 클릭 이벤트
-        deleteSelectedButton.addEventListener('click', function() {
+        deleteSelectedButton.addEventListener('click', function () {
             if (confirm('선택한 항목을 삭제하시겠습니까?')) {
-                // 선택된 항목의 boardId 수집
-                const selectedBoardIds = Array.from(individualCheckboxes)
+                const selectedBoardIds = Array.from(document.querySelectorAll('.chkbox'))
                     .filter(checkbox => checkbox.checked)
                     .map(checkbox => checkbox.getAttribute('data-board-id'));
 
-                // 선택된 게시물 삭제 요청
                 Promise.all(selectedBoardIds.map(boardId => {
                     return fetch(`/lotteon/admin/cs/board/delete/${boardId}`, {
                         method: 'DELETE',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
+                        headers: {'Content-Type': 'application/json'}
                     });
                 }))
                     .then(responses => {
                         if (responses.every(response => response.ok)) {
                             alert('선택한 항목이 삭제되었습니다.');
-                            // 삭제된 항목 제거
                             selectedBoardIds.forEach(boardId => {
                                 const row = document.querySelector(`.chkbox[data-board-id="${boardId}"]`).closest('tr');
-                                if (row) {
-                                    row.remove();
-                                }
+                                if (row) row.remove();
                             });
                         } else {
                             alert('일부 항목 삭제에 실패했습니다.');
@@ -175,72 +150,114 @@
             }
         });
 
-        // 개별 삭제 버튼 클릭 이벤트
-        const deleteButtons = document.querySelectorAll('.deletebtn');
-        deleteButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const boardId = this.getAttribute('data-board-id');
-                if (confirm('이 게시물을 삭제하시겠습니까?')) {
-                    fetch(`/lotteon/admin/cs/board/delete/${boardId}`, {
-                        method: 'DELETE',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    })
-                        .then(response => {
-                            if (response.ok) {
-                                alert('게시물이 성공적으로 삭제되었습니다.');
-                                const row = this.closest('tr');
-                                if (row) {
-                                    row.remove();
-                                }
-                            } else {
-                                alert('게시물 삭제에 실패했습니다.');
-                            }
-                        })
-                        .catch(error => {
-                            console.error('삭제 중 오류 발생:', error);
-                            alert('삭제 중 오류가 발생했습니다.');
-                        });
-                }
-            });
+        function loadData(category1Id, category2Id) {
+            const selectedCategoryId = category2Id && category2Id !== "2차 유형" ? category2Id : category1Id;
+            if (selectedCategoryId === "1차 유형") {
+                loadInitialData();
+            } else {
+                fetchAndDisplayBoards(selectedCategoryId);
+            }
+        }
+
+        function loadInitialData() {
+            boardListBody.innerHTML = initialHTML;
+        }
+
+        category1Select.addEventListener('change', function () {
+            const parentId = this.value;
+            if (parentId === "1차 유형") {
+                loadInitialData();
+            } else {
+                updateCategory2(parentId);
+                loadData(parentId, "");
+            }
         });
-    });
 
-    // 1차 카테고리 선택 시 2차 카테고리 값을 동적으로 가져와서 설정
-    const category1Select = document.getElementById('category1');
-    const category2Select = document.getElementById('category2');
+        category2Select.addEventListener('change', function () {
+            loadData(category1Select.value, this.value);
+        });
 
-    category1Select.addEventListener('change', function() {
-        const parentId = this.value;
+        function updateCategory2(parentId) {
+            category2Select.innerHTML = '<option value="2차 유형" disabled hidden selected>2차 유형</option>';
+            fetch(`/lotteon/cs/qna/subcategories/${parentId}`)
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(subCategory => {
+                        const option = document.createElement('option');
+                        option.value = subCategory.boardCateId;
+                        option.text = subCategory.name;
+                        category2Select.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error fetching subcategories:', error));
+        }
 
-        // 2차 카테고리 초기화
-        category2Select.innerHTML = '<option disabled hidden selected>2차 유형</option>';
+        function fetchAndDisplayBoards(cateId, page = 0) { // page 매개변수 추가
+            fetch(`/lotteon/board/qna/${cateId}?page=${page}&size=8`)
+                .then(response => response.json())
+                .then(data => {
+                    boardListBody.innerHTML = '';
+                    data.content.forEach(board => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                    <td><input type="checkbox" class="chkbox" data-board-id="${board.boardId}"></td>
+                    <td>${board.boardId}</td>
+                    <td>${board.cate.parent.name}</td>
+                    <td>${board.cate.name}</td>
+                    <td class="title">
+                        <a href="/admin/cs/qna/view/${board.boardId}">${board.title}</a>
+                    </td>
+                    <td>${board.user.uid}</td>
+                    <td>${board.regDate}</td>
+                    <td class="${board.state === 1 ? 'st1' : 'st2'}">
+                        ${board.state === 1 ? '답변완료' : '검토중'}
+                    </td>
+                `;
+                        boardListBody.appendChild(row);
+                    });
+                    updatePagination(data.totalPages, data.number);
+                })
+                .catch(error => console.error('게시물 목록을 가져오는 중 오류 발생:', error));
+        }
 
-        // 서버로부터 2차 카테고리 데이터를 가져옴
-        fetch(`/lotteon/cs/qna/subcategories/${parentId}`)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                data.forEach(subCategory => {
-                    const option = document.createElement('option');
-                    option.value = subCategory.boardCateId;
-                    option.text = subCategory.name;
-                    category2Select.appendChild(option);
-                });
-            })
-            .catch(error => console.error('Error fetching subcategories:', error));
-    });
+// 카테고리 변경 시 데이터 로드
+        function loadData(category1Id, category2Id, page = 0) { // page 매개변수 추가
+            const selectedCategoryId = category2Id && category2Id !== "2차 유형" ? category2Id : category1Id;
+            if (selectedCategoryId === "1차 유형") {
+                loadInitialData();
+            } else {
+                fetchAndDisplayBoards(selectedCategoryId, page); // page 전달
+            }
+        }
 
-    document.getElementById("myForm").addEventListener("submit", function(event) {
-        const category2 = document.getElementById("category2");
+// 페이지네이션 업데이트
+        function updatePagination(totalPages, currentPage) {
+            const paginationDiv = document.querySelector('.pagination');
+            paginationDiv.innerHTML = '';
 
-        // category2의 값이 빈 문자열이라면 폼 제출을 막고 경고 메시지 표시
-        if (category2.value === "2차 유형") {
-            alert("카테고리를 선택해주세요.");
-            event.preventDefault(); // 폼 제출 중단
+            const prevButton = document.createElement('button');
+            prevButton.classList.add('page-btn');
+            prevButton.disabled = currentPage === 0;
+            prevButton.onclick = () => loadData(category1Select.value, category2Select.value, currentPage - 1);
+            prevButton.textContent = '이전';
+            paginationDiv.appendChild(prevButton);
+
+            for (let i = 0; i < totalPages; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.classList.add('page-num');
+                if (i === currentPage) pageButton.classList.add('active');
+                pageButton.textContent = i + 1;
+                pageButton.onclick = () => loadData(category1Select.value, category2Select.value, i);
+                paginationDiv.appendChild(pageButton);
+            }
+
+            const nextButton = document.createElement('button');
+            nextButton.classList.add('page-btn');
+            nextButton.disabled = currentPage + 1 === totalPages;
+            nextButton.onclick = () => loadData(category1Select.value, category2Select.value, currentPage + 1);
+            nextButton.textContent = '다음';
+            paginationDiv.appendChild(nextButton);
         }
     });
-
-
 </script>
+</html>

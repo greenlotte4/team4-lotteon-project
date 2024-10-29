@@ -1,13 +1,11 @@
 package com.lotte4.service.board;
 
-import com.lotte4.dto.BoardCateDTO;
+
 import com.lotte4.dto.BoardCommentDTO;
 import com.lotte4.dto.BoardRegisterDTO;
 import com.lotte4.dto.BoardResponseDTO;
 import com.lotte4.entity.Board;
 import com.lotte4.entity.BoardCate;
-import com.lotte4.entity.ProductCate;
-import com.lotte4.entity.User;
 import com.lotte4.repository.UserRepository;
 import com.lotte4.repository.board.BoardCateRepository;
 import com.lotte4.repository.board.BoardRepository;
@@ -21,12 +19,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -43,16 +37,16 @@ public class BoardService {
         return boardEntities.map(board -> modelMapper.map(board, BoardResponseDTO.class));
     }
     // 카테고리 아이디로 찾는 메서드
-    public Page<BoardResponseDTO> selectAllBoardByCateId(int cateId, int page, int size) {
+    public Page<BoardResponseDTO> selectAllBoardByCateId(int cateId, String cate, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Board> boardEntities;
 
         Optional<BoardCate> category = boardCateRepository.findById(cateId);
         if (category.isPresent()) {
             if (category.get().getParent() == null) {
-                boardEntities = boardRepository.findByCate_Parent_BoardCateId(cateId, pageable);
+                boardEntities = boardRepository.findByCate_Parent_BoardCateIdAndType(cateId, cate,  pageable);
             } else {
-                boardEntities = boardRepository.findByCate_BoardCateId(cateId, pageable);
+                boardEntities = boardRepository.findByCate_BoardCateIdAndType(cateId,cate, pageable);
             }
         } else {
             // 예외 처리: 카테고리가 존재하지 않을 경우

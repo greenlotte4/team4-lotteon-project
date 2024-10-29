@@ -58,12 +58,14 @@ public class BoardController {
         return "/admin/cs/" + type + "/list";
     }
     @ResponseBody
-    @GetMapping("/board/{cate}")
+    @GetMapping("/board/{type}/{cate}")
     public ResponseEntity<Page<BoardResponseDTO>> selectBoard(
             @PathVariable(required = false) int cate,
+            @PathVariable String type,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "8") int size) {
-        Page<BoardResponseDTO> boardList = boardService.selectAllBoardByCateId(cate, page, size);
+
+        Page<BoardResponseDTO> boardList = boardService.selectAllBoardByCateId(cate,type, page, size);
 
         return ResponseEntity.ok(boardList);
     }
@@ -103,7 +105,7 @@ public class BoardController {
 
         if(Objects.equals(type, "notice")) {
 
-            List<BoardCateDTO> cate1 = boardCateService.selectBoardCatesByDepth(0);
+            List<BoardCateDTO> cate1 = boardCateService.getSubCategories(8);
             model.addAttribute("cates", cate1);
         }
         if(Objects.equals(type, "faq")) {

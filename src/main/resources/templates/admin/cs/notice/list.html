@@ -27,8 +27,7 @@
                 <div id="dropdown" class="table-controls">
                     <!-- 1차 유형 카테고리 (BoardCategory Enum) -->
                     <select id="category1">
-                        <option th:value =8 th:text="전체"> 유형</option>
-
+                        <option th:value="8" th:text="전체">유형</option>
                         <option th:each="cate : ${cates}"
                                 th:value="${cate.boardCateId}"
                                 th:text="${cate.name}"></option>
@@ -56,8 +55,8 @@
                         <th>관리</th>
                     </tr>
                     </thead>
-                    <tbody id="boardListBody" >
-
+                    <tbody id="boardListBody">
+                    <!-- 데이터가 로드되기 전 이곳은 비어있음 -->
                     </tbody>
                 </table>
                 <div class="buttons">
@@ -65,22 +64,9 @@
                     <a th:href="@{/admin/cs/notice/write}" class="write-btn">작성하기</a>
                 </div>
                 <div class="pagination">
-                    <button class="page-btn"
-                            th:disabled="${currentPage == 0}"
-                            th:onclick="'window.location.href=\'?page=' + ${currentPage - 1} + '&size=8\''">
-                        이전
-                    </button>
-                    <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
-                        <button class="page-num"
-                                th:classappend="${i == currentPage} ? 'active'"
-                                th:onclick="'window.location.href=\'?page=' + ${i} + '&size=8\''"
-                                th:text="${i + 1}">1</button>
-                    </span>
-                    <button class="page-btn"
-                            th:disabled="${currentPage + 1 == totalPages}"
-                            th:onclick="'window.location.href=\'?page=' + ${currentPage + 1} + '&size=8\''">
-                        다음
-                    </button>
+                    <button class="page-btn" id="prevPage" disabled>이전</button>
+                    <span id="pageNumbers"></span>
+                    <button class="page-btn" id="nextPage">다음</button>
                 </div>
             </div>
         </section>
@@ -91,17 +77,83 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const category1Select = document.getElementById('category1');
+        const boardListBody = document.getElementById('boardListBody');
+        const pageNumbers = document.getElementById('pageNumbers');
+        const prevButton = document.getElementById('prevPage');
+        const nextButton = document.getElementById('nextPage');
+        let currentPage = 0;
+        let totalPages = 0;
 
-        // 페이지 로드 시 현재 선택된 카테고리 값을 사용해 데이터 불러오기
-        const selectedCategoryId = category1Select.value;
-        console.log("초기 선택된 카테고리 ID:", selectedCategoryId);
-        fetchAndDisplayBoards(selectedCategoryId);
+        function loadBoards(cateId, page = 0) {
+            fetch(`/lotteon/board/notice/${cateId}?page=${page}&size=8`)
+                .then(response => response.json())
+                .then(data => {
+                    boardListBody.innerHTML = '';
+                    data.content.forEach(board => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td><input type="checkbox" class="chkbox" data-board-id="${board.boardId}"></td>
+                            <td>${board.boardId}</td>
+                            <td>${board.cate.name}</td>
+                            <td class="title">
+                                <a href="/lotteon/admin/cs/notice/view/${board.boardId}">${board.title}</a>
+                            </td>
+                            <td>${board.user.uid}</td>
+                            <td>${board.regDate}</td>
+                            <td>
+                                <a href="/lotteon/admin/cs/notice/modify/${board.boardId}" class="edit-btn">수정</a>
+                                <button class="deletebtn" data-board-id="${board.boardId}">삭제</button>
+                            </td>
+                        `;
+                        boardListBody.appendChild(row);
+                    });
+                    totalPages = data.totalPages;
+                    updatePagination(page);
+                })
+                .catch(error => console.error('게시물 목록을 가져오는 중 오류 발생:', error));
+        }
 
+        function updatePagination(currentPage) {
+            pageNumbers.innerHTML = '';
+            prevButton.disabled = currentPage === 0;
+            nextButton.disabled = currentPage + 1 === totalPages;
+
+            // 이전 페이지 버튼 클릭 이벤트
+            prevButton.onclick = () => {
+                loadBoards(category1Select.value, currentPage - 1);
+            };
+
+            // 다음 페이지 버튼 클릭 이벤트
+            nextButton.onclick = () => {
+                loadBoards(category1Select.value, currentPage + 1);
+            };
+
+            // 페이지 번호 버튼 생성
+            for (let i = 0; i < totalPages; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.classList.add('page-num');
+                if (i === currentPage) {
+                    pageButton.classList.add('active');
+                }
+                pageButton.textContent = i + 1;
+                pageButton.onclick = () => loadBoards(category1Select.value, i);
+                pageNumbers.appendChild(pageButton);
+            }
+        }
+
+        // 페이지 로드 시 초기 데이터 로드
+        loadBoards(category1Select.value);
+
+        // 카테고리 변경 시 데이터 로드
+        category1Select.addEventListener('change', function() {
+            loadBoards(this.value);
+        });
+
+        // 선택 삭제 버튼 상태 업데이트
         const selectAllCheckbox = document.querySelector('.chkbox-select-all');
         const individualCheckboxes = document.querySelectorAll('.chkbox');
         const deleteSelectedButton = document.querySelector('.delete-btn');
 
-        // 전체 선택 체크박스 클릭 이벤트
         selectAllCheckbox.addEventListener('click', function() {
             individualCheckboxes.forEach(checkbox => {
                 checkbox.checked = selectAllCheckbox.checked;
@@ -109,18 +161,15 @@
             toggleDeleteButtonState();
         });
 
-        // 개별 체크박스 클릭 이벤트
         individualCheckboxes.forEach(checkbox => {
             checkbox.addEventListener('click', toggleDeleteButtonState);
         });
 
-        // 선택 삭제 버튼 상태 업데이트
         function toggleDeleteButtonState() {
             const anyChecked = Array.from(individualCheckboxes).some(chk => chk.checked);
             deleteSelectedButton.disabled = !anyChecked;
         }
 
-        // 선택 삭제 버튼 클릭 이벤트
         deleteSelectedButton.addEventListener('click', function() {
             if (confirm('선택한 항목을 삭제하시겠습니까?')) {
                 const selectedBoardIds = Array.from(individualCheckboxes)
@@ -153,7 +202,6 @@
             }
         });
 
-        // 개별 삭제 버튼 클릭 이벤트
         document.querySelectorAll('.deletebtn').forEach(button => {
             button.addEventListener('click', function() {
                 const boardId = this.getAttribute('data-board-id');
@@ -179,81 +227,6 @@
                 }
             });
         });
-
-        category1Select.addEventListener('change', function() {
-            const selectedCategoryId = this.value;
-            console.log("선택한 카테고리 ID:", selectedCategoryId);
-            fetchAndDisplayBoards(selectedCategoryId);
-        });
-
-        // 게시물 목록을 가져오는 함수
-        function fetchAndDisplayBoards(cateId) {
-            fetch(`/lotteon/board/${cateId}?page=0&size=8`)
-                .then(response => response.json())
-                .then(data => {
-                    console.log("데이터:", data);
-                    const boardListBody = document.getElementById('boardListBody');
-                    boardListBody.innerHTML = '';
-                    data.content.forEach(board => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <tr>
-                                <td><input type="checkbox" class="chkbox" data-board-id="${board.boardId}"></td>
-                                <td>${board.boardId}</td>
-                                <td>${board.cate.name}</td>
-                                <td class="title">
-                                                                   <a href="/admin/cs/faq/view/${board.boardId}">${board.title}</a>
-                                </td>
-                                <td>${board.user.uid}</td>
-                                <td>${board.regDate}</td>
-                                <td>
-                                    <a href="/admin/cs/faq/modify/${board.boardId}" class="edit-btn">수정</a>
-                                    <button class="deletebtn" data-board-id="${board.boardId}">삭제</button>
-                                </td>
-                            </tr>
-                        `;
-                        boardListBody.appendChild(row);
-                    });
-                    updatePagination(data.totalPages, data.number);
-                })
-                .catch(error => {
-                    console.error('게시물 목록을 가져오는 중 오류 발생:', error);
-                });
-        }
-
-        // 페이지네이션 업데이트 함수
-        function updatePagination(totalPages, currentPage) {
-            const paginationDiv = document.querySelector('.pagination');
-            paginationDiv.innerHTML = '';
-
-            // 이전 페이지 버튼
-            const prevButton = document.createElement('button');
-            prevButton.classList.add('page-btn');
-            prevButton.disabled = currentPage === 0;
-            prevButton.onclick = () => fetchAndDisplayBoards(category1Select.value, currentPage - 1);
-            prevButton.textContent = '이전';
-            paginationDiv.appendChild(prevButton);
-
-            // 페이지 번호 버튼 생성
-            for (let i = 0; i < totalPages; i++) {
-                const pageButton = document.createElement('button');
-                pageButton.classList.add('page-num');
-                if (i === currentPage) {
-                    pageButton.classList.add('active');
-                }
-                pageButton.textContent = i + 1;
-                pageButton.onclick = () => fetchAndDisplayBoards(category1Select.value, i);
-                paginationDiv.appendChild(pageButton);
-            }
-
-            // 다음 페이지 버튼
-            const nextButton = document.createElement('button');
-            nextButton.classList.add('page-btn');
-            nextButton.disabled = currentPage + 1 === totalPages;
-            nextButton.onclick = () => fetchAndDisplayBoards(category1Select.value, currentPage + 1);
-            nextButton.textContent = '다음';
-            paginationDiv.appendChild(nextButton);
-        }
     });
 </script>
 </body>

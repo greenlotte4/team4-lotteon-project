@@ -14,22 +14,4 @@ public class CustomerServiceController {
     }
 
 
-    @GetMapping("/cs/notice/view")
-    public String noticeView(){
-        return "/cs/notice/view";
-    }
-
-    @GetMapping("/cs/faq/view")
-    public String faqView(){
-        return "/cs/faq/view";
-    }
-
-
-
-    @GetMapping("/cs/qna/view")
-    public String qnaView(){
-        return "/cs/qna/view";
-    }
-
-
 }

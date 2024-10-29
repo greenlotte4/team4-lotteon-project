@@ -68,7 +68,7 @@ public class  CsQnaController {
     @GetMapping({"/cs/{type}/list", "/cs/{type}/list/{cate}"})  // 선택적인 cate 경로 처리
     public String qna(Model model,
                       @PathVariable String type,
-                      @PathVariable(required = false) Integer cate, // cate가 없으면 null로 처리
+                      @PathVariable(required = false) Integer cate,// cate가 없으면 null로 처리
                       @RequestParam(defaultValue = "0") int page,
                       @RequestParam(defaultValue = "8") int size) {
 
@@ -76,10 +76,10 @@ public class  CsQnaController {
 
         if (cate == null) {
             // cate가 없거나 null일 때 전체 보드 가져오기
-            boardList = boardService.selectAllBoardByType(type, page, size);
+            boardList = boardService.selectAllBoardByType(type, page,  size);
         } else {
             // cate가 있을 때 해당 카테고리에 맞는 보드 가져오기
-            boardList = boardService.selectAllBoardByCateId(cate, page, size);
+            boardList = boardService.selectAllBoardByCateId(cate, type, page, size);
         }
         log.info("왜 부모는 안뜨지 ? "+boardList.getContent());
         model.addAttribute("boards", boardList.getContent());
@@ -91,10 +91,10 @@ public class  CsQnaController {
 
 
     // 글보기 : qna, faq
-    @GetMapping("/cs/qna/view/{id}")
-    public String qnaView(Model model, @PathVariable int id) {
+    @GetMapping("/cs/{type}/view/{id}")
+    public String qnaView(Model model, @PathVariable String type, @PathVariable int id) {
         model.addAttribute("board", boardService.selectBoardById(id));
-        return "/cs/qna/view";
+        return "/cs/"+type+"/view";
     }
 
 
