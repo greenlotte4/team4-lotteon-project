@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Builder
 public class BoardResponseDTO {
     private int boardId;
-
+    private int rowNumber;
     private UserDTO user;
     private BoardCateDTO cate;
 

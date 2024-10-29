@@ -84,16 +84,18 @@
         let currentPage = 0;
         let totalPages = 0;
 
-        function loadBoards(cateId, page = 0) {
+        function loadBoards(cateId, page = 0, size = 8) {
             fetch(`/lotteon/board/notice/${cateId}?page=${page}&size=8`)
                 .then(response => response.json())
                 .then(data => {
                     boardListBody.innerHTML = '';
-                    data.content.forEach(board => {
+                    const totalElements = data.totalElements; // 전체 항목 수
+                    data.content.forEach((board,index) => {
+                        const rowNumber = totalElements - (page * size + index); // 역순 번호 계산
                         const row = document.createElement('tr');
                         row.innerHTML = `
                             <td><input type="checkbox" class="chkbox" data-board-id="${board.boardId}"></td>
-                            <td>${board.boardId}</td>
+                            <td>${rowNumber}</td>
                             <td>${board.cate.name}</td>
                             <td class="title">
                                 <a href="/lotteon/admin/cs/notice/view/${board.boardId}">${board.title}</a>

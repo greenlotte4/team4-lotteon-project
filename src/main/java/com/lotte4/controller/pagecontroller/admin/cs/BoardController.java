@@ -33,7 +33,7 @@ public class BoardController {
     private final BoardService boardService;
     // 관리자 cs - Board (qna,faq,notice)
 
-    // 글목록 - qna,fap
+    // admin 글 목록
     @GetMapping("/admin/cs/{type}/list")
     public String AdminQnaList(
             Model model,
@@ -42,8 +42,8 @@ public class BoardController {
             @RequestParam(defaultValue = "8") int size) {
 
         if (Objects.equals(type, "notice")) {
-            List<BoardCateDTO> cate1 = boardCateService.getSubCategories(8);
-            model.addAttribute("cates", cate1);
+            List<BoardCateDTO> cates = boardCateService.getSubCategories(8);
+            model.addAttribute("cates", cates);
         }
         if (Objects.equals(type, "faq") || Objects.equals(type, "qna")) {
             List<BoardCateDTO> cate1 = boardCateService.selectBoardCatesByDepth(1);

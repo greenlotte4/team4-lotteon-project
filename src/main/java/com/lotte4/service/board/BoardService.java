@@ -16,11 +16,16 @@ import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -34,7 +39,24 @@ public class BoardService {
     public Page<BoardResponseDTO> selectAllBoardByType(String type, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Board> boardEntities = boardRepository.findByType(type, pageable);
-        return boardEntities.map(board -> modelMapper.map(board, BoardResponseDTO.class));
+
+        if (type.equals("faq") || type.equals("qna")) {
+            int totalElements = (int) boardEntities.getTotalElements();
+            AtomicInteger startNumber = new AtomicInteger(totalElements - (page * size));
+
+            List<BoardResponseDTO> boardListWithRowNumber = boardEntities.stream()
+                    .map(board -> {
+                        BoardResponseDTO dto = modelMapper.map(board, BoardResponseDTO.class);
+                        dto.setRowNumber(startNumber.getAndDecrement()); // AtomicInteger를 사용하여 rowNumber 설정
+                        return dto;
+                    })
+                    .collect(Collectors.toList());
+
+            return new PageImpl<>(boardListWithRowNumber, pageable, boardEntities.getTotalElements());
+        } else {
+            // rowNumber가 필요 없는 경우 그대로 반환
+            return boardEntities.map(board -> modelMapper.map(board, BoardResponseDTO.class));
+        }
     }
     // 카테고리 아이디로 찾는 메서드
     public Page<BoardResponseDTO> selectAllBoardByCateId(int cateId, String cate, int page, int size) {

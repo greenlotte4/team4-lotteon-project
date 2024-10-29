@@ -66,7 +66,7 @@
                     <!-- Thymeleaf로 초기 데이터 렌더링 -->
                     <tr th:each="board : ${boardList}">
                         <td><input type="checkbox" class="chkbox" th:data-board-id="${board.boardId}"></td>
-                        <td th:text="${board.boardId}"></td>
+                        <td th:text="${board.rowNumber}"></td>
                         <td th:text="${board.cate.parent.name}"></td>
                         <td th:text="${board.cate.name}"></td>
                         <td class="title">
@@ -162,11 +162,13 @@
                 .then(response => response.json())
                 .then(data => {
                     boardListBody.innerHTML = '';
-                    data.content.forEach(board => {
+
+                    data.content.forEach((board, index) => {
+                        const rowNumber = data.totalElements - (page * 8 + index); // 역순 번호 매기기
                         const row = document.createElement('tr');
                         row.innerHTML = `
                             <td><input type="checkbox" class="chkbox" data-board-id="${board.boardId}"></td>
-                            <td>${board.boardId}</td>
+                            <td>${rowNumber}</td> <!-- 번호 열에 rowNumber 추가 -->
                             <td>${board.cate.parent.name}</td>
                             <td>${board.cate.name}</td>
                             <td class="title">
@@ -175,7 +177,7 @@
                             <td>${board.user.uid}</td>
                             <td>${board.regDate}</td>
                             <td>
-                                <a href="{/lotteon/admin/cs/faq/modify/${board.boardId}" class="edit-btn">수정</a>
+                                <a href="/lotteon/admin/cs/faq/modify/${board.boardId}" class="edit-btn">수정</a>
                                 <button class="deletebtn" data-board-id="${board.boardId}">삭제</button>
                             </td>
                         `;
