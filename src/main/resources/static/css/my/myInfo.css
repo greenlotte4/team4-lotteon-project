@@ -243,6 +243,10 @@ main {
     margin-left: 15px;
 }
 
+.myInfo_ReviewTable img {
+    width: 20px;
+}
+
 .terms > li{
     font-size: 13px;
     color: #A6A6A6;
