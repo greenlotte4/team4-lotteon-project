@@ -39,7 +39,7 @@ public class BoardService {
     // 글 타입별로 찾는 메서드 ( qna | faq | notice )
     public Page<BoardResponseDTO> selectAllBoardByType(String type, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Board> boardEntities = boardRepository.findByType(type, pageable);
+        Page<Board> boardEntities = boardRepository.findByTypeOrderByRegDateDesc(type, pageable);
 
         return applyRowNumber(boardEntities, pageable, page, size);
     }
@@ -53,10 +53,10 @@ public class BoardService {
         if (category.isPresent()) {
             // 부모가 null - 부모 카테고리 (depth=1) => board의 카테고리의 상위로 조회해야함 (ex) '회원' 으로 조회)
             if (category.get().getParent() == null) {
-                boardEntities = boardRepository.findByCate_Parent_BoardCateIdAndType(cateId, type, pageable);
+                boardEntities = boardRepository.findByCate_Parent_BoardCateIdAndTypeOrderByRegDateDesc(cateId, type, pageable);
             } else {
             // 부모가 존재 - 자식 카테고리 (depth=2) => board의 카테고리로 조회해야함 (ex) '회원 가입' 으로 조회)
-                boardEntities = boardRepository.findByCate_BoardCateIdAndType(cateId, type, pageable);
+                boardEntities = boardRepository.findByCate_BoardCateIdAndTypeOrderByRegDateDesc(cateId, type, pageable);
             }
 
         } else {
