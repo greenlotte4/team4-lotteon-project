@@ -10,8 +10,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.swing.text.html.Option;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Log4j2
@@ -21,12 +23,19 @@ public class BannerService {
     private final ModelMapper modelMapper;
     private final BannerRepository bannerRepository;
 
+    public BannerDTO getBanner(int bannerId) {
+        Optional<Banner> banner = bannerRepository.findById(bannerId);
+        return banner.map(value -> modelMapper.map(value, BannerDTO.class)).orElse(null);
+    }
+
     public List<BannerDTO> getAllBanners(){
         List<Banner> banners = bannerRepository.findAll();
         List<BannerDTO> bannerDTOs = new ArrayList<>();
 
         for(Banner banner : banners){
-            bannerDTOs.add(modelMapper.map(banner, BannerDTO.class));
+            if(banner.getState() == 1){
+                bannerDTOs.add(modelMapper.map(banner, BannerDTO.class));
+            }
         }
         return bannerDTOs;
     }
@@ -57,7 +66,9 @@ public class BannerService {
         }
         List<BannerDTO> bannerDTOs = new ArrayList<>();
         for(Banner banner : banners){
-            bannerDTOs.add(modelMapper.map(banner, BannerDTO.class));
+            if(banner.getState() == 1){
+                bannerDTOs.add(modelMapper.map(banner, BannerDTO.class));
+            }
         }
         return bannerDTOs;
     }
@@ -79,6 +90,8 @@ public class BannerService {
             bannerDTO.setImg(bannerImgFileName);
         }
 
+        //활성화
+        bannerDTO.setState(1);
 
         Banner banner = modelMapper.map(bannerDTO, Banner.class);
         Banner resultBanner = bannerRepository.save(banner);
@@ -90,5 +103,32 @@ public class BannerService {
 
     public void deleteBanner(int bannerId){
         bannerRepository.deleteById(bannerId);
+    }
+
+    public void updateBannerState(BannerDTO bannerDTO, int state){
+        Optional<Banner> bannerOpt = bannerRepository.findById(bannerDTO.getBannerId());
+        if(bannerOpt.isPresent()){
+            Banner banner = bannerOpt.get();
+            banner.setState(state);
+            bannerRepository.save(banner);
+        }
+    }
+
+    public boolean expireBannerCheck(BannerDTO bannerDTO){
+        Optional<Banner> bannerOpt = bannerRepository.findById(bannerDTO.getBannerId());
+        if(bannerOpt.isPresent()) {
+            Banner banner = bannerOpt.get();
+            Date eDate = banner.getEDate();
+            String time = banner.getETime();
+
+            //LocalDateTime으로 변환
+            LocalDateTime eDay = new java.sql.Timestamp(eDate.getTime()).toLocalDateTime();
+            eDay = eDay.plusHours(Long.parseLong(time.substring(0, 2)));
+            eDay = eDay.plusMinutes(Long.parseLong(time.substring(3, 5)));
+            //현재 시간과 비교
+            boolean expire = eDay.isBefore(LocalDateTime.now());
+            return expire;
+        }
+        return false;
     }
 }
