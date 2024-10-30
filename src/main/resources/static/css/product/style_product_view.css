@@ -328,3 +328,21 @@ strong {
     height: 70px;
     width: 440px;
 }
+
+.option-select {
+    padding: 10px;
+    font-size: 12px;
+    margin-right: 2px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 137px;
+    height: 37px;
+    margin-bottom: 5px;
+    margin-left: 3px;
+}
+
+/* 입력할 때 테두리 색 변경 */
+select:focus {
+    border-color: #d82a2a !important;
+    outline: none !important; /* 기본 포커스 아웃라인 제거 */
+}
