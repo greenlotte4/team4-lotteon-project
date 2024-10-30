@@ -109,7 +109,7 @@ public class ProductController {
 
         Cart savedCart = cartService.insertCart(cartResponseDTO);
         if(savedCart != null){
-            return ResponseEntity.ok("sucess");
+            return ResponseEntity.ok("success");
 
         }else {
             return ResponseEntity.ok("failed");

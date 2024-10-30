@@ -113,12 +113,31 @@
 
 <script>
 
-    // 서버에서 전달된 알림 메시지가 있으면 alert 창을 띄우기
-    var alertMessage = /*[[${alertMessage}]]*/ '';  // 서버에서 전달된 메시지를 가져옵니다.
+    document.getElementById('cartForm').onsubmit = function(event) {
+        event.preventDefault(); // 기본 폼 제출 방지
 
-    if (alertMessage) {
-        alert(alertMessage);  // alert 창을 띄웁니다.
-    }
+        // AJAX 요청
+        const formData = new FormData(this);
+        fetch(this.action, {
+            method: 'POST',
+            body: formData,
+        })
+            .then(response => response.text())
+            .then(data => {
+                if (data === "success") {
+                    // 성공 시 알림창 띄우기
+                    if (confirm("장바구니에 상품이 담겼습니다. 장바구니로 이동하시겠습니까?")) {
+                        window.location.href = "/lotteon/product/cart"; // 장바구니 페이지로 리다이렉트
+                    }
+                } else if (data === "failed") {
+                    alert("장바구니 등록에 실패했습니다.");
+                } else if (data === "noUser") {
+                    alert("로그인이 필요합니다."); // 로그인 필요 알림
+                    window.location.href = "/lotteon/member/login"; // 로그인 페이지로 리다이렉트
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    };
 
     document.addEventListener('DOMContentLoaded', function() {
 
