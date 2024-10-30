@@ -36,6 +36,7 @@ import java.util.stream.Collectors;
 
      수정이력
       - 2024/10/28 강은경 - 관리자 회원목록 기능 검색&페이징 메서드 추가
+      - 2024/10/28 강은경 - uid로 사용자 조회
 */
 @Log4j2
 @RequiredArgsConstructor
@@ -203,5 +204,18 @@ public class UserService {
         return selectUserListByMember(role, 0, Integer.MAX_VALUE, keyword).getTotalElements();
     }
 
+    // uid로 사용자 조회
+    public User findByUid(String uid) {
+        // UserRepository를 사용하여 uid로 사용자 정보를 조회
+        Optional<User> userOptional = userRepository.findByUid(uid);
+
+        if(userOptional.isPresent()) {
+            return userOptional.get();
+        } else {
+            log.warn("사용자를 찾을 수 없습니다 - uid: " + uid);
+            return null; // 사용자가 없을 경우 null 반환
+        }
+
+    }
 
 }
