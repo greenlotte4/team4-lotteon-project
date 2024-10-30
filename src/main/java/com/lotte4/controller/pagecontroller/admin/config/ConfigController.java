@@ -1,6 +1,7 @@
 package com.lotte4.controller.pagecontroller.admin.config;
 
 import com.lotte4.dto.BannerDTO;
+import com.lotte4.dto.ProductRegisterCateDTO;
 import com.lotte4.dto.TermsDTO;
 import com.lotte4.dto.admin.config.InfoDTO;
 import com.lotte4.dto.ProductCateDTO;
@@ -90,6 +91,24 @@ public class ConfigController {
             log.error(e.getMessage());
             return ResponseEntity.ok("fail");
         }
+    }
+
+    @PutMapping("/admin/config/banner/enable")
+    public ResponseEntity<String> AdminConfigBannerEnable(@RequestBody BannerDTO bannerDTO) {
+        boolean expire = bannerService.expireBannerCheck(bannerDTO);
+        if(expire) {
+            return ResponseEntity.ok("fail");
+        }else{
+            bannerService.updateBannerState(bannerDTO,1);
+            return ResponseEntity.ok("success");
+        }
+    }
+
+    @PutMapping("/admin/config/banner/disable")
+    public ResponseEntity<String> AdminConfigBannerDisable(@RequestBody BannerDTO bannerDTO) {
+        bannerService.updateBannerState(bannerDTO,0);
+        return ResponseEntity.ok("success");
+
     }
 
     @DeleteMapping("/admin/config/banner")
@@ -192,12 +211,11 @@ public class ConfigController {
 
     @PostMapping("/admin/config/category")
     @ResponseBody
-    public String AdminConfigCategoryPost(@RequestBody ProductCateDTO productCateDTO, @RequestParam String parent, @RequestParam int depth, Model model) {
-        log.info("productCateDTO : "+productCateDTO);
+    public String AdminConfigCategoryPost(@RequestBody ProductRegisterCateDTO productRegisterCateDTO, @RequestParam String parent, Model model) {
+        log.info("productCateDTO : "+productRegisterCateDTO);
         log.info("parent : "+parent);
-        log.info("depth : "+depth);
 
-        categoryService.insertProductCate(productCateDTO, parent, depth);
+        categoryService.insertProductCate(productRegisterCateDTO, parent);
         return "success";
     }
 

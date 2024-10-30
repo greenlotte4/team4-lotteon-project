@@ -61,14 +61,22 @@
                     <tr th:each="cart, i:${cartList}" th:id="'cart-item-' + ${cart.cartId}">
                         <td><input type="checkbox" class="checkboxes" th:value="${cart.cartId}" onclick="toggleCheckbox(this)"></td>
                         <td class="product-info">
-                            <img src="/images/product/image.png" alt="상품 이미지">
+                            <img th:src="@{'/uploads/product/' + ${cart.productVariants.product.getImg1()}}" alt="상품 사진" class="product-image">
                             <div class="product-details">
                                 <p class="product-name">[ [[${cart.productVariants.product.company}]] ]
                                     [[${cart.productVariants.product.name}]]</p>
                             </div>
                         </td>
                         <td>
-                            <span id="variant-options" th:utext="${cart.productVariants.options}"></span>
+                            <span id="variant-options" class="variant-options">
+                                <ul class="horizontal-list">
+                                    <li th:each="entry : ${cart.productVariants.options.entrySet()}">
+                                        <ul>
+                                            <li th:each="value : ${entry.value}" th:text="${value}"></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </span>
                         </td>
                         <td>
                             <div class="quantity">
@@ -252,26 +260,6 @@
 
     document.addEventListener("DOMContentLoaded", function (){
 
-        // span 요소에서 JSON 문자열 가져오기
-        var variantOptions = document.getElementById("variant-options").textContent;
-
-        try {
-            // JSON 문자열을 객체로 변환
-            var parsedOptions = JSON.parse(variantOptions);
-            console.log("Parsed Options:", parsedOptions);
-
-            // key와 value를 각각 출력
-            for (var key in parsedOptions) {
-                if (parsedOptions.hasOwnProperty(key)) {
-                    console.log("Key: " + key + ", Value: " + parsedOptions[key]);
-
-                    // 키와 값을 HTML 요소에 추가 (예시로 아래에 추가)
-                    document.getElementById("variant-options").insertAdjacentHTML('beforeend', `<div>${key}: ${parsedOptions[key].join(', ')}</div>`);
-                }
-            }
-        } catch (error) {
-            console.error("JSON 파싱 오류:", error);
-        }s
 
 
     });
