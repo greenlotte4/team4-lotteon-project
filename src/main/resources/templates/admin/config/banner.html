@@ -91,10 +91,10 @@
                         <td>[[${banner.eTime}]]</td>
                         <td>
                             <th:block th:if="${banner.state} == 0">
-                                <a href="#" class="edit-btn">활성</a>
+                                <button class="edit-btn">활성</button>
                             </th:block>
                             <th:blcok th:unless="${banner.state} == 0">
-                                <button class="deletebtn">비활성</button>
+                                <button class="deletebtn disableBtn">비활성</button>
                             </th:blcok>
                         </td>
                         <input type="hidden" th:value="${banner.bannerId}" class="bannerId"/>
@@ -278,6 +278,79 @@
             });
         }
 
+
+        //활성화
+        const enableBtns = document.querySelectorAll('.edit-btn');
+        for (let enableBtn of enableBtns) {
+            enableBtn.onclick = function (e){
+                e.preventDefault();
+                const row = enableBtn.closest('tr');
+                const bannerId = parseInt(row.getElementsByClassName('bannerId')[0].value,10);
+                console.log(bannerId);
+
+                const jsonData = {
+                    "bannerId" : bannerId,
+                }
+
+
+                fetch('/lotteon/admin/config/banner/enable', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(jsonData)
+                })
+                    .then(resp => resp.text())
+                    .then(data => {
+                        if (data.trim() === "success") {
+                            location.reload();
+                        } else {
+                            alert("만료된 배너입니다!");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                    });
+            }
+        }
+
+
+        //비활성
+        const disableBtns = document.querySelectorAll('.disableBtn');
+        for (let disableBtn of disableBtns) {
+            disableBtn.onclick = function (e){
+                e.preventDefault();
+                const row = disableBtn.closest('tr');
+                const bannerId = parseInt(row.getElementsByClassName('bannerId')[0].value,10);
+                console.log(bannerId);
+
+                const jsonData = {
+                    "bannerId" : bannerId,
+                }
+
+
+                fetch('/lotteon/admin/config/banner/disable', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(jsonData)
+                })
+                    .then(resp => resp.text())
+                    .then(data => {
+                        if (data.trim() === "success") {
+                            location.reload();
+                        } else {
+                            alert("실패했습니다!");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                    });
+            }
+        }
+
+
         //삭제
         const deleteBtn = document.getElementById("deleteBtn");
         deleteBtn.onclick = function (e){
@@ -293,6 +366,7 @@
                 const productNo = parseInt(row.getElementsByClassName('bannerId')[0].value,10);
                 console.log(productNo);
                 selectedIds.push(productNo);
+
             }
 
             if (selectedIds.length === 0) {

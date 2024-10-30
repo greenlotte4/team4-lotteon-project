@@ -2,8 +2,10 @@ package com.lotte4.service;
 
 
 import com.lotte4.dto.CartDTO;
+import com.lotte4.dto.ProductCateDTO;
 import com.lotte4.dto.UserDTO;
 import com.lotte4.entity.Cart;
+import com.lotte4.entity.ProductCate;
 import com.lotte4.entity.User;
 import com.lotte4.repository.CartRepository;
 import com.lotte4.repository.ProductVariantsRepository;
@@ -13,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -33,13 +36,15 @@ public class CartService {
 
     // 장바구니 목록 select
     public List<CartDTO> getCartByUserId(String uid) {
-        return cartRepository.findByUser_Uid(uid)
-                .map(cartList -> cartList.stream()
-                        .map(cart -> modelMapper.map(cart, CartDTO.class))  // 각 Cart 객체를 CartDTO로 변환
-                        .collect(Collectors.toList())  // List<CartDTO>로 수집
-                )
-                .orElse(Collections.emptyList());  // 데이터가 없을 경우 빈 리스트 반환
+        List<CartDTO> cartDTOList = new ArrayList<>();
+
+        cartRepository.findByUser_Uid(uid)
+                .orElse(Collections.emptyList())
+                .forEach(cart -> cartDTOList.add(modelMapper.map(cart, CartDTO.class)));
+
+        return cartDTOList;
     }
+
 
     // 장바구니 삭제
     public void deleteCartItems(int cartId){
