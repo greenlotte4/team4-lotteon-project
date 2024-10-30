@@ -2,11 +2,10 @@
 <header>
     <div class="header-top">
         <a th:href="@{/index}" class="logo">
-            <img th:src="@{'/uploads/config/' + ${info.headerLogo}}" alt="LOTTE ON">
+            <img th:src="@{'/uploads/config/' + ${info.headerLogo}}">
         </a>
-        <nav>
-            <a th:href="@{/member/login}">로그아웃</a>
-            <a th:href="@{/cs/index}">고객센터</a>
-        </nav>
+        <p class="header-href">
+            <a th:href="@{/index}">HOME</a> | <a th:href="@{/member/logout}">로그아웃</a> | <a href="#" id="cs">고객센터</a>
+        </p>
     </div>
 </header>
