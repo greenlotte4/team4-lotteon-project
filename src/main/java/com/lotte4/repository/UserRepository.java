@@ -1,5 +1,6 @@
 package com.lotte4.repository;
 
+import com.lotte4.entity.MemberInfo;
 import com.lotte4.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,9 +16,13 @@ import java.util.Optional;
 
      수정이력
       - 2024/10/28 강은경 - 관리자 회원목록 기능 검색&페이징 메서드 추가
+      - 2024/10/30 황수빈 - 포인트 조회 시 memberinfo로 uid를 찾아야함으로 메서드 추가
 */
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
+
+    User findByMemberInfo(MemberInfo memberInfo);
+
 
     // uid로 정보 조회
     Optional<User> findByUid(String uid);

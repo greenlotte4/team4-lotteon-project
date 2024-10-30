@@ -80,7 +80,7 @@ public class UserService {
 
         pointRepository.save( Point.builder()
                         .pointName("회원가입 축하 포인트")
-                        .user(user)
+                        .memberInfo(memberInfo)
                         .type("적립")
                         .point(5000)
                         .presentPoint(5000)

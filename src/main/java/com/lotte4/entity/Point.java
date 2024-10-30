@@ -33,7 +33,7 @@ public class Point {
     private String type;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "memberInfo_id")
+    private MemberInfo memberInfo;
 
 }
