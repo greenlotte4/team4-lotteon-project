@@ -1,6 +1,7 @@
 package com.lotte4.service;
 
 import com.lotte4.dto.ProductCateDTO;
+import com.lotte4.dto.ProductRegisterCateDTO;
 import com.lotte4.entity.ProductCate;
 import com.lotte4.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -45,18 +46,17 @@ public class CategoryService {
         return productCateDTOList;
     }
 
-    public void insertProductCate(ProductCateDTO productCateDTO, String parent, int depth){
+    public void insertProductCate(ProductRegisterCateDTO productRegisterCateDTO, String parent){
+        log.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        ProductCate productCate = modelMapper.map(productRegisterCateDTO, ProductCate.class);
 
-        ProductCate productCate = modelMapper.map(productCateDTO, ProductCate.class);
-
+        log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         //depth가 1보다 큰경우
         //--> 제일 상위 카테고리가 아닌경우
-        if(depth > 1){
+        if(productCate.getDepth() > 1){
             ProductCate parentCate = categoryRepository.findByName(parent);
             productCate.setParent(parentCate);
         }
-
-        productCate.setDepth(depth);
 
         categoryRepository.save(productCate);
     }

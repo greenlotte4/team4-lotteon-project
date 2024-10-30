@@ -136,11 +136,11 @@
 
         const jsonData = {
             "name" : categoryName,
+            "depth": categoryDepth
         }
 
         const queryParams = new URLSearchParams({
-            parent: selectedParent,
-            depth: Number(categoryDepth)
+            parent: selectedParent
         });
 
         fetch('/lotteon/admin/config/category?' + queryParams.toString(),{
