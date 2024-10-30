@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -48,7 +49,7 @@ public class Product {
     private List<ProductVariants> productVariants = new ArrayList<>();
 
     @Convert(converter = MapToJsonConverter.class)
-    private Map<String, List<String>> options;
+    private LinkedHashMap<String, List<String>> options;
 
     private int status;
 

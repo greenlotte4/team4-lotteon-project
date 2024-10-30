@@ -5,18 +5,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Converter
-public class MapToJsonConverter implements AttributeConverter<Map<String, List<String>>, String> {
+public class MapToJsonConverter implements AttributeConverter<LinkedHashMap<String, List<String>>, String> {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public String convertToDatabaseColumn(Map<String, List<String>> attribute) {
+    public String convertToDatabaseColumn(LinkedHashMap<String, List<String>> attribute) {
         try {
             return objectMapper.writeValueAsString(attribute);
         } catch (Exception e) {
@@ -25,11 +22,11 @@ public class MapToJsonConverter implements AttributeConverter<Map<String, List<S
     }
 
     @Override
-    public Map<String, List<String>> convertToEntityAttribute(String dbData) {
+    public LinkedHashMap<String, List<String>> convertToEntityAttribute(String dbData) {
         try {
             // 변환 중 문제가 발생할 경우 단일 값을 리스트로 처리
-            Map<String, Object> rawMap = objectMapper.readValue(dbData, new TypeReference<Map<String, Object>>() {});
-            Map<String, List<String>> resultMap = new HashMap<>();
+            LinkedHashMap<String, Object> rawMap = objectMapper.readValue(dbData, new TypeReference<LinkedHashMap<String, Object>>() {});
+            LinkedHashMap<String, List<String>> resultMap = new LinkedHashMap<>();
 
             rawMap.forEach((key, value) -> {
                 if (value instanceof String) {
