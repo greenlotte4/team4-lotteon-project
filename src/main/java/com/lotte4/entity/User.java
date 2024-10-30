@@ -6,7 +6,14 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+/*
+     날짜 : 2024/10/30
+     이름 : 강은경
+     내용 : User entity 생성
 
+     수정이력
+      - 2024/10/30 강은경 - toDTO 하는 과정에서 sellerInfo가 null일 경우 처리
+*/
 @Getter
 @Setter
 @ToString
@@ -42,8 +49,8 @@ public class User {
     public UserDTO toDTO() {
         return UserDTO.builder()
                 .userId(userId)
-                .memberInfo(memberInfo.toDTO())
-                .sellerInfo(sellerInfo.toDTO())
+                .memberInfo(memberInfo==null?null:memberInfo.toDTO())
+                .sellerInfo(sellerInfo==null?null:sellerInfo.toDTO())
                 .uid(uid)
                 .pass(pass)
                 .role(role)

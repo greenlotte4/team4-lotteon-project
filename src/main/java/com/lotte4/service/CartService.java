@@ -2,8 +2,10 @@ package com.lotte4.service;
 
 
 import com.lotte4.dto.CartDTO;
+import com.lotte4.dto.CartResponseDTO;
 import com.lotte4.dto.ProductCateDTO;
 import com.lotte4.dto.UserDTO;
+import com.lotte4.dto.admin.config.InfoDTO;
 import com.lotte4.entity.Cart;
 import com.lotte4.entity.ProductCate;
 import com.lotte4.entity.User;
@@ -20,7 +22,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+/*
+     날짜 : 2024/10/30
+     이름 : 강은경
+     내용 : CartService 생성
 
+     수정이력
+      - 2024/10/30 강은경 - cart insert 하는 메서드 추가
+*/
 @Log4j2
 @Service
 @RequiredArgsConstructor
@@ -30,9 +39,6 @@ public class CartService {
     private final ProductVariantsRepository productVariantsRepository;
     private final ModelMapper modelMapper;
 
-//    public List<Cart> selectCartsByUserId(int userId){
-//        return cartRepository.findByUserId(userId);
-//    }
 
     // 장바구니 목록 select
     public List<CartDTO> getCartByUserId(String uid) {
@@ -45,11 +51,40 @@ public class CartService {
         return cartDTOList;
     }
 
-
     // 장바구니 삭제
     public void deleteCartItems(int cartId){
         cartRepository.deleteById(cartId); // cartId로 cart 삭제
     }
+
+    // cart insert
+    public Cart insertCart(CartResponseDTO cartResponseDTO) {
+
+        Cart cart = modelMapper.map(cartResponseDTO, Cart.class);
+        log.info("cart : " + cart);
+
+        // 기존 장바구니에 동일한 상품이 있는지 확인
+        Optional<Cart> existingCartOptional = cartRepository.findByUserUidAndProductVariantId(
+                cartResponseDTO.getUser().getUid(),
+                cartResponseDTO.getProductVariants().getVariant_id()
+        );
+
+        log.info("existingCartDTO : " + existingCartOptional);
+
+        if (existingCartOptional.isPresent()) {
+            // 기존 상품이 있으면 count만 업데이트
+            Cart existingCart = existingCartOptional.get();
+            existingCart.setCount(existingCart.getCount() + cart.getCount());
+
+            log.info("existingCart : " + existingCart);
+            return cartRepository.save(existingCart);  // 기존 엔티티를 업데이트
+        } else {
+            // 기존 장바구니에 동일한 상품이 없으면 새로 저장
+            return cartRepository.save(cart);
+        }
+    }
+
+
+
 
 
 

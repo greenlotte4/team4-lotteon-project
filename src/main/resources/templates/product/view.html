@@ -63,7 +63,7 @@
                                 </select>
                             </li>
                         </ul>
-                        <div class="selected-variant-id">선택된 Variant ID: 없음</div>
+
                     </span>
                     <div class="quantity-section">
                         <label for="quantity">수량</label>
@@ -73,7 +73,11 @@
                         총 상품금액: <strong>27,000원</strong>
                     </div>
                     <div class="purchase-actions">
-                        <a th:href="@{/product/cart}" class="cart-button">장바구니</a>
+                        <form th:action="@{/product/cart}" method="post" id="cartForm">
+                            <input type="hidden" name="productVariants" class="selected-variant-id"/>
+                            <input type="hidden" name="count" id="count" />
+                            <button type="submit" class="cart-button">장바구니</button>
+                        </form>
                         <a th:href="@{/product/order}" class="buy-button">구매하기</a>
                     </div>
                     <div class="product-banner" th:each="banner : ${banners}" th:if="${banner.location == 'PRODUCT1'}">
@@ -178,7 +182,43 @@
 
 
 <script>
+
+    document.getElementById('cartForm').onsubmit = function(event) {
+        event.preventDefault(); // 기본 폼 제출 방지
+
+        // AJAX 요청
+        const formData = new FormData(this);
+        fetch(this.action, {
+            method: 'POST',
+            body: formData,
+        })
+            .then(response => response.text())
+            .then(data => {
+                if (data === "success") {
+                    // 성공 시 알림창 띄우기
+                    if (confirm("장바구니에 상품이 담겼습니다. 장바구니로 이동하시겠습니까?")) {
+                        window.location.href = "/lotteon/product/cart"; // 장바구니 페이지로 리다이렉트
+                    }
+                } else if (data === "failed") {
+                    alert("장바구니 등록에 실패했습니다.");
+                } else if (data === "noUser") {
+                    alert("로그인이 필요합니다."); // 로그인 필요 알림
+                    window.location.href = "/lotteon/member/login"; // 로그인 페이지로 리다이렉트
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    };
+
     document.addEventListener('DOMContentLoaded', function() {
+
+        // 수량이 변경될 때마다 count 필드에 값 업데이트
+        document.getElementById('quantity').addEventListener('input', function () {
+            document.getElementById('count').value = this.value;
+        });
+
+        // 페이지 로드 시 초기 수량 값 설정
+        document.getElementById('count').value = document.getElementById('quantity').value;
+
         const productDataElement = document.getElementById('product-dto');
         const productDTO = JSON.parse(productDataElement.textContent);
 
@@ -248,10 +288,10 @@
 
             if (matchingVariant) {
                 console.log("Matched Variant ID:", matchingVariant.variant_id);
-                document.querySelector('.selected-variant-id').innerText = "선택된 Variant ID: " + matchingVariant.variant_id;
+                document.querySelector('.selected-variant-id').value = matchingVariant.variant_id;
             } else {
                 console.log("No matching variant found");
-                document.querySelector('.selected-variant-id').innerText = "선택된 Variant ID: 없음";
+                document.querySelector('.selected-variant-id').value = "선택된 Variant ID: 없음";
             }
         }
 
