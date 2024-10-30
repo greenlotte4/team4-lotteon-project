@@ -66,6 +66,7 @@ public class BannerService {
             banner.setImg("default_MAIN2.png");
             banner.setName("default_MAIN2_Banner");
             banner.setBackground("#FFFFFF");
+            banner.setLink("http://13.125.226.80:8080/lotteon/index");
             banners.add(banner);
         }
 
@@ -84,6 +85,7 @@ public class BannerService {
                 banner.setImg("default_"+location+".png");
                 banner.setName("default_"+location+"_Banner");
                 banner.setBackground("#FFFFFF");
+                banner.setLink("http://13.125.226.80:8080/lotteon/index");
                 banners.add(banner);
             }
         }
