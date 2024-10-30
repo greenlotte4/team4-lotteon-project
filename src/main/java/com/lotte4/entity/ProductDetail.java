@@ -1,3 +1,12 @@
+/*
+     날짜 : 2024/10/30
+     이름 : ???
+     내용 : ProductDetail 생성
+
+     수정이력
+     - 2024/10/30 전규찬 - productId 필드 추가
+*/
+
 package com.lotte4.entity;
 
 import jakarta.persistence.*;
@@ -29,9 +38,9 @@ public class ProductDetail {
     private String creator;
     private String country;
     private String warning;
+    private int productId;
 
-    @CurrentTimestamp
-    private LocalDateTime createDate;
+    private String createDate;
     private String quality;
     private String as_field;
     private String asPhone;

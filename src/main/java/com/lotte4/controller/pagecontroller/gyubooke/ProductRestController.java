@@ -49,7 +49,7 @@ public class ProductRestController {
 
     @PostMapping(value = "/admin/product/register", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Map<String, Integer>> productRegisterCate(@RequestParam("cateId") int cateId,
-                                                                    @RequestParam("sellerId") int sellerId,
+//                                                                    @RequestParam("sellerId") int sellerId,
                                                                     @RequestParam("img_1") MultipartFile img_1,
                                                                     @RequestParam("img_2") MultipartFile img_2,
                                                                     @RequestParam("img_3") MultipartFile img_3,
@@ -63,7 +63,7 @@ public class ProductRestController {
         productDTO.setProductCateId(categoryService.getProductCate(cateId));
 
         // 판매자 정보 입력
-        SellerInfoDTO sellerInfo = sellerInfoService.selectSellerInfoById(sellerId);
+//        SellerInfoDTO sellerInfo = sellerInfoService.selectSellerInfoById(sellerId);
 
         // 'options' JSON 문자열을 LinkedHashMap<String, List<String>>으로 변환
         LinkedHashMap<String, List<String>> optionsMap = null;
@@ -85,7 +85,7 @@ public class ProductRestController {
         productDTO.setImg2(img2);
         productDTO.setImg3(img3);
         productDTO.setDetail(detail);
-        productDTO.setSellerInfoId(sellerInfo);
+//        productDTO.setSellerInfoId(sellerInfo);
 
         ProductDTO dto = productService.insertProduct(productDTO);
 

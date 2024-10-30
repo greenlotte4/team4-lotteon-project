@@ -157,7 +157,6 @@ strong {
 .product-details {
     border: 1px solid #ddd;
     box-sizing: border-box;
-    box-sizing: border-box;
     padding: 20px;
 }
 
@@ -175,8 +174,9 @@ strong {
     max-width: 100%;
 }
 
-.product-detail-image img {
-    width: 100%;
+.product-detail-image > .product-image {
+    width: 80%;
+    max-width: 80% !important;
     height: auto;
 }
 
