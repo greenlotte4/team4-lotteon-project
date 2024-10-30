@@ -1,6 +1,8 @@
 package com.lotte4.dto;
 
 import lombok.*;
+
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +29,7 @@ public class ProductDTO {
     private String img3;
     private String detail;
     private SellerInfoDTO sellerInfoId;
-    private Map<String, List<String>> options;
+    private LinkedHashMap<String, List<String>> options;
     private int status;
     private ProductCateDTO productCateId;
 }

@@ -7,6 +7,7 @@ import com.lotte4.entity.ProductVariants;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +38,7 @@ public class Product_V_DTO {
     @Builder.Default
     private List<ProductVariants> productVariants = new ArrayList<>();
 
-    private Map<String, List<String>> options;
+    private LinkedHashMap<String, List<String>> options;
     private int status;
     private ProductCateDTO productCateId;
 

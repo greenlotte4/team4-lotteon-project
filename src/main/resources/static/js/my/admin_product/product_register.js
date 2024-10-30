@@ -150,6 +150,7 @@ form.addEventListener('submit', async function (e) {
     const discount = document.querySelector('#discount').value.trim();
     const point = document.querySelector('#point').value.trim();
     const deliveryFee = document.querySelector('#deliveryFee').value.trim();
+    const sellerId = document.querySelector('#sellerInfoId').value.trim();
 
     // 이미지 파일 파일명 수정
     const img_1 = document.querySelector('#prod_img1').files[0];
@@ -218,6 +219,7 @@ form.addEventListener('submit', async function (e) {
     formData.append('point', point);
     formData.append('deliveryFee', deliveryFee);
     formData.append('optionsJson', JSON.stringify(optionObj));
+    formData.append('sellerId', sellerId);
 
     try {
         // 첫 번째 POST: 제품 등록

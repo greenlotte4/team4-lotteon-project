@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -113,7 +114,10 @@ public class ProductController {
 
         Product_V_DTO productDTO = productService.getProductById(productId);
 
+        LinkedHashMap<String, List<String>> options = (LinkedHashMap<String, List<String>>) productDTO.getOptions();
+
         String productDTOJson = objectMapper.writeValueAsString(productDTO);
+        model.addAttribute("options", options);
         model.addAttribute("productDTOJson", productDTOJson);
         model.addAttribute("productDTO", productDTO);
 

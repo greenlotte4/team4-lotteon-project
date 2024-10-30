@@ -30,7 +30,7 @@
             <h2 class="section-title">상품보기</h2>
             <section class="product-view">
                 <div class="product-image">
-                    <img th:src="@{'/uploads/product/' + ${productDTO.getImg1()}}" alt="상품 사진" class="product-image">
+                    <img th:src="@{'/uploads/product/' + ${productDTO.getImg1()}}" alt="상품 목록 사진" class="product-image">
                 </div>
                 <div class="product-info">
                     <p class="product-number">상품번호: 10010118412</p>
@@ -55,7 +55,7 @@
                     </div>
                     <span id="variant-options" class="variant-options">
                        <ul>
-                            <li th:each="entry : ${productDTO.options.entrySet()}">
+                            <li th:each="entry : ${options.entrySet()}">
                                 <span th:text="${entry.key} + ': '"></span>
                                 <select>
                                     <option value="" selected disabled>선택하세요</option>
@@ -87,7 +87,9 @@
             <section class="product-details">
                 <h3>상품정보</h3>
                 <div class="product-detail-image">
-                    <img src="../images/product/image.png" alt="Product Details Image" />
+                    <img th:src="@{'/uploads/product/' + ${productDTO.getImg2()}}" alt="상품 메인 사진" class="product-image">
+                    <img th:src="@{'/uploads/product/' + ${productDTO.getImg3()}}" alt="상품 상세 사진" class="product-image">
+                    <img th:src="@{'/uploads/product/' + ${productDTO.getDetail()}}" alt="상품 상세 정보 사진" class="product-image">
                 </div>
                 <div id="product-info-public-announcement" class="hidden">
                     <h3>상품정보제공공시</h3>
