@@ -53,22 +53,43 @@ public class BannerService {
     public List<BannerDTO> getAllBannersWithLocation(){
         Random random = new Random();
         //MAIN2는 전부 삽입
-        List<Banner> banners = bannerRepository.findByLocation("MAIN2");
+        List<Banner> banners = bannerRepository.findByLocationAndState("MAIN2",1);
         // 슬라이드 배너 랜덤화
-        Collections.shuffle(banners);
+        if(!banners.isEmpty()){
+            Collections.shuffle(banners);
+        }
+        else{
+            //활성화된 배너가 없을 시
+            Banner banner = new Banner();
+            banner.setLocation("MAIN2");
+            banner.setState(1);
+            banner.setImg("default_MAIN2.png");
+            banner.setName("default_MAIN2_Banner");
+            banner.setBackground("#FFFFFF");
+            banners.add(banner);
+        }
+
 
         String[] bannerLocationList = {"MAIN1","PRODUCT1","MY1","MEMBER1"};
         for(String location : bannerLocationList){
-            List<Banner> bannerTMP = bannerRepository.findByLocation(location);
+            List<Banner> bannerTMP = bannerRepository.findByLocationAndState(location,1);
             if (!bannerTMP.isEmpty()){
                 banners.add(bannerTMP.get(random.nextInt(bannerTMP.size())));
+            }
+            else{
+                //활성화된 배너가 없을 시
+                Banner banner = new Banner();
+                banner.setLocation(location);
+                banner.setState(1);
+                banner.setImg("default_"+location+".png");
+                banner.setName("default_"+location+"_Banner");
+                banner.setBackground("#FFFFFF");
+                banners.add(banner);
             }
         }
         List<BannerDTO> bannerDTOs = new ArrayList<>();
         for(Banner banner : banners){
-            if(banner.getState() == 1){
-                bannerDTOs.add(modelMapper.map(banner, BannerDTO.class));
-            }
+            bannerDTOs.add(modelMapper.map(banner, BannerDTO.class));
         }
         return bannerDTOs;
     }
