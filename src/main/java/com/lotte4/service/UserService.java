@@ -3,9 +3,11 @@ package com.lotte4.service;
 import com.lotte4.dto.CartDTO;
 import com.lotte4.dto.UserDTO;
 import com.lotte4.entity.MemberInfo;
+import com.lotte4.entity.Point;
 import com.lotte4.entity.SellerInfo;
 import com.lotte4.entity.User;
 import com.lotte4.repository.MemberInfoRepository;
+import com.lotte4.repository.PointRepository;
 import com.lotte4.repository.UserRepository;
 import jakarta.mail.Message;
 import jakarta.mail.internet.InternetAddress;
@@ -42,6 +44,7 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
 
+    private final PointRepository pointRepository;
     private final UserRepository userRepository;
     private final MemberInfoService memberInfoService;
     private final SellerInfoService sellerInfoService;
@@ -74,6 +77,15 @@ public class UserService {
                 .build();
 
         userRepository.save(user);
+
+        pointRepository.save( Point.builder()
+                        .pointName("회원가입 축하 포인트")
+                        .memberInfo(memberInfo)
+                        .type("적립")
+                        .point(5000)
+                        .presentPoint(5000)
+                        .build() );
+
 
         log.info("memberuser" + user);
 

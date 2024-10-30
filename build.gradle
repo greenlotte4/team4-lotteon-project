@@ -6,7 +6,7 @@ plugins {
 
 group = 'com.lotte4'
 
-version = '4조-0.0.8-SNAPSHOT'
+version = '4조-0.0.7-SNAPSHOT'
 
 
 java {

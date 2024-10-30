@@ -1,5 +1,6 @@
-package com.lotte4.entity;
+package com.lotte4.dto;
 
+import com.lotte4.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -8,15 +9,12 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity
-@Table(name = "point")
-public class Point {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class PointDTO {
+
     private int pointId;
 
     // 포인트 이름
@@ -27,13 +25,13 @@ public class Point {
     // 잔여 포인트
     private int presentPoint;
 
-    @CreationTimestamp
+
     private LocalDateTime pointDate;
     // 차감인지 사용인지
     private String type;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "memberInfo_id")
-    private MemberInfo memberInfo;
+    private MemberInfoDTO memberInfo;
 
+    // 추가 필드
+    private String uid;
 }

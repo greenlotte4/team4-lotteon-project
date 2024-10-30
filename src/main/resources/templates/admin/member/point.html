@@ -67,29 +67,15 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>
-                    <input type="checkbox" class="chkbox" style="width: 12px" />
-                  </td>
-                  <td>5</td>
-                  <td>abc1234</td>
-                  <td>정우성</td>
-                  <td>1,000</td>
-                  <td>15,000</td>
-                  <td>구매확정 포인트 지급</td>
-                  <td>0000-00-00 00:00:00</td>
-                </tr>
-                <tr>
-                  <td>
-                    <input type="checkbox" class="chkbox" style="width: 12px" />
-                  </td>
-                  <td>4</td>
-                  <td>abc1234</td>
-                  <td>이나영</td>
-                  <td>1,000</td>
-                  <td>1,200</td>
-                  <td>이벤트 참여</td>
-                  <td>0000-00-00 00:00:00</td>
+                <tr th:each="point : ${points}">
+                  <td><input type="checkbox" class="chkbox" style="width: 12px" /></td>
+                  <td>index 추가 예정</td>
+                  <td>[[${point.uid}]]</td>
+                  <td>[[${point.memberInfo.name}]]</td>
+                  <td>[[${point.point}]]</td>
+                  <td>[[${point.presentPoint}]]</td>
+                  <td>[[${point.pointName}]]</td>
+                  <td>[[${point.pointDate}]]</td>
                 </tr>
               </tbody>
             </table>
