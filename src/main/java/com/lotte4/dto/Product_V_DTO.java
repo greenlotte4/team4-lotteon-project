@@ -1,7 +1,13 @@
+/*
+     날짜 : 2024/10/29
+     이름 : 전규찬
+     내용 : Product_V_DTO 생성
+
+     수정이력
+*/
+
 package com.lotte4.dto;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lotte4.entity.Product;
 import com.lotte4.entity.ProductVariants;
 import lombok.*;
@@ -9,7 +15,6 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 @Getter
 @Setter
@@ -59,6 +64,7 @@ public class Product_V_DTO {
         this.img3 = product.getImg3();
         this.detail = product.getDetail();
         this.productVariants = product.getProductVariants();
+        this.options = product.getOptions();
     }
 
 

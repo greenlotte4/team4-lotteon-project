@@ -133,6 +133,12 @@ public class ProductService {
         return null;
     }
 
+    public ProductDetailDTO getProductDetailById(int productId) {
+        ProductDetail productDetail = productDetailRepository.findByProductId(productId);
+        log.info("productDetail : " + productDetail);
+        return modelMapper.map(productDetail, ProductDetailDTO.class);
+    }
+
     public String uploadProdImg(MultipartFile file) {
 
         String uploadDir = System.getProperty("user.dir") + "/uploads/product/";

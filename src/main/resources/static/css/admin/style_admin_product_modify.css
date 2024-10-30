@@ -252,7 +252,8 @@
 .option-value-box{
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+    min-width: 10px;
     padding: 5px;
     margin: 0 3px 0 3px;
     height: 15px;
@@ -274,7 +275,7 @@
     cursor: pointer;
 }
 
-img{
+details > img{
     width: 200px;
     height: 200px;
     margin: 5px 0;
@@ -320,4 +321,8 @@ details {
 
 .image_td {
     padding: 0 10px !important;
+}
+
+.option {
+    margin-top: 5px;
 }
