@@ -56,8 +56,8 @@
                     <span id="variant-options" class="variant-options">
                        <ul>
                             <li th:each="entry : ${options.entrySet()}">
-                                <span th:text="${entry.key} + ': '"></span>
-                                <select>
+                                <span th:text="${entry.key}"></span>
+                                <select class="option-select">
                                     <option value="" selected disabled>선택하세요</option>
                                     <option th:each="value : ${entry.value}" th:value="${value}" th:text="${value}"></option>
                                 </select>
@@ -188,6 +188,7 @@
 
         // AJAX 요청
         const formData = new FormData(this);
+        console.log('formData : ' + formData);
         fetch(this.action, {
             method: 'POST',
             body: formData,
