@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,6 +42,8 @@ public class BannerService {
         return bannerDTOs;
     }
 
+
+    @Cacheable(key = "'allBannersWithLocation'", value = "banners", cacheManager = "redisCacheManager")
     public List<BannerDTO> getAllBannersWithLocation(){
         Random random = new Random();
         //MAIN2는 전부 삽입

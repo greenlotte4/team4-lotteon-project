@@ -1,5 +1,7 @@
 package com.lotte4.service;
 
+import com.lotte4.dto.CartDTO;
+import com.lotte4.dto.ProductCateChildDTO;
 import com.lotte4.dto.ProductCateDTO;
 import com.lotte4.entity.ProductCate;
 import com.lotte4.repository.CategoryRepository;
@@ -10,7 +12,13 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+
+/*
+    2024/10/30 캐싱 어노테이션 추가
+ */
 
 @Slf4j
 @Service
@@ -61,18 +69,13 @@ public class CategoryService {
 
         categoryRepository.save(productCate);
     }
-
-    @Cacheable(key = "#category", value = "categories", cacheManager = "cacheManager")
-    public List<ProductCateDTO> getProductCateListWithDepth(int depth){
-
-        List<ProductCateDTO> productCateDTOList = new ArrayList<>();
+    @Cacheable(key = "'getProductCateListWithDepth'", value = "categories", cacheManager = "redisCacheManager")
+    public List<ProductCateChildDTO> getProductCateListWithDepth(int depth){
         List<ProductCate> productCateList = categoryRepository.findByDepth(depth);
 
-        for(ProductCate productCate : productCateList){
-            productCateDTOList.add(new ProductCateDTO(productCate));
-        }
-        return productCateDTOList;
+        List<ProductCateChildDTO> childDTOS = productCateList.stream().map(ProductCateChildDTO::new).collect(Collectors.toList());
 
+        return childDTOS;
     }
 
     public boolean deleteProductCate(String name){

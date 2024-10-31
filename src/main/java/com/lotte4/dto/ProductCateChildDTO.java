@@ -1,19 +1,11 @@
 package com.lotte4.dto;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.lotte4.entity.ProductCate;
-import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
-/*
-
-    -2024-10-28 강중원 - tostring 순환참조 제거
-
- */
-
 
 @Getter
 @Setter
@@ -22,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
-public class ProductCateDTO {
+public class ProductCateChildDTO {
     private int productCateId;
 
     // 이름
@@ -31,27 +23,22 @@ public class ProductCateDTO {
     // 계층
     private int depth; // 추가함(241024 10:25)
 
-    // 부모
-    @ToString.Exclude
-    private ProductCateDTO parent; // 추가함(241024 12:35)
+    private List<ProductCateChildDTO> children = new ArrayList<>();
 
-
-    private List<ProductCateDTO> children = new ArrayList<>();
-
-    public ProductCateDTO(ProductCate productCate) {
+    public ProductCateChildDTO(ProductCate productCate) {
         this.productCateId = productCate.getProductCateId();
         this.name = productCate.getName();
         setChildren(productCate.getChildren());
     }
 
-    public ProductCateDTO(int productCateId, String name) {
+    public ProductCateChildDTO(int productCateId, String name) {
         this.productCateId = productCateId;
         this.name = name;
     }
 
     private void setChildren(List<ProductCate> children) {
         children.forEach(productCate -> {
-            ProductCateDTO childDTO = new ProductCateDTO(productCate);
+            ProductCateChildDTO childDTO = new ProductCateChildDTO(productCate);
             this.children.add(childDTO);
         });
     }
