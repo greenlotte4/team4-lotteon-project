@@ -106,8 +106,7 @@ public class AdminMemberController {
         memberInfoService.updateMemberGrades(memberGrades);
         return ResponseEntity.ok().build(); // 200 OK 응답 반환
     }
-
-<<<
+     s
     @ResponseBody
     @GetMapping("/member/point")
     public ResponseEntity<Page<PointDTO>> pointfinder (@RequestParam(required = false) String searchType,
