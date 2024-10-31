@@ -48,15 +48,7 @@ public class ProductVariantsDTO {
         this.options = productVariants.getOptions();
         this.created_at = productVariants.getCreated_at();
         this.updated_at = productVariants.getUpdated_at();
-        // product 필드는 ModelMapper가 자동으로 설정
-        // productVariants 리스트는 ModelMapper가 자동으로 매핑
+        this.product = new Product_V_DTO(productVariants.getProduct());
     }
 
-    public List<ProductVariantsDTO> setProductVariantsDTOList(List<ProductVariants> productVariants) {
-        List<ProductVariantsDTO> productVariantsDTOS = new ArrayList<>();
-        for (ProductVariants productVariant : productVariants) {
-            productVariantsDTOS.add(new ProductVariantsDTO(productVariant));
-        }
-        return productVariantsDTOS;
-    }
 }

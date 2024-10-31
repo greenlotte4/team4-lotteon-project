@@ -1,12 +1,10 @@
 package com.lotte4.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.lotte4.config.MapToJsonConverter;
+import com.lotte4.config.MapStringListToJsonConverter;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CurrentTimestamp;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,7 +27,7 @@ public class ProductVariants {
     private int price;
     private int stock;
 
-    @Convert(converter = MapToJsonConverter.class)
+    @Convert(converter = MapStringListToJsonConverter.class)
     private Map<List<String>, List<String>> options; // sku에 대한 옵션(ex 검은색 S / 파란색 L)
 
     @CurrentTimestamp

@@ -81,6 +81,7 @@
                                 <td class="label">상품명</td>
                                 <td>
                                     <input type="text" name="name" id="name" th:value="${productDTO.name}" required/>
+                                    <input id="productId" type="hidden" th:value="${productDTO.productId}">
                                 </td>
                             </tr>
                             <tr>
@@ -132,36 +133,42 @@
                                     <div class="file-upload file">
                                         <input type="file" id="prod_img1" name="img1" accept="image/*"/>
                                         <label for="prod_img1" class="labelForInput">파일 수정하기</label>
+                                        <span class="upload-name">선택된 파일 없음</span>
                                         <span>크기 190 x 190, 상품 목록에 출력될 이미지입니다. <br>⚠️ 파일을 수정하려면 '수정' 버튼을 클릭하여 새 파일을 업로드하세요. 파일을 업로드하지 않으면 기존 파일이 유지됩니다.
 </span>
                                         <details>
                                             <summary>
                                                 <span class="preview_img">기존 상품 목록 이미지 미리보기</span>
                                             </summary>
-                                            <img th:src="@{'/uploads/product/' + ${productDTO.getImg1()}}">
+                                            <img th:src="@{'/uploads/product/' + ${productDTO.img1}}">
+                                            <input id="img1" type="hidden" th:value="${productDTO.img1}">
                                         </details>
                                     </div>
                                     <div class="file-upload file">
                                         <input type="file" id="prod_img2" name="img2" accept="image/*"/>
                                         <label for="prod_img2" class="labelForInput">파일 수정하기</label>
+                                        <span class="upload-name">선택된 파일 없음</span>
                                         <span>크기 190 x 190, 상품 메인에 출력될 이미지입니다.<br>⚠️ 파일을 수정하려면 '수정' 버튼을 클릭하여 새 파일을 업로드하세요. 파일을 업로드하지 않으면 기존 파일이 유지됩니다.</span>
                                         <details>
                                             <summary>
                                                 <span class="preview_img">기존 상품 메인 이미지 미리보기</span>
                                             </summary>
-                                            <img th:src="@{'/uploads/product/' + ${productDTO.getImg2()}}">
+                                            <img th:src="@{'/uploads/product/' + ${productDTO.img2}}">
+                                            <input id="img2" type="hidden" th:value="${productDTO.img2}">
                                         </details>
 
                                     </div>
                                     <div class="file-upload file">
                                         <input type="file" id="prod_img3" name="img3" accept="image/*"/>
                                         <label for="prod_img3" class="labelForInput">파일 수정하기</label>
+                                        <span class="upload-name">선택된 파일 없음</span>
                                         <span>크기 190 x 190, 상품 상세에 출력될 이미지입니다.<br>⚠️ 파일을 수정하려면 '수정' 버튼을 클릭하여 새 파일을 업로드하세요. 파일을 업로드하지 않으면 기존 파일이 유지됩니다.</span>
                                         <details>
                                             <summary>
                                                 <span class="preview_img">기존 상품 상세 이미지 미리보기</span>
                                             </summary>
-                                            <img th:src="@{'/uploads/product/' + ${productDTO.getImg3()}}">
+                                            <img th:src="@{'/uploads/product/' + ${productDTO.img3}}">
+                                            <input id="img3" type="hidden" th:value="${productDTO.img3}">
                                         </details>
                                     </div>
                                 </td>
@@ -173,12 +180,14 @@
                                         <input type="file" id="prod_detail" name="detail"
                                                accept="image/*"/>
                                         <label for="prod_detail" class="labelForInput">파일 수정하기</label>
+                                        <span class="upload-name">선택된 파일 없음</span>
                                         <span>크기 가로 940px, 높이 제약없음, 크기 최대 1MB<br>⚠️ 파일을 수정하려면 '수정' 버튼을 클릭하여 새 파일을 업로드하세요. 파일을 업로드하지 않으면 기존 파일이 유지됩니다.</span>
                                         <details>
                                             <summary>
                                                 <span class="preview_img">기존 상품 상세정보 이미지 미리보기</span>
                                             </summary>
-                                            <img th:src="@{'/uploads/product/' + ${productDTO.getImg1()}}">
+                                            <img th:src="@{'/uploads/product/' + ${productDTO.detail}}">
+                                            <input id="detail" type="hidden" th:value="${productDTO.detail}">
                                         </details>
                                     </div>
                                 </td>
@@ -209,7 +218,7 @@
                                             </div>
                                         </th:block>
                                     </div>
-                                    <button type="button" id="addOption">옵션 추가</button>
+                                    <button th:if="${options.entrySet().size() < 3}" type="button" id="addOption">옵션 추가</button>
                                 </td>
                             </tr>
                         </table>
@@ -222,6 +231,7 @@
                     <div class="inquiry-section">
                         <table class="inquiry-table">
                             <tr>
+                                <input id="productDetailId" type="hidden" th:value="${productDetailDTO.productDetailId}">
                                 <td class="label">상품상태</td>
                                 <td>
                                     <input type="text" name="condition" th:value="${productDetailDTO.condition_field}"

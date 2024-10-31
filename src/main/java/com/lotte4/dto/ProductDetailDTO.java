@@ -9,9 +9,9 @@
 
 package com.lotte4.dto;
 
+import com.lotte4.entity.ProductDetail;
 import lombok.*;
 
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -38,4 +38,22 @@ public class ProductDetailDTO {
 
     private String as_field;
     private String asPhone;
+
+    public ProductDetailDTO(ProductDetail productDetail) {
+        this.productDetailId = productDetail.getProductDetailId();
+        this.condition_field = productDetail.getCondition_field();
+        this.duty = productDetail.getDuty();
+        this.receipt = productDetail.getReceipt();
+        this.sellerType = productDetail.getSellerType();
+        this.brand = productDetail.getBrand();
+        this.coa = productDetail.getCoa();
+        this.creator = productDetail.getCreator();
+        this.country = productDetail.getCountry();
+        this.warning = productDetail.getWarning();
+        this.createDate = productDetail.getCreateDate();
+        this.quality = productDetail.getQuality();
+        this.productId = productDetail.getProductId();
+        this.as_field = productDetail.getAs_field();
+        this.asPhone = productDetail.getAsPhone();
+    }
 }

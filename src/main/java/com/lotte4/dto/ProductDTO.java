@@ -8,12 +8,10 @@
 
 package com.lotte4.dto;
 
-import com.lotte4.entity.ProductDetail;
 import lombok.*;
 
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 @Getter
 @Setter

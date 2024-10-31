@@ -5,23 +5,39 @@
 
 'use strict';
 
+// 파일 업로드 파트
+
+const file_inputs = document.querySelectorAll('input[type="file"]');
+file_inputs.forEach(input => input.addEventListener('change', function (e) {
+    e.preventDefault();
+    const files = e.target.files;
+    const fileNameSpan = e.target.nextElementSibling.nextElementSibling;
+    if (files.length > 0) {
+        fileNameSpan.textContent = `현재 선택된 파일 : ${files[0].name}`;
+    } else {
+        fileNameSpan.textContent = '선택된 파일 없음';
+    }
+}));
+
+
 // 상품 옵션 입력 파트 ----------------------------------------------------------------------------
 
 const option = document.querySelector('#option');
 
 const deleteBtns = document.querySelectorAll('.pre-delete-value');
 
-deleteBtns.forEach(btn => btn.addEventListener('click', function () {
+deleteBtns.forEach(btn => btn.addEventListener('click', function (e) {
+    e.preventDefault();
     // 부모 div.option-value-box 찾기
     const optionValueBox = this.closest('.pre-option-value-box');
     if (optionValueBox) {
         if (window.confirm("선택하신 옵션을 삭제하면, 이 옵션이 포함된 모든 제품 조합도 함께 삭제됩니다. 삭제를 진행하시겠습니까?")) {
+
+            const optionValue = e.target.previousElementSibling.textContent;
+            console.log("optionValue = " + optionValue);
+
+
             optionValueBox.remove();
-
-
-
-
-
         } else {
             alert('삭제가 취소되었습니다.')
         }
@@ -78,10 +94,12 @@ option.addEventListener('keydown', function (event) {
 
 // 옵션 추가 버튼
 const addOptionButton = document.getElementById('addOption');
-addOptionButton.addEventListener('click', function () {
-    const options = document.querySelector('.option');
+if (addOptionButton) {
 
-    const option_innerHTML = `
+    addOptionButton.addEventListener('click', function () {
+        const options = document.querySelector('.option');
+
+        const option_innerHTML = `
         <div>
             <span>옵션명 :</span>
             <input type="text" class="option-name" placeholder="옵션명을 입력하세요" required>
@@ -95,13 +113,13 @@ addOptionButton.addEventListener('click', function () {
         </div>
         <span>⚠️ 옵션은 최대 3개까지 가능합니다.</span>
     `;
-    const option_name = document.querySelectorAll('.option-name');
-    if (option_name.length < 3) {
-        option.insertAdjacentHTML("beforeend", option_innerHTML);
-        addOptionButton.remove();
-    }
-
-});
+        const option_name = document.querySelectorAll('.option-name');
+        if (option_name.length < 3) {
+            option.insertAdjacentHTML("beforeend", option_innerHTML);
+            addOptionButton.remove();
+        }
+    });
+}
 
 // 데이터 전송 파트 --------------------------------------------------------------------------------
 
@@ -110,20 +128,8 @@ const form = document.querySelector('form');
 form.addEventListener('submit', async function (e) {
     e.preventDefault();
 
-    const cateId2 = category2.value;
-    const cateId3 = category3.value;
-
-    let cateId;
-
-    if (!cateId3) {
-        cateId = cateId2;
-    } else {
-        cateId = cateId3;
-    }
-
-    console.log('Selected Category ID:', cateId);
-
     // 상품 정보
+    const productId = document.querySelector('#productId').value.trim();
     const name = document.querySelector('#name').value.trim();
     const description = document.querySelector('#description').value.trim();
     const company = document.querySelector('#company').value.trim();
@@ -134,24 +140,33 @@ form.addEventListener('submit', async function (e) {
     // const sellerId = document.querySelector('#sellerInfoId').value.trim();
 
     // 이미지 파일 파일명 수정
-    const img_1 = document.querySelector('#prod_img1').files[0];
-    const img_2 = document.querySelector('#prod_img2').files[0];
-    const img_3 = document.querySelector('#prod_img3').files[0];
-    const detail_ = document.querySelector('#prod_detail').files[0];
+    const img__1 = document.querySelector('#prod_img1').files;
+    const img__2 = document.querySelector('#prod_img2').files;
+    const img__3 = document.querySelector('#prod_img3').files;
+    const detail__ = document.querySelector('#prod_detail').files;
 
-    const fileInputs = document.querySelectorAll('input[name="files"]');
+    const img_1 = img__1[0];
+    const img_2 = img__2[0];
+    const img_3 = img__3[0];
+    const detail_ = detail__[0];
 
-    // 모든 파일 입력 요소에서 선택된 파일을 수집
-    const files = [];
+    let img1;
+    let img2;
+    let img3;
+    let detail;
 
-    fileInputs.forEach(input => {
-        if (input.files.length > 0) {
-            // 각 입력 요소에서 선택된 모든 파일을 배열에 추가
-            Array.from(input.files).forEach(file => {
-                files.push(file);
-            });
-        }
-    });
+    if (img__1 !== undefined && img__1.length > 0) {
+        img1 = document.querySelector('#img1').value;
+    }
+    if (img__2 !== undefined && img__2.length > 0) {
+        img2 = document.querySelector('#img2').value;
+    }
+    if (img__3 !== undefined && img__3.length > 0) {
+        img3 = document.querySelector('#img3').value;
+    }
+    if (detail__ !== undefined && detail__.length > 0) {
+        detail = document.querySelector('#detail').value;
+    }
 
     // 옵션 리스트
     const optionNamesNodeList = document.querySelectorAll('.option-name');
@@ -187,11 +202,15 @@ form.addEventListener('submit', async function (e) {
     const optionObj = Object.fromEntries(optionMap);
 
     const formData = new FormData();
-    formData.append('cateId', cateId);
-    formData.append('img_1', img_1 || '');
-    formData.append('img_2', img_2 || '');
-    formData.append('img_3', img_3 || '');
-    formData.append('detail_', detail_ || '');
+    formData.append('productId', productId);
+    formData.append('img_1', img_1);
+    formData.append('img_2', img_2);
+    formData.append('img_3', img_3);
+    formData.append('detail_', detail_);
+    formData.append('img1', img1 || '');
+    formData.append('img2', img2 || '');
+    formData.append('img3', img3 || '');
+    formData.append('detail', detail || '');
     formData.append('name', name);
     formData.append('description', description);
     formData.append('company', company);
@@ -202,23 +221,28 @@ form.addEventListener('submit', async function (e) {
     formData.append('optionsJson', JSON.stringify(optionObj));
     // formData.append('sellerId', sellerId);
 
+    console.log("img1 = " + img1);
+    console.log("img2 = " + img2);
+    console.log("img3 = " + img3);
+    console.log("detail = " + detail);
+
     try {
-        // 첫 번째 POST: 제품 등록
-        const registerResponse = await fetch('/lotteon/admin/product/register', {
-            method: 'POST',
+        // 첫 번째 PUT: 제품 등록
+        const registerResponse = await fetch('/lotteon/admin/product', {
+            method: 'PUT',
             body: formData
         });
 
         const registerData = await registerResponse.json();
         console.log('Register Response:', registerData);
 
-        const productId = registerData.productId;
-        if (!productId) {
-            alert('유효한 상품 ID를 받지 못했습니다.');
+        if (registerData.status !== 'success') {
+            alert(registerData.message || '기본 정보 등록에 실패하였습니다.');
             return;
         }
 
         // 두 번째 POST: 제품 상세 등록
+        const productDetailId = document.querySelector('#productDetailId').value.trim();
         const condition_field = document.querySelector('#condition').value.trim();
         const duty = document.querySelector('#duty').value.trim();
         const receipt = document.querySelector('#receipt').value.trim();
@@ -234,6 +258,7 @@ form.addEventListener('submit', async function (e) {
         const asPhone = document.querySelector('#asPhone').value.trim();
 
         const data2 = {
+            productDetailId: productDetailId,
             condition_field: condition_field,
             duty: duty,
             receipt: receipt,
@@ -250,8 +275,8 @@ form.addEventListener('submit', async function (e) {
             productId: productId
         };
 
-        const detailResponse = await fetch('/lotteon/admin/product/register/detail', {
-            method: 'POST',
+        const detailResponse = await fetch('/lotteon/admin/product/detail', {
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -262,12 +287,12 @@ form.addEventListener('submit', async function (e) {
         console.log('Detail Response:', detailData);
 
         if (detailData.status !== 'success') {
-            alert(detailData.message || '상품 상세 등록에 실패하였습니다.');
+            alert(detailData.message || '상품정보 제공고시 등록에 실패하였습니다.');
             return;
         }
 
-        alert('상품 등록이 완료되었습니다. 상품 상세 등록 페이지로 이동합니다.');
-        window.location.assign('/lotteon/admin/product/registerMore?productId=' + productId);
+        alert('상품 등록이 완료되었습니다. 상품 상세 수정 페이지로 이동합니다.');
+        window.location.assign('/lotteon/admin/product/modifyMore?productId=' + productId);
 
     } catch (err) {
         console.error('Error during product registration:', err);

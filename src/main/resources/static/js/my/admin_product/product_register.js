@@ -8,7 +8,7 @@ const category3 = document.querySelector('#category3');
 category1.addEventListener('change', function (e) {
     const parent = e.target.value;
 
-    fetch(`/lotteon/admin/product/register/${parent}`)
+    fetch(`/lotteon/admin/product/${parent}`)
         .then(resp => resp.json())
         .then(data => {
             category2.innerHTML = "<option value=\"\" disabled selected hidden>2차분류 선택</option>";
@@ -27,7 +27,7 @@ category1.addEventListener('change', function (e) {
 category2.addEventListener('change', function (e) {
     const parent = e.target.value;
 
-    fetch(`/lotteon/admin/product/register/${parent}`)
+    fetch(`/lotteon/admin/product/${parent}`)
         .then(resp => resp.json())
         .then(data => {
             category3.innerHTML = "<option value=\"\" disabled selected hidden>3차분류 선택</option>";
@@ -96,7 +96,7 @@ option.addEventListener('keydown', function (event) {
 });
 
 // 옵션 추가 버튼
-const addOptionButton = document.getElementById('add-option');
+const addOptionButton = document.getElementById('addOption');
 addOptionButton.addEventListener('click', function () {
     const option = document.querySelector('#option');
 
@@ -113,11 +113,25 @@ addOptionButton.addEventListener('click', function () {
             </div>
         </div>
     `;
+    const option_innerHTML2 = `
+        <div>
+            <span>옵션명 :</span>
+            <input type="text" class="option-name" placeholder="옵션명을 입력하세요" required>
+        </div>
+        <div class="option-values">
+            <span>옵션값 :</span>
+            <div class="fake_input">
+                <input type="text" class="option-value-input"
+                       placeholder="옵션값 입력 후 엔터">
+            </div>
+        </div>
+        <span>⚠️ 옵션은 최대 3개까지 가능합니다.</span>
+    `;
     const option_name = document.querySelectorAll('.option-name');
-    if (option_name.length < 3) {
+    if (option_name.length < 2) {
         option.insertAdjacentHTML("beforeend", option_innerHTML);
-    } else {
-        alert('옵션을 더 이상 추가할 수 없습니다.');
+    } else if (option_name.length === 2) {
+        option.insertAdjacentHTML("beforeend", option_innerHTML2)
         addOptionButton.remove();
     }
 });
@@ -223,7 +237,7 @@ form.addEventListener('submit', async function (e) {
 
     try {
         // 첫 번째 POST: 제품 등록
-        const registerResponse = await fetch('/lotteon/admin/product/register', {
+        const registerResponse = await fetch('/lotteon/admin/product', {
             method: 'POST',
             body: formData
         });
@@ -269,7 +283,7 @@ form.addEventListener('submit', async function (e) {
             productId: productId
         };
 
-        const detailResponse = await fetch('/lotteon/admin/product/register/detail', {
+        const detailResponse = await fetch('/lotteon/admin/product/detail', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

@@ -1,3 +1,12 @@
+/*
+     날짜 : 2024/10/31
+     이름 : 전규찬(최초 작성자)
+     내용 : MapStringListToJsonConverter 생성
+
+     수정이력
+      - 2024/10/31 전규찬 - Map 유형이 다른 경우 변환이 안되기 때문에 유형을 분리함
+*/
+
 package com.lotte4.config;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -8,12 +17,13 @@ import jakarta.persistence.Converter;
 import java.util.*;
 
 @Converter
-public class MapToJsonConverter implements AttributeConverter<LinkedHashMap<String, List<String>>, String> {
+public class MapStringListToJsonConverter implements AttributeConverter<Map<String, List<String>>, String> {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public String convertToDatabaseColumn(LinkedHashMap<String, List<String>> attribute) {
+    public String convertToDatabaseColumn(Map<String, List<String>> attribute) {
+
         try {
             return objectMapper.writeValueAsString(attribute);
         } catch (Exception e) {
@@ -22,7 +32,10 @@ public class MapToJsonConverter implements AttributeConverter<LinkedHashMap<Stri
     }
 
     @Override
-    public LinkedHashMap<String, List<String>> convertToEntityAttribute(String dbData) {
+    public Map<String, List<String>> convertToEntityAttribute(String dbData) {
+        if (dbData == null) {
+            return null;
+        }
         try {
             // 변환 중 문제가 발생할 경우 단일 값을 리스트로 처리
             LinkedHashMap<String, Object> rawMap = objectMapper.readValue(dbData, new TypeReference<LinkedHashMap<String, Object>>() {});
