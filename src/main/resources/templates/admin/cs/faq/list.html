@@ -163,6 +163,18 @@
                 .then(data => {
                     boardListBody.innerHTML = '';
 
+                    // 데이터가 없을 때 메시지 표시
+                    if (data.content.length === 0) {
+                        const row = document.createElement('tr');
+                        const cell = document.createElement('td');
+                        cell.colSpan = 8; // 전체 컬럼을 차지하도록 설정
+                        cell.textContent = "조회할 글이 없습니다.";
+                        cell.classList.add("no-data-message"); // 스타일 추가를 위한 클래스
+                        row.appendChild(cell);
+                        boardListBody.appendChild(row);
+                        return;
+                    }
+
                     data.content.forEach((board, index) => {
                         const rowNumber = data.totalElements - (page * 8 + index); // 역순 번호 매기기
                         const row = document.createElement('tr');

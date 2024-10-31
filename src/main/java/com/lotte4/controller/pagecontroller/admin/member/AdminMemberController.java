@@ -1,14 +1,21 @@
 package com.lotte4.controller.pagecontroller.admin.member;
 
+
+import com.lotte4.dto.PointDTO;
+import com.lotte4.dto.UserDTO;
+
 import com.lotte4.dto.MemberInfoDTO;
 import com.lotte4.dto.PointDTO;
 import com.lotte4.dto.UserDTO;
 import com.lotte4.service.MemberInfoService;
+
 import com.lotte4.service.PointService;
 import com.lotte4.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,8 +37,10 @@ import java.util.List;
 public class AdminMemberController {
 
     private final UserService userService;
-    private final MemberInfoService memberInfoService;
     private final PointService pointService;
+    private final MemberInfoService memberInfoService;
+
+
 
     @GetMapping("/admin/member/list")
     public String AdminMemberList(Model model,
@@ -97,14 +106,27 @@ public class AdminMemberController {
         memberInfoService.updateMemberGrades(memberGrades);
         return ResponseEntity.ok().build(); // 200 OK 응답 반환
     }
+     s
+    @ResponseBody
+    @GetMapping("/member/point")
+    public ResponseEntity<Page<PointDTO>> pointfinder (@RequestParam(required = false) String searchType,
+                                                       @RequestParam(required = false) String keyword,
+                                                       @RequestParam(required = false) String type,
+                                                       @RequestParam(defaultValue = "0") int page,
+                                                       @RequestParam(defaultValue = "8") int size) {
+        Pageable pageable = PageRequest.of(page, size);
 
+        // 공통 메서드인 `searchPoints`를 호출하여 모든 조건을 처리
+        Page<PointDTO> results = pointService.searchPoints(type, searchType, keyword, pageable);
+
+        return ResponseEntity.ok(results);
+    }
 
     @GetMapping("/admin/member/point")
-    public String Adminmemberpoint(Model model) {
 
-        List<PointDTO> points = pointService.selectAllPoints();
-        log.info("points: " + points);
-        model.addAttribute("points",points);
+    public String Adminmemberpoint(Model model,
+                                   @RequestParam(defaultValue = "0") int page,
+                                   @RequestParam(defaultValue = "8") int size) {
 
         return "/admin/member/point";
     }
