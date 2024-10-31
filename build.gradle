@@ -56,6 +56,10 @@ dependencies {
 
     implementation 'org.mapstruct:mapstruct:1.4.2.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
+
+    //redis
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '3.3.5'
+
 }
 
 tasks.named('test') {
