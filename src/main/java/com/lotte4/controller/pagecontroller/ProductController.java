@@ -3,8 +3,12 @@ package com.lotte4.controller.pagecontroller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lotte4.dto.*;
+import com.lotte4.entity.Cart;
+import com.lotte4.entity.ProductVariants;
+import com.lotte4.entity.User;
 import com.lotte4.service.CartService;
 import com.lotte4.service.ProductService;
+import com.lotte4.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
@@ -12,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -26,7 +31,7 @@ import java.util.Map;
 //
 //수정이력
 //      - 2025/10/28 강중원 - 리스트 불러오기 임시 기능 메서드 추가
-
+//      - 2025/10/30 강은경 - 장바구니 insert하는 postmapping추가
 
 @Log4j2
 @RequiredArgsConstructor
@@ -36,6 +41,7 @@ public class ProductController {
     private final CartService cartService;
     private final ProductService productService;
     private final ObjectMapper objectMapper;
+    private final UserService userService;
 
     @GetMapping("/product/list")
     public String list(Model model) {
@@ -80,6 +86,35 @@ public class ProductController {
         log.info("cartList : " + cartList);
 
         return "/product/cart";
+    }
+
+    // 장바구니 insert
+    @ResponseBody
+    @PostMapping("/product/cart")
+    public ResponseEntity<String> addCart(CartResponseDTO cartResponseDTO, Principal principal) {
+
+        // 로그인 안 했으면 로그인 페이지로 리다이렉트
+        if (principal == null) {
+            return ResponseEntity.ok("noUser");
+        }
+
+        log.info("cartResponseDTO : " + cartResponseDTO);
+
+        String username = principal.getName();
+        User user = userService.findByUid(username);
+
+        log.info("user : " + user);
+
+        // principal user정보 set
+        cartResponseDTO.setUser(user.toDTO());
+
+        Cart savedCart = cartService.insertCart(cartResponseDTO);
+        if(savedCart != null){
+            return ResponseEntity.ok("success");
+
+        }else {
+            return ResponseEntity.ok("failed");
+        }
     }
 
 

@@ -157,7 +157,6 @@ strong {
 .product-details {
     border: 1px solid #ddd;
     box-sizing: border-box;
-    box-sizing: border-box;
     padding: 20px;
 }
 
@@ -175,8 +174,9 @@ strong {
     max-width: 100%;
 }
 
-.product-detail-image img {
-    width: 100%;
+.product-detail-image > .product-image {
+    width: 80%;
+    max-width: 80% !important;
     height: auto;
 }
 
@@ -327,4 +327,22 @@ strong {
     border-radius: 10px;
     height: 70px;
     width: 440px;
+}
+
+.option-select {
+    padding: 10px;
+    font-size: 12px;
+    margin-right: 2px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 137px;
+    height: 37px;
+    margin-bottom: 5px;
+    margin-left: 3px;
+}
+
+/* 입력할 때 테두리 색 변경 */
+select:focus {
+    border-color: #d82a2a !important;
+    outline: none !important; /* 기본 포커스 아웃라인 제거 */
 }

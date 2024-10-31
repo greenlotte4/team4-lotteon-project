@@ -2,6 +2,7 @@ package com.lotte4.interceptor;
 
 import com.lotte4.config.AppInfo;
 import com.lotte4.dto.BannerDTO;
+import com.lotte4.dto.ProductCateChildDTO;
 import com.lotte4.dto.ProductCateDTO;
 import com.lotte4.dto.admin.config.InfoDTO;
 import com.lotte4.service.CategoryService;
@@ -42,7 +43,7 @@ public class AppInfoInterceptor implements HandlerInterceptor {
             modelAndView.addObject("info", info);         // 헤더에서 사용할 info 객체 추가
             List<BannerDTO> banners = bannerService.getAllBannersWithLocation();    //모든 배너리스트 불러오기
             modelAndView.addObject("banners", banners);     // 모든 배너 추가
-            List<ProductCateDTO> productCateDTOList = categoryService.getProductCateListWithDepth(1); //1계층 카테고리 추가
+            List<ProductCateChildDTO> productCateDTOList = categoryService.getProductCateListWithDepth(1); //1계층 카테고리 추가
             modelAndView.addObject("productCateDTOList", productCateDTOList);
         }
     }

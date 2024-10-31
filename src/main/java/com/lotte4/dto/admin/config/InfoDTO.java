@@ -2,14 +2,16 @@ package com.lotte4.dto.admin.config;
 
 import lombok.*;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class InfoDTO {
-
+public class InfoDTO implements Serializable {
+    private static final long serialVersionUID = 1L;    //2024.10.31 - 강중원 - 시리얼번호 추가
     private int infoId;
 
     // 제목

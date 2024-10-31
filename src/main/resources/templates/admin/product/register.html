@@ -22,7 +22,8 @@
         <!--section-->
         <section>
             <div class="breadcrumb">
-                <a th:href="@{/admin/index}">Home</a> > <a th:href="@{/admin/product/list}">상품관리</a> > <a th:href="@{/admin/product/register}" class="location">상품목록</a>
+                <a th:href="@{/admin/index}">Home</a> > <a th:href="@{/admin/product/list}">상품관리</a> > <a
+                    th:href="@{/admin/product/register}" class="location">상품목록</a>
             </div>
             <h3>상품등록</h3>
 
@@ -98,7 +99,8 @@
                             <tr>
                                 <td class="label">할인율</td>
                                 <td>
-                                    <input type="text" name="discount" class="inputmini" id="discount" value="1" required/> %
+                                    <input type="text" name="discount" class="inputmini" id="discount" value="1"
+                                           required/> %
                                 </td>
                             </tr>
                             <tr>
@@ -110,7 +112,8 @@
                             <tr>
                                 <td class="label">배송비</td>
                                 <td>
-                                    <input type="text" name="deliveryFee" class="inputmini" id="deliveryFee" value="1" required/>
+                                    <input type="text" name="deliveryFee" class="inputmini" id="deliveryFee" value="1"
+                                           required/>
                                     원
                                 </td>
                             </tr>
@@ -159,7 +162,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="button" id="add-option">옵션 추가</button>
+                                    <button type="button" id="addOption">옵션 추가</button>
                                 </td>
                             </tr>
                         </table>
@@ -274,7 +277,7 @@
                 <!-- 
                    <input id="sellerInfoId" type="hidden" th:value="${#authentication.principal.user.sellerInfo.sellerInfoId}">
                   -->
-                  <input id="sellerInfoId" type="hidden" value="4">
+                <input id="sellerInfoId" type="hidden" value="4">
             </form>
         </section>
         <!-- /Section -->

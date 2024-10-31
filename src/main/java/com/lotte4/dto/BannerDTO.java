@@ -2,6 +2,7 @@ package com.lotte4.dto;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDateTime;
@@ -11,7 +12,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BannerDTO {
+public class BannerDTO implements Serializable {
+    private static final long serialVersionUID = 1L; //2024.10.31 - 강중원 - 시리얼번호 추가
     private int bannerId;
     private String img;
     private String name;

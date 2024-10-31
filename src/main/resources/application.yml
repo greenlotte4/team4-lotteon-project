@@ -77,3 +77,12 @@ spring:
                     timeout: 5000
                     starttls:
                         enable: true
+    data:
+        redis:
+            lettuce:
+                pool:
+                    max-active: 5
+                    max-idle: 5
+                    min-idle: 5
+            host: 13.125.226.80
+            port: 6379

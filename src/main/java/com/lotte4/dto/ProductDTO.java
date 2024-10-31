@@ -1,5 +1,14 @@
+/*
+     날짜 : 2024/10/30
+     이름 : ???
+     내용 : ProductDTO 생성
+
+     수정이력
+*/
+
 package com.lotte4.dto;
 
+import com.lotte4.entity.ProductDetail;
 import lombok.*;
 
 import java.util.LinkedHashMap;
