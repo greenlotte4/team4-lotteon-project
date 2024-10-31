@@ -1,6 +1,7 @@
 package com.lotte4.controller.pagecontroller.admin.config;
 
 import com.lotte4.dto.BannerDTO;
+import com.lotte4.dto.ProductCateChildDTO;
 import com.lotte4.dto.ProductRegisterCateDTO;
 import com.lotte4.dto.TermsDTO;
 import com.lotte4.dto.admin.config.InfoDTO;
@@ -204,7 +205,7 @@ public class ConfigController {
     // 카테고리
     @GetMapping("/admin/config/category")
     public String AdminConfigCategory(Model model) {
-        List<ProductCateDTO> productCateDTOList = categoryService.getProductCateListWithDepth(1);
+        List<ProductCateChildDTO> productCateDTOList = categoryService.getProductCateListWithDepth(1);
         model.addAttribute("productCateDTOList", productCateDTOList);
         return "/admin/config/category";
     }

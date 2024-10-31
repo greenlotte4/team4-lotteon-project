@@ -7,6 +7,7 @@
     margin-top: 16px;
 }
 
+
 .inquiry-table th, .inquiry-table td {
     padding: 8px;
     vertical-align: middle;
@@ -113,4 +114,20 @@
 .page-num.active {
     background-color: #d82a2a;
     color: white;
+}
+
+
+.no-data-message {
+    padding: 20px 0; /* 상하 여백 추가 */
+    height: 60px; /* 셀의 높이를 직접 지정 */
+    text-align: center; /* 가운데 정렬 */
+    color: #888; /* 텍스트 색상 */
+    font-size: 16px; /* 폰트 크기 조절 */
+}
+
+.st1 {
+    color : green !important;
+}
+.st2 {
+    color : red !important;
 }

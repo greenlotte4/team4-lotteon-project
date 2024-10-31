@@ -200,16 +200,16 @@
                                                 <div class="fake_input op">
                                                     <input type="text" class="option-value-input op"
                                                            placeholder="옵션값 입력 후 엔터">
-                                                    <div class="option-value-box"
+                                                    <div class="pre-option-value-box"
                                                          th:each="value : ${optionSet.getValue()}">
                                                         <span class="box-value" th:text="${value}"></span>
-                                                        <span class="delete-value"> X</span>
+                                                        <span class="pre-delete-value"> X</span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </th:block>
                                     </div>
-                                    <button type="button" id="add-option">옵션 추가</button>
+                                    <button type="button" id="addOption">옵션 추가</button>
                                 </td>
                             </tr>
                         </table>

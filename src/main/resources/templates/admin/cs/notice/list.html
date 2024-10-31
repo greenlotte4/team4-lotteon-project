@@ -93,8 +93,20 @@
                 .then(response => response.json())
                 .then(data => {
                     boardListBody.innerHTML = '';
+                    if (data.content.length === 0) {
+                        const row = document.createElement('tr');
+                        const cell = document.createElement('td');
+                        cell.colSpan = 8; // 전체 컬럼을 차지하도록 설정
+                        cell.textContent = "조회할 글이 없습니다.";
+                        cell.classList.add("no-data-message"); // 스타일 추가를 위한 클래스
+                        row.appendChild(cell);
+                        boardListBody.appendChild(row);
+                        return;
+                    }
+
                     const totalElements = data.totalElements; // 전체 항목 수
                     data.content.forEach((board,index) => {
+
                         const rowNumber = totalElements - (page * size + index); // 역순 번호 계산
                         const row = document.createElement('tr');
                         row.innerHTML = `

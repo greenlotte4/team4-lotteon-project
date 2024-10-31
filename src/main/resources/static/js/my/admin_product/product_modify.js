@@ -1,16 +1,30 @@
+/*
+    2024-10-30 22:29 전규찬
+    수정 내역 : 옵션 기존 / 신규 분리, 기존 옵션 삭제 시 알림 추가 / css 보완
+*/
+
 'use strict';
 
 // 상품 옵션 입력 파트 ----------------------------------------------------------------------------
 
 const option = document.querySelector('#option');
 
-const deleteBtns = document.querySelectorAll('.delete-value');
+const deleteBtns = document.querySelectorAll('.pre-delete-value');
 
 deleteBtns.forEach(btn => btn.addEventListener('click', function () {
     // 부모 div.option-value-box 찾기
-    const optionValueBox = this.closest('.option-value-box');
+    const optionValueBox = this.closest('.pre-option-value-box');
     if (optionValueBox) {
-        optionValueBox.remove();
+        if (window.confirm("선택하신 옵션을 삭제하면, 이 옵션이 포함된 모든 제품 조합도 함께 삭제됩니다. 삭제를 진행하시겠습니까?")) {
+            optionValueBox.remove();
+
+
+
+
+
+        } else {
+            alert('삭제가 취소되었습니다.')
+        }
     }
 }));
 
@@ -63,7 +77,7 @@ option.addEventListener('keydown', function (event) {
 });
 
 // 옵션 추가 버튼
-const addOptionButton = document.getElementById('add-option');
+const addOptionButton = document.getElementById('addOption');
 addOptionButton.addEventListener('click', function () {
     const options = document.querySelector('.option');
 
@@ -79,14 +93,14 @@ addOptionButton.addEventListener('click', function () {
                        placeholder="옵션값 입력 후 엔터">
             </div>
         </div>
+        <span>⚠️ 옵션은 최대 3개까지 가능합니다.</span>
     `;
     const option_name = document.querySelectorAll('.option-name');
     if (option_name.length < 3) {
         option.insertAdjacentHTML("beforeend", option_innerHTML);
-    } else {
-        alert('옵션을 더 이상 추가할 수 없습니다.');
         addOptionButton.remove();
     }
+
 });
 
 // 데이터 전송 파트 --------------------------------------------------------------------------------

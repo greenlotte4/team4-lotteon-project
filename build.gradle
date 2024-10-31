@@ -6,7 +6,7 @@ plugins {
 
 group = 'com.lotte4'
 
-version = '4조-0.0.9-SNAPSHOT'
+version = '4조-0.1.0-SNAPSHOT'
 
 
 java {
@@ -56,6 +56,10 @@ dependencies {
 
     implementation 'org.mapstruct:mapstruct:1.4.2.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
+
+    //redis
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '3.3.5'
+
 }
 
 tasks.named('test') {

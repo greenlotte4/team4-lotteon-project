@@ -25,19 +25,23 @@ public class BannerScheduler {
     public void bannerCheck() {
         List<BannerDTO> bannerList = bannerService.getAllBanners();
         for (BannerDTO bannerDTO : bannerList) {
-            Date eDate = bannerDTO.getEDate();
-            String time = bannerDTO.getETime();
+            //활성화 된 banner만
+            if(bannerDTO.getState() == 1) {
+                Date eDate = bannerDTO.getEDate();
+                String time = bannerDTO.getETime();
 
-            //LocalDateTime으로 변환
-            LocalDateTime eDay = new java.sql.Timestamp(eDate.getTime()).toLocalDateTime();
-            eDay = eDay.plusHours(Long.parseLong(time.substring(0,2)));
-            eDay = eDay.plusMinutes(Long.parseLong(time.substring(3,5)));
-            //현재 시간과 비교
-            boolean expire = eDay.isBefore(LocalDateTime.now());
-            //현재시간보다 지났다면 AND 활성화 상태이면
-            if (expire && bannerDTO.getState() != 0) {
-                //만료
-                bannerService.updateBannerState(bannerDTO, 0);
+                //LocalDateTime으로 변환
+                LocalDateTime eDay = new java.sql.Timestamp(eDate.getTime()).toLocalDateTime();
+                eDay = eDay.plusHours(Long.parseLong(time.substring(0,2)));
+                eDay = eDay.plusMinutes(Long.parseLong(time.substring(3,5)));
+                //현재 시간과 비교
+                boolean expire = eDay.isBefore(LocalDateTime.now());
+                //현재시간보다 지났다면 AND 활성화 상태이면
+                if (expire && bannerDTO.getState() != 0) {
+                    //만료
+                    bannerService.updateBannerState(bannerDTO, 0);
+                }
+
             }
 
         }

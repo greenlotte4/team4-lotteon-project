@@ -1,5 +1,7 @@
 package com.lotte4.service;
 
+import com.lotte4.dto.CartDTO;
+import com.lotte4.dto.ProductCateChildDTO;
 import com.lotte4.dto.ProductCateDTO;
 import com.lotte4.dto.ProductRegisterCateDTO;
 import com.lotte4.entity.ProductCate;
@@ -7,15 +9,23 @@ import com.lotte4.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+
+/*
+    2024/10/30 캐싱 어노테이션 추가
+ */
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
+    private final CachingService cachingService;
     private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
 
@@ -46,43 +56,20 @@ public class CategoryService {
         return productCateDTOList;
     }
 
-    public void insertProductCate(ProductRegisterCateDTO productRegisterCateDTO, String parent){
-        log.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        ProductCate productCate = modelMapper.map(productRegisterCateDTO, ProductCate.class);
+    public void insertProductCate(ProductRegisterCateDTO productCateDTO, String parent){
 
-        log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-        //depth가 1보다 큰경우
-        //--> 제일 상위 카테고리가 아닌경우
-        if(productCate.getDepth() > 1){
-            ProductCate parentCate = categoryRepository.findByName(parent);
-            productCate.setParent(parentCate);
-        }
-
-        categoryRepository.save(productCate);
+        cachingService.insertProductCate(productCateDTO, parent);
     }
 
-    public List<ProductCateDTO> getProductCateListWithDepth(int depth){
 
-        List<ProductCateDTO> productCateDTOList = new ArrayList<>();
-        List<ProductCate> productCateList = categoryRepository.findByDepth(depth);
+    public List<ProductCateChildDTO> getProductCateListWithDepth(int depth){
 
-        for(ProductCate productCate : productCateList){
-            productCateDTOList.add(new ProductCateDTO(productCate));
-        }
-        return productCateDTOList;
-
+        return cachingService.getProductCateListWithDepth(depth);
     }
 
     public boolean deleteProductCate(String name){
 
-        ProductCate productCate = categoryRepository.findByName(name);
-        if(productCate != null){
-            categoryRepository.delete(productCate);
-            return true;
-        }
-        else {
-            return false;
-        }
+        return cachingService.deleteProductCate(name);
 
     }
 }

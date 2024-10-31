@@ -98,7 +98,7 @@ option.addEventListener('keydown', function (event) {
 })
 
 // 옵션 추가 버튼
-const addOptionButton = document.getElementById('add-option');
+const addOptionButton = document.getElementById('addOption');
 addOptionButton.addEventListener('click', function () {
     const option = document.querySelector('#option');
 
@@ -114,12 +114,11 @@ addOptionButton.addEventListener('click', function () {
                                                        placeholder="옵션값 입력 후 엔터">
                                             </div>
                                         </div>
+                                        <span>⚠️ 옵션은 최대 3개까지 가능합니다.</span>
                                         `;
     const option_name = document.querySelectorAll('.option-name');
     if (option_name.length < 5) {
         option.insertAdjacentHTML("beforeend", option_innerHTML);
-    } else {
-        alert('옵션을 더 이상 추가할 수 없습니다.')
         addOptionButton.remove();
     }
 });
