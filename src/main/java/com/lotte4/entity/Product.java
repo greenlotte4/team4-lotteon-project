@@ -1,14 +1,13 @@
 package com.lotte4.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.lotte4.config.MapToJsonConverter;
+import com.lotte4.config.MapStringListToJsonConverter;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 @Getter
 @Setter
@@ -48,7 +47,7 @@ public class Product {
     @OneToMany(mappedBy = "product", orphanRemoval = true)
     private List<ProductVariants> productVariants = new ArrayList<>();
 
-    @Convert(converter = MapToJsonConverter.class)
+    @Convert(converter = MapStringListToJsonConverter.class)
     private LinkedHashMap<String, List<String>> options;
 
     private int status;

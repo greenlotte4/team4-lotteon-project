@@ -1,13 +1,19 @@
+/*
+     날짜 : 2024/10/31
+     이름 : 전규찬(최초 작성자)
+     내용 : 상품 RestController 생성
+
+     수정이력
+      - 2024/10/31 전규찬 - 매핑 url REST 방식에 맞게 수정 / 상품 수정을 위한 메서드 추가
+*/
+
 package com.lotte4.controller.pagecontroller.gyubooke;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lotte4.dto.CateForProdRegisterDTO;
 import com.lotte4.dto.ProductDTO;
 import com.lotte4.dto.ProductDetailDTO;
-import com.lotte4.dto.SellerInfoDTO;
-import com.lotte4.entity.SellerInfo;
+import com.lotte4.dto.Product_V_DTO;
 import com.lotte4.service.CategoryService;
 import com.lotte4.service.ProductService;
 import com.lotte4.service.SellerInfoService;
@@ -15,12 +21,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,26 +40,24 @@ public class ProductRestController {
 
 
     public static List<Integer> stringToIntegerList(String string) {
-
         return ProductService.stringToIntegerList(string);
     }
 
-
-    @GetMapping("/admin/product/register/{parentId}")
+    @GetMapping("/admin/product/{parentId}")
     public List<CateForProdRegisterDTO> registerCategory(@PathVariable int parentId) {
         return productService.getProductCateByParent(parentId);
     }
 
 
-    @PostMapping(value = "/admin/product/register", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Map<String, Integer>> productRegisterCate(@RequestParam("cateId") int cateId,
+    @PostMapping(value = "/admin/product", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Map<String, Integer>> productRegisterWithCate(@RequestParam("cateId") int cateId,
 //                                                                    @RequestParam("sellerId") int sellerId,
-                                                                    @RequestParam("img_1") MultipartFile img_1,
-                                                                    @RequestParam("img_2") MultipartFile img_2,
-                                                                    @RequestParam("img_3") MultipartFile img_3,
-                                                                    @RequestParam("detail_") MultipartFile detail_,
-                                                                    @RequestParam("optionsJson") String optionsJson,
-                                                                    @ModelAttribute ProductDTO productDTO) {
+                                                                        @RequestParam("img_1") MultipartFile img_1,
+                                                                        @RequestParam("img_2") MultipartFile img_2,
+                                                                        @RequestParam("img_3") MultipartFile img_3,
+                                                                        @RequestParam("detail_") MultipartFile detail_,
+                                                                        @RequestParam("optionsJson") String optionsJson,
+                                                                        @ModelAttribute ProductDTO productDTO) {
 
         log.info("productdto = " + productDTO);
 
@@ -65,29 +67,21 @@ public class ProductRestController {
         // 판매자 정보 입력
 //        SellerInfoDTO sellerInfo = sellerInfoService.selectSellerInfoById(sellerId);
 
-        // 'options' JSON 문자열을 LinkedHashMap<String, List<String>>으로 변환
-        LinkedHashMap<String, List<String>> optionsMap = null;
-        try {
-            optionsMap = objectMapper.readValue(optionsJson,
-                    new TypeReference<LinkedHashMap<String, List<String>>>() {
-                    });
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        productDTO.setOptions(optionsMap);
+        // 옵션을 LinkedHashMap으로 변환 후 productDTO에 주입
+        ProductDTO productDTO1 = productService.JsonToMapAndSetProductDTO(optionsJson, productDTO);
 
-        String img1 = productService.uploadProdImg(img_1);
-        String img2 = productService.uploadProdImg(img_2);
-        String img3 = productService.uploadProdImg(img_3);
-        String detail = productService.uploadProdImg(detail_);
+        String img1 = productService.uploadAndDeleteProdImg(img_1, null);
+        String img2 = productService.uploadAndDeleteProdImg(img_2, null);
+        String img3 = productService.uploadAndDeleteProdImg(img_3, null);
+        String detail = productService.uploadAndDeleteProdImg(detail_, null);
 
-        productDTO.setImg1(img1);
-        productDTO.setImg2(img2);
-        productDTO.setImg3(img3);
-        productDTO.setDetail(detail);
-//        productDTO.setSellerInfoId(sellerInfo);
+        productDTO1.setImg1(img1);
+        productDTO1.setImg2(img2);
+        productDTO1.setImg3(img3);
+        productDTO1.setDetail(detail);
+//        productDTO1.setSellerInfoId(sellerInfo);
 
-        ProductDTO dto = productService.insertProduct(productDTO);
+        ProductDTO dto = productService.insertProduct(productDTO1);
 
         Map<String, Integer> response1 = new HashMap<>();
 
@@ -101,8 +95,8 @@ public class ProductRestController {
         return ResponseEntity.ok().body(response1);
     }
 
-    @PostMapping("/admin/product/register/detail")
-    public ResponseEntity<Map<String, String>> productRegisterCate(@RequestBody ProductDetailDTO productDetailDTO) {
+    @PostMapping("/admin/product/detail")
+    public ResponseEntity<Map<String, String>> productDetailRegister(@RequestBody ProductDetailDTO productDetailDTO) {
         log.info(productDetailDTO);
         ProductDetailDTO dto = productService.insertProductDetail(productDetailDTO);
         Map<String, String> response = new HashMap<>();
@@ -116,7 +110,7 @@ public class ProductRestController {
         return ResponseEntity.ok().body(response);
     }
 
-    @PostMapping("/admin/product/register/more")
+    @PostMapping("/admin/product/more")
     public void productRegisterMore(@RequestParam String prodONames,
                                     @RequestParam String prodPrices,
                                     @RequestParam String prodStocks,
@@ -124,7 +118,7 @@ public class ProductRestController {
                                     @RequestParam String optionNames,
                                     @RequestParam String productId
     ) {
-        productService.makeProductVariantDTOAndInsert(optionNames, prodONames, prodPrices, prodStocks, mixedValuesList, productId);
+        productService.makeVariantDTOAndInsert(optionNames, prodONames, prodPrices, prodStocks, mixedValuesList, productId);
     }
 
     @DeleteMapping("/admin/product/delete/{productId}")
@@ -164,10 +158,81 @@ public class ProductRestController {
         return ResponseEntity.ok().body(response);
     }
 
+    @PutMapping("/admin/product")
+    public ResponseEntity<Map<String, String>> productModify(//@RequestParam("sellerId") int sellerId,
+                                                             @RequestParam(value = "img_1", required = false) MultipartFile img_1,
+                                                             @RequestParam(value = "img_2", required = false) MultipartFile img_2,
+                                                             @RequestParam(value = "img_3", required = false) MultipartFile img_3,
+                                                             @RequestParam(value = "detail_", required = false) MultipartFile detail_,
+                                                             @RequestParam("optionsJson") String optionsJson,
+                                                             @ModelAttribute ProductDTO productDTO) {
+
+        log.info("img_1 = " + img_1);
+        log.info("img_2 = " + img_2);
+        log.info("img_3 = " + img_3);
+        log.info("detail_ = " + detail_);
+        log.info("optionsJson = " + optionsJson);
+        log.info("productDTO = " + productDTO);
+
+        Product_V_DTO product_v_dto = productService.getProductById(productDTO.getProductId());
+        productDTO.setProductCateId(product_v_dto.getProductCateId());
+
+        ProductDTO productDTO1 = productService.JsonToMapAndSetProductDTO(optionsJson, productDTO);
+        log.info("productDTO1 = " + productDTO1);
+
+        ProductDTO productDTO2 = productService.updateProdImg(img_1, img_2, img_3, detail_, productDTO, product_v_dto);
+
+        log.info("productDTO2 = " + productDTO2);
+
+        ProductDTO dto = productService.insertProduct(productDTO2);
+
+        Map<String, String> response = new HashMap<>();
+
+        if (dto != null) {
+            response.put("status", "success");
+            return ResponseEntity.ok().body(response);
+        }
+
+        response.put("status", "failure");
+
+        return ResponseEntity.ok().body(response);
+    }
 
 
+    @PutMapping("/admin/product/detail")
+    public ResponseEntity<Map<String, String>> productDetailModify(@RequestBody ProductDetailDTO productDetailDTO) {
+        log.info(productDetailDTO);
+        ProductDetailDTO dto = productService.insertProductDetail(productDetailDTO);
+        Map<String, String> response = new HashMap<>();
 
+        if (dto != null) {
+            response.put("status", "success");
+            return ResponseEntity.ok().body(response);
+        }
+
+        response.put("status", "failure");
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PutMapping("/admin/product/more")
+    public void productModifyMore(@RequestParam String prodONames,
+                                  @RequestParam String prodPrices,
+                                  @RequestParam String prodStocks,
+                                  @RequestParam String variantsIds,
+                                  @RequestParam String valuesList,
+                                  @RequestParam String optionNames,
+                                  @RequestParam String productId) {
+
+        log.info("prodONames = " + prodONames);
+        log.info("prodPrices = " + prodPrices);
+        log.info("prodStocks = " + prodStocks);
+        log.info("variantsIds = " + variantsIds);
+        log.info("valuesList = " + valuesList);
+        log.info("optionNames = " + optionNames);
+        log.info("productId = " + productId);
+
+        productService.makeVariantDTOAndUpdate(prodONames, prodPrices, prodStocks, variantsIds, valuesList, optionNames, productId);
+    }
 
 }
-
-

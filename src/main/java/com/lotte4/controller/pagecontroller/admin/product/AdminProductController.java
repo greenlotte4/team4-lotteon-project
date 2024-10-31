@@ -1,24 +1,26 @@
 package com.lotte4.controller.pagecontroller.admin.product;
 
-import com.lotte4.dto.ProductCateDTO;
-import com.lotte4.dto.ProductDTO;
-import com.lotte4.dto.ProductDetailDTO;
-import com.lotte4.dto.Product_V_DTO;
+import com.lotte4.dto.*;
+import com.lotte4.entity.ProductVariants;
 import com.lotte4.service.CategoryService;
 import com.lotte4.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.*;
 
+@Log4j2
 @RequiredArgsConstructor
 @Controller
 public class AdminProductController {
 
     private final CategoryService categoryService;
     private final ProductService productService;
+    private final ModelMapper modelMapper;
 
     // 재귀를 이용하여 조합 생성
     private static void generateCombinations(List<List<String>> lists, List<String> resultList, int depth, List<String> current) {
@@ -59,8 +61,8 @@ public class AdminProductController {
 
         Product_V_DTO productDTO = productService.getProductById(productId);
         int prodId = productDTO.getProductId();
-        Map<String, List<String>> options = productDTO.getOptions();
 
+        Map<String, List<String>> options = productDTO.getOptions();
         List<String> optionNames = new ArrayList<>();
         List<List<String>> optionValuesList = new ArrayList<>();
 
@@ -75,6 +77,8 @@ public class AdminProductController {
 
         List<String> resultList = new ArrayList<>();
         generateCombinations(optionValuesList, resultList, 0, new ArrayList<>());
+
+        log.info("resultList = " + resultList);
 
         // String 조합들을 List<List<String>> 형태로 변환
         List<List<String>> mixedValuesList = new ArrayList<>();
@@ -118,4 +122,33 @@ public class AdminProductController {
         }
         return "/admin/product/modify";
     }
+
+    // 상품 상세 수정
+    @GetMapping("/admin/product/modifyMore")
+    public String AdminProductModifyMore(int productId, Model model) {
+
+        Product_V_DTO productDTO = productService.getProductById(productId);
+        List<ProductVariants> productVariantsList = productDTO.getProductVariants();
+        List<ProductVariantsDTO> productVariantsDTOList = productVariantsList
+                .stream()
+                .map(productVariants -> new ProductVariantsDTO(productVariants))
+                .toList();
+
+        Map<String, List<String>> options = productDTO.getOptions();
+        List<String> optionNames = new ArrayList<>();
+
+        // 각 옵션 키에 대한 반복문
+        for (Map.Entry<String, List<String>> entry : options.entrySet()) {
+            optionNames.add(entry.getKey());
+        }
+
+        model.addAttribute("productId", productId);
+        model.addAttribute("optionNames", optionNames);
+        model.addAttribute("productVariantsList", productVariantsDTOList);
+
+        return "/admin/product/modifyMore";
+    }
+
+
+
 }

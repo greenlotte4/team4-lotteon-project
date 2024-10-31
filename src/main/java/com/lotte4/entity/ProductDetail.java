@@ -11,17 +11,14 @@ package com.lotte4.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CurrentTimestamp;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Entity
+@Builder
 @Table(name = "product_detail")
 public class ProductDetail {
     //외래키 & 기본키

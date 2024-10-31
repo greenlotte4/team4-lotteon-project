@@ -16,9 +16,9 @@ function inputAllOnClick(button) {
     const input1 = document.querySelectorAll('.prodOName');
     const input2 = document.querySelectorAll('.prodPrice');
     const input3 = document.querySelectorAll('.prodStock');
-    const skuValue = document.querySelector('#input_sku').value;
-    const priceValue = document.querySelector('#input_price').value;
-    const stockValue = document.querySelector('#input_stock').value;
+    const skuValue = document.querySelector('#inputAll_sku').value;
+    const priceValue = document.querySelector('#inputAll_price').value;
+    const stockValue = document.querySelector('#inputAll_stock').value;
 
     // actionType에 따라 다른 동작 수행
     switch (actionType) {
@@ -84,26 +84,40 @@ btnSubmit.addEventListener('click', function (e) {
     const prodONameNodes = document.querySelectorAll('.prodOName');
     const prodPriceNodes = document.querySelectorAll('.prodPrice');
     const prodStockNodes = document.querySelectorAll('.prodStock');
-    const mixedValuesNodes = document.querySelector('#mixedValuesList');
+    const variantsIdNodes = document.querySelectorAll('.productVariantsId');
+    const optionValuesNodes = document.querySelectorAll('.optionValues');
     const optionNamesNodes = document.querySelector('#optionNames');
     const productId = document.querySelector('#productId').value;
 
     const prodONames = Array.from(prodONameNodes).map(node => node.value.trim());
     const prodPrices = Array.from(prodPriceNodes).map(node => node.value.trim());
     const prodStocks = Array.from(prodStockNodes).map(node => node.value.trim());
-    const mixedValuesList = mixedValuesNodes.value;
+    const variantsIds = Array.from(variantsIdNodes).map(node => node.value.trim());
     const optionNames = optionNamesNodes.value;
+
+    // optionValues 의 자식 요소에 속해있는 옵션값들 불러와서 List로 만들기
+
+    const valuesList = [];
+
+    optionValuesNodes.forEach(optionValues => {
+        let optionNodes = optionValues.querySelectorAll('.mixedValue');
+        let singleValues = Array.from(optionNodes).map(node => node.textContent.trim());
+        valuesList.push(singleValues);
+    })
+
+    console.log("valuesList = " + valuesList);
 
     const formData = new FormData();
     formData.append('prodONames', JSON.stringify(prodONames))
     formData.append('prodPrices', JSON.stringify(prodPrices))
     formData.append('prodStocks', JSON.stringify(prodStocks))
-    formData.append('mixedValuesList', JSON.stringify(mixedValuesList))
+    formData.append('variantsIds', JSON.stringify(variantsIds))
+    formData.append('valuesList', JSON.stringify(valuesList))
     formData.append('optionNames', JSON.stringify(optionNames))
     formData.append('productId', JSON.stringify(productId))
 
     fetch('/lotteon/admin/product/more', {
-        method: 'POST',
+        method: 'PUT',
         body: formData
     })
         .then(resp => resp.json())
@@ -112,7 +126,7 @@ btnSubmit.addEventListener('click', function (e) {
         })
         .catch(err => console.log(err));
 
-    alert('상세 등록이 완료되었습니다! 상품 목록 페이지로 이동합니다.')
+    alert('상세 정보 수정이 완료되었습니다! 상품 목록 페이지로 이동합니다.')
     window.location.assign('/lotteon/admin/product/list');
 
 });
