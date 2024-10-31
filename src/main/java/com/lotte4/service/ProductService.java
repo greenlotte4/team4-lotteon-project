@@ -162,27 +162,23 @@ public class ProductService {
             String ext = oName.substring(oName.lastIndexOf("."));
             String sName = UUID.randomUUID().toString() + ext;
 
-            // 파일 저장
-            try {
-                file.transferTo(new File(uploadDir + "prod_img_" + sName));
-            } catch (IOException e) {
-                log.error(e);
-            }
-
-            // 이전 파일명을 입력했을 경우 (null 이 아닌 경우)
+            // 기존 파일 삭제
+            File file1 = new File(uploadDir + prevFileName);
             if (prevFileName != null) {
-                File file1 = new File(uploadDir + prevFileName);
                 try {
                     boolean deleted = file1.delete();
                 } catch (Exception e) {
                     log.error(e);
                 }
             }
-
+            // 파일 저장
+            try {
+                file.transferTo(new File(uploadDir + "prod_img_" + sName));
+            } catch (IOException e) {
+                log.error(e);
+            }
             return "prod_img_" + sName;
         }
-
-
         return null;
     }
 
@@ -239,12 +235,19 @@ public class ProductService {
             List<Integer> prod_prices = stringToIntegerList(prodPrices);
             List<Integer> prod_stocks = stringToIntegerList(prodStocks);
             List<Integer> variants_ids = stringToIntegerList(variantsIds);
-            List<List<String>> values_list = stringToListInList(valuesList);
             List<String> option_names = stringToStringList(optionNames);
             int prodId = Integer.parseInt(productId.replace("\"", ""));
 
-            log.info("values_list = " + values_list);
+            // valueList  형식 변환
+            List<String> stringList = List.of(valuesList.replace("\"", "").replace("[[", "").replace("]]", "").split("],\\["));
+            List<List<String>> values_list = new ArrayList<>();
 
+            for (String s : stringList) {
+                List<String> strings = List.of(s.split(","));
+                values_list.add(strings);
+            }
+
+            log.info("values_list = " + values_list);
 
             // 리스트 크기 검증
             int size = prod_oNames.size();
@@ -282,6 +285,32 @@ public class ProductService {
 
 
     public String deleteById(int productId) {
+        String uploadDir = System.getProperty("user.dir") + "/uploads/product/";
+
+        Optional<Product> optProd = productRepository.findById(productId);
+        if (optProd.isPresent()) {
+            Product product = optProd.get();
+            String img1 = product.getImg1();
+            String img2 = product.getImg2();
+            String img3 = product.getImg3();
+            String detail = product.getDetail();
+
+            // 기존 파일 삭제
+            File file1 = new File(uploadDir + img1);
+            File file2 = new File(uploadDir + img2);
+            File file3 = new File(uploadDir + img3);
+            File file4 = new File(uploadDir + detail);
+
+            try {
+                file1.delete();
+                file2.delete();
+                file3.delete();
+                file4.delete();
+            } catch (Exception e) {
+                log.error(e);
+            }
+
+        }
         productRepository.deleteById(productId);
         Optional<Product> optionalProduct = productRepository.findById(productId);
         if (optionalProduct.isPresent()) {
