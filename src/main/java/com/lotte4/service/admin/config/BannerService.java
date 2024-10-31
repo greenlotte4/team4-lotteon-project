@@ -32,15 +32,7 @@ public class BannerService {
     }
 
     public List<BannerDTO> getAllBanners(){
-        List<Banner> banners = bannerRepository.findAll();
-        List<BannerDTO> bannerDTOs = new ArrayList<>();
-
-        for(Banner banner : banners){
-            if(banner.getState() == 1){
-                bannerDTOs.add(modelMapper.map(banner, BannerDTO.class));
-            }
-        }
-        return bannerDTOs;
+        return cachingService.getAllBanners();
     }
 
     public List<BannerDTO> getBannersByLocation(String location){
@@ -91,12 +83,9 @@ public class BannerService {
     }
 
     public void updateBannerState(BannerDTO bannerDTO, int state){
-        Optional<Banner> bannerOpt = bannerRepository.findById(bannerDTO.getBannerId());
-        if(bannerOpt.isPresent()){
-            Banner banner = bannerOpt.get();
-            banner.setState(state);
-            bannerRepository.save(banner);
-        }
+        cachingService.updateBannerState(bannerDTO, state);
+        cachingService.clearAllEnableBanners();
+
     }
 
     public boolean expireBannerCheck(BannerDTO bannerDTO){
@@ -115,5 +104,10 @@ public class BannerService {
             return expire;
         }
         return false;
+    }
+
+    public void clearBannerCache(){
+        cachingService.clearAllBannersWithLocation();
+        cachingService.clearAllEnableBanners();
     }
 }
