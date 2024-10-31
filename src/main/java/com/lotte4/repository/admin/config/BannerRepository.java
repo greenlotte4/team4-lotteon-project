@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface BannerRepository extends JpaRepository<Banner, Integer> {
     public List<Banner> findByLocation(String location);
+    public List<Banner> findByLocationAndState(String location, int status);
+
 }

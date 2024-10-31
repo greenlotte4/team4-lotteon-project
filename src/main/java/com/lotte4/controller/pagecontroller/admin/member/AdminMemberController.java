@@ -1,15 +1,18 @@
 package com.lotte4.controller.pagecontroller.admin.member;
 
+import com.lotte4.dto.MemberInfoDTO;
+import com.lotte4.dto.PointDTO;
 import com.lotte4.dto.UserDTO;
+import com.lotte4.service.MemberInfoService;
+import com.lotte4.service.PointService;
 import com.lotte4.service.UserService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 /*
@@ -19,16 +22,16 @@ import java.util.List;
 
      수정이력
       - 2024/10/28 강은경 - 관리자 회원목록 기능 검색&페이징 메서드 추가
+      - 2024/10/30 황수빈 - @RequiredArgsConstructor 추가, admin/point/list 추가
 */
 @Log4j2
 @Controller
+@RequiredArgsConstructor
 public class AdminMemberController {
 
     private final UserService userService;
-
-    public AdminMemberController(UserService userService) {
-        this.userService = userService;
-    }
+    private final MemberInfoService memberInfoService;
+    private final PointService pointService;
 
     @GetMapping("/admin/member/list")
     public String AdminMemberList(Model model,
@@ -80,10 +83,29 @@ public class AdminMemberController {
         }
     }
 
+    // 회원수정
+    @PutMapping("/admin/member/update")
+    public ResponseEntity<Void> updateMember(@RequestBody MemberInfoDTO memberInfoDTO) {
+        log.info("memberInfoDTO: " + memberInfoDTO);
+        memberInfoService.updateMember(memberInfoDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    // 회원 등급 수정
+    @PutMapping("/admin/member/update-grades")
+    public ResponseEntity<Void> updateGrades(@RequestBody List<MemberInfoDTO> memberGrades) {
+        memberInfoService.updateMemberGrades(memberGrades);
+        return ResponseEntity.ok().build(); // 200 OK 응답 반환
+    }
 
 
     @GetMapping("/admin/member/point")
-    public String Adminmemberpoint(){
+    public String Adminmemberpoint(Model model) {
+
+        List<PointDTO> points = pointService.selectAllPoints();
+        log.info("points: " + points);
+        model.addAttribute("points",points);
+
         return "/admin/member/point";
     }
 }

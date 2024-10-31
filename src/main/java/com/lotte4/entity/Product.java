@@ -1,10 +1,12 @@
 package com.lotte4.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lotte4.config.MapToJsonConverter;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,11 +44,12 @@ public class Product {
 
     @Builder.Default
     @ToString.Exclude
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    @OneToMany(mappedBy = "product", orphanRemoval = true)
     private List<ProductVariants> productVariants = new ArrayList<>();
 
     @Convert(converter = MapToJsonConverter.class)
-    private Map<String, List<String>> options;
+    private LinkedHashMap<String, List<String>> options;
 
     private int status;
 

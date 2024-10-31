@@ -3,9 +3,11 @@ package com.lotte4.service;
 import com.lotte4.dto.CartDTO;
 import com.lotte4.dto.UserDTO;
 import com.lotte4.entity.MemberInfo;
+import com.lotte4.entity.Point;
 import com.lotte4.entity.SellerInfo;
 import com.lotte4.entity.User;
 import com.lotte4.repository.MemberInfoRepository;
+import com.lotte4.repository.PointRepository;
 import com.lotte4.repository.UserRepository;
 import jakarta.mail.Message;
 import jakarta.mail.internet.InternetAddress;
@@ -36,12 +38,14 @@ import java.util.stream.Collectors;
 
      수정이력
       - 2024/10/28 강은경 - 관리자 회원목록 기능 검색&페이징 메서드 추가
+      - 2024/10/28 강은경 - uid로 사용자 조회
 */
 @Log4j2
 @RequiredArgsConstructor
 @Service
 public class UserService {
 
+    private final PointRepository pointRepository;
     private final UserRepository userRepository;
     private final MemberInfoService memberInfoService;
     private final SellerInfoService sellerInfoService;
@@ -74,6 +78,15 @@ public class UserService {
                 .build();
 
         userRepository.save(user);
+
+        pointRepository.save( Point.builder()
+                        .pointName("회원가입 축하 포인트")
+                        .memberInfo(memberInfo)
+                        .type("적립")
+                        .point(5000)
+                        .presentPoint(5000)
+                        .build() );
+
 
         log.info("memberuser" + user);
 
@@ -203,5 +216,18 @@ public class UserService {
         return selectUserListByMember(role, 0, Integer.MAX_VALUE, keyword).getTotalElements();
     }
 
+    // uid로 사용자 조회
+    public User findByUid(String uid) {
+        // UserRepository를 사용하여 uid로 사용자 정보를 조회
+        Optional<User> userOptional = userRepository.findByUid(uid);
+
+        if(userOptional.isPresent()) {
+            return userOptional.get();
+        } else {
+            log.warn("사용자를 찾을 수 없습니다 - uid: " + uid);
+            return null; // 사용자가 없을 경우 null 반환
+        }
+
+    }
 
 }

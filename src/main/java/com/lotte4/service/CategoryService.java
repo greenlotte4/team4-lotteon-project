@@ -3,6 +3,7 @@ package com.lotte4.service;
 import com.lotte4.dto.CartDTO;
 import com.lotte4.dto.ProductCateChildDTO;
 import com.lotte4.dto.ProductCateDTO;
+import com.lotte4.dto.ProductRegisterCateDTO;
 import com.lotte4.entity.ProductCate;
 import com.lotte4.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -54,8 +55,6 @@ public class CategoryService {
         }
         return productCateDTOList;
     }
-
-
 
     public void insertProductCate(ProductCateDTO productCateDTO, String parent, int depth){
 

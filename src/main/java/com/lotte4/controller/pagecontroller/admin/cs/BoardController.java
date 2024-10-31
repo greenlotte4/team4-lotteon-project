@@ -33,7 +33,7 @@ public class BoardController {
     private final BoardService boardService;
     // 관리자 cs - Board (qna,faq,notice)
 
-    // 글목록 - qna,fap
+    // admin 글 목록
     @GetMapping("/admin/cs/{type}/list")
     public String AdminQnaList(
             Model model,
@@ -42,8 +42,10 @@ public class BoardController {
             @RequestParam(defaultValue = "8") int size) {
 
         if (Objects.equals(type, "notice")) {
-            List<BoardCateDTO> cate1 = boardCateService.selectBoardCatesByDepth(0);
-            model.addAttribute("cates", cate1);
+
+            List<BoardCateDTO> cates = boardCateService.getSubCategories(8);
+            model.addAttribute("cates", cates);
+
         }
         if (Objects.equals(type, "faq") || Objects.equals(type, "qna")) {
             List<BoardCateDTO> cate1 = boardCateService.selectBoardCatesByDepth(1);
@@ -57,6 +59,19 @@ public class BoardController {
 
         return "/admin/cs/" + type + "/list";
     }
+    @ResponseBody
+    @GetMapping("/board/{type}/{cate}")
+    public ResponseEntity<Page<BoardResponseDTO>> selectBoard(
+            @PathVariable(required = false) int cate,
+            @PathVariable String type,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "8") int size) {
+
+        Page<BoardResponseDTO> boardList = boardService.selectAllBoardByCateId(cate,type, page, size);
+
+        return ResponseEntity.ok(boardList);
+    }
+
     // 글보기 - qna,fap
     @GetMapping("/admin/cs/{type}/view/{id}")
     public String adminQnaView(Model model, @PathVariable int id, @PathVariable String type) {
@@ -86,13 +101,13 @@ public class BoardController {
     }
 
 
-    // faq 수정
+    // faq 수정 - get
     @GetMapping("/admin/cs/{type}/modify/{boardId}")
     public String AdminCsFaqModify(Model model,@PathVariable int boardId,@PathVariable String type) {
 
         if(Objects.equals(type, "notice")) {
 
-            List<BoardCateDTO> cate1 = boardCateService.selectBoardCatesByDepth(0);
+            List<BoardCateDTO> cate1 = boardCateService.getSubCategories(8);
             model.addAttribute("cates", cate1);
         }
         if(Objects.equals(type, "faq")) {
@@ -106,7 +121,7 @@ public class BoardController {
         return "/admin/cs/"+type+"/modify";
     }
 
-    // 자주묻는질문. - 수정
+    //  faq 수정 - post
     @PostMapping("/admin/cs/{type}/modify")
     public String AdminCsFaqModify(BoardRegisterDTO boardDTO, @PathVariable String type) {
 
@@ -124,7 +139,6 @@ public class BoardController {
     }
     @PostMapping("/admin/cs/qna/reply/{id}")
     public String AdminQnaReply(BoardCommentDTO commentDTO, @PathVariable int id) {
-        log.info("왜 댓글이 안되지"+commentDTO);
         commentDTO.setBoardId(id);
         boardService.insertBoardQnaComment(commentDTO);
         return "redirect:/admin/cs/qna/view/"+id;
@@ -140,12 +154,5 @@ public class BoardController {
     }
 
 
-    // TODO : cate로 바꿔서 list 불러올 떄 동적 처리
-//    @ResponseBody
-//    @GetMapping("/admin/cs/board/list/{type}")
-//    public ResponseEntity<List<BoardResponseDTO>> AdminQnaList(@PathVariable String type) {
-//
-//        return ResponseEntity.ok(boardService.selectAllBoardByType(type));
-//    }
 
 }

@@ -147,6 +147,9 @@
     float: right;
     text-decoration: none; /* 밑줄 제거 */
     margin-top: 7px;
+    &:hover{
+        background-color: rgba(216, 42, 42, 0.78);
+    }
 }
 
 #btnOption {
@@ -201,6 +204,7 @@
     border: 1px solid #d82a2a;
     border-radius: 5px;
     font-size: 12px;
+    background-color: white;
     color: #d82a2a;
     padding: 5px;
     cursor: pointer;
@@ -213,6 +217,7 @@
     cursor: pointer;
     background-color: #d82a2a;
 }
+
 
 /* 등록 확인 버튼 스타일 */
 .confirm-btn {
@@ -249,6 +254,36 @@
     margin-top: 3px;
     margin-bottom: 10px;
 }
+.pre-option-value-box{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 10px;
+    padding: 5px;
+    margin: 0 3px 0 3px;
+    height: 15px;
+    border-radius: 5px;
+    background-color: #b6b5b5;
+    border: none;
+    color: white;
+}
+.pre-delete-value{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 8px;
+    height: 8px;
+    margin-left: 3px;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    &:hover{
+        transition: color 0.2s ease;
+        color: #4F4F4F;
+    }
+}
+
 .option-value-box{
     display: flex;
     align-items: center;
@@ -257,7 +292,7 @@
     margin: 0 3px 0 3px;
     height: 15px;
     border-radius: 5px;
-    background-color: #b6b5b5;
+    background-color:  rgba(0, 123, 255, 0.74);
     border: none;
     color: white;
 }
@@ -272,9 +307,13 @@
     font-size: 10px;
     font-weight: bold;
     cursor: pointer;
+    &:hover{
+        transition: color 0.2s ease;
+        color: rgba(173, 216, 230, 0.9);
+    }
 }
 
-img{
+details > img{
     width: 200px;
     height: 200px;
     margin: 5px 0;
@@ -320,4 +359,8 @@ details {
 
 .image_td {
     padding: 0 10px !important;
+}
+
+.option {
+    margin-top: 5px;
 }

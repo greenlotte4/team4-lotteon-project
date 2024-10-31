@@ -23,7 +23,7 @@
         <!--section-->
         <section>
             <div class="breadcrumb">
-                <a th:href="@{/admin/indwx}">Home</a> > <a href="#">고객센터</a> > <a href="#" class="location">문의하기</a>
+                <a th:href="@{/admin/index}">Home</a> > <a th:href="@{/admin/faq/list}">문의하기</a> > <a th:href="@{/admin/qna/reply}" class="location">문의하기</a>
             </div>
             <h3>문의하기 보기</h3>
             <div class="form">
@@ -45,7 +45,7 @@
                         <tr class="answer">
                             <td class="label">답변</td>
                             <td>
-                               <textarea name="comment" rows="5" cols="50"></textarea>
+                               <textarea name="comment" id="comment" rows="5" cols="50" required></textarea>
                             </td>
                         </tr>
                     </table>
@@ -62,5 +62,6 @@
     </div>
 </main>
 <footer th:replace="~{/admin/include/footer.html}"></footer>
+
 </body>
 </html>

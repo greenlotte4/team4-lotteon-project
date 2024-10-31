@@ -25,7 +25,7 @@ public class CartDTO {
 
     private UserDTO user;
 
-    private ProductVariantsDTO productVariants;
+    private ProductVariants productVariants;
 
     // 갯수
     private int count;

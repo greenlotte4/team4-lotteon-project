@@ -6,16 +6,21 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lotte4.dto.CateForProdRegisterDTO;
 import com.lotte4.dto.ProductDTO;
 import com.lotte4.dto.ProductDetailDTO;
+import com.lotte4.dto.SellerInfoDTO;
+import com.lotte4.entity.SellerInfo;
 import com.lotte4.service.CategoryService;
 import com.lotte4.service.ProductService;
+import com.lotte4.service.SellerInfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +32,7 @@ public class ProductRestController {
     private final ProductService productService;
     private final ObjectMapper objectMapper;
     private final CategoryService categoryService;
+    private final SellerInfoService sellerInfoService;
 
 
     public static List<Integer> stringToIntegerList(String string) {
@@ -43,6 +49,7 @@ public class ProductRestController {
 
     @PostMapping(value = "/admin/product/register", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Map<String, Integer>> productRegisterCate(@RequestParam("cateId") int cateId,
+//                                                                    @RequestParam("sellerId") int sellerId,
                                                                     @RequestParam("img_1") MultipartFile img_1,
                                                                     @RequestParam("img_2") MultipartFile img_2,
                                                                     @RequestParam("img_3") MultipartFile img_3,
@@ -50,14 +57,19 @@ public class ProductRestController {
                                                                     @RequestParam("optionsJson") String optionsJson,
                                                                     @ModelAttribute ProductDTO productDTO) {
 
+        log.info("productdto = " + productDTO);
+
         // 상품 카테고리 아이디 입력
         productDTO.setProductCateId(categoryService.getProductCate(cateId));
 
-        // 'options' JSON 문자열을 Map<String, List<String>>으로 변환
-        Map<String, List<String>> optionsMap = null;
+        // 판매자 정보 입력
+//        SellerInfoDTO sellerInfo = sellerInfoService.selectSellerInfoById(sellerId);
+
+        // 'options' JSON 문자열을 LinkedHashMap<String, List<String>>으로 변환
+        LinkedHashMap<String, List<String>> optionsMap = null;
         try {
             optionsMap = objectMapper.readValue(optionsJson,
-                    new TypeReference<Map<String, List<String>>>() {
+                    new TypeReference<LinkedHashMap<String, List<String>>>() {
                     });
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
@@ -73,6 +85,7 @@ public class ProductRestController {
         productDTO.setImg2(img2);
         productDTO.setImg3(img3);
         productDTO.setDetail(detail);
+//        productDTO.setSellerInfoId(sellerInfo);
 
         ProductDTO dto = productService.insertProduct(productDTO);
 

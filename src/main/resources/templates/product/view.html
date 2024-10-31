@@ -1,17 +1,11 @@
 <!DOCTYPE html>
-<!-- xmlns:th="http://www.thymeleaf.org"
-        xmlns:layout="http://www.thymeleaf.org/"
-        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" -->
-
 <html lang="en">
 <head>
     <meta charset="UTF-8"/>
     <title>롯데ON::롯데 온라인 쇼핑몰</title>
-    <!-- 파비콘 -->
     <link rel="shortcut icon" type="image/x-icon" href="../images/favicon.ico"/>
     <link rel="stylesheet" th:href="@{/css/product/product_common.css}"/>
     <link rel="stylesheet" th:href="@{/css/product/style_product_view.css}"/>
-
 </head>
 <body>
 <div id="bannerTop" class="on">
@@ -27,7 +21,6 @@
     <main class="mainIn cf">
         <aside th:replace="~{/main_aside.html}"></aside>
         <section class="product-view-section">
-            <!-- Breadcrumb -->
             <div class="breadcrumb">
                 <a href="#">Home</a> &gt;
                 <a href="#">패션·의류·뷰티</a> &gt;
@@ -35,37 +28,43 @@
             </div>
 
             <h2 class="section-title">상품보기</h2>
-            <!-- 상품보기 -->
-
             <section class="product-view">
-
                 <div class="product-image">
-                    <img th:src="@{/images/example.png}" alt="Product Image" />
+                    <img th:src="@{'/uploads/product/' + ${productDTO.getImg1()}}" alt="상품 목록 사진" class="product-image">
                 </div>
                 <div class="product-info">
                     <p class="product-number">상품번호: 10010118412</p>
-                    <h2 class="product-title" th:text="${productDTO.productVariants}"></h2>
-
+                    <h2 class="product-title" th:text="${productDTO.name}"></h2>
+                    <p class="product-number" th:text="${productDTO.description}"></p>
+                    <h2 id="product-dto" th:text="${productDTOJson}" style="display:none"></h2>
                     <div class="rating">
-                        <span>★★★★★</span> <a href="#">상품리뷰</a> (13)
+                        <span>★★★★★</span> <a href="#">상품리뷰</a> ([[${productDTO.review}]])
                     </div>
                     <div class="price-section">
-                        <span class="original-price">30,000원</span>
-                        <span class="discount-rate">10% ↓</span>
+                        <span class="original-price" th:text="${productDTO.price}"></span>
+                        <span class="discount-rate" th:text="${productDTO.discount + '% ↓'}"></span>
                         <span class="discount-price">27,000원</span>
                     </div>
                     <div class="shipping-info">
-                        <p>무료배송</p>
+                        <p th:if="${productDTO.deliveryFee == 0}" th:text="무료배송"></p>
+                        <p th:if="${productDTO.deliveryFee != 0}" th:text="${productDTO.deliveryFee + '원'}"></p>
                         <p>모레(금) 7/8 도착 예정</p>
                     </div>
                     <div class="product-origin">
                         <p>원산지: 상세설명 참조</p>
                     </div>
-                    <div class="options-section">
-                        <select name="" id="">
-                            <option value=""></option>
-                        </select>
-                    </div>
+                    <span id="variant-options" class="variant-options">
+                       <ul>
+                            <li th:each="entry : ${options.entrySet()}">
+                                <span th:text="${entry.key}"></span>
+                                <select class="option-select">
+                                    <option value="" selected disabled>선택하세요</option>
+                                    <option th:each="value : ${entry.value}" th:value="${value}" th:text="${value}"></option>
+                                </select>
+                            </li>
+                        </ul>
+
+                    </span>
                     <div class="quantity-section">
                         <label for="quantity">수량</label>
                         <input type="number" id="quantity" name="quantity" min="1" value="1"/>
@@ -74,7 +73,11 @@
                         총 상품금액: <strong>27,000원</strong>
                     </div>
                     <div class="purchase-actions">
-                        <a th:href="@{/product/cart}" class="cart-button">장바구니</a>
+                        <form th:action="@{/product/cart}" method="post" id="cartForm">
+                            <input type="hidden" name="productVariants" class="selected-variant-id"/>
+                            <input type="hidden" name="count" id="count" />
+                            <button type="submit" class="cart-button">장바구니</button>
+                        </form>
                         <a th:href="@{/product/order}" class="buy-button">구매하기</a>
                     </div>
                     <div class="product-banner" th:each="banner : ${banners}" th:if="${banner.location == 'PRODUCT1'}">
@@ -85,15 +88,13 @@
                 </div>
             </section>
 
-            <!-- 상품정보 -->
             <section class="product-details">
-
                 <h3>상품정보</h3>
                 <div class="product-detail-image">
-                    <img src="../images/product/image.png" alt="Product Details Image" />
+                    <img th:src="@{'/uploads/product/' + ${productDTO.getImg2()}}" alt="상품 메인 사진" class="product-image">
+                    <img th:src="@{'/uploads/product/' + ${productDTO.getImg3()}}" alt="상품 상세 사진" class="product-image">
+                    <img th:src="@{'/uploads/product/' + ${productDTO.getDetail()}}" alt="상품 상세 정보 사진" class="product-image">
                 </div>
-
-                <!-- 상품정보제공공시 -->
                 <div id="product-info-public-announcement" class="hidden">
                     <h3>상품정보제공공시</h3>
                     <table class="info-table">
@@ -101,30 +102,7 @@
                             <th>상품명</th>
                             <td>내셔널지오그래픽키즈 벨루가 헤비다운</td>
                         </tr>
-                        <tr>
-                            <th>상품번호</th>
-                            <td>10010118412</td>
-                        </tr>
-                        <tr>
-                            <th>제조사/수입자</th>
-                            <td>내셔널지오그래픽</td>
-                        </tr>
-                        <tr>
-                            <th>원산지</th>
-                            <td>국내</td>
-                        </tr>
-                        <tr>
-                            <th>제조연월</th>
-                            <td>2024년 10월</td>
-                        </tr>
-                        <tr>
-                            <th>품질보증기준</th>
-                            <td>관련 법 및 소비자 분쟁해결 기준에 따름</td>
-                        </tr>
-                        <tr>
-                            <th>A/S 책임자와 전화번호</th>
-                            <td>내셔널지오그래픽 고객센터 (1234-5678)</td>
-                        </tr>
+                        <!-- Additional product info -->
                     </table>
                 </div>
             </section>
@@ -132,6 +110,7 @@
             <!-- 상품리뷰 -->
             <section id="additional-product-info">
                 <h3>상품리뷰</h3>
+
                 <div class="review-list">
                     <div class="review-item">
                         <div class="review-header">
@@ -182,7 +161,6 @@
                         <span class="review-date">2024.10.09</span>
                     </div>
                 </div>
-                    <!-- 반복되는 리뷰 아이템들 -->
                     <div class="pagination">
                         <ul>
                             <li><a href="#">&lt;</a></li>
@@ -196,13 +174,133 @@
                     </div>
                 </div>
             </section>
-
-
         </section>
-
     </main>
     <footer th:replace="~{/include/footer.html}"></footer>
     <button type="button" id="top">상단이동</button>
 </div>
+
+
+<script>
+
+    document.getElementById('cartForm').onsubmit = function(event) {
+        event.preventDefault(); // 기본 폼 제출 방지
+
+        // AJAX 요청
+        const formData = new FormData(this);
+        console.log('formData : ' + formData);
+        fetch(this.action, {
+            method: 'POST',
+            body: formData,
+        })
+            .then(response => response.text())
+            .then(data => {
+                if (data === "success") {
+                    // 성공 시 알림창 띄우기
+                    if (confirm("장바구니에 상품이 담겼습니다. 장바구니로 이동하시겠습니까?")) {
+                        window.location.href = "/lotteon/product/cart"; // 장바구니 페이지로 리다이렉트
+                    }
+                } else if (data === "failed") {
+                    alert("장바구니 등록에 실패했습니다.");
+                } else if (data === "noUser") {
+                    alert("로그인이 필요합니다."); // 로그인 필요 알림
+                    window.location.href = "/lotteon/member/login"; // 로그인 페이지로 리다이렉트
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+        // 수량이 변경될 때마다 count 필드에 값 업데이트
+        document.getElementById('quantity').addEventListener('input', function () {
+            document.getElementById('count').value = this.value;
+        });
+
+        // 페이지 로드 시 초기 수량 값 설정
+        document.getElementById('count').value = document.getElementById('quantity').value;
+
+        const productDataElement = document.getElementById('product-dto');
+        const productDTO = JSON.parse(productDataElement.textContent);
+
+        console.log("Loaded productDTO:", productDTO); // 전체 productDTO 객체 확인
+
+        const selects = document.querySelectorAll('#variant-options select');
+
+        function findMatchingVariant() {
+            // 선택된 옵션을 배열에 담음
+            const selectedOptions = [];
+            selects.forEach(select => {
+                selectedOptions.push(select.value);
+            });
+            console.log("Selected Options Array:", selectedOptions);
+
+            // 옵션의 키를 생성
+            let selectedOptionsKey = `[${Array.from(selects).map(select => select.previousElementSibling.innerText.replace(':', '').trim()).join(', ')}]`;
+            console.log("Generated Key for Selected Options (original):", selectedOptionsKey);
+
+            // 순열 생성 함수
+            function generatePermutations(array) {
+                if (array.length <= 1) return [array];
+                const permutations = [];
+                for (let i = 0; i < array.length; i++) {
+                    const currentElement = array[i];
+                    const remainingElements = array.slice(0, i).concat(array.slice(i + 1));
+                    const remainingPermutations = generatePermutations(remainingElements);
+                    remainingPermutations.forEach(permutation => {
+                        permutations.push([currentElement, ...permutation]);
+                    });
+                }
+                return permutations;
+            }
+
+            // 모든 순열 생성
+            const optionsPermutations = generatePermutations(selectedOptions);
+            const keysPermutations = generatePermutations(Array.from(selects).map(select => select.previousElementSibling.innerText.replace(':', '').trim()));
+
+            console.log("All Options Permutations:", optionsPermutations);
+            console.log("All Keys Permutations:", keysPermutations);
+
+            let matchingVariant = null;
+
+            if (selectedOptions.every(value => value)) {
+                // 각 키와 옵션 배열의 모든 순열로 variant 찾기
+                for (let keyPerm of keysPermutations) {
+                    selectedOptionsKey = `[${keyPerm.join(', ')}]`;
+                    console.log("Trying Key Permutation:", selectedOptionsKey);
+
+                    for (let optionsPerm of optionsPermutations) {
+                        console.log("Trying Options Permutation:", optionsPerm);
+
+                        matchingVariant = productDTO.productVariants.find(variant => {
+                            const variantOptions = variant.options[selectedOptionsKey];
+                            console.log("Checking variant:", variant.variant_id, "with options:", variantOptions, "against selected options:", optionsPerm);
+                            return JSON.stringify(variantOptions) === JSON.stringify(optionsPerm);
+                        });
+
+                        if (matchingVariant) {
+                            console.log("Match found with Key:", selectedOptionsKey, "and Options:", optionsPerm);
+                            break; // 매칭이 되면 더 이상 반복하지 않음
+                        }
+                    }
+                    if (matchingVariant) break;
+                }
+            }
+
+            if (matchingVariant) {
+                console.log("Matched Variant ID:", matchingVariant.variant_id);
+                document.querySelector('.selected-variant-id').value = matchingVariant.variant_id;
+            } else {
+                console.log("No matching variant found");
+                document.querySelector('.selected-variant-id').value = "선택된 Variant ID: 없음";
+            }
+        }
+
+        selects.forEach(select => {
+            select.addEventListener('change', findMatchingVariant);
+        });
+
+    });
+</script>
 </body>
 </html>

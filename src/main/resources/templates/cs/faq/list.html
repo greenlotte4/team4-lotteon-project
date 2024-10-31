@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>공지사항 목록</title>
+  <title>자주묻는질문 목록</title>
   <link rel="stylesheet" th:href="@{/css/common.css}">
   <link rel="stylesheet" th:href="@{/css/cs/cs_common.css}"/>
-  <link rel="stylesheet" th:href="@{/css/cs/faq_list.css}"/>
+  <link rel="stylesheet" th:href="@{/css/cs/cs_list.css}"/>
 </head>
 <body>
 <header th:replace="~{/include/header.html}"></header>
@@ -14,51 +14,27 @@
 
 <main>
   <th:block th:replace="~{/cs/aside/aside_faq.html}"></th:block>
-  <section id="section_wrapper">
-    <div id="category">
-      <p>회원<br><span>회원 관련 자주 묻는 질문입니다.</span></p>
-      <div class="breadcrumb">
-        <a th:href="@{/cs/index}">Home</a> > <a th:href="@{/cs/faq/list}">자주 묻는 질문</a> > <a th:href="@{/cs/faq/list}" class="location">회원</a>
-      </div>
-    </div>
-    <div class="faq-Table">
-      <div class="thead">가입</div>
+
       <table>
-        <!-- th:each 기본 3개 출력 / 더보기 시 10개 -->
-        <tr class="faq">
-          <td><a th:href="@{/cs/faq/view}"><img class="qimage" th:src="@{/images/cs/Q.png}" alt="Q">개인회원과 법인회원에 차이가 있나요 ?</a></td>
+        <thead>
+        <tr>
+
+          <th>유형</th>
+          <th>내용</th>
+          <th>작성자</th>
+          <th>작성일</th>
         </tr>
-        <tr class="faq">
-          <td><a th:href="@{/cs/faq/view}"><img class="qimage" th:src="@{/images/cs/Q.png}" alt="Q">개인회원과 법인회원에 차이가 있나요 ?</a></td>
-        </tr>
-        <tr class="faq">
-          <td><a th:href="@{/cs/faq/view}"><img class="qimage" th:src="@{/images/cs/Q.png}" alt="Q">개인회원과 법인회원에 차이가 있나요 ?</a></td>
-        </tr>
-        <tr class="last-Tr">
-          <td class="showMoreOrLess">
-            <button id="showLess">간단히보기</button>
+        </thead>
+        <tbody>
+        <tr th:each="board : ${boards}">
+          <td th:text="${board.cate.name}"></td>
+          <td class="title">
+            <a th:href="@{/admin/cs/notice/view/{id}(id=${board.boardId})}" th:text="${board.title}"></a>
           </td>
+          <td th:text="${board.user.uid}"></td>
+          <td th:text="${board.regDate}"></td>
         </tr>
-      </table>
-    </div>
-    <div class="faq-Table">
-      <div class="thead">탈퇴</div>
-      <table>
-        <!-- th:each -->
-        <tr class="faq">
-          <td><a th:href="@{/cs/faq/view}"><img  class="qimage" th:src="@{/images/cs/Q.png}" alt="Q">개인회원과 법인회원에 차이가 있나요 ?</a></td>
-        </tr>
-        <tr class="faq">
-          <td><a th:href="@{/cs/faq/view}"><img  class="qimage" th:src="@{/images/cs/Q.png}" alt="Q">개인회원과 법인회원에 차이가 있나요 ?</a></td>
-        </tr>
-        <tr class="faq">
-          <td><a th:href="@{/cs/faq/view}"><img  class="qimage" th:src="@{/images/cs/Q.png}" alt="Q">개인회원과 법인회원에 차이가 있나요 ?</a></td>
-        </tr>
-        <tr class="last-Tr">
-          <td class="showMoreOrLess">
-            <button id="showMore">더보기</button>
-          </td>
-        </tr>
+        </tbody>
       </table>
     </div>
   </section>

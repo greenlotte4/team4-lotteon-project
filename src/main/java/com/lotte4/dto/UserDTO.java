@@ -42,17 +42,5 @@ public class UserDTO {
         return maskedUid;
     }
 
-    public User toEntity() {
-        return User.builder()
-                .userId(userId)
-                .memberInfo(memberInfo.toEntity())
-                .sellerInfo(sellerInfo.toEntity())
-                .uid(uid)
-                .pass(pass)
-                .role(role)
-                .createdAt(createdAt)
-                .leaveDate(leaveDate)
-                .build();
-    }
 
 }

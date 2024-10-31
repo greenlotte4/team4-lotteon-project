@@ -39,6 +39,10 @@ aside {
 .sidebar-menu a:hover {
     font-weight:bold !important;
 }
+.submenu a:hover {
+    font-weight: 700;
+    background-color: #eaeaea;
+}
 
 
 .submenu {

@@ -1,6 +1,8 @@
 package com.lotte4.dto;
 
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lotte4.entity.ProductCate;
 import jakarta.persistence.*;
 import lombok.*;
@@ -29,13 +31,13 @@ public class ProductCateDTO {
     private String name;
 
     // 계층
-    private int depth; // 추가함(241024 10:25)
+    private int depth; // 추가함(24/10/24 10:25)
 
     // 부모
     @ToString.Exclude
-    private ProductCateDTO parent; // 추가함(241024 12:35)
-
-
+    @JsonBackReference // 추가 - 황수빈 (24/10/30 12:27)
+    private ProductCateDTO parent; // 추가함(24/10/24 12:35)
+    @JsonManagedReference
     private List<ProductCateDTO> children = new ArrayList<>();
 
     public ProductCateDTO(ProductCate productCate) {

@@ -2,6 +2,7 @@ package com.lotte4.controller.pagecontroller.admin.product;
 
 import com.lotte4.dto.ProductCateDTO;
 import com.lotte4.dto.ProductDTO;
+import com.lotte4.dto.ProductDetailDTO;
 import com.lotte4.dto.Product_V_DTO;
 import com.lotte4.service.CategoryService;
 import com.lotte4.service.ProductService;
@@ -98,6 +99,12 @@ public class AdminProductController {
         Product_V_DTO productDTO = productService.getProductById(productId);
         int productCateId = productDTO.getProductCateId().getProductCateId();
         model.addAttribute("productDTO", productDTO);
+
+        LinkedHashMap<String, List<String>> options = productDTO.getOptions();
+        model.addAttribute("options", options);
+
+        ProductDetailDTO productDetailDTO = productService.getProductDetailById(productId);
+        model.addAttribute("productDetailDTO", productDetailDTO);
 
         ProductCateDTO productCateDTO = categoryService.getProductCate(productCateId);
         ProductCateDTO parentProductCateDTO = productCateDTO.getParent();
