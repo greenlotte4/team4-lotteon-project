@@ -7,12 +7,15 @@ import com.lotte4.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 /*
@@ -83,14 +86,25 @@ public class AdminMemberController {
         }
     }
 
+    @ResponseBody
+    @GetMapping("/member/point")
+    public ResponseEntity<Page<PointDTO>> pointfinder (@RequestParam(required = false) String searchType,
+                                                       @RequestParam(required = false) String keyword,
+                                                       @RequestParam(required = false) String type,
+                                                       @RequestParam(defaultValue = "0") int page,
+                                                       @RequestParam(defaultValue = "8") int size) {
+        Pageable pageable = PageRequest.of(page, size);
 
+        // 공통 메서드인 `searchPoints`를 호출하여 모든 조건을 처리
+        Page<PointDTO> results = pointService.searchPoints(type, searchType, keyword, pageable);
+
+        return ResponseEntity.ok(results);
+    }
 
     @GetMapping("/admin/member/point")
-    public String Adminmemberpoint(Model model) {
-
-        List<PointDTO> points = pointService.selectAllPoints();
-        log.info("points: " + points);
-        model.addAttribute("points",points);
+    public String Adminmemberpoint(Model model,
+                                   @RequestParam(defaultValue = "0") int page,
+                                   @RequestParam(defaultValue = "8") int size) {
 
         return "/admin/member/point";
     }
