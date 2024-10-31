@@ -22,15 +22,20 @@
             </div>
         </div>
         <table>
+            <tbody>
             <tr id="notice_title">
                 <td>
-                    [안내] 해외결제사칭 문자주의
-                    <span class="r-date">2022.11.30</span>
+                    <span th:text="${board.cate.name}"></span><span th:text="${board.title}"> </span><br>
+                    <div>
+                     <span th:text= "${board.regDate}" class="r-date">2022.11.30</span>
+                    </div>
                 </td>
             </tr>
             <tr class="content">
-                <td>글 내용~~~~</td>
+                <td th:text="${board.content}"></td>
             </tr>
+
+            </tbody>
         </table>
         <a th:href="@{/cs/notice/list}">
             <button id="toList">목록</button>

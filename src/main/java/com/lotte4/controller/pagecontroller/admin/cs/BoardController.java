@@ -76,7 +76,7 @@ public class BoardController {
     @GetMapping("/admin/cs/{type}/view/{id}")
     public String adminQnaView(Model model, @PathVariable int id, @PathVariable String type) {
         model.addAttribute("board", boardService.selectBoardById(id));
-        log.info("왜 view가 안보여?"+ boardService.selectBoardById(id));
+
         return "/admin/cs/"+type+"/view";
     }
 

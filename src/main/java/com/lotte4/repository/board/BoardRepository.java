@@ -20,4 +20,5 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
     Page<Board> findByCate_BoardCateIdAndTypeOrderByRegDateDesc(int CateId,String type, Pageable pageable);
     Page<Board> findByCate_Parent_BoardCateIdAndTypeOrderByRegDateDesc(int parentId, String type,Pageable pageable);
 
+    List<Board> findTop5ByTypeOrderByRegDateDesc(String type);
 }

@@ -64,7 +64,12 @@ public class  CsQnaController {
 
     }
 
-
+    //공지사항 작성
+    @GetMapping("/admin/cs/notice/write")
+    public String AdminNoticeWrite(Model model) {
+        model.addAttribute("cates",boardCateService.getSubCategories(8));
+        return "/admin/cs/notice/write";
+    }
     // 글목록 : qna, faq
     @GetMapping({"/cs/{type}/list", "/cs/{type}/list/{cate}"})  // 선택적인 cate 경로 처리
     public String qna(Model model,
@@ -96,6 +101,7 @@ public class  CsQnaController {
     @GetMapping("/cs/{type}/view/{id}")
     public String qnaView(Model model, @PathVariable String type, @PathVariable int id) {
         model.addAttribute("board", boardService.selectBoardById(id));
+        log.info("어떻게 오나 함 보자"+boardService.selectBoardById(id));
         return "/cs/"+type+"/view";
     }
 

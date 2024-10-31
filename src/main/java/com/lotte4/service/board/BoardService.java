@@ -146,4 +146,13 @@ public class BoardService {
         }
     }
 
+    public List<Board> findTop5ByOrderByRegdateDesc(String type) {
+        return boardRepository.findTop5ByTypeOrderByRegDateDesc(type);
+    }
+
+    public Board findById(int boardId) {
+        return boardRepository.findById(boardId)
+                .orElseThrow(() -> new EntityNotFoundException("Board not found with ID: " + boardId));
+    }
+
 }

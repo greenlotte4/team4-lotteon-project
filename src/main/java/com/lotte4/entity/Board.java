@@ -38,4 +38,8 @@ public class Board {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="writer")
     private User user;
+
+    @Transient
+    private String maskedUserId;
+
 }

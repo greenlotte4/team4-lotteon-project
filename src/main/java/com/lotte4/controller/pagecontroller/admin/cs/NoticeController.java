@@ -16,19 +16,5 @@ public class NoticeController {
     private final BoardService boardService;
 
 
-    //
-    //공지사항 작성
-    @GetMapping("/admin/cs/notice/write")
-    public String AdminNoticeWrite(Model model) {
-        model.addAttribute("cates",boardCateService.getSubCategories(8));
-        return "/admin/cs/notice/write";
-    }
-
-//    //공지사항 수정
-//    @GetMapping("/admin/cs/notice/modify")
-//    public String AdminNoticeModify() {
-//        return "/admin/cs/notice/modify";
-//    }
-
 
 }

@@ -1,3 +1,5 @@
+
+<body>
 <link rel="stylesheet" th:href="@{/css/include/header.css}"/>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
@@ -90,7 +92,7 @@
             <div class="sub">
                 <div class="category">
                     <div class="moreViewWrap">
-                        <button type="button" class="moreView"><img style="width: 63px;" th:src="@{/images/main/category_button.png}"/></button>
+                        <button type="button" class="moreView"><img class ="cateBtn" th:src="@{/images/main/category_button.png}"/></button>
                     </div>
                     <div class="menu" style="align-content: center">
                         <ul>
@@ -102,13 +104,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="trending">
-                    <div class="preview">
-                        <span>1</span>
-                        <span>뉴발란스 운동화</span>
-                        <button type="button"><span class="blind">^</span></button>
-                    </div>
-                </div>
+
 
             </div><!-- sub -->
         </div><!-- subWrapper -->

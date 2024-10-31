@@ -8,10 +8,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Controller
 public class CustomerServiceController {
 
-    @GetMapping("/cs/index")
-    public String cs(){
-        return "/cs/index";
-    }
-
 
 }

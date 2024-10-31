@@ -5,6 +5,10 @@ header {
     background-color: white;
 }
 
+.cateBtn {
+    margin-top: 2.5px;
+    width: 63px;
+}
 .loginname {
     font-size: 14px;
 }
