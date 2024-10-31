@@ -38,7 +38,8 @@ import java.util.stream.Collectors;
 
      수정이력
       - 2024/10/28 강은경 - 관리자 회원목록 기능 검색&페이징 메서드 추가
-      - 2024/10/28 강은경 - uid로 사용자 조회
+      - 2024/10/28 강은경 - uid로 사용자 조회 메서드 추가
+      - 2024/10/28 강은경 - 이름과 이메일로 아이디 조회하는 메서드 추가
 */
 @Log4j2
 @RequiredArgsConstructor
@@ -227,6 +228,22 @@ public class UserService {
             log.warn("사용자를 찾을 수 없습니다 - uid: " + uid);
             return null; // 사용자가 없을 경우 null 반환
         }
+
+    }
+
+    // 이름과 이메일로 아이디 조회
+    public String findIdByNameAndEmail(String name, String email) {
+
+        Optional<User> userOptional = userRepository.findByMemberInfo_nameAndMemberInfo_email(name, email);
+
+        if(userOptional.isPresent()) {
+            log.info("아이디 찾기 성공 - name: " + name + ", email: " + email);
+            return userOptional.get().getUid();
+        } else {
+            return null;
+        }
+
+
 
     }
 
