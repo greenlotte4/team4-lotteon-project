@@ -2,7 +2,7 @@ package com.lotte4.controller.pagecontroller;
 
 import com.lotte4.dto.TermsDTO;
 import com.lotte4.dto.UserDTO;
-import com.lotte4.entity.Terms;
+import com.lotte4.entity.User;
 import com.lotte4.service.TermsService;
 import com.lotte4.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,9 +13,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.Map;
+
+/*
+     날짜 : 2024/10/31
+     이름 : 강은경
+     내용 : MemberController 생성
+
+     수정이력
+      - 2024/10/31 강은경 - 아이디찾기 & 비밀번호 찾기 메서드 추가
+*/
 
 @Log4j2
 @RequiredArgsConstructor
@@ -162,5 +173,66 @@ public class MemberController {
         return ResponseEntity.ok().body(resultMap);
     }
 
+    // member/seller 아이디찾기 유형 고르는 페이지
+    @GetMapping("/member/find_id_select")
+    public String findIdSelect() {
+
+        return "/member/find_id_select";
+    }
+
+    // member/seller 비밀번호찾기 유형 고르는 페이지
+    @GetMapping("/member/find_pass_select")
+    public String findPassSelect() {
+
+        return "/member/find_pass_select";
+    }
+    
+    // 개인구매회원 아이디 찾기
+    @GetMapping("/member/find_member_id")
+    public String findId() {
+
+        return "/member/find_member_id";
+    }
+
+
+    // 개인구매회원 아이디 찾기 결과
+    @GetMapping("/member/find_id_result")
+    public String findIdResult() {
+
+        return "/member/find_id_result";
+    }
+
+    // 아이디찾기 결과 post
+    @PostMapping("/member/find_id_result")
+    public String handleFindIdResult(UserDTO userDTO, RedirectAttributes redirectAttributes) {
+
+        // 이름과 이메일로 아이디 조회
+        String uid = userService.findIdByNameAndEmail(userDTO.getMemberInfo().getName(), userDTO.getMemberInfo().getEmail());
+        log.info("uid : " + uid);
+
+        if (uid != null) {
+            UserDTO user = userService.selectUser(uid);
+            log.info("user : " + user);
+            redirectAttributes.addFlashAttribute("user", user); // 찾은 유저 정보를 뷰로 전달
+            return "redirect:/member/find_id_result";
+        } else {
+            redirectAttributes.addFlashAttribute("error", "해당 정보로 등록된 아이디가 없습니다."); // Flash 속성으로 에러 메시지 전달
+            return "redirect:/member/find_member_id";
+        }
+    }
+
+    // 개인구매회원 비밀번호 찾기
+    @GetMapping("/member/find_member_pass")
+    public String findMemberPass() {
+
+        return "/member/find_member_pass";
+    }
+
+    // 비밀번호 변경
+    @GetMapping("/member/pass_change")
+    public String passChange() {
+
+        return "/member/pass_change";
+    }
 }
 
