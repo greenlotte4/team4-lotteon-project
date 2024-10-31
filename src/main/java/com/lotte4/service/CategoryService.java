@@ -56,9 +56,9 @@ public class CategoryService {
         return productCateDTOList;
     }
 
-    public void insertProductCate(ProductCateDTO productCateDTO, String parent, int depth){
+    public void insertProductCate(ProductRegisterCateDTO productCateDTO, String parent){
 
-        cachingService.insertProductCate(productCateDTO, parent, depth);
+        cachingService.insertProductCate(productCateDTO, parent);
     }
 
 

@@ -3,6 +3,7 @@ package com.lotte4.service;
 import com.lotte4.dto.BannerDTO;
 import com.lotte4.dto.ProductCateChildDTO;
 import com.lotte4.dto.ProductCateDTO;
+import com.lotte4.dto.ProductRegisterCateDTO;
 import com.lotte4.dto.admin.config.InfoDTO;
 import com.lotte4.entity.Banner;
 import com.lotte4.entity.Info;
@@ -23,10 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -49,9 +47,23 @@ public class CachingService {
         // 구역별 리스트 전부 불러오기
         String[] bannerLocationList = {"MAIN2","MAIN1","PRODUCT1","MY1","MEMBER1"};
         for(String location : bannerLocationList){
-            List<Banner> bannerTMP = bannerRepository.findByLocation(location);
+            List<Banner> bannerTMP = bannerRepository.findByLocationAndState(location,1);
             if (!bannerTMP.isEmpty()){
                 banners.add(bannerTMP);
+            }
+            else{
+                //활성화된 배너가 없다면
+                Banner banner = new Banner();
+                banner.setLocation(location);
+                banner.setState(1);
+                banner.setImg("default_"+location+".png");
+                banner.setName("default_"+location+"_Banner");
+                banner.setBackground("#FFFFFF");
+                banner.setLink("http://13.125.226.80:8080/lotteon/index");
+                List<Banner> bannerList = new ArrayList<>();
+                bannerList.add(banner);
+
+                banners.add(bannerList);
             }
         }
         List<List<BannerDTO>> bannerDTOs = new ArrayList<>();
@@ -66,6 +78,29 @@ public class CachingService {
         }
         return bannerDTOs;
     }
+
+    @Cacheable(key = "'allBanners'", value = "allBanners")
+    public List<BannerDTO> getAllBanners(){
+        List<Banner> banners = bannerRepository.findAll();
+        List<BannerDTO> bannerDTOs = new ArrayList<>();
+
+        for(Banner banner : banners){
+                bannerDTOs.add(modelMapper.map(banner, BannerDTO.class));
+        }
+        return bannerDTOs;
+    }
+
+
+    @CacheEvict(value = "banners", key = "'allBannersWithLocation'")
+    public void updateBannerState(BannerDTO bannerDTO, int state){
+        Optional<Banner> bannerOpt = bannerRepository.findById(bannerDTO.getBannerId());
+        if(bannerOpt.isPresent()){
+            Banner banner = bannerOpt.get();
+            banner.setState(state);
+            bannerRepository.save(banner);
+        }
+    }
+
 
     @CacheEvict(value = "banners", key = "'allBannersWithLocation'")
     public BannerDTO insertBanner(BannerDTO bannerDTO, MultipartFile bannerImg) throws IOException {
@@ -98,6 +133,13 @@ public class CachingService {
         bannerRepository.deleteById(bannerId);
     }
 
+    @CacheEvict(value = "banners", key = "'allBannersWithLocation'")
+    public void clearAllBannersWithLocation(){
+    }
+    @CacheEvict(key = "'allBanners'", value = "allBanners")
+    public void clearAllEnableBanners(){
+    }
+
 
 
     //카테고리
@@ -123,19 +165,16 @@ public class CachingService {
     }
 
     @CacheEvict(key = "'getProductCateListWithDepth'", value = "categories")
-    public void insertProductCate(ProductCateDTO productCateDTO, String parent, int depth){
+    public void insertProductCate(ProductRegisterCateDTO productCateDTO, String parent){
 
         ProductCate productCate = modelMapper.map(productCateDTO, ProductCate.class);
 
         //depth가 1보다 큰경우
         //--> 제일 상위 카테고리가 아닌경우
-        if(depth > 1){
+        if(productCate.getDepth() > 1){
             ProductCate parentCate = categoryRepository.findByName(parent);
             productCate.setParent(parentCate);
         }
-
-        productCate.setDepth(depth);
-
         categoryRepository.save(productCate);
     }
 
