@@ -72,6 +72,7 @@ public class BannerService {
 
         BannerDTO resultBannerDTO = cachingService.insertBanner(bannerDTO, bannerImg);
 
+        cachingService.clearAllEnableBanners();
         if(resultBannerDTO.getName() == null){
             return "fail";
         }
@@ -80,6 +81,8 @@ public class BannerService {
 
     public void deleteBanner(int bannerId){
         cachingService.deleteBanner(bannerId);
+
+        cachingService.clearAllEnableBanners();
     }
 
     public void updateBannerState(BannerDTO bannerDTO, int state){
