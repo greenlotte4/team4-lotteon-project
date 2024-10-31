@@ -3,6 +3,7 @@ package com.lotte4.service.admin.config;
 import com.lotte4.dto.BannerDTO;
 import com.lotte4.entity.Banner;
 import com.lotte4.repository.admin.config.BannerRepository;
+import com.lotte4.service.CachingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ import java.util.*;
 public class BannerService {
     private final ModelMapper modelMapper;
     private final BannerRepository bannerRepository;
+    private final CachingService cachingService;
 
     public List<BannerDTO> getAllBanners(){
         List<Banner> banners = bannerRepository.findAll();
@@ -43,55 +45,39 @@ public class BannerService {
     }
 
 
-    @Cacheable(key = "'allBannersWithLocation'", value = "banners", cacheManager = "redisCacheManager")
+
+
     public List<BannerDTO> getAllBannersWithLocation(){
         Random random = new Random();
-        //MAIN2는 전부 삽입
-        List<Banner> banners = bannerRepository.findByLocation("MAIN2");
-        // 슬라이드 배너 랜덤화
-        Collections.shuffle(banners);
+        List<List<BannerDTO>> findResult = cachingService.getAllBannersWithLocationPre();
 
-        String[] bannerLocationList = {"MAIN1","PRODUCT1","MY1","MEMBER1"};
-        for(String location : bannerLocationList){
-            List<Banner> bannerTMP = bannerRepository.findByLocation(location);
-            if (!bannerTMP.isEmpty()){
-                banners.add(bannerTMP.get(random.nextInt(bannerTMP.size())));
+        //메인 슬라이드 전부 넣기
+        List<BannerDTO> bannerDTOs = findResult.get(0);
+        //랜덤하게 섞기
+        Collections.shuffle(bannerDTOs);
+
+        //랜덤으로 하나 정해서 리스트에 삽입
+        for (int count = 1; count < findResult.size(); count++) {
+            List<BannerDTO> bannerDTOList = findResult.get(count);
+            if (!bannerDTOList.isEmpty()){
+                bannerDTOs.add(bannerDTOList.get(random.nextInt(bannerDTOList.size())));
             }
-        }
-        List<BannerDTO> bannerDTOs = new ArrayList<>();
-        for(Banner banner : banners){
-            bannerDTOs.add(modelMapper.map(banner, BannerDTO.class));
         }
         return bannerDTOs;
     }
 
+
     public String insertBanner(BannerDTO bannerDTO, MultipartFile bannerImg) throws IOException {
 
-        String uploadDir = System.getProperty("user.dir") + "/uploads/config/";
+        BannerDTO resultBannerDTO = cachingService.insertBanner(bannerDTO, bannerImg);
 
-        File uploadDirectory = new File(uploadDir);
-        if (!uploadDirectory.exists()) {
-            if (!uploadDirectory.mkdirs()) {
-                throw new IOException("디렉토리를 생성할 수 없습니다: " + uploadDir);
-            }
-        }
-
-        if (!bannerImg.isEmpty()) {
-            String bannerImgFileName = "banner_" + bannerDTO.getName() + "_" + bannerDTO.getLocation() + "_" + System.currentTimeMillis() + ".png";
-            bannerImg.transferTo(new File(uploadDir + bannerImgFileName));
-            bannerDTO.setImg(bannerImgFileName);
-        }
-
-
-        Banner banner = modelMapper.map(bannerDTO, Banner.class);
-        Banner resultBanner = bannerRepository.save(banner);
-        if(resultBanner.getName() == null){
+        if(resultBannerDTO.getName() == null){
             return "fail";
         }
         return "success";
     }
 
     public void deleteBanner(int bannerId){
-        bannerRepository.deleteById(bannerId);
+        cachingService.deleteBanner(bannerId);
     }
 }

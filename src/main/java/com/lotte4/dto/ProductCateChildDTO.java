@@ -4,8 +4,13 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.lotte4.entity.ProductCate;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+/*
+    2024/10/31 강중원 - 자식데이터만 가지는 DTO추가
+ */
 
 @Getter
 @Setter
@@ -13,8 +18,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
-public class ProductCateChildDTO {
+//@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
+public class ProductCateChildDTO implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+
     private int productCateId;
 
     // 이름

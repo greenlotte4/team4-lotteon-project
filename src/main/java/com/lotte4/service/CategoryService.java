@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
+    private final CachingService cachingService;
     private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
 
@@ -54,40 +55,22 @@ public class CategoryService {
         return productCateDTOList;
     }
 
+
+
     public void insertProductCate(ProductCateDTO productCateDTO, String parent, int depth){
 
-        ProductCate productCate = modelMapper.map(productCateDTO, ProductCate.class);
-
-        //depth가 1보다 큰경우
-        //--> 제일 상위 카테고리가 아닌경우
-        if(depth > 1){
-            ProductCate parentCate = categoryRepository.findByName(parent);
-            productCate.setParent(parentCate);
-        }
-
-        productCate.setDepth(depth);
-
-        categoryRepository.save(productCate);
+        cachingService.insertProductCate(productCateDTO, parent, depth);
     }
-    @Cacheable(key = "'getProductCateListWithDepth'", value = "categories", cacheManager = "redisCacheManager")
+
+
     public List<ProductCateChildDTO> getProductCateListWithDepth(int depth){
-        List<ProductCate> productCateList = categoryRepository.findByDepth(depth);
 
-        List<ProductCateChildDTO> childDTOS = productCateList.stream().map(ProductCateChildDTO::new).collect(Collectors.toList());
-
-        return childDTOS;
+        return cachingService.getProductCateListWithDepth(depth);
     }
 
     public boolean deleteProductCate(String name){
 
-        ProductCate productCate = categoryRepository.findByName(name);
-        if(productCate != null){
-            categoryRepository.delete(productCate);
-            return true;
-        }
-        else {
-            return false;
-        }
+        return cachingService.deleteProductCate(name);
 
     }
 }

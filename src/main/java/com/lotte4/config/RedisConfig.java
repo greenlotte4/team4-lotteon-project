@@ -15,12 +15,15 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.RedisSerializationContext;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.data.redis.serializer.*;
 
 import java.time.Duration;
+
+/*
+
+    강중원
+
+ */
 
 @Configuration
 public class RedisConfig {
@@ -43,67 +46,17 @@ public class RedisConfig {
      * RedisConnection에서 넘겨준 byte 값 객체 직렬화
      */
 
-
     @Bean
-    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
-        template.setConnectionFactory(redisConnectionFactory);
-        // JSON 직렬화기 설정
-        Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<>(Object.class);
-        template.setDefaultSerializer(serializer);
+        template.setConnectionFactory(connectionFactory);
+
+        // Use Jackson2JsonRedisSerializer for values
+        Jackson2JsonRedisSerializer<Object> serializer =  new Jackson2JsonRedisSerializer<>(Object.class);
+        template.setValueSerializer(serializer);
+        template.setKeySerializer(new StringRedisSerializer());
+
         return template;
     }
 
-
-    @Bean(name = "redisCacheManager")
-    public RedisCacheManager redisCacheManager(RedisConnectionFactory factory) {
-        PolymorphicTypeValidator typeValidator = BasicPolymorphicTypeValidator
-                .builder()
-                .allowIfSubType(Object.class)
-                .build();
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        objectMapper.activateDefaultTyping(typeValidator, ObjectMapper.DefaultTyping.OBJECT_AND_NON_CONCRETE);
-        GenericJackson2JsonRedisSerializer redisSerializer = new GenericJackson2JsonRedisSerializer(objectMapper);
-
-        RedisCacheConfiguration defaultConfig = RedisCacheConfiguration.defaultCacheConfig()
-                .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(redisSerializer));
-
-        return RedisCacheManager
-                .RedisCacheManagerBuilder
-                .fromConnectionFactory(factory)
-                .cacheDefaults(defaultConfig)
-                .build();
-
-    }
-
-    @Bean
-    public ObjectMapper objectMapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        return objectMapper;
-    }
-
-//    @Bean
-//    public CacheManager cacheManager(RedisConnectionFactory factory) {
-//        RedisCacheConfiguration cacheConfig =  RedisCacheConfiguration.defaultCacheConfig()
-//                .disableCachingNullValues()
-//                .entryTtl(Duration.ofHours(1))
-//                .computePrefixWith(CacheKeyPrefix.simple())
-//                .serializeKeysWith(
-//                        RedisSerializationContext.SerializationPair.fromSerializer(
-//                                new StringRedisSerializer())
-//                )
-//                .serializeValuesWith(
-//                        RedisSerializationContext.SerializationPair.fromSerializer(
-//                                new GenericJackson2JsonRedisSerializer())
-//                );
-//        return RedisCacheManager
-//                .RedisCacheManagerBuilder
-//                .fromConnectionFactory(factory)
-//                .cacheDefaults(cacheConfig)
-//                .build();
-//    }
 }
