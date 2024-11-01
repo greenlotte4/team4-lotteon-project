@@ -46,6 +46,13 @@
     margin-bottom: 5px;
     color: #333;
     height: 42px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: wrap;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    word-break: keep-all;
 }
 
 .product-description {
@@ -53,6 +60,13 @@
     color: #666;
     margin-bottom: 10px;
     height: 37px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: wrap;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    word-break: keep-all;
 }
 
 .price-info {
