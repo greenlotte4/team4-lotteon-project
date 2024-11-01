@@ -10,10 +10,7 @@
 package com.lotte4.controller.pagecontroller.gyubooke;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lotte4.dto.CateForProdRegisterDTO;
-import com.lotte4.dto.ProductDTO;
-import com.lotte4.dto.ProductDetailDTO;
-import com.lotte4.dto.Product_V_DTO;
+import com.lotte4.dto.*;
 import com.lotte4.service.CategoryService;
 import com.lotte4.service.ProductService;
 import com.lotte4.service.SellerInfoService;
@@ -34,7 +31,6 @@ import java.util.Map;
 public class ProductRestController {
 
     private final ProductService productService;
-    private final ObjectMapper objectMapper;
     private final CategoryService categoryService;
     private final SellerInfoService sellerInfoService;
 
@@ -51,7 +47,7 @@ public class ProductRestController {
 
     @PostMapping(value = "/admin/product", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Map<String, Integer>> productRegisterWithCate(@RequestParam("cateId") int cateId,
-//                                                                    @RequestParam("sellerId") int sellerId,
+                                                                        @RequestParam("sellerId") int sellerId,
                                                                         @RequestParam("img_1") MultipartFile img_1,
                                                                         @RequestParam("img_2") MultipartFile img_2,
                                                                         @RequestParam("img_3") MultipartFile img_3,
@@ -65,7 +61,7 @@ public class ProductRestController {
         productDTO.setProductCateId(categoryService.getProductCate(cateId));
 
         // 판매자 정보 입력
-//        SellerInfoDTO sellerInfo = sellerInfoService.selectSellerInfoById(sellerId);
+        SellerInfoDTO sellerInfo = sellerInfoService.selectSellerInfoById(sellerId);
 
         // 옵션을 LinkedHashMap으로 변환 후 productDTO에 주입
         ProductDTO productDTO1 = productService.JsonToMapAndSetProductDTO(optionsJson, productDTO);
@@ -79,7 +75,7 @@ public class ProductRestController {
         productDTO1.setImg2(img2);
         productDTO1.setImg3(img3);
         productDTO1.setDetail(detail);
-//        productDTO1.setSellerInfoId(sellerInfo);
+        productDTO1.setSellerInfoId(sellerInfo);
 
         ProductDTO dto = productService.insertProduct(productDTO1);
 
@@ -159,7 +155,7 @@ public class ProductRestController {
     }
 
     @PutMapping("/admin/product")
-    public ResponseEntity<Map<String, String>> productModify(//@RequestParam("sellerId") int sellerId,
+    public ResponseEntity<Map<String, String>> productModify(@RequestParam("sellerId") int sellerId,
                                                              @RequestParam(value = "img_1", required = false) MultipartFile img_1,
                                                              @RequestParam(value = "img_2", required = false) MultipartFile img_2,
                                                              @RequestParam(value = "img_3", required = false) MultipartFile img_3,
@@ -183,6 +179,10 @@ public class ProductRestController {
         ProductDTO productDTO2 = productService.updateProdImg(img_1, img_2, img_3, detail_, productDTO, product_v_dto);
 
         log.info("productDTO2 = " + productDTO2);
+
+        // 판매자 정보 입력
+        SellerInfoDTO sellerInfo = sellerInfoService.selectSellerInfoById(sellerId);
+        productDTO2.setSellerInfoId(sellerInfo);
 
         ProductDTO dto = productService.insertProduct(productDTO2);
 

@@ -7,9 +7,11 @@ import com.lotte4.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.*;
 
@@ -40,13 +42,44 @@ public class AdminProductController {
     }
 
     // 상품현황
-    @GetMapping("/admin/product/list")
-    public String AdminProductList(Model model) {
-        List<ProductDTO> products = productService.getAllProducts();
-        model.addAttribute("products", products);
-
-        return "/admin/product/list";
-    }
+//    @GetMapping("/admin/product/list")
+//    public String AdminMemberList(Model model,
+//                                  @RequestParam(defaultValue = "0") int page,
+//                                  @RequestParam(defaultValue = "5") int size,
+//                                  @RequestParam(required = false) String keyword,
+//                                  @RequestParam(required = false) String searchCategory) { // searchCategory 추가
+//
+//        // status가 0인 회원 목록 출력
+//        int status = 0;
+//
+//        // status에 해당하는 전체 회원 수를 가져옴
+//        long totalElements = productService.getTotalProductCountByRoleAndKeyword(status, keyword); // keyword에 따른 총 개수 가져오기
+//        // 회원 목록을 가져옴
+//        Page<ProductDTO> productList = productService.selectProductListByStatus(status, page, size, keyword); // 검색 조건 추가
+//
+//        // 시작 번호 계산 (검색된 결과에 따른 시작 번호)
+//        int startNo = (int) totalElements - (page * size);
+//
+//        model.addAttribute("productList", productList);
+//        model.addAttribute("totalPages", productList.getTotalPages());
+//        model.addAttribute("currentPage", page);
+//        model.addAttribute("size", size);
+//        model.addAttribute("totalElements", totalElements);
+//        model.addAttribute("startNo", startNo); // 시작 번호 추가
+//        model.addAttribute("keyword", keyword); // keyword를 모델에 추가
+//        model.addAttribute("searchCategory", searchCategory); // searchCategory를 모델에 추가
+//
+//        log.info("productList: " + productList);
+//        log.info("totalPages: " + productList.getTotalPages());
+//        log.info("currentPage: " + page);
+//        log.info("size: " + size);
+//        log.info("totalElements: " + totalElements);
+//        log.info("startNo: " + startNo);
+//        log.info("keyword: " + keyword);
+//        log.info("userList size: " + productList.getContent().size());
+//
+//        return "/admin/product/list";
+//    }
 
     // 상품등록
     @GetMapping("/admin/product/register")

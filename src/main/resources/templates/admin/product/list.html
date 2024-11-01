@@ -32,14 +32,22 @@
             <h3>상품현황</h3>
             <div class="form">
                 <div class="search-bar">
-                    <select id="search-category" class="dropdown">
-                        <option>상품명</option>
-                        <option>상품번호</option>
-                        <option>판매자</option>
-                        <option>제조사</option>
-                    </select>
-                    <input type="text" placeholder="키워드 입력" class="search-input">
-                    <button class="search-btn">검색</button>
+                    <form action="#" th:action="@{/admin/member/list}" method="get"> <!-- GET 방식으로 폼 전송 -->
+                        <select id="search-category" name="searchCategory" class="dropdown"> <!-- name 속성 추가 -->
+                            <option value="name" th:selected="${searchCategory == 'name'}">상품명</option>
+                            <option value="productId" th:selected="${searchCategory == 'productId'}">상품번호</option>
+                            <option value="sellerInfoId" th:selected="${searchCategory == 'sellerInfoId'}">판매자</option>
+                            <option value="company" th:selected="${searchCategory == 'company'}">제조사</option>
+                        </select>
+                        <input
+                                type="text"
+                                name="keyword"
+                                placeholder="키워드 입력"
+                                class="search-input"
+                                th:value="${keyword}"
+                        />
+                        <button type="submit" class="search-btn">검색</button> <!-- type을 submit으로 설정 -->
+                    </form>
                 </div>
 
                 <table class="inquiry-table">
@@ -93,13 +101,22 @@
                 </div>
 
                 <div class="pagination">
-                    <button class="page-btn">이전</button>
-                    <button class="page-num">1</button>
-                    <button class="page-num">2</button>
-                    <button class="page-num">3</button>
-                    <button class="page-num">4</button>
-                    <button class="page-num">5</button>
-                    <button class="page-btn">다음</button>
+                    <button class="page-btn"
+                            th:disabled="${currentPage == 0}"
+                            th:onclick="'window.location.href=\'?page=' + ${currentPage - 1} + '&size=5\''">
+                        이전
+                    </button>
+                    <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                        <button class="page-num"
+                                th:classappend="${i == currentPage} ? 'active'"
+                                th:onclick="'window.location.href=\'?page=' + ${i} + '&size=5\''"
+                                th:text="${i + 1}">1</button>
+                    </span>
+                    <button class="page-btn"
+                            th:disabled="${currentPage + 1 == totalPages}"
+                            th:onclick="'window.location.href=\'?page=' + ${currentPage + 1} + '&size=5\''">
+                        다음
+                    </button>
                 </div>
             </div>
         </section>

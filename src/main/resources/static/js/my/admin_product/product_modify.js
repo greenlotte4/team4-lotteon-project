@@ -97,6 +97,9 @@ const addOptionButton = document.getElementById('addOption');
 if (addOptionButton) {
 
     addOptionButton.addEventListener('click', function () {
+
+        alert('새로운 옵션이 추가되면, 기존에 있던 모든 제품 조합이 초기화됩니다. 옵션 추가를 진행하시겠습니까?')
+
         const options = document.querySelector('.option');
 
         const option_innerHTML = `
@@ -111,11 +114,26 @@ if (addOptionButton) {
                        placeholder="옵션값 입력 후 엔터">
             </div>
         </div>
+    `;
+        const option_innerHTML2 = `
+        <div>
+            <span>옵션명 :</span>
+            <input type="text" class="option-name" placeholder="옵션명을 입력하세요" required>
+        </div>
+        <div class="option-values">
+            <span>옵션값 :</span>
+            <div class="fake_input">
+                <input type="text" class="option-value-input"
+                       placeholder="옵션값 입력 후 엔터">
+            </div>
+        </div>
         <span>⚠️ 옵션은 최대 3개까지 가능합니다.</span>
     `;
         const option_name = document.querySelectorAll('.option-name');
-        if (option_name.length < 3) {
+        if (option_name.length < 2) {
             option.insertAdjacentHTML("beforeend", option_innerHTML);
+        } else if (option_name.length === 2) {
+            option.insertAdjacentHTML("beforeend", option_innerHTML2)
             addOptionButton.remove();
         }
     });
