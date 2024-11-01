@@ -117,7 +117,7 @@ public class ProductRestController {
         productService.makeVariantDTOAndInsert(optionNames, prodONames, prodPrices, prodStocks, mixedValuesList, productId);
     }
 
-    @DeleteMapping("/admin/product/delete/{productId}")
+    @DeleteMapping("/admin/product/{productId}")
     public ResponseEntity<Map<String, String>> productDelete(@PathVariable int productId) {
         String status = productService.deleteById(productId);
         Map<String, String> response = new HashMap<>();
@@ -131,7 +131,7 @@ public class ProductRestController {
         return ResponseEntity.ok().body(response);
     }
 
-    @DeleteMapping("/admin/product/delete")
+    @DeleteMapping("/admin/product")
     public ResponseEntity<Map<String, String>> selectedProductDelete(@RequestParam String productIds) {
         log.info("productIds = " + productIds);
 
