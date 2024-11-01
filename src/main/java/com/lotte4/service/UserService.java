@@ -194,15 +194,31 @@ public class UserService {
         return code + "";
     }
 
-    // role이 member인 회원 목록 select
-    public Page<UserDTO> selectUserListByMember(String role, int page, int size, String keyword) {
+    public Page<UserDTO> selectUserListByMember(String role, int page, int size, String keyword, String searchCategory) {
         Pageable pageable = PageRequest.of(page, size);
         Page<User> userPage;
 
-        // 검색 키워드가 있을 때
+        // 검색 키워드가 있을 때 searchCategory에 따라 조건을 나눔
         if (keyword != null && !keyword.isEmpty()) {
-            userPage = userRepository.findByRoleAndUidContainingOrMemberInfoNameContainingOrMemberInfoEmailContainingOrMemberInfoHpContaining(
-                    role, keyword, keyword, keyword, keyword, pageable);
+            switch (searchCategory) {
+                case "uid":
+                    userPage = userRepository.findByRoleAndUidContaining(role, keyword, pageable);
+                    break;
+                case "name":
+                    userPage = userRepository.findByRoleAndMemberInfoNameContaining(role, keyword, pageable);
+                    break;
+                case "email":
+                    userPage = userRepository.findByRoleAndMemberInfoEmailContaining(role, keyword, pageable);
+                    break;
+                case "hp":
+                    userPage = userRepository.findByRoleAndMemberInfoHpContaining(role, keyword, pageable);
+                    break;
+                default:
+                    // 기본적으로 모든 필드를 포함하는 검색
+                    userPage = userRepository.findByRole(
+                            role, pageable);
+                    break;
+            }
         } else {
             // 키워드가 없을 경우 기본값으로 모든 사용자 가져오기
             userPage = userRepository.findByRole(role, pageable);
@@ -212,10 +228,6 @@ public class UserService {
         return userPage.map(user -> modelMapper.map(user, UserDTO.class));
     }
 
-    public long getTotalUserCountByRoleAndKeyword(String role, String keyword) {
-        // 사용자 리스트를 가져와서 카운트
-        return selectUserListByMember(role, 0, Integer.MAX_VALUE, keyword).getTotalElements();
-    }
 
     // uid로 사용자 조회
     public User findByUid(String uid) {

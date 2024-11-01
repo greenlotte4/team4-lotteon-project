@@ -47,17 +47,14 @@ public class AdminMemberController {
                                   @RequestParam(defaultValue = "0") int page,
                                   @RequestParam(defaultValue = "5") int size,
                                   @RequestParam(required = false) String keyword,
-                                  @RequestParam(required = false) String searchCategory) { // searchCategory 추가
-
-        // role이 member인 회원 목록 출력
+                                  @RequestParam(required = false) String searchCategory) {
         String role = "member";
 
-        // role에 해당하는 전체 회원 수를 가져옴
-        long totalElements = userService.getTotalUserCountByRoleAndKeyword(role, keyword); // keyword에 따른 총 개수 가져오기
-        // 회원 목록을 가져옴
-        Page<UserDTO> userList = userService.selectUserListByMember(role, page, size, keyword); // 검색 조건 추가
+        // 검색 조건에 따라 회원 목록을 가져옴
+        Page<UserDTO> userList = userService.selectUserListByMember(role, page, size, keyword, searchCategory);
 
-        // 시작 번호 계산 (검색된 결과에 따른 시작 번호)
+        // 시작 번호 계산
+        long totalElements = userList.getTotalElements();
         int startNo = (int) totalElements - (page * size);
 
         model.addAttribute("userList", userList);
@@ -65,21 +62,13 @@ public class AdminMemberController {
         model.addAttribute("currentPage", page);
         model.addAttribute("size", size);
         model.addAttribute("totalElements", totalElements);
-        model.addAttribute("startNo", startNo); // 시작 번호 추가
-        model.addAttribute("keyword", keyword); // keyword를 모델에 추가
-        model.addAttribute("searchCategory", searchCategory); // searchCategory를 모델에 추가
-
-        log.info("userList: " + userList);
-        log.info("totalPages: " + userList.getTotalPages());
-        log.info("currentPage: " + page);
-        log.info("size: " + size);
-        log.info("totalElements: " + totalElements);
-        log.info("startNo: " + startNo);
-        log.info("keyword: " + keyword);
-        log.info("userList size: " + userList.getContent().size());
+        model.addAttribute("startNo", startNo);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("searchCategory", searchCategory);
 
         return "/admin/member/list";
     }
+
 
     @GetMapping("/admin/member/list/{uid}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable String uid) {
