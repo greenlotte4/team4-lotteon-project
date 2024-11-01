@@ -41,6 +41,13 @@ public class AdminProductController {
         }
     }
 
+    @GetMapping("/admin/product/list")
+    public String AdminProductList(Model model) {
+         List<ProductDTO> products = productService.getAllProducts();
+         model.addAttribute("products", products);
+         return "/admin/product/list";
+    }
+
     // 상품현황
 //    @GetMapping("/admin/product/list")
 //    public String AdminMemberList(Model model,
