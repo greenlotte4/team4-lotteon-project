@@ -2,9 +2,13 @@ package com.lotte4.repository;
 
 import com.lotte4.entity.MemberInfo;
 import com.lotte4.entity.User;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -52,5 +56,12 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     // 이름과 이메일로 아이디 조회
     Optional<User> findByMemberInfo_nameAndMemberInfo_email(String memberInfo_name, String memberInfo_email);
+
+    // 아이디와 이메일로 정보 조회
+    Optional<User> findByUidAndMemberInfo_email(String uid, String memberInfo_email);
+
+    @Modifying
+    @Query("UPDATE User u SET u.pass = :pass WHERE u.uid = :uid")
+    int updatePassword(@Param("uid") String uid, @Param("pass") String pass);
 
 }

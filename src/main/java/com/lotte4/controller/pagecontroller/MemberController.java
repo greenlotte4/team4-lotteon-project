@@ -221,6 +221,26 @@ public class MemberController {
         }
     }
 
+
+    // 비밀번호찾기 결과 post
+    @PostMapping("/member/find_pass_result")
+    public String handleFindPassResult(UserDTO userDTO, RedirectAttributes redirectAttributes) {
+
+        // 아이디와 이메일로 아이디 조회
+        String uid = userService.findAllByUidAndEmail(userDTO.getUid(), userDTO.getMemberInfo().getEmail());
+        log.info("uid : " + uid);
+
+        if (uid != null) {
+            UserDTO user = userService.selectUser(uid);
+            log.info("user : " + user);
+            redirectAttributes.addFlashAttribute("user", user); // 찾은 유저 정보를 뷰로 전달
+            return "redirect:/member/pass_change";
+        } else {
+            redirectAttributes.addFlashAttribute("error", "해당 정보로 등록된 회원이 없습니다."); // Flash 속성으로 에러 메시지 전달
+            return "redirect:/member/find_member_pass";
+        }
+    }
+    
     // 개인구매회원 비밀번호 찾기
     @GetMapping("/member/find_member_pass")
     public String findMemberPass() {
@@ -230,9 +250,30 @@ public class MemberController {
 
     // 비밀번호 변경
     @GetMapping("/member/pass_change")
-    public String passChange() {
+    public String passChange(UserDTO userDTO) {
+
+        log.info("userDTO : " + userDTO);
+
 
         return "/member/pass_change";
+    }
+
+    // 비밀번호 변경
+    @PostMapping("/member/pass_change")
+    public String passChange(@RequestParam("uid") String uid,
+                             @RequestParam("pass") String newPassword,
+                             Model model, RedirectAttributes redirectAttributes) {
+        log.info("uid : " + uid);
+        log.info("newPassword : " + newPassword);
+        boolean isUpdated = userService.updatePassword(uid, newPassword);
+
+        if (isUpdated) {
+            redirectAttributes.addFlashAttribute("success", "비밀번호가 성공적으로 변경되었습니다.");
+            return "redirect:/member/login"; // 로그인 페이지로 리다이렉트
+        } else {
+            redirectAttributes.addFlashAttribute("error", "비밀번호 변경에 실패했습니다.");
+            return "/member/pass_change";  // 비밀번호 변경 페이지로 다시 이동
+        }
     }
 }
 

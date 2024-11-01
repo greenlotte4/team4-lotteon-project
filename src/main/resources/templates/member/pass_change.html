@@ -17,36 +17,35 @@
 <main id="main">
     <div class="mainIn">
         <div class="findid">
-            <form th:action="@{/member/find_id_result}" method="post" class="findIdForm">
+            <form th:action="@{/member/pass_change}" method="post" class="findIdForm">
                 <div id="error-message" th:if="${error}" th:text="${error}" style="display: none;"></div>
                 <section>
+                    <input type="hidden" name="uid" th:value="${user.uid}"/>
                     <div class="headtxt">
                         <span>비밀번호 재설정</span>
                     </div>
+                    <p class="notice">새로운 비밀번호를 설정해 주세요.</p>
                     <div class="form-container">
                         <div class="form-group">
-                            <label for="uid">아이디</label>
-                            <input type="text" id="uid" name="name" placeholder="새 비밀번호를 입력해 주세요">
-                        </div>
-                        <div class="form-group">
                             <label for="pass">새 비밀번호</label>
-                            <input type="text" id="pass" name="memberInfo.name" placeholder="새 비밀번호를 입력해 주세요">
+                            <input type="password" id="pass" name="pass2" placeholder="영문, 숫자, 특수문자 8~12자 설정" class="inputPass">
                         </div>
                         <div class="form-group">
                             <label for="pass">새 비밀번호 확인</label>
-                            <input type="text" id="pass1" name="memberInfo.name" placeholder="새 비밀번호를 다시 입력해 주세요">
+                            <input type="password" id="pass2" name="pass" class="inputPass" placeholder="새 비밀번호 다시 입력"><br>
+                            <span class="resultPass desc" id="resultPass"></span>
                         </div>
                     </div>
                 </section>
-                <div class="findnote">
+                <!--<div class="findnote">
                     <p>
                         회원가입시 이메일 주소와 입력한 이메일 주소가 같아야, 인증번호를 받을 수 있습니다.<br>
                         인증번호를 입력 후 확인 버튼을 누르세요.
                     </p>
-                </div>
-                <div class="btns">
+                </div>-->
+                <div class="btnss">
 <!--                    <a th:href="@{/member/login}" class="btn_cancel">취소</a>-->
-                    <button id="submitBtn2" type="submit" class="btn_next">확인</button>
+                    <button id="submitBtn2" type="submit" class="btn_pass">확인</button>
                 </div>
             </form>
         </div>
@@ -81,13 +80,12 @@
 
 <script>
 
-
     let receivecode;
     let isEmailOk = false;
     window.onload = function() {
 
         // error-message 요소가 존재하는지 확인
-        var errorMessageElement = document.getElementById("error-message");
+        const errorMessageElement = document.getElementById("error-message");
         if (errorMessageElement) { // 요소가 존재할 경우에만 메시지 가져오기
             var errorMessage = errorMessageElement.textContent;
             if (errorMessage) {
@@ -95,66 +93,48 @@
             }
         }
 
-        const btnSendEmail = document.getElementById('btnSendEmail');   // 인증번호 받기 버튼
-        const btnAuthEmail = document.getElementById('btnAuthEmail');   // 인증확인 버튼
-        const resultEmail = document.querySelector('.resultEmail');     // 인증 결과
-        let preventDblClick = false; // 더블클릭 방지
-
-        // 인증번호 받기 버튼 클릭시
-        btnSendEmail.onclick = async function() {
-            if (preventDblClick) return;
-
-            const email = document.getElementById('email').value;
-            const name = document.getElementById('name').value;
-
-            if(!email || !name) {
-                resultEmail.innerText = "이름과 이메일을 모두 입력하세요.";
-                resultEmail.style.color = "red";
-                return;
-            }
-
-            try {
-                preventDblClick = true;
-
-                const response = await fetch('/lotteon/member/email', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ "email": email, "name": name })
-                });
-
-                const data = await response.json();
-                console.log(data.code)
-                receivecode=data.code
-                if (data.result) {
-                    resultEmail.innerText = "인증번호가 발송되었습니다.";
-                    resultEmail.style.color = "green";
-                } else {
-                    resultEmail.innerText = "다시 시도해주세요.";
-                    resultEmail.style.color = "red";
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                resultEmail.innerText = "오류가 발생했습니다.";
-                resultEmail.style.color = "red";
-            } finally {
-                preventDblClick = false;
-            }
-        };
-
-        // 이메일 인증확인 버튼
-        btnAuthEmail.onclick = function() {
-            const code = document.getElementById('code').value;
-            if(receivecode===code){
-                isEmailOk = true;
-            }
-
-            if(isEmailOk) {
-                document.getElementById('submitBtn2').disabled = false;
-                alert('인증되었습니다.');
-            }
+        function showResultInvalid(element, message) {
+            element.textContent = message;
+            element.style.color = 'red';
+            element.style.display = 'block';
         }
+
+        function showResultValid(element, message) {
+            element.textContent = message;
+            element.style.color = 'green';
+            element.style.display = 'block';
+        }
+
+        // 비밀번호 확인 기능
+        const inputPasses = document.getElementsByClassName('inputPass');
+        const resultPass = document.getElementById('resultPass');
+        let isPasswordValid = false; // 비밀번호 유효성 체크 상태
+
+        if (inputPasses.length > 1) {
+            inputPasses[1].addEventListener('focusout', () => {
+                if (inputPasses[0].value === inputPasses[1].value) {
+                    if (!inputPasses[0].value.match(/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,12}$/)) {
+                        showResultInvalid(resultPass, '비밀번호 형식에 맞지 않습니다.');
+                        isPasswordValid = false; // 유효성 실패
+                    } else {
+                        showResultValid(resultPass, '사용 가능한 비밀번호입니다.');
+                        isPasswordValid = true; // 유효성 성공
+                    }
+                } else {
+                    showResultInvalid(resultPass, '비밀번호가 일치하지 않습니다.');
+                    isPasswordValid = false; // 유효성 실패
+                }
+            });
+        }
+
+        // 비밀번호 유효성 검사 함수
+        window.validatePassword = function() {
+            if (!isPasswordValid) {
+                alert("비밀번호를 재확인 해주세요."); // 유효성 검사 실패 시 alert 표시
+                return false; // 폼 제출 방지
+            }
+            return true; // 모든 검사를 통과하면 true 반환
+        };
 
     };
 </script>

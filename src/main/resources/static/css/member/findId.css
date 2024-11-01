@@ -1,7 +1,7 @@
 
 input::placeholder{text-indent: 6px;} /* 텍스트 들여쓰기 */
 
-main {margin-top: 10px;margin-bottom: 65px;}
+main {margin-top: -39px;margin-bottom: 65px;}
 main > section {
   margin: 0 auto;
   width: 600px;
@@ -231,13 +231,18 @@ main > section > form > table > tbody {
   font-size:12px;
   font-weight: 400;
   color: #999;
-  margin-top: 172px;
+  margin-top: 186px;
   line-height: 20px;
   width: 456.2px;
   max-width: max-content;
   margin-left: 24px;
 }
 .findid .btns {text-align: right; margin-top: 32px;}
+
+.findid .btnss {
+  text-align: right;
+  margin-top: 178px;
+}
 .findid .btns > button{
   border: 1px solid #BEBEBE;
   background-color: #FFFFFF;
@@ -259,13 +264,23 @@ main > section > form > table > tbody {
   border: 1px solid #d82a2a;
   border-radius: 5px;
   cursor: pointer;
-  margin-top: 6px;
+  margin-top: 14px;
   width: 598px;
   height: 45px;
   font-size: 17px;
 }
 
-
+.findid .btnss >.btn_pass{
+  color: white;
+  background-color: #d82a2a;
+  margin-left: 1px;
+  border: 1px solid #d82a2a;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 598px;
+  height: 45px;
+  font-size: 17px;
+}
 
 .findidresult {
   width: 600px;
@@ -380,7 +395,7 @@ main > section > form > table > tbody {
 }
 
 .form-group {
-  margin-bottom: 16px;
+  margin-bottom: 22px;
 }
 
 .form-group label {
@@ -431,6 +446,12 @@ main > section > form > table > tbody {
 input:focus {
   border-color: #d82a2a !important;
   outline: none !important; /* 기본 포커스 아웃라인 제거 */
+}
+
+.notice {
+  color: #999;
+  margin-left: 8px;
+  font-weight: 400;
 }
 
 
