@@ -28,7 +28,7 @@ checkAll.addEventListener('click', function () {
 const checkboxes = document.querySelectorAll('.chk');
 
 for (const checkbox of checkboxes) {
-    checkbox.addEventListener('click', function (e) {
+    checkbox.addEventListener('click', function () {
 
         const totalCnt = checkboxes.length;
 
@@ -57,7 +57,7 @@ for (const delete_btn of delete_btns) {
         const productId = delete_btn.value;
         console.log("prodId = " + productId)
 
-        fetch(`/lotteon/admin/product/delete/${productId}`, {
+        fetch(`/lotteon/admin/product/${productId}`, {
             method: 'DELETE'
         })
             .then(resp => resp.json())
@@ -90,7 +90,7 @@ delete_selected.addEventListener('click', function (e) {
     const formData = new FormData;
     formData.append('productIds', JSON.stringify(productIds));
 
-    fetch('/lotteon/admin/product/delete', {
+    fetch('/lotteon/admin/product', {
         method: 'DELETE',
         body: formData
     })
