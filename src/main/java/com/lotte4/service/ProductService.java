@@ -12,6 +12,9 @@ import com.lotte4.repository.ProductVariantsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -421,6 +424,30 @@ public class ProductService {
         }
         return productDTO;
     }
+
+    // status가 0인 상품 목록 select
+//    public Page<ProductDTO> selectProductListByStatus(int status, int page, int size, String keyword) {
+//        Pageable pageable = PageRequest.of(page, size);
+//        Page<Product> productPage;
+//
+//        // 검색 키워드가 있을 때
+//        if (keyword != null && !keyword.isEmpty()) {
+//            productPage = productRepository.findByStatusAndSearchCategoryAndKeyword(
+//                    status, searchCategory, keyword, pageable);
+//        } else {
+//            // 키워드가 없을 경우 기본값으로 모든 상품 가져오기
+//            productPage = productRepository.findByStatus(status, pageable);
+//        }
+//
+//        // product 엔티티를 ProductDTO 변환
+//        return productPage.map(product -> modelMapper.map(product, ProductDTO.class));
+//    }
+//
+//    public long getTotalProductCountByRoleAndKeyword(int status, String keyword) {
+//        // 상품 리스트를 가져와서 카운트
+//        return selectProductListByStatus(status, 0, Integer.MAX_VALUE, keyword).getTotalElements();
+//    }
+
 
 }
 
