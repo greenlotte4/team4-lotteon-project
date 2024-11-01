@@ -100,6 +100,7 @@
         const btnSendEmail = document.getElementById('btnSendEmail');   // 인증번호 받기 버튼
         const btnAuthEmail = document.getElementById('btnAuthEmail');   // 인증확인 버튼
         const resultEmail = document.querySelector('.resultEmail');     // 인증 결과
+        const submitBtn = document.getElementById('submitBtn2');        // 확인 버튼
         let preventDblClick = false; // 더블클릭 방지
 
         // 인증번호 받기 버튼 클릭시
@@ -148,13 +149,19 @@
         // 이메일 인증확인 버튼
         btnAuthEmail.onclick = function() {
             const code = document.getElementById('code').value;
-            if(receivecode===code){
+            if (receivecode === code) {
                 isEmailOk = true;
-            }
-
-            if(isEmailOk) {
-                document.getElementById('submitBtn2').disabled = false;
                 alert('인증되었습니다.');
+            } else {
+                alert('인증번호가 일치하지 않습니다.');
+            }
+        };
+
+        // 제출 버튼 클릭 시 인증 확인
+        submitBtn.onclick = function(event) {
+            if (!isEmailOk) { // 인증이 완료되지 않았을 때
+                alert("이메일 인증을 완료해 주세요.");
+                event.preventDefault();
             }
         }
 
