@@ -27,6 +27,13 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/*
+
+    배너 이미지 파일 삭제 추가 11.01 강중원
+
+ */
+
+
 @Log4j2
 @Service
 @RequiredArgsConstructor
@@ -122,6 +129,7 @@ public class CachingService {
 
 
         Banner banner = modelMapper.map(bannerDTO, Banner.class);
+        banner.setState(1);
         Banner resultBanner = bannerRepository.save(banner);
 
         return modelMapper.map(resultBanner, BannerDTO.class);
@@ -130,7 +138,25 @@ public class CachingService {
 
     @CacheEvict(value = "banners", key = "'allBannersWithLocation'")
     public void deleteBanner(int bannerId){
+        //이미지삭제 - 11.01
+        Optional<Banner> banner = bannerRepository.findById(bannerId);
+        String FileName = "";
+
         bannerRepository.deleteById(bannerId);
+
+        if(banner.isPresent()){
+            FileName = banner.get().getImg();
+            String uploadDir = System.getProperty("user.dir") + "/uploads/config/";
+
+            File file1 = new File(uploadDir + FileName);
+            if (FileName != null) {
+                try {
+                    boolean deleted = file1.delete();
+                } catch (Exception e) {
+                    log.error(e);
+                }
+            }
+        }
     }
 
     @CacheEvict(value = "banners", key = "'allBannersWithLocation'")

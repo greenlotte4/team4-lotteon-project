@@ -127,10 +127,6 @@
                         <td><input type="text" id="bannerName" placeholder="배너명을 입력하세요" name="name" required></td>
                     </tr>
                     <tr>
-                        <th>배너크기</th>
-                        <td><input type="text" id="bannerSize" placeholder="배너크기를 입력하세요" name="size" required></td>
-                    </tr>
-                    <tr>
                         <th>배경색</th>
                         <td><input type="color" id="bannerBackground" name="background" required></td>
                     </tr>
@@ -152,6 +148,10 @@
                         </td>
                     </tr>
                     <tr>
+                        <th>배너크기</th>
+                        <td><input type="text" id="bannerSize" placeholder="배너위치를 선택하세요" name="size" readonly></td>
+                    </tr>
+                    <tr>
                         <th>노출날짜</th>
                         <td>
                             <input type="date" id="startDate" class="date" name="sDate" required>
@@ -164,7 +164,7 @@
                         <td>
                             <input type="time" id="startTime" class="date" name="sTime" required>
                             ~
-                            <input type="time" id="endTime" class="date" name="eTime" required>
+                            <input type="time" id="endTime" class="date" name="eTime" step="600" required>
                         </td>
                     </tr>
                     <tr>
@@ -398,7 +398,43 @@
                     console.error('Error:', err);
                     alert('삭제 중 오류가 발생했습니다.');
                 });
-        }
+        }//삭제 끝
+
+        //시간 10분 조정
+        let endTime = document.getElementById("endTime");
+        endTime.addEventListener("focusout", e => {
+           console.log(endTime.value.substring(3,5));
+           endTime.value = endTime.value.substring(0,4) + "0";
+        });
+
+        //start시간 => 현재시간
+        document.getElementById('startDate').value = new Date().toISOString().substring(0, 10);
+        document.getElementById('startTime').value = new Date().toISOString().substring(11, 16);
+
+
+        //배너 위치에 따른 사이즈 조절
+        let bannerLocation = document.getElementById("bannerLocation");
+        let bannerSize= document.getElementById("bannerSize");
+        bannerLocation.addEventListener("focusout", e => {
+            switch (bannerLocation.value){
+                case "MAIN1":
+                    bannerSize.value = "1200x80"
+                    break;
+                case "MAIN2":
+                    bannerSize.value = "985x447"
+                    break;
+                case "MEMBER1":
+                    bannerSize.value = "1200x100"
+                    break;
+                case "MY1":
+                    bannerSize.value = "810x86"
+                    break;
+                case "PRODUCT1":
+                    bannerSize.value = "440x70"
+                    break;
+            }
+
+        });
 
     });
 
