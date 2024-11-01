@@ -81,7 +81,6 @@
                                 <td class="label">상품명</td>
                                 <td>
                                     <input type="text" name="name" id="name" th:value="${productDTO.name}" required/>
-                                    <input id="productId" type="hidden" th:value="${productDTO.productId}">
                                 </td>
                             </tr>
                             <tr>
@@ -218,7 +217,9 @@
                                             </div>
                                         </th:block>
                                     </div>
-                                    <button th:if="${options.entrySet().size() < 3}" type="button" id="addOption">옵션 추가</button>
+                                    <button th:if="${options.entrySet().size() < 3}" type="button" id="addOption">옵션
+                                        추가
+                                    </button>
                                 </td>
                             </tr>
                         </table>
@@ -231,7 +232,8 @@
                     <div class="inquiry-section">
                         <table class="inquiry-table">
                             <tr>
-                                <input id="productDetailId" type="hidden" th:value="${productDetailDTO.productDetailId}">
+                                <input id="productDetailId" type="hidden"
+                                       th:value="${productDetailDTO.productDetailId}">
                                 <td class="label">상품상태</td>
                                 <td>
                                     <input type="text" name="condition" th:value="${productDetailDTO.condition_field}"
@@ -333,6 +335,9 @@
                         <button type="submit" class="write-btn" id="product_submit">등록</button>
                     </div>
                 </div>
+                <input id="productId" type="hidden" th:value="${productDTO.productId}">
+                <input id="sellerInfoId" type="hidden"
+                       th:value="${#authentication.principal.user.sellerInfo.sellerInfoId}">
             </form>
         </section>
         <!-- /Section -->
