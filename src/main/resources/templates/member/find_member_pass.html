@@ -26,7 +26,7 @@
                     <div class="form-container">
                         <div class="form-group">
                             <label for="uid">아이디</label>
-                            <input type="text" id="uid" name="memberInfo.uid" placeholder="아이디를 입력해 주세요">
+                            <input type="text" id="uid" name="uid" placeholder="아이디를 입력해 주세요">
                         </div>
                         <div class="form-group">
                             <label for="email">이메일</label>
@@ -87,6 +87,16 @@
     let receivecode ;
     let isEmailOk = false;
     window.onload = function() {
+
+        // error-message 요소가 존재하는지 확인
+        var errorMessageElement = document.getElementById("error-message");
+        if (errorMessageElement) { // 요소가 존재할 경우에만 메시지 가져오기
+            var errorMessage = errorMessageElement.textContent;
+            if (errorMessage) {
+                alert(errorMessage); // alert 창으로 에러 메시지 표시
+            }
+        }
+
         const btnSendEmail = document.getElementById('btnSendEmail');
         const btnAuthEmail = document.getElementById('btnAuthEmail');
         const resultEmail = document.querySelector('.resultEmail');

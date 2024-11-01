@@ -13,6 +13,7 @@ import jakarta.mail.Message;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import lombok.extern.log4j.Log4j2;
@@ -254,9 +255,24 @@ public class UserService {
         } else {
             return null;
         }
-
-
-
     }
 
+    // 아이디와 이메일로 정보 조회
+    public String findAllByUidAndEmail(String uid, String email) {
+
+        Optional<User> userOptional = userRepository.findByUidAndMemberInfo_email(uid, email);
+
+        if(userOptional.isPresent()) {
+            log.info("정보 찾기 성공 - uid: " + uid + ", email: " + email);
+            return userOptional.get().getUid();
+        } else {
+            return null;
+        }
+    }
+    @Transactional
+    public boolean updatePassword(String uid, String rawPassword) {
+        String encodedPassword = passwordEncoder.encode(rawPassword);
+        int result = userRepository.updatePassword(uid, encodedPassword);
+        return result > 0;  // 업데이트가 성공하면 true 반환
+    }
 }

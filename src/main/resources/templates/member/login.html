@@ -24,6 +24,7 @@
                 <!-- 로그인 폼 -->
                 <div class="login-form">
                     <div class="login-input">
+                        <div id="success-message" th:if="${success}" th:text="${success}" style="display: none;"></div>
                         <form th:action="@{/member/login}" method="post" name="loginForm">
                             <div class="input-group">
                                 <input type="text" name="uid" id="userid" placeholder="아이디를 입력해주세요">
@@ -117,6 +118,16 @@
             alert('로그인에 실패하였습니다. 아이디, 비밀번호를 확인해주세요.');
         } else if(success === '101') {
             alert('로그아웃 완료되었습니다.');
+        }
+
+
+        // success-message 요소가 존재하는지 확인
+        const successMessageElement = document.getElementById("success-message");
+        if (successMessageElement) { // 요소가 존재할 경우에만 메시지 가져오기
+            const successMessage = successMessageElement.textContent;
+            if (successMessage) {
+                alert(successMessage); // alert 창으로 에러 메시지 표시
+            }
         }
     };
 </script>
