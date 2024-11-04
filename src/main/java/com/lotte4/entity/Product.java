@@ -55,5 +55,16 @@ public class Product {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "productCateId")
     private ProductCate productCateId;
+
+    // 관계 관리 메서드
+    public void addVariant(ProductVariants variant) {
+        productVariants.add(variant);
+        variant.setProduct(this);
+    }
+
+    public void removeVariant(ProductVariants variant) {
+        productVariants.remove(variant);
+        variant.setProduct(null);
+    }
 }
 

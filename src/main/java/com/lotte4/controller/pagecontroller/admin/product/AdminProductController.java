@@ -1,17 +1,14 @@
 package com.lotte4.controller.pagecontroller.admin.product;
 
 import com.lotte4.dto.*;
-import com.lotte4.entity.ProductVariants;
 import com.lotte4.service.CategoryService;
 import com.lotte4.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.*;
 
@@ -99,7 +96,7 @@ public class AdminProductController {
     @GetMapping("/admin/product/registerMore")
     public String AdminProductRegisterMore(int productId, Model model) {
 
-        Product_V_DTO productDTO = productService.getProductById(productId);
+        Product_V_DTO productDTO = productService.getProduct_V_ById(productId);
         int prodId = productDTO.getProductId();
 
         Map<String, List<String>> options = productDTO.getOptions();
@@ -140,7 +137,7 @@ public class AdminProductController {
     @GetMapping("/admin/product/modify")
     public String AdminProductModify(int productId, Model model) {
 
-        Product_V_DTO productDTO = productService.getProductById(productId);
+        Product_V_DTO productDTO = productService.getProduct_V_ById(productId);
         int productCateId = productDTO.getProductCateId().getProductCateId();
         model.addAttribute("productDTO", productDTO);
 
@@ -167,12 +164,9 @@ public class AdminProductController {
     @GetMapping("/admin/product/modifyMore")
     public String AdminProductModifyMore(int productId, Model model) {
 
-        Product_V_DTO productDTO = productService.getProductById(productId);
-        List<ProductVariants> productVariantsList = productDTO.getProductVariants();
-        List<ProductVariantsDTO> productVariantsDTOList = productVariantsList
-                .stream()
-                .map(productVariants -> new ProductVariantsDTO(productVariants))
-                .toList();
+        Product_V_DTO productDTO = productService.getProduct_V_ById(productId);
+        List<ProductVariantsWithoutProductDTO> productVariantsList = productDTO.getProductVariants();
+
 
         Map<String, List<String>> options = productDTO.getOptions();
         List<String> optionNames = new ArrayList<>();
@@ -184,7 +178,7 @@ public class AdminProductController {
 
         model.addAttribute("productId", productId);
         model.addAttribute("optionNames", optionNames);
-        model.addAttribute("productVariantsList", productVariantsDTOList);
+        model.addAttribute("productVariantsList", productVariantsList);
 
         return "/admin/product/modifyMore";
     }

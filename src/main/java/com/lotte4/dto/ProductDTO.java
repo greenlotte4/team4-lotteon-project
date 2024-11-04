@@ -8,10 +8,12 @@
 
 package com.lotte4.dto;
 
+import com.lotte4.entity.Product;
 import lombok.*;
 
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -39,5 +41,36 @@ public class ProductDTO {
     private LinkedHashMap<String, List<String>> options;
     private int status;
     private ProductCateDTO productCateId;
+
+    public ProductDTO(Product product) {
+        this.productId = product.getProductId();
+        this.name = product.getName();
+        this.description = product.getDescription();
+        this.company = product.getCompany();
+        this.price = product.getPrice();
+        this.discount = product.getDiscount();
+        this.point = product.getPoint();
+        this.sold = product.getSold();
+        this.deliveryFee = product.getDeliveryFee();
+        this.hit = product.getHit();
+        this.review = product.getReview();
+        this.img1 = product.getImg1();
+        this.img2 = product.getImg2();
+        this.img3 = product.getImg3();
+        this.detail = product.getDetail();
+        this.status = product.getStatus();
+        this.options = product.getOptions();
+
+        // SellerInfoDTO 매핑
+        if (product.getSellerInfoId() != null) {
+            this.sellerInfoId = new SellerInfoDTO(product.getSellerInfoId());
+        }
+
+        // ProductCateDTO 매핑
+        if (product.getProductCateId() != null) {
+            this.productCateId = new ProductCateDTO(product.getProductCateId());
+        }
+
+    }
 }
 

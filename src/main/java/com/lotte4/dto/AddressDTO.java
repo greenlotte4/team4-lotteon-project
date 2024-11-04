@@ -15,4 +15,9 @@ public class AddressDTO {
     private String addr2;
 
 
+    public AddressDTO(Address address) {
+        this.zipCode = address.getZipCode();
+        this.addr1 = address.getAddr1();
+        this.addr2 = address.getAddr2();
     }
+}

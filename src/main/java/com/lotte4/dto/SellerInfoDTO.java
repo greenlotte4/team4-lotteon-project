@@ -49,6 +49,26 @@ public class SellerInfoDTO {
     // 상태
     private int state;
 
+    public SellerInfoDTO(SellerInfo sellerInfo) {
+        if (sellerInfo != null) {
+            this.sellerInfoId = sellerInfo.getSellerInfoId();
+            this.comName = sellerInfo.getComName();
+            this.ceo = sellerInfo.getCeo();
+            this.comNumber = sellerInfo.getComNumber();
+            this.bizNumber = sellerInfo.getBizNumber();
+            this.hp = sellerInfo.getHp();
+            this.fax = sellerInfo.getFax();
+            this.regIp = sellerInfo.getRegIp();
+            this.updateAt = sellerInfo.getUpdateAt() != null ? sellerInfo.getUpdateAt().toString() : null;
+            this.state = sellerInfo.getState();
+
+            // Address 매핑
+            if (sellerInfo.getAddress() != null) {
+                this.address = new AddressDTO(sellerInfo.getAddress());
+            }
+        }
+    }
+
     public SellerInfo toEntity() {
         return SellerInfo.builder()
                 .sellerInfoId(sellerInfoId)

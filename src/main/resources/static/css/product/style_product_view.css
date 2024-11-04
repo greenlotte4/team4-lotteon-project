@@ -10,7 +10,6 @@
     border: 1px solid #ddd;
     box-sizing: border-box;
     padding: 20px;
-    margin-bottom: 20px;
 }
 
 .product-image {
@@ -126,6 +125,7 @@ strong {
 .purchase-actions {
     display: flex;
     gap: 10px;
+    margin-bottom: 20px;
 }
 
 .cart-button, .buy-button {
@@ -335,7 +335,7 @@ strong {
     margin-right: 2px;
     border-radius: 5px;
     border: 1px solid #ccc;
-    width: 137px;
+    width: 90%;
     height: 37px;
     margin-bottom: 5px;
     margin-left: 3px;
@@ -345,4 +345,17 @@ strong {
 select:focus {
     border-color: #d82a2a !important;
     outline: none !important; /* 기본 포커스 아웃라인 제거 */
+}
+
+#variant-options ul {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+#variant-options li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
 }

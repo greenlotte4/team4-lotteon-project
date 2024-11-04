@@ -1,9 +1,8 @@
 
 .myInfo_product > li{
-  background: #f8f8f8;
+  background: #ffffff;
   border-radius: 10px;
   padding: 20px;
-  box-shadow: 2px 2px 10px #acabab4d;
   margin-top: 20px;
 }
 .myInfo_product > li > span{
@@ -13,7 +12,7 @@
 
 
 .myInfo_product > li > div{
-  background: #f8f8f8;
+  background: #ffffff;
   margin-top: 10px;
   box-shadow: 2px 2px 10px #acabab4d;
   border-radius: 10px;
@@ -57,12 +56,12 @@
   width: 100px;
   margin: 5px 0;
   padding: 5px;
-  background-color: #558ED5;
+  background-color: #EF2A23;
+  box-sizing : border-box;
   color: white;
-  border: none;
+  border: 1px solid #EF2A23 ;
   cursor: pointer;
   border-radius: 10px;
-  box-shadow: 2px 2px 10px #acabab4d;
 }
 
 .myInfo_product > li > div > div:nth-child(4) > button:hover{
@@ -70,23 +69,17 @@
 }
 
 .myInfo_product > li > div > div:nth-child(4) > button:nth-child(3){
-  display: block;
-  width: 100px;
-  margin: 5px 0;
-  padding: 5px;
-  background-color: rgb(238, 238, 238);
-  color: black;
-  border: 1px solid rgb(165, 165, 165);
+  background-color: #ffffff;
+  color: #EF2A23;
+  box-sizing: border-box;
+  border: 1px solid #EF2A23;
   cursor: pointer;
 }
 
 .myInfo_product > li > div > div:nth-child(4) > button:nth-child(4){
-  display: block;
-  width: 100px;
-  margin: 5px 0;
-  padding: 5px;
-  background-color: rgb(238, 238, 238);
-  color: black;
-  border: 1px solid rgb(165, 165, 165);
+  background-color: #ffffff;
+  color: #EF2A23;
+  box-sizing: border-box;
+  border: 1px solid #EF2A23;
   cursor: pointer;
 }

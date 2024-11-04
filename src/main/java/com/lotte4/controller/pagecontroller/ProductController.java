@@ -4,19 +4,17 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lotte4.dto.*;
 import com.lotte4.entity.Cart;
-import com.lotte4.entity.ProductVariants;
 import com.lotte4.entity.User;
 import com.lotte4.service.CartService;
 import com.lotte4.service.ProductService;
 import com.lotte4.service.UserService;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -30,8 +28,9 @@ import java.util.Map;
 //내용 : OOO 생성
 //
 //수정이력
-//      - 2025/10/28 강중원 - 리스트 불러오기 임시 기능 메서드 추가
-//      - 2025/10/30 강은경 - 장바구니 insert하는 postmapping추가
+//      - 2024/10/28 강중원 - 리스트 불러오기 임시 기능 메서드 추가
+//      - 2024/10/30 강은경 - 장바구니 insert하는 postmapping추가
+//      - 2024/11/04 강중원 - 상품 카테고리와 타입에 따른 정렬 매핑 추가
 
 @Log4j2
 @RequiredArgsConstructor
@@ -42,20 +41,40 @@ public class ProductController {
     private final ProductService productService;
     private final ObjectMapper objectMapper;
     private final UserService userService;
+    private final ModelMapper modelMapper;
 
     @GetMapping("/product/list")
     public String list(Model model) {
-        List<ProductDTO> productDTOList = productService.getAllProducts();
+        //home - 모든 상품
+        List<ProductListDTO> productDTOList = productService.getProductWithCateAndType(0, "sold");
         model.addAttribute("productDTOList", productDTOList);
         log.info(productDTOList);
-        List<String> cate = new ArrayList<>();
-        model.addAttribute("categories", cate);
+        List<String> categories = new ArrayList<>();
+        model.addAttribute("categories", categories);
+        model.addAttribute("cate", 0);
         return "/product/list";
     }
 
     @GetMapping("/product/list/{cate}")
     public String listWithCate(@PathVariable int cate, Model model) {
-        List<ProductDTO> productDTOList = productService.getProductWithCate(cate);
+        //List<ProductDTO> productDTOList = productService.getProductWithCate(cate);
+        //기본 정렬 - 판매량
+        List<ProductListDTO> productDTOList = productService.getProductWithCateAndType(cate, "sold");
+        model.addAttribute("productDTOList", productDTOList);
+
+        List<ProductCateDTO> cateList = productService.getProductCates(cate);
+
+        model.addAttribute("categories", cateList);
+
+        model.addAttribute("cate", cate);
+
+        log.info(productDTOList);
+        return "/product/list";
+    }
+
+    @GetMapping("/product/list/{cate}/{type}")
+    public String listWithCateAndType(@PathVariable int cate,@PathVariable String type, Model model) {
+        List<ProductListDTO> productDTOList = productService.getProductWithCateAndType(cate, type);
         model.addAttribute("productDTOList", productDTOList);
 
         List<ProductCateDTO> cateList = productService.getProductCates(cate);
@@ -147,7 +166,9 @@ public class ProductController {
     @GetMapping("/product/view")
     public String view(int productId, Model model) throws JsonProcessingException {
 
-        Product_V_DTO productDTO = productService.getProductById(productId);
+        Product_V_DTO productDTO = productService.getProduct_V_ById(productId);
+
+        List<ProductVariantsWithoutProductDTO> productVariants = productDTO.getProductVariants();
 
         LinkedHashMap<String, List<String>> options = (LinkedHashMap<String, List<String>>) productDTO.getOptions();
 
@@ -155,7 +176,7 @@ public class ProductController {
         model.addAttribute("options", options);
         model.addAttribute("productDTOJson", productDTOJson);
         model.addAttribute("productDTO", productDTO);
-
+        model.addAttribute("productVariants", productVariants);
 
         return "/product/view";
     }

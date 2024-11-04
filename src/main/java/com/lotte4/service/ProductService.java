@@ -12,9 +12,6 @@ import com.lotte4.repository.ProductVariantsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,6 +31,7 @@ import java.util.*;
         - 2024/10/29 강중원 - 상위 카테고리 리스트로 불러오는 기능 추가
         - 2024/10/31 전규찬 - JSON 문자열을 LinkedHashMap으로 변환하고 productDTO에 set하는 메서드 추가
                            - 파일 수정 발생 시 upload 에서 기존 파일 삭제 + 신규 파일 업로드, db에 파일명 업데이트
+        - 2024/11/04 강중원 - 카테고리와 타입에 따른 정렬 기능 추가
 */
 
 @Log4j2
@@ -47,6 +45,7 @@ public class ProductService {
     private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
     private final ObjectMapper objectMapper;
+    private final CachingService cachingService;
 
     //
     public static List<String> stringToStringList(String string) {
@@ -107,22 +106,23 @@ public class ProductService {
         return cateForProdRegisterDTOList;
     }
 
-    public Product_V_DTO getProductById(int productId) {
-        Optional<Product> productOptional = productRepository.findById(productId);
-        if (productOptional.isPresent()) {
-            Product product = productOptional.get();
-            return modelMapper.map(product, Product_V_DTO.class);
-        }
-        return null;
-    }
-
-    public Product_V_DTO getProductById2(int productId) {
+    public Product_V_DTO getProduct_V_ById(int productId) {
         Optional<Product> productOptional = productRepository.findById(productId);
         if (productOptional.isPresent()) {
             Product product = productOptional.get();
             return new Product_V_DTO(product);
         }
         return null;
+    }
+
+    public ProductDTO getProductById(int productId) {
+        Optional<Product> productOptional = productRepository.findById(productId);
+        if (productOptional.isPresent()) {
+            Product product = productOptional.get();
+            return new ProductDTO(product);
+        }
+        return null;
+
     }
 
     public List<ProductDTO> getAllProducts() {
@@ -286,8 +286,8 @@ public class ProductService {
         }
     }
 
-
-    public String deleteById(int productId) {
+    @Transactional
+    public String deleteProductAndImagesById(int productId) {
         String uploadDir = System.getProperty("user.dir") + "/uploads/product/";
 
         Optional<Product> optProd = productRepository.findById(productId);
@@ -312,8 +312,8 @@ public class ProductService {
             } catch (Exception e) {
                 log.error(e);
             }
-
         }
+        productDetailRepository.deleteByProductId(productId);
         productRepository.deleteById(productId);
         Optional<Product> optionalProduct = productRepository.findById(productId);
         if (optionalProduct.isPresent()) {
@@ -322,110 +322,258 @@ public class ProductService {
         return "success";
     }
 
-    public List<ProductCateDTO> getProductCates(int cate) {
-        List<ProductCateDTO> productCateDTOList = new ArrayList<>();
-        Optional<ProductCate> productCateOpt = categoryRepository.findById(cate);
-        if (productCateOpt.isPresent()) {
-            ProductCate productCate = productCateOpt.get();
+public List<ProductCateDTO> getProductCates(int cate) {
+    List<ProductCateDTO> productCateDTOList = new ArrayList<>();
+    Optional<ProductCate> productCateOpt = categoryRepository.findById(cate);
+    if (productCateOpt.isPresent()) {
+        ProductCate productCate = productCateOpt.get();
+        productCateDTOList.add(modelMapper.map(productCate, ProductCateDTO.class));
+        while (productCate.getParent() != null) {
+            productCate = productCate.getParent();
             productCateDTOList.add(modelMapper.map(productCate, ProductCateDTO.class));
-            while (productCate.getParent() != null) {
-                productCate = productCate.getParent();
-                productCateDTOList.add(modelMapper.map(productCate, ProductCateDTO.class));
-            }
         }
-        Collections.reverse(productCateDTOList);
-        return productCateDTOList;
     }
+    Collections.reverse(productCateDTOList);
+    return productCateDTOList;
+}
 
-    public List<ProductDTO> getProductWithCate(int cate) {
-        List<ProductDTO> productDTOList = new ArrayList<>();
-        Optional<ProductCate> productCate = categoryRepository.findById(cate);
+public List<ProductDTO> getProductWithCate(int cate) {
+    List<ProductDTO> productDTOList = new ArrayList<>();
+    Optional<ProductCate> productCate = categoryRepository.findById(cate);
 
 
-        log.info(productDTOList.toString());
+    log.info(productDTOList.toString());
 
 
-        if (productCate.isPresent()) {
-            // depth가 1 또는 2인 경우, 하위 카테고리의 제품을 가져옴
-            if (productCate.get().getChildren() != null) {
-                for (ProductCate child : productCate.get().getChildren()) {
-                    // 현재 하위 카테고리에 속한 제품을 가져옴
-                    List<Product> childProducts = productRepository.findByProductCateId(child);
-                    for (Product product : childProducts) {
-                        productDTOList.add(modelMapper.map(product, ProductDTO.class));
-                    }
+    if (productCate.isPresent()) {
+        // depth가 1 또는 2인 경우, 하위 카테고리의 제품을 가져옴
+        if (productCate.get().getChildren() != null) {
+            for (ProductCate child : productCate.get().getChildren()) {
+                // 현재 하위 카테고리에 속한 제품을 가져옴
+                List<Product> childProducts = productRepository.findByProductCateId(child);
+                for (Product product : childProducts) {
+                    productDTOList.add(modelMapper.map(product, ProductDTO.class));
+                }
 
-                    // depth가 1인 경우, 손자 카테고리의 제품을 가져옴
-                    if (child.getChildren() != null) {
-                        for (ProductCate grandChild : child.getChildren()) {
-                            List<Product> grandChildProducts = productRepository.findByProductCateId(grandChild);
-                            for (Product product : grandChildProducts) {
-                                productDTOList.add(modelMapper.map(product, ProductDTO.class));
-                            }
+                // depth가 1인 경우, 손자 카테고리의 제품을 가져옴
+                if (child.getChildren() != null) {
+                    for (ProductCate grandChild : child.getChildren()) {
+                        List<Product> grandChildProducts = productRepository.findByProductCateId(grandChild);
+                        for (Product product : grandChildProducts) {
+                            productDTOList.add(modelMapper.map(product, ProductDTO.class));
                         }
                     }
                 }
             }
+        }
 
-            // 해당 카테고리에 속한 직접적인 제품도 가져옴
-            List<Product> products = productRepository.findByProductCateId(productCate.get());
-            for (Product product : products) {
-                productDTOList.add(modelMapper.map(product, ProductDTO.class));
+        // 해당 카테고리에 속한 직접적인 제품도 가져옴
+        List<Product> products = productRepository.findByProductCateId(productCate.get());
+        for (Product product : products) {
+            productDTOList.add(modelMapper.map(product, ProductDTO.class));
+        }
+    }
+    log.info(productDTOList.toString());
+    return productDTOList;
+}
+
+    //2024.11.04 - 강중원 - 리스트별 정렬 알고리즘
+    public List<ProductListDTO> getProductWithCateAndType(int cate, String type) {
+        List<ProductDTO> productDTOList = new ArrayList<>();
+        //home(전체상품)
+        if(cate==0){
+            productDTOList = getAllProducts();
+        }
+        //카테고리가 있을경우
+        else{
+            productDTOList = getProductWithCate(cate);
+        }
+        
+        List<ProductListDTO> productListDTOList = new ArrayList<>();
+            for (ProductDTO productDTO : productDTOList) {
+                productListDTOList.add(modelMapper.map(productDTO, ProductListDTO.class));
+            }
+        
+        
+        //정렬
+        switch (type) {
+            //낮은 가격
+            case "lowPrice":
+                productListDTOList.sort(new Comparator<ProductListDTO>() {
+                    @Override
+                    public int compare(ProductListDTO o1, ProductListDTO o2) {
+
+                        double o1Price = o1.getPrice() * (1 - o1.getDiscount() / 100.0);
+                        double o2Price = o2.getPrice() * (1 - o2.getDiscount() / 100.0);
+
+                        if(o1Price>o2Price){
+                            return 1;
+                        }else if(o1Price<o2Price){
+                            return -1;
+                        }
+                        return 0;
+                    }
+                });
+                break;
+
+                //높은 가격순
+            case "highPrice":
+                productListDTOList.sort(new Comparator<ProductListDTO>() {
+                    @Override
+                    public int compare(ProductListDTO o1, ProductListDTO o2) {
+                        double o1Price = o1.getPrice() * (1 - o1.getDiscount() / 100.0);
+                        double o2Price = o2.getPrice() * (1 - o2.getDiscount() / 100.0);
+
+                        if(o1Price>o2Price){
+                            return -1;
+                        }else if(o1Price<o2Price){
+                            return 1;
+                        }
+                        return 0;
+                    }
+                });
+                break;
+
+                //판매량
+            case "sold":
+
+                productListDTOList.sort(new Comparator<ProductListDTO>() {
+                    @Override
+                    public int compare(ProductListDTO o1, ProductListDTO o2) {
+                        return Integer.compare(o2.getSold(), o1.getSold());
+                    }
+                });
+                break;
+
+                //평점 높은순
+            case "highReview":
+                break;
+
+                //리뷰 많은순
+            case "manyReview":
+                productListDTOList.sort(new Comparator<ProductListDTO>() {
+                    @Override
+                    public int compare(ProductListDTO o1, ProductListDTO o2) {
+                        return Double.compare(o2.getReview(), o1.getReview());
+                    }
+                });
+                break;
+
+                //최근 등록순
+            case "recent":
+                break;
+        }
+        return productListDTOList;
+    }
+
+    //home(index)에서 사용
+    public List<ProductDTO> getProductWithType(String type) {
+        List<ProductDTO> productDTOList = getAllProducts();
+
+        //정렬
+        switch (type) {
+            case "Hit":
+                productDTOList.sort(new Comparator<ProductDTO>() {
+                    @Override
+                    public int compare(ProductDTO o1, ProductDTO o2) {
+                        return Integer.compare(o2.getHit(), o1.getHit());
+                    }
+                });
+                break;
+            case "Score":
+
+                break;
+            case "ScoreMany":
+                productDTOList.sort(new Comparator<ProductDTO>() {
+                    @Override
+                    public int compare(ProductDTO o1, ProductDTO o2) {
+                        return Integer.compare(o2.getReview(), o1.getReview());
+                    }
+                });
+                break;
+
+            case "Discount":
+                productDTOList.sort(new Comparator<ProductDTO>() {
+                    @Override
+                    public int compare(ProductDTO o1, ProductDTO o2) {
+                        return Integer.compare(o2.getDiscount(), o1.getDiscount());
+                    }
+                });
+                break;
+
+        }
+        List<ProductDTO> productDTOs = new ArrayList<>();
+
+        //8개만 추출
+        int count = 0;
+        int max = 8;
+
+        for(ProductDTO productDTO : productDTOList){
+            if(count < max){
+                productDTOs.add(productDTO);
+                count++;
+            }else{
+                break;
             }
         }
-        log.info(productDTOList.toString());
-        return productDTOList;
+        return productDTOs;
     }
 
-    public ProductDTO JsonToMapAndSetProductDTO(String optionsJson, ProductDTO productDTO) {
-
-        // 'options' JSON 문자열을 LinkedHashMap<String, List<String>>으로 변환
-        LinkedHashMap<String, List<String>> optionsMap = null;
-        try {
-            optionsMap = objectMapper.readValue(optionsJson,
-                    new TypeReference<LinkedHashMap<String, List<String>>>() {
-                    });
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        productDTO.setOptions(optionsMap);
-        return productDTO;
+    public List<ProductListDTO> getProductBest() {
+        return cachingService.getProductBest();
     }
 
-    public ProductDTO updateProdImg(MultipartFile img1, MultipartFile img2, MultipartFile img3, MultipartFile detail, ProductDTO productDTO, Product_V_DTO product_V_DTO) {
 
-        if (img1 != null) {
-            String prevImg = productDTO.getImg1();
-            String newImg1 = uploadAndDeleteProdImg(img1, prevImg);
-            productDTO.setImg1(newImg1);
-        } else {
-            productDTO.setImg1(product_V_DTO.getImg1());
-        }
-        if (img2 != null) {
-            String prevImg = productDTO.getImg2();
-            String newImg2 = uploadAndDeleteProdImg(img2, prevImg);
-            productDTO.setImg2(newImg2);
-        } else {
-            productDTO.setImg2(product_V_DTO.getImg2());
-        }
-        if (img3 != null) {
-            String prevImg = productDTO.getImg3();
-            String newImg3 = uploadAndDeleteProdImg(img3, prevImg);
-            productDTO.setImg3(newImg3);
-        } else {
-            productDTO.setImg3(product_V_DTO.getImg3());
-        }
-        if (detail != null) {
-            String prevImg = productDTO.getDetail();
-            String newDetail = uploadAndDeleteProdImg(detail, prevImg);
-            productDTO.setDetail(newDetail);
-        } else {
-            productDTO.setDetail(product_V_DTO.getDetail());
-        }
-        return productDTO;
+
+public ProductDTO JsonToMapAndSetProductDTO(String optionsJson, ProductDTO productDTO) {
+
+    // 'options' JSON 문자열을 LinkedHashMap<String, List<String>>으로 변환
+    LinkedHashMap<String, List<String>> optionsMap = null;
+    try {
+        optionsMap = objectMapper.readValue(optionsJson,
+                new TypeReference<LinkedHashMap<String, List<String>>>() {
+                });
+    } catch (JsonProcessingException e) {
+        throw new RuntimeException(e);
     }
+    productDTO.setOptions(optionsMap);
+    return productDTO;
+}
 
-    // status가 0인 상품 목록 select
+public ProductDTO updateProdImg(MultipartFile img1, MultipartFile img2, MultipartFile img3, MultipartFile detail, ProductDTO productDTO, Product_V_DTO product_V_DTO) {
+
+    if (img1 != null) {
+        String prevImg = productDTO.getImg1();
+        String newImg1 = uploadAndDeleteProdImg(img1, prevImg);
+        productDTO.setImg1(newImg1);
+    } else {
+        productDTO.setImg1(product_V_DTO.getImg1());
+    }
+    if (img2 != null) {
+        String prevImg = productDTO.getImg2();
+        String newImg2 = uploadAndDeleteProdImg(img2, prevImg);
+        productDTO.setImg2(newImg2);
+    } else {
+        productDTO.setImg2(product_V_DTO.getImg2());
+    }
+    if (img3 != null) {
+        String prevImg = productDTO.getImg3();
+        String newImg3 = uploadAndDeleteProdImg(img3, prevImg);
+        productDTO.setImg3(newImg3);
+    } else {
+        productDTO.setImg3(product_V_DTO.getImg3());
+    }
+    if (detail != null) {
+        String prevImg = productDTO.getDetail();
+        String newDetail = uploadAndDeleteProdImg(detail, prevImg);
+        productDTO.setDetail(newDetail);
+    } else {
+        productDTO.setDetail(product_V_DTO.getDetail());
+    }
+    return productDTO;
+}
+
+// status가 0인 상품 목록 select
 //    public Page<ProductDTO> selectProductListByStatus(int status, int page, int size, String keyword) {
 //        Pageable pageable = PageRequest.of(page, size);
 //        Page<Product> productPage;
