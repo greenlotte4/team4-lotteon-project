@@ -177,6 +177,7 @@ public class ProductRestController {
 
         Product_V_DTO product_v_dto = productService.getProduct_V_ById(productDTO.getProductId());
         productDTO.setProductCateId(product_v_dto.getProductCateId());
+        productDTO.setProductDetailId(productDTO.getProductDetailId());
 
         ProductDTO productDTO1 = productService.JsonToMapAndSetProductDTO(optionsJson, productDTO);
         log.info("productDTO1 = " + productDTO1);

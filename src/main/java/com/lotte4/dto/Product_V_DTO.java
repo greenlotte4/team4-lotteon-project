@@ -46,6 +46,7 @@ public class Product_V_DTO {
     private LinkedHashMap<String, List<String>> options;
     private int status;
     private ProductCateDTO productCateId;
+    private ProductDetailDTO productDetailId;
 
     public Product_V_DTO(Product product) {
         this.productId = product.getProductId();
@@ -81,6 +82,11 @@ public class Product_V_DTO {
             this.productVariants = product.getProductVariants().stream()
                     .map(ProductVariantsWithoutProductDTO::new)
                     .collect(Collectors.toList());
+        }
+
+        // ProductDetailDTO 매핑
+        if (product.getProductDetail() != null) {
+            this.productDetailId = new ProductDetailDTO(product.getProductDetail());
         }
     }
 

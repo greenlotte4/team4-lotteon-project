@@ -130,7 +130,7 @@ public class ProductService {
         List<Product> productList = productRepository.findAll();
         List<ProductDTO> productDTOList = new ArrayList<>();
         for (Product product : productList) {
-            productDTOList.add(modelMapper.map(product, ProductDTO.class));
+            productDTOList.add(new ProductDTO(product));
         }
         return productDTOList;
     }

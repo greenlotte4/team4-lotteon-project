@@ -34,7 +34,6 @@ public class ProductDetailDTO {
     private String warning;
     private String createDate;
     private String quality;
-    private int productId; // 241030 필드 추가
 
     private String as_field;
     private String asPhone;
