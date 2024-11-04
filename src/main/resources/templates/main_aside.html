@@ -11,87 +11,31 @@
             <!-- 상품만큼 반복 -->
             <!-- 반복시 i값(인덱스) 증가 필요 -->
             <!-- 반복 블럭 시작 -->
-            <li>
-                <a href="#">
-
+            <li th:each="product, i : ${SoldList}">
+                <a th:href="@{/product/view(productId = ${product.productId})}">
                     <div class="best_num">
-                        <i>1</i>
+                        <i>[[${i.index}+1]]</i>
                     </div>
                     <div class="thumb">
-                        <img th:src="@{/images/product/product2.png}" alt="item1" />
+                        <img th:src="@{'/uploads/product/' + ${product.img1}}" alt="item1" />
                     </div>
                     <div class="aside_desc">
-                        <h2>사과</h2>
+                        <h2>[[${product.name}]]</h2>
                         <div class="org_price">
                             <!-- 기본가격 -->
-                            <del>5000</del>
+                            <del>[[${product.price}]]</del>
                             <!-- 깎이는 퍼센트 -->
-                            <span>20</span>
+                            <span>[[${product.discount}]]</span>
                         </div>
                         <div class="dis_price">
                             <!-- 계산된 가격 -->
-                            <ins>3000</ins>
+                            <ins>[[${#numbers.formatDecimal(product.price * (1 - product.discount / 100.0), 0, 0)}]]</ins>
                         </div>
                     </div>
                 </a>
             </li>
             <!-- 반복 블럭 끝 -->
 
-            <!-- 반복 블럭 시작 -->
-            <li>
-                <a href="#">
-                    <div class="best_num">
-                        <i>2</i>
-                    </div>
-                    <div class="thumb">
-                        <img th:src="@{/images/product/product1.png}" alt="item1" />
-                    </div>
-
-                    <div class="aside_desc">
-
-                        <h2>사과</h2>
-                        <div class="org_price">
-                            <!-- 기본가격 -->
-                            <del>5000</del>
-                            <!-- 깎이는 퍼센트 -->
-                            <span>20</span>
-                        </div>
-                        <div class="dis_price">
-                            <!-- 계산된 가격 -->
-                            <ins>3000</ins>
-                        </div>
-                    </div>
-                </a>
-            </li>
-            <!-- 반복 블럭 끝 -->
-
-            <!-- 반복 블럭 시작 -->
-            <li>
-                <a href="#">
-                    <div class="best_num">
-                        <i>3</i>
-                    </div>
-                    <div class="thumb">
-                        <img th:src="@{/images/product/product3.png}" alt="item1" />
-                    </div>
-                    <div class="aside_desc">
-
-                        <h2>사과</h2>
-
-                        <div class="org_price">
-                            <!-- 기본가격 -->
-                            <del>5000</del>
-                            <!-- 깎이는 퍼센트 -->
-                            <span>20</span>
-                        </div>
-                        <div class="dis_price">
-                            <!-- 계산된 가격 -->
-                            <ins>3000</ins>
-                        </div>
-                    </div>
-                </a>
-            </li>
-            <!-- 반복 블럭 끝 -->
 
         </ol>
     </article>

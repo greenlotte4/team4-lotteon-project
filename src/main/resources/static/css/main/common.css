@@ -224,18 +224,18 @@ main {
   margin-top: 15px;
 }
 
-.main_section > .hit > article > a {
-  width: 170px;
-  height: 260px;
-  box-sizing: border-box;
-  text-align: center;
-  margin-right: 12px;
-}
+/*.main_section > .hit > article > a {*/
+/*  width: 170px;*/
+/*  height: 260px;*/
+/*  box-sizing: border-box;*/
+/*  text-align: center;*/
+/*  margin-right: 12px;*/
+/*}*/
 
-.main_section > .hit >article {
-  height: auto;
-  display: block;
-}
+/*.main_section > .hit >article {*/
+/*  height: auto;*/
+/*  display: block;*/
+/*}*/
 
 .main_section > section > article > a:hover{
   transform:scale(1.05);
