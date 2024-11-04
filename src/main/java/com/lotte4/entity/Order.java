@@ -5,6 +5,8 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,19 +20,9 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int orderId;
-    private int count;
-    private int price;
-    private int discount;
-    private int deliveryFee;
     private int usePoint;
-    private int savePoint;
     private int totalPrice;
     
-    //색상
-    private String option1;
-    //사이즈
-    private String option2;
-
     // 배송지
     private String recipName;
     private String recipHp;
@@ -39,9 +31,12 @@ public class Order {
     private String recipAddr2;
 
     //결재방법
-    private int Pay;
+    private int Payment;
+    //order 빨리 끝나면 stauts 상태값 정리 할것 필수
     private int Status;
-    private LocalDateTime Date;
+    //구매일자
+    private LocalDateTime buyDate;
+    //쿠폰 사용유무
     private int couponUse;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -52,11 +47,22 @@ public class Order {
     @JoinColumn(name = "couponId")
     private Coupon coupon;
 
-    @OneToOne(mappedBy = "order")
-    private Delivery delivery;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "productId")
-    private Product product;
+    @JoinColumn(name = "variant_id")
+    private ProductVariants productVariants;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private List<OrderItems> orderItems = new ArrayList<>();
+
+    public void addOrderItem(OrderItems orderItem) {
+        if (orderItems == null) {
+            orderItems = new ArrayList<>();
+        }
+        orderItems.add(orderItem);
+        orderItem.setOrder(this); // 양방향 관계 설정
+    }
 
 }

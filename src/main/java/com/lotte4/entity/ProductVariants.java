@@ -1,6 +1,8 @@
 package com.lotte4.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.lotte4.config.MapStringListToJsonConverter;
 import jakarta.persistence.*;
 import lombok.*;

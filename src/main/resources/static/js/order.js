@@ -5,21 +5,47 @@ window.onload = function () {
     const all__sold = document.getElementById("all__sold");
     const all__discount = document.getElementById("all__discount");
     const all__deliveryfee = document.getElementById("all__deliveryfee");
-    let all__totalPrice = document.getElementById("all__totalPrice");
+    const all__totalPrice = document.getElementById("all__totalPrice");
     const selectElement = document.getElementById('condition');
     const pay__deliveryfee = document.getElementById('pay__deliveryfee');
     const recip__name = document.getElementById('recip__name');
     const phone__number = document.getElementById('phone__number');
+    const paymentMethods = document.getElementsByName("paymentMethod");
+
+    //전체 금액 계산용
+    const originPrice = document.getElementById("originPrice");
+    const deliveryFee = document.getElementById("deliveryFee");
 
 
+    // 합계를 계산하는 함수 정의
+    function totalPrice() {
+        const originPrices = document.querySelectorAll("#originPrice");
+        let total = Array.from(originPrices).reduce((acc, priceElement) => {
+            const price = parseFloat(priceElement.innerText.replace(/,/g, '')) || 0; // 숫자로 변환
+            return acc + price;
+        }, 0);
+        all__sold.innerText = `${total.toLocaleString()}원`;
+        console.log('전체 판매금액:', total);
+    }
+    function deliveryPrice(){
+        const deliveryPrice = document.querySelectorAll("#deliveryFee");
+        let total = Array.from(deliveryPrice).reduce((acc, priceElement) => {
+            const price = parseFloat(priceElement.innerText.replace(/,/g, '')) || 0;
+            return acc + price;
+        }, 0);
+        all__deliveryfee.innerText = `${total.toLocaleString()}원`;
+        console.log('전체 배송금액 : ' , total)
+    }
 
-    // option1 (색상) 선택값
+
+    //함수 호출 한번 해줘야함
+    totalPrice();
+    deliveryPrice()
+
+    // option1 (문자열)
     const option1Element = document.querySelector('.option1');
-    const option1Value = () => option1Element.options[option1Element.selectedIndex].value;
-
-    // option2 (사이즈) 선택값
-    const option2Element = document.querySelector('.option2');
-    const option2Value = () => option2Element.options[option2Element.selectedIndex].value;
+    const option1Value = () => option1Element.value;
+    console.log(option1Value());
 
     const postcodeInput = document.getElementById("postcode");
     const addressInput = document.getElementById("address");
@@ -109,84 +135,116 @@ window.onload = function () {
 
     calculateFinalPrice();
 
-    function YYYYMMDDHHMMSS(date) {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-
-        const hours = String(date.getHours()).padStart(2, '0');
-        const minutes = String(date.getMinutes()).padStart(2, '0');
-        const seconds = String(date.getSeconds()).padStart(2, '0');
-
-        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-    }
-
-    const currentDate = new Date();
-    const formattedDate = YYYYMMDDHHMMSS(currentDate);
-
-
     const checkoutBtn = document.querySelector('.checkout-btn');
     checkoutBtn.addEventListener('click', function (event) {
         let usedPoint = parseInt(addPoint.value) || 0;
-
         if (usedPoint > 0 && usedPoint < 5000) {
             alert('사용 포인트가 5000p 미만입니다. 포인트를 5000p 이상으로 사용하여 주십시오.');
             event.preventDefault();
             return;
         }
 
-        const date = new Date();
-        console.log(date);
+        let paymentType = null;
+        let status = 0;
 
+        paymentMethods.forEach(method => {
+            if (method.checked) {
+                paymentType = method.value;
+                if (method.value !== '4') {
+                    status = 1;
+                }
+            }
+        });
 
-        if (confirm('결제를 진행하시겠습니까?')) {
-            const data = {
-                //결재방법, 상태값(결재완료 시 0 = 결재완료, count = 수량 받아와야함),
-                Date: formattedDate,
-                pay: 1,
-                status: 0,
-                count: 1,
-                couponUse: 0,
-                deliveryFee: parsePrice(all__deliveryfee.innerText),
-                discount: 10,
-                memberInfoId: 1,
-                option1: option1Value(),
-                option2: option2Value(),
-                price: parsePrice(all__sold.innerText),
-                productId: 3,
-                recipZip: postcodeInput.value,
-                recipAddr1: addressInput.value,
-                recipAddr2: detailAddressInput.value,
-                recipHp: phone__number.value,
-                recipName: recip__name.value,
-                savePoint: parseInt(nowPoint.innerText),
-                totalPrice: parsePrice(all__totalPrice.innerText),
-                usedPoint: usedPoint
-            };
-            console.log(data);
-
-            fetch('/lotteon/product/order/save', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
-                .then(response => response.json())
-                .then(result => {
-                    if (result.success) {
-                        alert('결제가 완료되었습니다.');
-                        window.location.href = '/lotteon/product/complete';
-                    } else {
-                        alert('결제가 실패하였습니다.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('결제 중 오류가 발생하였습니다.');
-                });
-        } else {
-            event.preventDefault();
+        if (!paymentType) {
+            alert("결제 방법을 선택하세요.");
+            return;
         }
+
+        if (paymentType === "4") {
+            alert("무통장 입금을 선택하셨습니다. 24시간 이내에 입금해주시기 바랍니다.");
+        }
+
+        function getProductVariantsId(row) {
+            let productVariantsId = row.getAttribute("data-variant-id");
+            if (!productVariantsId) {
+                // productVariantsId가 없으면 0.5초 후 다시 시도
+                setTimeout(() => {
+                    productVariantsId = row.getAttribute("data-variant-id");
+                    console.log("재확인된 productVariantsId:", productVariantsId);
+                }, 500);
+            }
+            return productVariantsId ? parseInt(productVariantsId) : null;
+        }
+
+        const orderItems = Array.from(document.querySelectorAll(".cart-table tbody tr")).map(row => {
+            const productVariantsId = getProductVariantsId(row);  // 이 함수를 통해 productVariantsId를 가져옴
+            const count = parseInt(row.querySelector(".quantity p").innerText) || 0;
+            const originPrice = parseInt(row.querySelector(".price-info .discount-price").innerText.replace(/[^0-9]/g, '')) || 0;
+            const originDiscount = parseInt(row.querySelector(".price-info del").innerText.replace(/[^0-9]/g, '')) || 0;
+            const originPoint = parseInt(row.querySelector(".shipping-info").innerText.replace(/[^0-9]/g, '')) || 0;
+
+            return {
+                productVariants: { variant_id: productVariantsId },
+                count,
+                originPrice,
+                originDiscount,
+                originPoint,
+                deliveryFee: parseInt(all__deliveryfee.innerText.replace(/[^0-9]/g, '')) || 0,
+            };
+        });
+
+        const data = {
+            Date: YYYYMMDDHHMMSS(new Date()),     // 주문 날짜
+            Payment: paymentType,                 // 결제 방법
+            Status: status,                       // 결제 상태
+            count: orderItems.reduce((acc, item) => acc + item.count, 0),
+            couponUse: document.getElementById("condition").value,
+            deliveryFee: parseInt(all__deliveryfee.innerText.replace(/[^0-9]/g, '')),
+            discount: parseInt(all__sold.innerText.replace(/[^0-9]/g, '')) - parseInt(all__totalPrice.innerText.replace(/[^0-9]/g, '')),
+            memberInfo: { memberInfoId: 1 },
+            option1: option1Element.innerText,
+            price: parseInt(all__sold.innerText.replace(/[^0-9]/g, '')),
+            recipZip: postcodeInput.value,
+            recipAddr1: addressInput.value,
+            recipAddr2: detailAddressInput.value,
+            recipHp: phone__number.value,
+            recipName: recip__name.value,
+            totalPrice: parseInt(all__totalPrice.innerText.replace(/[^0-9]/g, '')),
+            usePoint: usedPoint,
+            orderItems: orderItems
+        };
+
+        console.log(data);
+
+        fetch('/lotteon/product/order/save', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    alert('결제가 완료되었습니다.');
+                    window.location.href = '/lotteon/product/complete';
+                } else {
+                    alert('결제가 실패하였습니다.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('결제 중 오류가 발생하였습니다.');
+            });
     });
 };
+
+// 현재 날짜 및 시간을 YYYYMMDDHHMMSS 형식으로 변환
+function YYYYMMDDHHMMSS(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}

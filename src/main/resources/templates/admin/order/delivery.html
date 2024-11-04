@@ -13,6 +13,37 @@
     <!--각 페이지(section) 개별 css-->
     <link rel="stylesheet" th:href="@{/css/admin/style_order_delivery.css}"/>
 
+    <style>
+        /* 모달 스타일 */
+        .modal {
+            display: none; /* 기본적으로 숨김 */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: relative;
+            margin: 10% auto;
+            padding: 20px;
+            width: 80%;
+            max-width: 500px;
+            background-color: white;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+    </style>
+
 </head>
 <body>
 <header th:replace="~{/admin/include/header.html}"></header>
@@ -63,19 +94,26 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>
-                            <a href="#" onclick="openDeliveryDetailModal()">10121211341</a> <!-- 주문번호 클릭 시 모달 오픈 -->
+                    <tr th:each="delivery : ${deliverys}">
+<!--                        <td>-->
+<!--                            <a href="#" class="delivery-detail-link" th:attr="data-waybill=${delivery.deliveryWaybill}" th:text="${delivery.deliveryWaybill}">송장번호 확인</a>-->
+<!--                        </td>-->
+                        <td><a href="#" id="openModalBtn">송장번호 확인</a></td>
+                        <td th:text="${delivery.deliveryCompany}">로젠택배</td>
+                        <td th:text="${delivery.orderDTO.orderId}">10121211341</td>
+                        <td th:text="${delivery.orderDTO.recipName}">김유신</td>
+                        <td th:text="${delivery.orderDTO.productVariants.product.name}">청바지</td>
+                        <td th:text="${delivery.orderDTO.count}">3</td>
+                        <td th:text="${#numbers.formatInteger(delivery.orderDTO.count * delivery.orderDTO.price , '0', 'COMMA')}">68,400</td>
+                        <td th:text="${#numbers.formatInteger(delivery.orderDTO.deliveryFee, '0', 'COMMA')}">무료</td>
+                        <td th:text="${delivery.orderDTO.Status == 2 ? '배송준비' :
+                                      (delivery.orderDTO.Status == 3 ? '배송 중' :
+                                      (delivery.orderDTO.Status == 4 ? '배송완료' :
+                                      (delivery.orderDTO.Status == 5 ? '취소' :
+                                      (delivery.orderDTO.Status == 6 ? '교환' :
+                                      (delivery.orderDTO.Status == 7 ? '반품' : '알 수 없음')))))}">
                         </td>
-                        <td>로젠택배</td>
-                        <td>10121211341</td>
-                        <td>김유신</td>
-                        <td>청바지</td>
-                        <td>3</td>
-                        <td>68,400</td>
-                        <td>무료</td>
-                        <td>배송준비</td>
-                        <td>2024-10-17 10:00:06</td>
+                        <td th:text="${#temporals.format(delivery.deliveryDate, 'yyyy-MM-dd HH:mm:ss')}">2024-10-17 10:00:06</td>
                     </tr>
                     </tbody>
                 </table>
@@ -96,136 +134,180 @@
 <!-- 배송상세 모달 -->
 <div id="versionModal" class="modal">
     <div class="modal-content">
-        <div class="modal-header">
-            <h4>배송상세</h4>
-            <span id="versionModalClose" class="close">&times;</span> <!-- id 추가 -->
-        </div>
-        <div class="modal-body">
-            <div>
-                <h2 class="sub-title">상품정보</h2>
-                <table class="product-info-table">
-                    <colgroup>
-                        <col style="width: 10%">
-                        <col style="width: 2%">
-                        <col style="width: 13%">
-                        <col style="width: 10%">
-                        <col style="width: 9%">
-                        <col style="width: 6%">
-                        <col style="width: 7%">
-                        <col style="width: 7%">
-                    </colgroup>
-                    <thead>
-                    <tr>
-                        <th></th>
-                        <th>상품번호</th>
-                        <th>상품명</th>
-                        <th>판매자</th>
-                        <th>가격</th>
-                        <th>수량</th>
-                        <th>배송비</th>
-                        <th>결제금액</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td><img src="product_image_1.jpg" alt="상품1" class="product-img"></td>
-                        <td>120120021</td>
-                        <td>청바지</td>
-                        <td>(주)상호명</td>
-                        <td>24,000</td>
-                        <td>3</td>
-                        <td>0</td>
-                        <td>68,400</td>
-                    </tr>
-
-                    </tbody>
-                </table>
-            </div>
-
-            <div>
-                <h2 class="sub-title3">배송정보</h2>
-                <table class="delivery-info-table">
-                    <colgroup>
-                        <col style="width: 13%;">
-                        <col style="width: 75%;">
-                    </colgroup>
-                    <tr>
-                        <th>주문번호</th>
-                        <td>
-                            10121211341
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>수령인</th>
-                        <td>
-                            김유신
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>연락처</th>
-                        <td>
-                            010-1234-1234
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>배송지 주소</th>
-                        <td>
-                            부산 부산진구 123-11 10층
-                        </td>
-                    </tr>
-                    <tr>
-                        <th style="padding-top: 20px;">택배사</th> <!-- 여백 추가 -->
-                        <td style="padding-top: 20px;">로젠택배</td>
-                    </tr>
-                    <tr>
-                        <th>송장번호</th>
-                        <td>
-                            10122102315
-                        </td>
-                    </tr>
-                    <tr>
-                    <tr class="last-tr">
-                        <th>기타</th>
-                        <td>
-                            감사합니다. 수고하세요.
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
+        <h4>배송상세</h4>
+        <span id="versionModalClose" class="close">&times;</span>
+        <p>여기에 배송 상세 정보가 표시됩니다.</p>
     </div>
 </div>
+<!--<div id="versionModal" class="modal">-->
+<!--    <div class="modal-content">-->
+<!--        <div class="modal-header">-->
+<!--            <h4>배송상세</h4>-->
+<!--            <span id="versionModalClose" class="close">&times;</span> &lt;!&ndash; id 추가 &ndash;&gt;-->
+<!--        </div>-->
+<!--        <div class="modal-body">-->
+<!--            <div>-->
+<!--                <h2 class="sub-title">상품정보</h2>-->
+<!--                <table class="product-info-table">-->
+<!--                    <colgroup>-->
+<!--                        <col style="width: 10%">-->
+<!--                        <col style="width: 2%">-->
+<!--                        <col style="width: 13%">-->
+<!--                        <col style="width: 10%">-->
+<!--                        <col style="width: 9%">-->
+<!--                        <col style="width: 6%">-->
+<!--                        <col style="width: 7%">-->
+<!--                        <col style="width: 7%">-->
+<!--                    </colgroup>-->
+<!--                    <thead>-->
+<!--                    <tr>-->
+<!--                        <th>상품이미지</th>-->
+<!--                        <th>상품번호</th>-->
+<!--                        <th>상품명</th>-->
+<!--                        <th>판매자</th>-->
+<!--                        <th>가격</th>-->
+<!--                        <th>수량</th>-->
+<!--                        <th>배송비</th>-->
+<!--                        <th>결제금액</th>-->
+<!--                    </tr>-->
+<!--                    </thead>-->
+<!--                    <tbody>-->
+<!--                    <tr>-->
+<!--                        <td><img id="modalProductImg" src="" alt="상품 사진" class="product-image"></td>-->
+<!--                        <td id="modalProductNo">상품번호</td>-->
+<!--                        <td id="modalProductName">상품명</td>-->
+<!--                        <td id="modalSeller">판매자</td>-->
+<!--                        <td id="modalPrice">가격</td>-->
+<!--                        <td id="modalCount">수량</td>-->
+<!--                        <td id="modalDeliveryFee">배송비</td>-->
+<!--                        <td id="modalTotalPrice">결제금액</td>-->
+<!--                    </tr>-->
+<!--                    </tbody>-->
+<!--                </table>-->
+<!--            </div>-->
+
+<!--            <div>-->
+<!--                <h2 class="sub-title3">배송정보</h2>-->
+<!--                <table class="delivery-info-table">-->
+<!--                    <colgroup>-->
+<!--                        <col style="width: 13%;">-->
+<!--                        <col style="width: 75%;">-->
+<!--                    </colgroup>-->
+<!--                    <tr>-->
+<!--                        <th>주문번호</th>-->
+<!--                        <td id="modalOrderId">주문번호</td>-->
+<!--                    </tr>-->
+<!--                    <tr>-->
+<!--                        <th>수령인</th>-->
+<!--                        <td id="modalRecipName">수령인</td>-->
+<!--                    </tr>-->
+<!--                    <tr>-->
+<!--                        <th>연락처</th>-->
+<!--                        <td id="modalRecipHp">연락처</td>-->
+<!--                    </tr>-->
+<!--                    <tr>-->
+<!--                        <th>배송지 주소</th>-->
+<!--                        <td id="modalRecipAddr">배송지 주소</td>-->
+<!--                    </tr>-->
+<!--                    <tr>-->
+<!--                        <th>택배사</th>-->
+<!--                        <td id="modalDeliveryCompany">택배사</td>-->
+<!--                    </tr>-->
+<!--                    <tr>-->
+<!--                        <th>송장번호</th>-->
+<!--                        <td id="modalWaybill">송장번호</td>-->
+<!--                    </tr>-->
+<!--                    <tr class="last-tr">-->
+<!--                        <th>기타</th>-->
+<!--                        <td id="modalContent">기타</td>-->
+<!--                    </tr>-->
+<!--                    </tbody>-->
+<!--                </table>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 <footer th:replace="~{/admin/include/footer.html}"></footer>
 </body>
-</html>
 <script>
-    // 전역 변수로 모달 선언
-    var modal = document.getElementById("versionModal");
+    document.addEventListener('DOMContentLoaded', function () {
+        // 모달 열기 버튼 클릭 이벤트
+        document.getElementById('openModalBtn').addEventListener('click', function (event) {
+            event.preventDefault();
+            openDeliveryDetailModal();  // 모달 열기
+        });
 
-    // 주문상세 모달 열기 함수
-    function openDeliveryDetailModal() {
-        modal.style.display = "block";
-    }
-
-    // 주문상세 모달 동작
-    document.addEventListener('DOMContentLoaded', function() {
-        var versionCloseBtn = document.getElementById("versionModalClose"); // 버전 모달 닫기 버튼
-
-        // 닫기 버튼(X) 클릭 시 모달 닫기
-        versionCloseBtn.onclick = function() {
-            modal.style.display = "none";
-        };
-
-
-        // 모달 외부 클릭 시 모달 닫기
-        window.onclick = function(event) {
-            var modal = document.getElementById("versionModal");
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
+        // 모달 닫기 버튼 설정
+        document.getElementById('versionModalClose').onclick = function () {
+            document.getElementById('versionModal').style.display = 'none';
         };
     });
+
+    function openDeliveryDetailModal() {
+        console.log("Opening modal");
+        document.getElementById('versionModal').style.display = 'block';
+    }
+    }
 </script>
+<!--<script>-->
+<!--    console.log("Script Loaded");-->
+
+<!--    const deliveryData = /*[[${#objectMapper.writeValueAsString(deliverys)}]]*/ null;-->
+
+<!--    console.log("Delivery Data Loaded:", deliveryData);-->
+
+<!--    document.addEventListener('DOMContentLoaded', function () {-->
+<!--        console.log("DOMContentLoaded Event Fired");-->
+
+<!--        // 상세 보기 링크 클릭 이벤트 설정-->
+<!--        const detailLinks = document.querySelectorAll('.delivery-detail-link');-->
+<!--        console.log("Delivery Detail Links:", detailLinks);-->
+
+<!--        detailLinks.forEach(link => {-->
+<!--            link.addEventListener('click', function (event) {-->
+<!--                event.preventDefault();-->
+<!--                const waybill = this.getAttribute('data-waybill');-->
+<!--                console.log("Waybill Clicked:", waybill);-->
+<!--                openDeliveryDetailModal(waybill);-->
+<!--            });-->
+<!--        });-->
+
+<!--        document.getElementById('versionModalClose').onclick = function () {-->
+<!--            document.getElementById('versionModal').style.display = 'none';-->
+<!--        };-->
+<!--    });-->
+
+<!--    function openDeliveryDetailModal(deliveryWaybill) {-->
+<!--        console.log("Modal Opening Function Called for Waybill:", deliveryWaybill);-->
+
+<!--        const delivery = deliveryData.find(d => d.deliveryWaybill === deliveryWaybill);-->
+
+<!--        if (delivery) {-->
+<!--            console.log("Delivery Found:", delivery);  // 데이터 검색 확인-->
+
+<!--            document.getElementById('modalProductImg').src = `/uploads/product/${delivery.orderDTO.product.img1}`;-->
+<!--            document.getElementById('modalProductNo').innerText = delivery.orderDTO.product.productId;-->
+<!--            document.getElementById('modalProductName').innerText = delivery.orderDTO.product.name;-->
+<!--            document.getElementById('modalSeller').innerText = delivery.orderDTO.product.company;-->
+<!--            document.getElementById('modalPrice').innerText = delivery.orderDTO.price.toLocaleString();-->
+<!--            document.getElementById('modalCount').innerText = delivery.orderDTO.count;-->
+<!--            document.getElementById('modalDeliveryFee').innerText = delivery.orderDTO.deliveryFee.toLocaleString();-->
+<!--            document.getElementById('modalTotalPrice').innerText = (delivery.orderDTO.price * delivery.orderDTO.count).toLocaleString();-->
+
+<!--            document.getElementById('modalOrderId').innerText = delivery.orderDTO.orderId;-->
+<!--            document.getElementById('modalRecipName').innerText = delivery.orderDTO.recipName;-->
+<!--            document.getElementById('modalRecipHp').innerText = delivery.orderDTO.recipHp;-->
+<!--            document.getElementById('modalRecipAddr').innerText = `${delivery.orderDTO.recipAddr1} ${delivery.orderDTO.recipAddr2}`;-->
+<!--            document.getElementById('modalDeliveryCompany').innerText = delivery.deliveryCompany;-->
+<!--            document.getElementById('modalWaybill').innerText = delivery.deliveryWaybill;-->
+<!--            document.getElementById('modalContent').innerText = delivery.content;-->
+
+<!--            document.getElementById('versionModal').style.display = 'block';-->
+<!--        } else {-->
+<!--            console.log("Delivery data not found for waybill:", deliveryWaybill);-->
+<!--        }-->
+<!--    }-->
+<!--</script>-->
+
+</html>
 

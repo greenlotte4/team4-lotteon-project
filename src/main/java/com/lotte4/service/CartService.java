@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 
      수정이력
       - 2024/10/30 강은경 - cart insert 하는 메서드 추가
+      - 2024/11/02 조수빈 - cart select 하는 메서드 추가
 */
 @Log4j2
 @Service
@@ -39,6 +40,14 @@ public class CartService {
     private final ProductVariantsRepository productVariantsRepository;
     private final ModelMapper modelMapper;
 
+
+    // 사용자 아이디와 장바구니 ID 목록으로 CartDTO 목록 조회
+    public List<CartDTO> getCartItemsByIds(String uid, List<Integer> cartIds) {
+        // 사용자의 cartIds에 포함된 장바구니 항목 조회
+        return cartRepository.findByUserUidAndCartIdIn(uid, cartIds).stream()
+                .map(cart -> modelMapper.map(cart, CartDTO.class))
+                .collect(Collectors.toList());
+    }
 
     // 장바구니 목록 select
     public List<CartDTO> getCartByUserId(String uid) {
@@ -82,9 +91,6 @@ public class CartService {
             return cartRepository.save(cart);
         }
     }
-
-
-
 
 
 

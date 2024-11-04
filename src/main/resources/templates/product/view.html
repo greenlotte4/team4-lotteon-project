@@ -81,7 +81,7 @@
                             <input type="hidden" name="count" id="count" />
                             <button type="submit" class="cart-button">장바구니</button>
                         </form>
-                        <a th:href="@{/product/order}" class="buy-button">구매하기</a>
+                        <a id="buyLink" href="#" class="buy-button">구매하기</a>
                     </div>
                     <div class="product-banner" th:each="banner : ${banners}" th:if="${banner.location == 'PRODUCT1'}">
                         <a th:href="${banner.link}">

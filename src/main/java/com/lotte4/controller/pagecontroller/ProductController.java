@@ -4,17 +4,21 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lotte4.dto.*;
 import com.lotte4.entity.Cart;
+import com.lotte4.entity.ProductVariants;
 import com.lotte4.entity.User;
 import com.lotte4.service.CartService;
 import com.lotte4.service.ProductService;
 import com.lotte4.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -30,6 +34,7 @@ import java.util.Map;
 //수정이력
 //      - 2024/10/28 강중원 - 리스트 불러오기 임시 기능 메서드 추가
 //      - 2024/10/30 강은경 - 장바구니 insert하는 postmapping추가
+//      - 2024/10/31 조수빈 - session 정보 전달하는 HttpSession 추가
 //      - 2024/11/04 강중원 - 상품 카테고리와 타입에 따른 정렬 매핑 추가
 
 @Log4j2
@@ -90,7 +95,7 @@ public class ProductController {
     }
 
     @GetMapping("/product/cart")
-    public String cart(Model model, Principal principal) {
+    public String cart(Model model, Principal principal, HttpSession session) {
 
         if (principal == null || principal.getName() == null) {
             return "redirect:/member/login"; // 로그인 체크
@@ -99,6 +104,9 @@ public class ProductController {
         log.info("uid : " + uid);
 
         List<CartDTO> cartList = cartService.getCartByUserId(uid);
+
+        session.setAttribute("secartList", cartList);
+        log.info("session cartList"+cartList);
 
         model.addAttribute("cartList", cartList);
 
@@ -128,6 +136,7 @@ public class ProductController {
         cartResponseDTO.setUser(user.toDTO());
 
         Cart savedCart = cartService.insertCart(cartResponseDTO);
+        log.info("savedCart : " + savedCart);
         if(savedCart != null){
             return ResponseEntity.ok("success");
 
@@ -135,6 +144,15 @@ public class ProductController {
             return ResponseEntity.ok("failed");
         }
     }
+
+
+    // 선택구매용
+    @PostMapping("/product/cart/selected")
+    public ResponseEntity<?> storeSelectedCartItems(@RequestBody List<Integer> cartIds, HttpSession session) {
+        session.setAttribute("selectedCartIds", cartIds);
+        return ResponseEntity.ok().build();
+    }
+
 
 
     @PostMapping("/product/cart/delete")
@@ -164,7 +182,7 @@ public class ProductController {
     }
 
     @GetMapping("/product/view")
-    public String view(int productId, Model model) throws JsonProcessingException {
+    public String view(int productId, Model model, HttpSession session) throws JsonProcessingException {
 
         Product_V_DTO productDTO = productService.getProduct_V_ById(productId);
 
@@ -176,6 +194,12 @@ public class ProductController {
         model.addAttribute("options", options);
         model.addAttribute("productDTOJson", productDTOJson);
         model.addAttribute("productDTO", productDTO);
+
+        session.setAttribute("productDTO", productDTO);
+        log.info("productDTO : " + productDTO);
+        log.info("productDTOJson : " + productDTOJson);
+        log.info("options : " + options);
+
         model.addAttribute("productVariants", productVariants);
 
         return "/product/view";

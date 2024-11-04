@@ -160,8 +160,8 @@
                     <p class="shipping-notice">배송비는 쿠폰할인금액에 따라 변경될 수 있습니다.</p>
                 </div>
                 <div class="checkout-buttons">
-                    <button class="checkout-btn outlined">선택주문(1)</button>
-                    <a th:href="@{/product/order}" class="checkout-btn filled" onclick="selectAllAndUpdate()" id="total-order-btn">전체주문</a>
+                    <button class="checkout-btn outlined" onclick="orderSelectedItems()">선택주문</button>
+                    <button class="checkout-btn filled" onclick="orderAllItems()">전체주문</button>
                 </div>
             </aside>
 
@@ -346,8 +346,6 @@
 
 </script>
 
-
-
 <script>
     // 선택된 항목을 서버에 전송하고 주문 페이지로 이동하는 함수
     function orderSelectedItems() {
@@ -406,7 +404,6 @@
                 alert("주문 처리 중 오류가 발생했습니다.");
             });
     }
-
 </script>
 
 </html>

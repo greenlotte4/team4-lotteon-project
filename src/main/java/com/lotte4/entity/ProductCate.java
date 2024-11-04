@@ -1,7 +1,5 @@
 package com.lotte4.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,15 +18,10 @@ public class ProductCate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int productCateId;
-
     // 계층
     private int depth;
-
-
     // 이름
     private String name;
-
-
     //외래키 목록
     // 부모 객체
     @ManyToOne(fetch = FetchType.LAZY)
