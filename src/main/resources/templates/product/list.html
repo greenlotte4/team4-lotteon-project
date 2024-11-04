@@ -12,9 +12,12 @@
     <link id="pageStylesheet" rel="stylesheet" th:href="@{/css/product/style_product_list_grid.css}"/>
     <script>
         // CSS 파일을 동적으로 변경하는 함수
-        function changeStylesheet(fileName) {
+       function changeStylesheet(fileName) {
+
             const stylesheet = document.getElementById('pageStylesheet');
             stylesheet.href = fileName;
+
+
         }
     </script>
 </head>
@@ -119,7 +122,6 @@
         </section>
     </main>
     <footer th:replace="~{/include/footer.html}"></footer>
-    <button type="button" id="top">상단이동</button>
 </div>
 </body>
 </html>
