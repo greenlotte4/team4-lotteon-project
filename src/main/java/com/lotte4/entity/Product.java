@@ -56,6 +56,10 @@ public class Product {
     @JoinColumn(name = "productCateId")
     private ProductCate productCateId;
 
+    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "productDetailId")
+    private ProductDetail productDetail;
+
     // 관계 관리 메서드
     public void addVariant(ProductVariants variant) {
         productVariants.add(variant);

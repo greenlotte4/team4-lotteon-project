@@ -52,6 +52,7 @@ public class ProductRestController {
                                                                         @RequestParam("img_3") MultipartFile img_3,
                                                                         @RequestParam("detail_") MultipartFile detail_,
                                                                         @RequestParam("optionsJson") String optionsJson,
+                                                                        @RequestParam("product_Detail_Id") int product_Detail_Id,
                                                                         @ModelAttribute ProductDTO productDTO) {
 
         log.info("productdto = " + productDTO);
@@ -61,6 +62,9 @@ public class ProductRestController {
 
         // 판매자 정보 입력
         SellerInfoDTO sellerInfo = sellerInfoService.selectSellerInfoById(sellerId);
+
+        // 상품 상세 정보 입력
+        ProductDetailDTO productDetail = productService.getProductDetailById(product_Detail_Id);
 
         // 옵션을 LinkedHashMap으로 변환 후 productDTO에 주입
         ProductDTO productDTO1 = productService.JsonToMapAndSetProductDTO(optionsJson, productDTO);
@@ -75,6 +79,7 @@ public class ProductRestController {
         productDTO1.setImg3(img3);
         productDTO1.setDetail(detail);
         productDTO1.setSellerInfoId(sellerInfo);
+        productDTO1.setProductDetailId(productDetail);
 
         ProductDTO dto = productService.insertProduct(productDTO1);
 
@@ -91,17 +96,17 @@ public class ProductRestController {
     }
 
     @PostMapping("/admin/product/detail")
-    public ResponseEntity<Map<String, String>> productDetailRegister(@RequestBody ProductDetailDTO productDetailDTO) {
+    public ResponseEntity<Map<String, Integer>> productDetailRegister(@RequestBody ProductDetailDTO productDetailDTO) {
         log.info(productDetailDTO);
         ProductDetailDTO dto = productService.insertProductDetail(productDetailDTO);
-        Map<String, String> response = new HashMap<>();
+        Map<String, Integer> response = new HashMap<>();
 
         if (dto != null) {
-            response.put("status", "success");
+            response.put("productDetailId", dto.getProductDetailId());
             return ResponseEntity.ok().body(response);
         }
 
-        response.put("status", "failure");
+        response.put("productDetailId", 0);
         return ResponseEntity.ok().body(response);
     }
 

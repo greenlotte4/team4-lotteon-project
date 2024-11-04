@@ -41,6 +41,7 @@ public class ProductDTO {
     private LinkedHashMap<String, List<String>> options;
     private int status;
     private ProductCateDTO productCateId;
+    private ProductDetailDTO productDetailId;
 
     public ProductDTO(Product product) {
         this.productId = product.getProductId();
@@ -71,6 +72,10 @@ public class ProductDTO {
             this.productCateId = new ProductCateDTO(product.getProductCateId());
         }
 
+        // ProductDetailDTO 매핑
+        if (product.getProductDetail() != null) {
+            this.productDetailId = new ProductDetailDTO(product.getProductDetail());
+        }
     }
 }
 
