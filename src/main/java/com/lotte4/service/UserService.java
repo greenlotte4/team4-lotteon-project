@@ -8,6 +8,7 @@ import com.lotte4.entity.SellerInfo;
 import com.lotte4.entity.User;
 import com.lotte4.repository.MemberInfoRepository;
 import com.lotte4.repository.PointRepository;
+import com.lotte4.repository.SellerInfoRepository;
 import com.lotte4.repository.UserRepository;
 import jakarta.mail.Message;
 import jakarta.mail.internet.InternetAddress;
@@ -41,6 +42,7 @@ import java.util.stream.Collectors;
       - 2024/10/28 강은경 - 관리자 회원목록 기능 검색&페이징 메서드 추가
       - 2024/10/28 강은경 - uid로 사용자 조회 메서드 추가
       - 2024/10/28 강은경 - 이름과 이메일로 아이디 조회하는 메서드 추가
+      - 2024/11/03 강은경 - 정보에 따른 아이디 조회하는 메서드 추가
 */
 @Log4j2
 @RequiredArgsConstructor
@@ -55,6 +57,7 @@ public class UserService {
     private final JavaMailSender javaMailSender;
     private final MemberInfoRepository memberInfoRepository;
     private final PasswordEncoder passwordEncoder;
+    private final SellerInfoRepository sellerInfoRepository;
 
     @Value("${spring.mail.username}")
     private String sender;
@@ -150,7 +153,7 @@ public class UserService {
                 .orElse(null);
     }
 
-    // 사용자 중복 체크
+    // 사용자 중복 체크(개인구매회원)
     public int selectCountUser(String type, String value){
         int count = 0;
 
@@ -158,6 +161,20 @@ public class UserService {
             count = userRepository.countByUid(value);
         } else if(type.equals("email")){
             count = memberInfoRepository.countByEmail(value);
+        } else if (type.equals("hp")) {
+            count = memberInfoRepository.countByHp(value);
+        }
+        return count;
+    }
+
+    // 사용자 중복 체크(사업자판매회원)
+    public int selectCountSellerUser(String type, String value){
+        int count = 0;
+
+        if(type.equals("uid")){
+            count = userRepository.countByUid(value);
+        } else if(type.equals("email")){
+            count = sellerInfoRepository.countByEmail(value);
         } else if (type.equals("hp")) {
             count = memberInfoRepository.countByHp(value);
         }
@@ -269,10 +286,38 @@ public class UserService {
             return null;
         }
     }
+
+    // 아이디와 사업자등록번호와 이메일로 정보 조회
+    public String findAllByUidAndComNumberAndEmail(String uid, String comNumber,String email) {
+
+        Optional<User> userOptional = userRepository.findByUidAndAndSellerInfo_ComNumberAndSellerInfo_Email(uid, comNumber, email);
+
+        if(userOptional.isPresent()) {
+            log.info("정보 찾기 성공 - uid: " + uid + ", comNumber: " + comNumber+ ", email: " + email);
+            return userOptional.get().getUid();
+        } else {
+            return null;
+        }
+    }
+
+    // 비밀번호 변경
     @Transactional
     public boolean updatePassword(String uid, String rawPassword) {
         String encodedPassword = passwordEncoder.encode(rawPassword);
         int result = userRepository.updatePassword(uid, encodedPassword);
         return result > 0;  // 업데이트가 성공하면 true 반환
+    }
+
+    // 회사명과 사업자등록번호와 이메일로 아이디 조회
+    public String findIdByComNameAndComNumberAndEmail(String comName, String comNumber, String email) {
+
+        Optional<User> userOptional = userRepository.findBySellerInfo_ComNameAndSellerInfo_ComNumberAndSellerInfo_Email(comName, comNumber, email);
+
+        if(userOptional.isPresent()) {
+            log.info("아이디 찾기 성공 - comName: " + comName + ", comNumber: " + comNumber + ", email: " + email);
+            return userOptional.get().getUid();
+        } else {
+            return null;
+        }
     }
 }

@@ -6,6 +6,14 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+/*
+     날짜 : 2024/11/03
+     이름 : 강은경
+     내용 : SellerInfo 생성
+
+     수정이력
+      - 2024/11/03 강은경 - email 속성 추가
+*/
 
 @Getter
 @Setter
@@ -31,6 +39,8 @@ import java.time.LocalDateTime;
     private String hp;
     // 팩스 번호
     private String fax;
+    // 이메일
+    private String email;
     
     @Embedded
     private Address address; // address 객체로 분리
@@ -51,6 +61,7 @@ import java.time.LocalDateTime;
                 .bizNumber(bizNumber)
                 .hp(hp)
                 .fax(fax)
+                .email(email)
                 .regIp(regIp)
                 .updateAt(updateAt)
                 .state(state)

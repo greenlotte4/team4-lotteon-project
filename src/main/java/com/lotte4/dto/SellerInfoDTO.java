@@ -9,7 +9,14 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+/*
+     날짜 : 2024/11/03
+     이름 : 강은경
+     내용 : SellerInfoDTO 생성
 
+     수정이력
+      - 2024/11/03 강은경 - email 속성 추가
+*/
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,6 +36,7 @@ public class SellerInfoDTO {
     private String hp;
     // 팩스 번호
     private String fax;
+    private String email;
 
     private AddressDTO address;
 
@@ -70,6 +78,7 @@ public class SellerInfoDTO {
                 .bizNumber(bizNumber)
                 .hp(hp)
                 .fax(fax)
+                .email(email)
                 .address(new Address(address.getZipCode(), address.getAddr1(), address.getAddr2()))
                 .regIp(regIp)
                 .updateAt(updateAt)

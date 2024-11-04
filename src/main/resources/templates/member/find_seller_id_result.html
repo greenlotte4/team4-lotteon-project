@@ -29,9 +29,9 @@
                 <div >
                     <table>
                         <tr>
-                            <td class="table-label">이름</td>
+                            <td class="table-label">회사명</td>
                             <td>
-                                <span th:text="${user.memberInfo.name}"></span>
+                                <span th:text="${user.sellerInfo.comName}"></span>
                             </td>
                         </tr>
                         <tr>
@@ -41,15 +41,21 @@
                             </td>
                         </tr>
                         <tr>
+                            <td class="table-label">사업자등록번호</td>
+                            <td>
+                                <span th:text="${user.sellerInfo.comNumber}" ></span>
+                            </td>
+                        </tr>
+                        <tr>
                             <td class="table-label">이메일</td>
                             <td>
-                                <span th:text="${user.memberInfo.email}" ></span>
+                                <span th:text="${user.sellerInfo.email}" ></span>
                             </td>
                         </tr>
                         <tr>
                             <td class="table-label">가입일</td>
                             <td>
-                                <span th:text="${#strings.substring(user.memberInfo.updatedAt, 0, 10)}"></span>
+                                <span th:text="${#strings.substring(user.sellerInfo.updateAt, 0, 10)}"></span>
                             </td>
                         </tr>
                     </table>
