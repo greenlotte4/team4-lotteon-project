@@ -23,3 +23,18 @@
         </p>
     </div>
 </footer>
+<button type="button" id="top" class="scroll_move"><img th:src="@{/images/main/Red_Arrow2.png}" alt="상단이동"/></button>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 버튼 클릭 이벤트 리스너 추가
+        const scrollButton = document.getElementById('top');
+        scrollButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            // 최상단으로 스크롤
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth' // 부드러운 스크롤 효과
+            });
+        });
+    });
+</script>

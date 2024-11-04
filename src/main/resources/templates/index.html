@@ -45,17 +45,6 @@
     </script>
 <!--슬라이드 끝-->
 
-    <script>
-        $(document).ready(function($) {
-            $(".scroll_move").click(function(event){
-                console.log(".scroll_move");
-                event.preventDefault();
-                $('html,body').animate({scrollTop:$(this.hash).offset().top}, 500);
-            });
-
-        });
-    </script>
-
 </head>
 <body>
 <div id="bannerTop" class="on">
@@ -467,7 +456,7 @@
     </main>
     <footer th:replace="~{/include/footer.html}">
     </footer>
-    <button type="button" id="top">상단이동</button>
+
 </div>
 </body>
 </html>

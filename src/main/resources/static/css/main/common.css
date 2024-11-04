@@ -393,20 +393,7 @@ footer p > strong {
   font-weight: bold;
 }
 
-/* 오른쪽 하단 상단 이동버튼 */
-#top {
-  position: fixed;
-  left: 50%;
-  bottom: 10px;
-  margin-left: 600px;
-  /* display: none; */
-  width: 42px;
-  height: 42px;
-  background-image: url("../../../templates/images/top.png");
-  border: none;
-  font-size: 0;
-  cursor: pointer;
-}
+
 /* 기본 스타일 */
 body {
   font-family: Arial, sans-serif;
