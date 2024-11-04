@@ -46,6 +46,7 @@ public class ProductService {
     private final ModelMapper modelMapper;
     private final ObjectMapper objectMapper;
     private final CachingService cachingService;
+    private final ProductDetailRepository detailRepository;
 
     //
     public static List<String> stringToStringList(String string) {
@@ -391,7 +392,10 @@ public List<ProductDTO> getProductWithCate(int cate) {
         
         List<ProductListDTO> productListDTOList = new ArrayList<>();
             for (ProductDTO productDTO : productDTOList) {
-                productListDTOList.add(modelMapper.map(productDTO, ProductListDTO.class));
+                ProductListDTO productListDTO = modelMapper.map(productDTO, ProductListDTO.class);
+                ProductDetail detail= detailRepository.findByProductId(productDTO.getProductId());
+                productListDTO.setCreateTime(detail.getCreateDate());
+                productListDTOList.add(productListDTO);
             }
         
         
@@ -461,21 +465,36 @@ public List<ProductDTO> getProductWithCate(int cate) {
 
                 //최근 등록순
             case "recent":
+                productListDTOList.sort(new Comparator<ProductListDTO>() {
+                    @Override
+                    public int compare(ProductListDTO o1, ProductListDTO o2) {
+                        return o2.getCreateTime().compareTo(o1.getCreateTime());
+                    }
+                });
                 break;
         }
         return productListDTOList;
     }
 
     //home(index)에서 사용
-    public List<ProductDTO> getProductWithType(String type) {
+    public List<ProductListDTO> getProductWithType(String type) {
         List<ProductDTO> productDTOList = getAllProducts();
+
+        List<ProductListDTO> productListDTOList = new ArrayList<>();
+        for (ProductDTO productDTO : productDTOList) {
+            ProductListDTO productListDTO = modelMapper.map(productDTO, ProductListDTO.class);
+            ProductDetail detail= detailRepository.findByProductId(productDTO.getProductId());
+            productListDTO.setCreateTime(detail.getCreateDate());
+            productListDTOList.add(productListDTO);
+        }
+
 
         //정렬
         switch (type) {
             case "Hit":
-                productDTOList.sort(new Comparator<ProductDTO>() {
+                productListDTOList.sort(new Comparator<ProductListDTO>() {
                     @Override
-                    public int compare(ProductDTO o1, ProductDTO o2) {
+                    public int compare(ProductListDTO o1, ProductListDTO o2) {
                         return Integer.compare(o2.getHit(), o1.getHit());
                     }
                 });
@@ -484,33 +503,40 @@ public List<ProductDTO> getProductWithCate(int cate) {
 
                 break;
             case "ScoreMany":
-                productDTOList.sort(new Comparator<ProductDTO>() {
+                productListDTOList.sort(new Comparator<ProductListDTO>() {
                     @Override
-                    public int compare(ProductDTO o1, ProductDTO o2) {
+                    public int compare(ProductListDTO o1, ProductListDTO o2) {
                         return Integer.compare(o2.getReview(), o1.getReview());
                     }
                 });
                 break;
 
             case "Discount":
-                productDTOList.sort(new Comparator<ProductDTO>() {
+                productListDTOList.sort(new Comparator<ProductListDTO>() {
                     @Override
-                    public int compare(ProductDTO o1, ProductDTO o2) {
+                    public int compare(ProductListDTO o1, ProductListDTO o2) {
                         return Integer.compare(o2.getDiscount(), o1.getDiscount());
                     }
                 });
                 break;
-
+            case "Recent":
+                productListDTOList.sort(new Comparator<ProductListDTO>() {
+                    @Override
+                    public int compare(ProductListDTO o1, ProductListDTO o2) {
+                        return o1.getCreateTime().compareTo(o2.getCreateTime());
+                    }
+                });
+                break;
         }
-        List<ProductDTO> productDTOs = new ArrayList<>();
+        List<ProductListDTO> productDTOs = new ArrayList<>();
 
         //8개만 추출
         int count = 0;
         int max = 8;
 
-        for(ProductDTO productDTO : productDTOList){
+        for(ProductListDTO productListDTO : productListDTOList){
             if(count < max){
-                productDTOs.add(productDTO);
+                productDTOs.add(productListDTO);
                 count++;
             }else{
                 break;

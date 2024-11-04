@@ -2,6 +2,7 @@ package com.lotte4.controller.pagecontroller;
 
 import com.lotte4.dto.ProductCateDTO;
 import com.lotte4.dto.ProductDTO;
+import com.lotte4.dto.ProductListDTO;
 import com.lotte4.service.CategoryService;
 import com.lotte4.service.ProductService;
 import lombok.AllArgsConstructor;
@@ -30,16 +31,20 @@ public class HomeController {
     public String index(Model model) {
 
         //히트상품 (조회수)
-        List<ProductDTO> HitList = productService.getProductWithType("Hit");
+        List<ProductListDTO> HitList = productService.getProductWithType("Hit");
         model.addAttribute("HitList", HitList);
 
         //할인상품 (할인)
-        List<ProductDTO> DiscountList = productService.getProductWithType("Discount");
+        List<ProductListDTO> DiscountList = productService.getProductWithType("Discount");
         model.addAttribute("DiscountList", DiscountList);
 
         //인기상품 (평점 많은순)
-        List<ProductDTO> ScoreManyList = productService.getProductWithType("ScoreMany");
+        List<ProductListDTO> ScoreManyList = productService.getProductWithType("ScoreMany");
         model.addAttribute("ScoreManyList", ScoreManyList);
+
+        //최근상품 (등록일 최근순)
+        List<ProductListDTO> RecentList = productService.getProductWithType("Recent");
+        model.addAttribute("RecentList", RecentList);
 
         return "/index";
     }
