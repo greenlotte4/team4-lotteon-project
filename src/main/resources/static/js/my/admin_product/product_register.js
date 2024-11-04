@@ -236,22 +236,7 @@ form.addEventListener('submit', async function (e) {
     formData.append('sellerId', sellerId);
 
     try {
-        // 첫 번째 POST: 제품 등록
-        const registerResponse = await fetch('/lotteon/admin/product', {
-            method: 'POST',
-            body: formData
-        });
-
-        const registerData = await registerResponse.json();
-        console.log('Register Response:', registerData);
-
-        const productId = registerData.productId;
-        if (!productId) {
-            alert('유효한 상품 ID를 받지 못했습니다.');
-            return;
-        }
-
-        // 두 번째 POST: 제품 상세 등록
+        // 첫 번째 POST: 제품 상세 등록
         const condition_field = document.querySelector('#condition').value.trim();
         const duty = document.querySelector('#duty').value.trim();
         const receipt = document.querySelector('#receipt').value.trim();
@@ -294,8 +279,26 @@ form.addEventListener('submit', async function (e) {
         const detailData = await detailResponse.json();
         console.log('Detail Response:', detailData);
 
-        if (detailData.status !== 'success') {
-            alert(detailData.message || '상품 상세 등록에 실패하였습니다.');
+        const productDetailId = detailData.productDetailId;
+        if (!productDetailId) {
+            alert('유효한 상품 상세 ID를 받지 못했습니다.');
+            return;
+        }
+
+        formData.append('product_Detail_Id', productDetailId);
+
+        // 두 번째 POST: 제품 등록
+        const registerResponse = await fetch('/lotteon/admin/product', {
+            method: 'POST',
+            body: formData
+        });
+
+        const registerData = await registerResponse.json();
+        console.log('Register Response:', registerData);
+
+        const productId = registerData.productId;
+        if (!productId) {
+            alert('유효한 상품 ID를 받지 못했습니다.');
             return;
         }
 

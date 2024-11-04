@@ -5,6 +5,7 @@
 
      수정이력
      - 2024/10/30 전규찬 - productId 필드 추가
+     - 2024/11/04 전규찬 - productId 필드 제거 / Product 측에 ProductDetailId 추가
 */
 
 package com.lotte4.entity;
@@ -35,7 +36,6 @@ public class ProductDetail {
     private String creator;
     private String country;
     private String warning;
-    private int productId;
 
     private String createDate;
     private String quality;

@@ -1,3 +1,12 @@
+/*
+     날짜 : 2024/11/04
+     이름 : 전규찬
+     내용 : product_view.js 생성
+
+     수정이력
+     - 2024/11/04 전규찬 - 옵션 선택 시 해당 제품 수량 선택 영역 생성 / 제품 가격 명시 / 가격 총합 계산
+*/
+
 'use strict'
 
 window.onload = function () {
@@ -172,10 +181,95 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // 매칭된 variant가 있을 때 링크 설정
             if (matchingVariant) {
-                const count = quantityInput.value;
-                buyLink.href = `/lotteon/product/order/${matchingVariant.variant_id}?count=${count}`;
+                console.log("Matched Variant Price:", matchingVariant.price);
+                const total_price = document.querySelector('.total-price');
+
+                // 옵션 선택 시 해당 제품 수량 선택 영역 생성
+                const innerHtml = `
+                                <div id="${matchingVariant.variant_id}" class="selected_variant">
+                                    <div class="delete_variant_div">
+                                      <button class="delete_variant" type="button">X</button>                                  
+                                    </div>
+                                    <div class="variant_info_div">
+                                       <span>${matchingVariant.sku}</span>            
+                                       <div class="btnPlusMinusDiv">
+                                            <button class="btn_minus" type="button">-</button>
+                                            <input type="number" min="1" max="${matchingVariant.stock}" value="1">
+                                            <button class="btn_plus" type="button">+</button>
+                                        </div>
+                                        <span class="variant_price">${matchingVariant.price.toLocaleString() + "원"}</span>
+                                    </div>
+                                </div>
+                              `;
+                try {
+                    // 동일한 제품에 대한 영역이 없다면 추가
+                    if (document.getElementById(`${matchingVariant.variant_id}`) === null) {
+
+                        total_price.insertAdjacentHTML('beforebegin', innerHtml);
+
+                        // 생성된 제품 1개 가격을 총 상품금액에 더하기
+                        let totalPrice = document.querySelector('.total-price').querySelector('strong');
+
+                        totalPrice.textContent = (parseInt(totalPrice.textContent.replace(",", "").replace("원", "")) + matchingVariant.price).toLocaleString() + "원";
+
+                        // 영역 제거 버튼 기능 추가
+                        const btn_delete_variant = document.getElementById(`${matchingVariant.variant_id}`).querySelector('.delete_variant');
+                        btn_delete_variant.addEventListener('click', function (e) {
+                            e.preventDefault();
+                            e.target.parentElement.parentElement.remove();
+                            const currentCount = e.target.parentElement.nextElementSibling.querySelector('.btnPlusMinusDiv').querySelector('input').value;
+                            const VariantPrice =  e.target.parentElement.nextElementSibling.querySelector('.variant_price').textContent.replace(",", "").replace("원", "");
+                            const priceToMinus = parseInt(currentCount) * parseInt(VariantPrice);
+                            totalPrice.textContent = (parseInt(totalPrice.textContent.replace(",", "").replace("원", "")) - priceToMinus).toLocaleString() + "원";
+                        });
+
+                        // 수량 증가 / 감소 버튼 기능 추가
+                        const btn_minus = document.getElementById(`${matchingVariant.variant_id}`).querySelector('.btn_minus');
+                        const btn_plus = document.getElementById(`${matchingVariant.variant_id}`).querySelector('.btn_plus')
+
+                        btn_minus.addEventListener('click', function (e) {
+                            e.preventDefault();
+
+                            // 숫자 입력란 호출
+                            const currentNum = e.target.nextElementSibling;
+                            console.log("currentNum = " + currentNum);
+
+                            // 최소값보다 작거나 같으면 비활성화
+                            if (parseInt(currentNum.value) <= parseInt(currentNum.min)) {
+                                e.target.disabled;
+                            } else{
+                                // 클릭마다 1씩 감소, 제품 가격만큼 총 상품금액에서 차감
+                                currentNum.value = parseInt(currentNum.value) - 1;
+                                let currentVariantPrice = e.target.parentElement.nextElementSibling.textContent.replace(",", "").replace("원", "");
+                                totalPrice.textContent = (parseInt(totalPrice.textContent.replace(",", "").replace("원", "")) - parseInt(currentVariantPrice)).toLocaleString() + "원";
+                            }
+                        });
+
+                        btn_plus.addEventListener('click', function (e) {
+                            e.preventDefault();
+
+                            const currentNum = e.target.previousElementSibling;
+                            console.log("currentNum = " + currentNum);
+                            if (parseInt(currentNum.value) >= parseInt(currentNum.max)) {
+                                e.target.disabled;
+                            } else{
+                                currentNum.value = parseInt(currentNum.value) + 1;
+                                let currentVariantPrice = e.target.parentElement.nextElementSibling.textContent.replace(",", "").replace("원", "");
+                                totalPrice.textContent = (parseInt(totalPrice.textContent.replace(",", "").replace("원", "")) + parseInt(currentVariantPrice)).toLocaleString() + "원";
+                            }
+
+                        });
+                    }
+                } catch (error) {
+                    console.error('고유 제품 HTML 삽입 중 오류 발생:', error);
+                }
+
+
+                document.querySelector('.selected-variant-price').textContent = `제품 가격 : ${matchingVariant.price.toLocaleString() + "원"}`;
+                document.querySelector('.total-price').querySelector('strong').textContent = matchingVariant.price.toLocaleString() + "원";
             } else {
                 console.log("No matching variant found");
+                document.querySelector('.selected-variant-price').textContent = "제품 가격 : 0원";
             }
         }
     }

@@ -52,7 +52,6 @@ public class ProductDetailDTO {
         this.warning = productDetail.getWarning();
         this.createDate = productDetail.getCreateDate();
         this.quality = productDetail.getQuality();
-        this.productId = productDetail.getProductId();
         this.as_field = productDetail.getAs_field();
         this.asPhone = productDetail.getAsPhone();
     }

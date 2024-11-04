@@ -145,9 +145,15 @@ public class ProductService {
     }
 
     public ProductDetailDTO getProductDetailById(int productId) {
-        ProductDetail productDetail = productDetailRepository.findByProductId(productId);
-        log.info("productDetail : " + productDetail);
-        return modelMapper.map(productDetail, ProductDetailDTO.class);
+        Optional<Product> productOptional = productRepository.findById(productId);
+        if (productOptional.isPresent()) {
+            Product product = productOptional.get();
+            ProductDTO productDTO = new ProductDTO(product);
+            ProductDetailDTO productDetailDTO = productDTO.getProductDetailId();
+            log.info("productDetailDTO : " + productDetailDTO);
+            return productDetailDTO;
+        }
+        return null;
     }
 
     public String uploadAndDeleteProdImg(MultipartFile file, String prevFileName) {
@@ -314,7 +320,6 @@ public class ProductService {
                 log.error(e);
             }
         }
-        productDetailRepository.deleteByProductId(productId);
         productRepository.deleteById(productId);
         Optional<Product> optionalProduct = productRepository.findById(productId);
         if (optionalProduct.isPresent()) {
@@ -393,7 +398,7 @@ public List<ProductDTO> getProductWithCate(int cate) {
         List<ProductListDTO> productListDTOList = new ArrayList<>();
             for (ProductDTO productDTO : productDTOList) {
                 ProductListDTO productListDTO = modelMapper.map(productDTO, ProductListDTO.class);
-                ProductDetail detail= detailRepository.findByProductId(productDTO.getProductId());
+                ProductDetailDTO detail= productDTO.getProductDetailId();
                 productListDTO.setCreateTime(detail.getCreateDate());
                 productListDTOList.add(productListDTO);
             }
@@ -483,7 +488,7 @@ public List<ProductDTO> getProductWithCate(int cate) {
         List<ProductListDTO> productListDTOList = new ArrayList<>();
         for (ProductDTO productDTO : productDTOList) {
             ProductListDTO productListDTO = modelMapper.map(productDTO, ProductListDTO.class);
-            ProductDetail detail= detailRepository.findByProductId(productDTO.getProductId());
+            ProductDetailDTO detail= productDTO.getProductDetailId();
             productListDTO.setCreateTime(detail.getCreateDate());
             productListDTOList.add(productListDTO);
         }
