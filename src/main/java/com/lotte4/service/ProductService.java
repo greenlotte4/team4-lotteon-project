@@ -358,7 +358,7 @@ public List<ProductDTO> getProductWithCate(int cate) {
                 // 현재 하위 카테고리에 속한 제품을 가져옴
                 List<Product> childProducts = productRepository.findByProductCateId(child);
                 for (Product product : childProducts) {
-                    productDTOList.add(modelMapper.map(product, ProductDTO.class));
+                    productDTOList.add(new ProductDTO(product));
                 }
 
                 // depth가 1인 경우, 손자 카테고리의 제품을 가져옴
@@ -366,7 +366,7 @@ public List<ProductDTO> getProductWithCate(int cate) {
                     for (ProductCate grandChild : child.getChildren()) {
                         List<Product> grandChildProducts = productRepository.findByProductCateId(grandChild);
                         for (Product product : grandChildProducts) {
-                            productDTOList.add(modelMapper.map(product, ProductDTO.class));
+                            productDTOList.add(new ProductDTO(product));
                         }
                     }
                 }
@@ -376,7 +376,7 @@ public List<ProductDTO> getProductWithCate(int cate) {
         // 해당 카테고리에 속한 직접적인 제품도 가져옴
         List<Product> products = productRepository.findByProductCateId(productCate.get());
         for (Product product : products) {
-            productDTOList.add(modelMapper.map(product, ProductDTO.class));
+            productDTOList.add(new ProductDTO(product));
         }
     }
     log.info(productDTOList.toString());
