@@ -138,3 +138,55 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    // 수량이 변경될 때마다 count 필드에 값 업데이트
+    const quantityInput = document.getElementById('quantity');
+    const buyLink = document.getElementById('buyLink'); // 단품 구매 버튼
+
+    // 초기 count 값 설정
+    document.getElementById('count').value = quantityInput.value;
+
+    // 서버에서 전달된 variantDTO JSON 데이터
+    const variantDTO = JSON.parse(document.getElementById('product-dto').textContent);
+
+    const selects = document.querySelectorAll('#variant-options select');
+
+    function findMatchingVariant() {
+        // 선택된 옵션을 배열에 담음
+        const selectedOptions = [];
+        selects.forEach(select => {
+            selectedOptions.push(select.value);
+        });
+
+        // 선택된 옵션이 모두 선택된 경우에만 처리
+        if (selectedOptions.every(value => value)) {
+            const selectedOptionsKey = `[${Array.from(selects).map(select => select.previousElementSibling.innerText.replace(':', '').trim()).join(', ')}]`;
+            let matchingVariant = null;
+
+            // variantDTO에서 옵션 키와 매칭되는 variant 찾기
+            matchingVariant = variantDTO.productVariants.find(variant => {
+                const variantOptions = variant.options[selectedOptionsKey];
+                return JSON.stringify(variantOptions) === JSON.stringify(selectedOptions);
+            });
+
+            // 매칭된 variant가 있을 때 링크 설정
+            if (matchingVariant) {
+                const count = quantityInput.value;
+                buyLink.href = `/lotteon/product/order/${matchingVariant.variant_id}?count=${count}`;
+            } else {
+                console.log("No matching variant found");
+            }
+        }
+    }
+
+    // 옵션이 변경될 때마다 variant를 찾음
+    selects.forEach(select => {
+        select.addEventListener('change', findMatchingVariant);
+    });
+
+    // 수량 변경 시 count 값을 업데이트
+    quantityInput.addEventListener('input', function () {
+        document.getElementById('count').value = this.value;
+    });
+});

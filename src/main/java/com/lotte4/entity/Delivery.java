@@ -19,9 +19,10 @@ import java.time.LocalDateTime;
 @Entity
 public class Delivery {
 
+    //배송 순번(추후 년/월/일 + 번호 같이 만들어서 줘야함)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long deliveryNo;
+    private Long deliveryId;
 
 
     //배송 시작일
@@ -41,10 +42,12 @@ public class Delivery {
     @CreationTimestamp
     private LocalDateTime waybillDate;
 
+    private String content;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "orderId")
-    private Order order;
+
+    @OneToOne
+    @JoinColumn(name = "orderItemId")  // OrderItems의 orderItemId를 외래 키로 사용
+    private OrderItems orderItem;
 
 }
 

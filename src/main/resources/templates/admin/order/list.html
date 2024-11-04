@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <html lang="ko"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
       xmlns:th="http://www.thymeleaf.org">
@@ -31,11 +30,7 @@
                         <option>주문자</option>
                         <option>주문자명</option>
                     </select>
-                    <input
-                            type="text"
-                            placeholder="검색어 입력"
-                            class="search-input"
-                    />
+                    <input type="text" placeholder="검색어 입력" class="search-input"/>
                     <button class="search-btn">검색</button>
                 </div>
 
@@ -67,89 +62,40 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
+                    <tr th:each="order : ${orderDTOS}">
                         <td>
-                            <a href="#" onclick="openOrderDetailModal()">10121211341</a> <!-- 주문번호 클릭 시 모달 오픈 -->
+                            <a href="#" th:onclick="'openOrderDetailModal(' + ${order.orderId} + ')'" th:text="${order.orderId}">10121211341</a>
                         </td>
-                        <td>abc123</td>
-                        <td>김유신</td>
-                        <td>청바지</td>
-                        <td>2</td>
-                        <td>102,900</td>
-                        <td>신용카드</td>
-                        <!-- 결제완료/결제대기/주문취소 글자 색상 스크립트 처리? or th:if-->
-                        <td class="clear">결제완료</td>
-                        <td>0000-00-00 00:00:00</td>
                         <td>
-                            <a href="#" id="openRegisterModalBtn" class="delivery-btn">배송하기</a>
+                            <span th:each="user : ${userDTOS}"
+                                  th:if="${user.memberInfo != null and order.memberInfo != null and user.memberInfo.memberInfoId == order.memberInfo.memberInfoId}"
+                                  th:text="${user.uid}">아이디 없음</span>
                         </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <a href="#" onclick="openOrderDetailModal()">10121211341</a> <!-- 주문번호 클릭 시 모달 오픈 -->
+                        <td th:text="${order.memberInfo != null ? order.memberInfo.name : 'N/A'}">김유신</td>
+                        <td th:text="${order.product.name != null ? order.product.name : 'N/A'}">상품명</td>
+                        <td th:text="${order.count}">2</td>
+                        <td th:text="${#numbers.formatInteger(order.price * order.count, '0', 'COMMA')}">102,900</td>
+                        <td th:text="${order.Pay == 1 ? '무통장 입금' : '기타'}">신용카드</td>
+                        <td th:classappend="${order.Status == 1 ? 'completed' : (order.Status == 0 ? 'pending' : 'cancelled')}"
+                        <td th:text="${order.Status == 0 ? '결제대기' :
+                                      (order.Status == 1 ? '결제완료' :
+                                      (order.Status == 2 ? '결제완료' :
+                                      (order.Status == 3 ? '결제완료' :
+                                      (order.Status == 4 ? '결제완료' :
+                                      (order.Status == 5 ? '취소' :
+                                      (order.Status == 6 ? '교환' :
+                                      (order.Status == 7 ? '반품' : '알 수 없음')))))))}">
                         </td>
-                        <td>abc123</td>
-                        <td>김유신</td>
-                        <td>청바지</td>
-                        <td>2</td>
-                        <td>102,900</td>
-                        <td>계좌이체</td>
-                        <!-- 결제완료/결제대기/주문취소 글자 색상 스크립트 처리? or th:if-->
-                        <td class="wait">결제대기</td>
-                        <td>0000-00-00 00:00:00</td>
+                        <td th:text="${#temporals.format(order.buyDate, 'yyyy-MM-dd HH:mm:ss')}">2024-10-17 10:00:06</td>
                         <td>
-                            <a href="#" id="openRegisterModalBtn" class="delivery-btn">배송하기</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <a href="#" onclick="openOrderDetailModal()">10121211341</a> <!-- 주문번호 클릭 시 모달 오픈 -->
-                        </td>
-                        <td>abc123</td>
-                        <td>김유신</td>
-                        <td>청바지</td>
-                        <td>2</td>
-                        <td>102,900</td>
-                        <td>신용카드</td>
-                        <!-- 결제완료/결제대기/주문취소 글자 색상 스크립트 처리? or th:if-->
-                        <td class="clear">결제완료</td>
-                        <td>0000-00-00 00:00:00</td>
-                        <td>
-                            입력완료
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <a href="#" onclick="openOrderDetailModal()">10121211341</a> <!-- 주문번호 클릭 시 모달 오픈 -->
-                        </td>
-                        <td>abc123</td>
-                        <td>김유신</td>
-                        <td>청바지</td>
-                        <td>2</td>
-                        <td>102,900</td>
-                        <td>신용카드</td>
-                        <!-- 결제완료/결제대기/주문취소 글자 색상 스크립트 처리? or th:if-->
-                        <td class="cancel">주문취소</td>
-                        <td>0000-00-00 00:00:00</td>
-                        <td>
-                            주문취소
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <a href="#" onclick="openOrderDetailModal()">10121211341</a> <!-- 주문번호 클릭 시 모달 오픈 -->
-                        </td>
-                        <td>abc123</td>
-                        <td>김유신</td>
-                        <td>청바지</td>
-                        <td>2</td>
-                        <td>102,900</td>
-                        <td>계좌이체</td>
-                        <!-- 결제완료/결제대기/주문취소 글자 색상 스크립트 처리? or th:if-->
-                        <td class="wait">결제대기</td>
-                        <td>0000-00-00 00:00:00</td>
-                        <td>
-                            <a href="#" id="openRegisterModalBtn" class="delivery-btn">배송하기</a>
+                            <a href="#"
+                               th:attr="data-order-id=${order.orderId},
+                                        data-recip-name=${order.recipName},
+                                        data-recip-zip=${order.recipZip},
+                                        data-recip-addr1=${order.recipAddr1},
+                                        data-recip-addr2=${order.recipAddr2}"
+                               onclick="openRegisterModal(this)"
+                               class="delivery-btn">배송하기</a>
                         </td>
                     </tr>
                     </tbody>
@@ -168,6 +114,7 @@
         </section>
     </div>
 </main>
+
 <!-- 배송 등록 모달 -->
 <div id="versionRegisterModal" class="modal2">
     <div class="modal-content2">
@@ -180,53 +127,56 @@
                 <table class="modal-table2">
                     <tr>
                         <th>주문번호</th>
-                        <td><input type="text" id="versionInput" value="10121211341" required></td>
+                        <td><input type="text" id="versionInput" readonly></td>
                     </tr>
                     <tr>
                         <th>수령인</th>
-                        <td><input type="text" id="changelogInput" value="홍길동" required></td>
+                        <td><input type="text" id="recipientInput" required></td>
                     </tr>
                     <tr>
                         <th>우편번호</th>
-                        <td><input type="text" id="changelogInput" value="12345" required></td>
+                        <td><input type="text" id="zipcodeInput" required></td>
                     </tr>
                     <tr>
                         <th>기본주소</th>
-                        <td><input type="text" id="changelogInput" value="부산광역시 부산진구 부전동 123" required></td>
+                        <td><input type="text" id="addressInput" required></td>
                     </tr>
                     <tr>
                         <th>상세주소</th>
-                        <td><input type="text" id="changelogInput" value="00빌딩 3층 301호" required></td>
+                        <td><input type="text" id="detailedAddressInput" required></td>
                     </tr>
                     <tr>
                         <th>택배사</th>
                         <td>
-                            <select id="search-category" class="dropdown">
-                                <option>택배사 선택</option>
-                                <option>택</option>
-                                <option>배</option>
-                                <option>사</option>
+                            <select id="deliveryCompany" class="dropdown">
+                                <option value="">택배사 선택</option>
+                                <option value="롯데택배">롯데택배</option>
+                                <option value="로젠택배">로젠택배</option>
+                                <option value="CJ대한통운">CJ대한통운</option>
                             </select>
                         </td>
                     </tr>
                     <tr>
                         <th>운송장번호</th>
-                        <td><input type="text" id="changelogInput" value="00빌딩 3층 301호" placeholder="발급받은 택배사 송장번호 입력" required></td>
+                        <td><input type="text" id="trackingNumberInput" placeholder="발급받은 택배사 송장번호 입력" required></td>
                     </tr>
                     <tr>
                         <th>기타</th>
                         <td>
-                            <textarea id="changelogInput" value="00빌딩 3층 301호" placeholder="기타정보 입력" required></textarea>
+                            <textarea id="additionalInfo" placeholder="기타정보 입력" required></textarea>
                         </td>
                     </tr>
                 </table>
             </form>
         </div>
         <div class="modal-footer2">
-            <button id="registerConfirmBtn" class="confirm-btn">등록하기</button>
+            <button id="registerConfirmBtn"  class="confirm-btn">등록하기</button>
         </div>
     </div>
 </div>
+
+
+
 <!-- 주문상세 모달 -->
 <div id="versionModal" class="modal">
     <div class="modal-content">
@@ -379,10 +329,13 @@
     </div>
 </div>
 <footer th:replace="~{/admin/include/footer.html}"></footer>
-</body>
-</html>
-<script>
 
+
+
+
+
+<!-- 자바스크립트 코드 -->
+<script>
     // 전역 변수로 모달 선언
     var modal = document.getElementById("versionModal");
 
@@ -411,53 +364,57 @@
     });
 
 
-    // 배송하기 모달 동작
-    document.addEventListener('DOMContentLoaded', function() {
-        var registerModal = document.getElementById("versionRegisterModal");
-        var registerBtn = document.getElementById("openRegisterModalBtn"); // 등록 버튼
-        var registerCloseBtn = document.getElementById("registerModalClose"); // 등록 모달 닫기 버튼
-        var closeButton = document.getElementById("registerCloseBtn"); // 하단 닫기 버튼
-        var confirmButton = document.getElementById("registerConfirmBtn");
+    function openRegisterModal(element) {
+        document.getElementById("versionInput").value = element.getAttribute("data-order-id") || '';
+        document.getElementById("recipientInput").value = element.getAttribute("data-recip-name") || '';
+        document.getElementById("zipcodeInput").value = element.getAttribute("data-recip-zip") || '';
+        document.getElementById("addressInput").value = element.getAttribute("data-recip-addr1") || '';
+        document.getElementById("detailedAddressInput").value = element.getAttribute("data-recip-addr2") || '';
 
-        // 등록 버튼 클릭 시 모달 열기
-        registerBtn.onclick = function() {
-            registerModal.style.display = "block";
+        document.getElementById("versionRegisterModal").style.display = "block";
+    }
+
+    document.getElementById("registerModalClose").onclick = function() {
+        document.getElementById("versionRegisterModal").style.display = "none";
+    };
+    document.getElementById("versionModalClose").onclick = function() {
+        document.getElementById("versionModal").style.display = "none";
+    };
+    window.onclick = function(event) {
+        if (event.target === document.getElementById("versionRegisterModal")) {
+            document.getElementById("versionRegisterModal").style.display = "none";
+        }
+        if (event.target === document.getElementById("versionModal")) {
+            document.getElementById("versionModal").style.display = "none";
+        }
+    };
+    registerConfirmBtn.onclick = async function() {
+        const orderData = {
+            orderId: document.getElementById("versionInput").value,
+            deliveryCompany: document.getElementById("deliveryCompany").value,
+            deliveryWaybill: document.getElementById("trackingNumberInput").value,
+            content: document.getElementById("additionalInfo").value
         };
 
-        // 닫기 버튼(X) 클릭 시 모달 닫기
-        registerCloseBtn.onclick = function() {
-            registerModal.style.display = "none";
-        };
-
-        // 하단 닫기 버튼 클릭 시 모달 닫기
-        closeButton.onclick = function() {
-            registerModal.style.display = "none";
-        };
-
-        // 모달 외부 클릭 시 모달 닫기
-        window.onclick = function(event) {
-            if (event.target == registerModal) {
-                registerModal.style.display = "none";
-            }
-        };
-
-        // 등록 확인 버튼 클릭 시
-        confirmButton.onclick = function() {
-            var version = document.getElementById("versionInput").value;
-            var changelog = document.getElementById("changelogInput").value;
-
-            if (version && changelog) {
-                // 등록 로직 추가 (서버 전송 또는 콘솔 출력)
-                console.log("버전:", version);
-                console.log("변경내역:", changelog);
-
-                // 등록 완료 후 모달 닫기
-                registerModal.style.display = "none";
-            } else {
-                alert("모든 필드를 입력해주세요.");
-            }
-        };
-    });
-
-
+        fetch('/lotteon/admin/order/delivery/save?orderId=' + orderData.orderId, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(orderData)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('배송 등록 결과:', data);
+            })
+            .catch(error => {
+                console.error('배송 등록 중 오류 발생:', error);
+            });
+    };
 </script>
+
+</body>
+</html>
