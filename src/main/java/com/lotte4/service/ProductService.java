@@ -12,9 +12,6 @@ import com.lotte4.repository.ProductVariantsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -107,22 +104,23 @@ public class ProductService {
         return cateForProdRegisterDTOList;
     }
 
-    public Product_V_DTO getProductById(int productId) {
-        Optional<Product> productOptional = productRepository.findById(productId);
-        if (productOptional.isPresent()) {
-            Product product = productOptional.get();
-            return modelMapper.map(product, Product_V_DTO.class);
-        }
-        return null;
-    }
-
-    public Product_V_DTO getProductById2(int productId) {
+    public Product_V_DTO getProduct_V_ById(int productId) {
         Optional<Product> productOptional = productRepository.findById(productId);
         if (productOptional.isPresent()) {
             Product product = productOptional.get();
             return new Product_V_DTO(product);
         }
         return null;
+    }
+
+    public ProductDTO getProductById(int productId) {
+        Optional<Product> productOptional = productRepository.findById(productId);
+        if (productOptional.isPresent()) {
+            Product product = productOptional.get();
+            return new ProductDTO(product);
+        }
+        return null;
+
     }
 
     public List<ProductDTO> getAllProducts() {
@@ -286,8 +284,8 @@ public class ProductService {
         }
     }
 
-
-    public String deleteById(int productId) {
+    @Transactional
+    public String deleteProductAndImagesById(int productId) {
         String uploadDir = System.getProperty("user.dir") + "/uploads/product/";
 
         Optional<Product> optProd = productRepository.findById(productId);
@@ -312,8 +310,8 @@ public class ProductService {
             } catch (Exception e) {
                 log.error(e);
             }
-
         }
+        productDetailRepository.deleteByProductId(productId);
         productRepository.deleteById(productId);
         Optional<Product> optionalProduct = productRepository.findById(productId);
         if (optionalProduct.isPresent()) {
@@ -322,110 +320,110 @@ public class ProductService {
         return "success";
     }
 
-    public List<ProductCateDTO> getProductCates(int cate) {
-        List<ProductCateDTO> productCateDTOList = new ArrayList<>();
-        Optional<ProductCate> productCateOpt = categoryRepository.findById(cate);
-        if (productCateOpt.isPresent()) {
-            ProductCate productCate = productCateOpt.get();
+public List<ProductCateDTO> getProductCates(int cate) {
+    List<ProductCateDTO> productCateDTOList = new ArrayList<>();
+    Optional<ProductCate> productCateOpt = categoryRepository.findById(cate);
+    if (productCateOpt.isPresent()) {
+        ProductCate productCate = productCateOpt.get();
+        productCateDTOList.add(modelMapper.map(productCate, ProductCateDTO.class));
+        while (productCate.getParent() != null) {
+            productCate = productCate.getParent();
             productCateDTOList.add(modelMapper.map(productCate, ProductCateDTO.class));
-            while (productCate.getParent() != null) {
-                productCate = productCate.getParent();
-                productCateDTOList.add(modelMapper.map(productCate, ProductCateDTO.class));
-            }
         }
-        Collections.reverse(productCateDTOList);
-        return productCateDTOList;
     }
+    Collections.reverse(productCateDTOList);
+    return productCateDTOList;
+}
 
-    public List<ProductDTO> getProductWithCate(int cate) {
-        List<ProductDTO> productDTOList = new ArrayList<>();
-        Optional<ProductCate> productCate = categoryRepository.findById(cate);
+public List<ProductDTO> getProductWithCate(int cate) {
+    List<ProductDTO> productDTOList = new ArrayList<>();
+    Optional<ProductCate> productCate = categoryRepository.findById(cate);
 
 
-        log.info(productDTOList.toString());
+    log.info(productDTOList.toString());
 
 
-        if (productCate.isPresent()) {
-            // depth가 1 또는 2인 경우, 하위 카테고리의 제품을 가져옴
-            if (productCate.get().getChildren() != null) {
-                for (ProductCate child : productCate.get().getChildren()) {
-                    // 현재 하위 카테고리에 속한 제품을 가져옴
-                    List<Product> childProducts = productRepository.findByProductCateId(child);
-                    for (Product product : childProducts) {
-                        productDTOList.add(modelMapper.map(product, ProductDTO.class));
-                    }
+    if (productCate.isPresent()) {
+        // depth가 1 또는 2인 경우, 하위 카테고리의 제품을 가져옴
+        if (productCate.get().getChildren() != null) {
+            for (ProductCate child : productCate.get().getChildren()) {
+                // 현재 하위 카테고리에 속한 제품을 가져옴
+                List<Product> childProducts = productRepository.findByProductCateId(child);
+                for (Product product : childProducts) {
+                    productDTOList.add(modelMapper.map(product, ProductDTO.class));
+                }
 
-                    // depth가 1인 경우, 손자 카테고리의 제품을 가져옴
-                    if (child.getChildren() != null) {
-                        for (ProductCate grandChild : child.getChildren()) {
-                            List<Product> grandChildProducts = productRepository.findByProductCateId(grandChild);
-                            for (Product product : grandChildProducts) {
-                                productDTOList.add(modelMapper.map(product, ProductDTO.class));
-                            }
+                // depth가 1인 경우, 손자 카테고리의 제품을 가져옴
+                if (child.getChildren() != null) {
+                    for (ProductCate grandChild : child.getChildren()) {
+                        List<Product> grandChildProducts = productRepository.findByProductCateId(grandChild);
+                        for (Product product : grandChildProducts) {
+                            productDTOList.add(modelMapper.map(product, ProductDTO.class));
                         }
                     }
                 }
             }
-
-            // 해당 카테고리에 속한 직접적인 제품도 가져옴
-            List<Product> products = productRepository.findByProductCateId(productCate.get());
-            for (Product product : products) {
-                productDTOList.add(modelMapper.map(product, ProductDTO.class));
-            }
         }
-        log.info(productDTOList.toString());
-        return productDTOList;
+
+        // 해당 카테고리에 속한 직접적인 제품도 가져옴
+        List<Product> products = productRepository.findByProductCateId(productCate.get());
+        for (Product product : products) {
+            productDTOList.add(modelMapper.map(product, ProductDTO.class));
+        }
     }
+    log.info(productDTOList.toString());
+    return productDTOList;
+}
 
-    public ProductDTO JsonToMapAndSetProductDTO(String optionsJson, ProductDTO productDTO) {
+public ProductDTO JsonToMapAndSetProductDTO(String optionsJson, ProductDTO productDTO) {
 
-        // 'options' JSON 문자열을 LinkedHashMap<String, List<String>>으로 변환
-        LinkedHashMap<String, List<String>> optionsMap = null;
-        try {
-            optionsMap = objectMapper.readValue(optionsJson,
-                    new TypeReference<LinkedHashMap<String, List<String>>>() {
-                    });
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        productDTO.setOptions(optionsMap);
-        return productDTO;
+    // 'options' JSON 문자열을 LinkedHashMap<String, List<String>>으로 변환
+    LinkedHashMap<String, List<String>> optionsMap = null;
+    try {
+        optionsMap = objectMapper.readValue(optionsJson,
+                new TypeReference<LinkedHashMap<String, List<String>>>() {
+                });
+    } catch (JsonProcessingException e) {
+        throw new RuntimeException(e);
     }
+    productDTO.setOptions(optionsMap);
+    return productDTO;
+}
 
-    public ProductDTO updateProdImg(MultipartFile img1, MultipartFile img2, MultipartFile img3, MultipartFile detail, ProductDTO productDTO, Product_V_DTO product_V_DTO) {
+public ProductDTO updateProdImg(MultipartFile img1, MultipartFile img2, MultipartFile img3, MultipartFile detail, ProductDTO productDTO, Product_V_DTO product_V_DTO) {
 
-        if (img1 != null) {
-            String prevImg = productDTO.getImg1();
-            String newImg1 = uploadAndDeleteProdImg(img1, prevImg);
-            productDTO.setImg1(newImg1);
-        } else {
-            productDTO.setImg1(product_V_DTO.getImg1());
-        }
-        if (img2 != null) {
-            String prevImg = productDTO.getImg2();
-            String newImg2 = uploadAndDeleteProdImg(img2, prevImg);
-            productDTO.setImg2(newImg2);
-        } else {
-            productDTO.setImg2(product_V_DTO.getImg2());
-        }
-        if (img3 != null) {
-            String prevImg = productDTO.getImg3();
-            String newImg3 = uploadAndDeleteProdImg(img3, prevImg);
-            productDTO.setImg3(newImg3);
-        } else {
-            productDTO.setImg3(product_V_DTO.getImg3());
-        }
-        if (detail != null) {
-            String prevImg = productDTO.getDetail();
-            String newDetail = uploadAndDeleteProdImg(detail, prevImg);
-            productDTO.setDetail(newDetail);
-        } else {
-            productDTO.setDetail(product_V_DTO.getDetail());
-        }
-        return productDTO;
+    if (img1 != null) {
+        String prevImg = productDTO.getImg1();
+        String newImg1 = uploadAndDeleteProdImg(img1, prevImg);
+        productDTO.setImg1(newImg1);
+    } else {
+        productDTO.setImg1(product_V_DTO.getImg1());
     }
+    if (img2 != null) {
+        String prevImg = productDTO.getImg2();
+        String newImg2 = uploadAndDeleteProdImg(img2, prevImg);
+        productDTO.setImg2(newImg2);
+    } else {
+        productDTO.setImg2(product_V_DTO.getImg2());
+    }
+    if (img3 != null) {
+        String prevImg = productDTO.getImg3();
+        String newImg3 = uploadAndDeleteProdImg(img3, prevImg);
+        productDTO.setImg3(newImg3);
+    } else {
+        productDTO.setImg3(product_V_DTO.getImg3());
+    }
+    if (detail != null) {
+        String prevImg = productDTO.getDetail();
+        String newDetail = uploadAndDeleteProdImg(detail, prevImg);
+        productDTO.setDetail(newDetail);
+    } else {
+        productDTO.setDetail(product_V_DTO.getDetail());
+    }
+    return productDTO;
+}
 
-    // status가 0인 상품 목록 select
+// status가 0인 상품 목록 select
 //    public Page<ProductDTO> selectProductListByStatus(int status, int page, int size, String keyword) {
 //        Pageable pageable = PageRequest.of(page, size);
 //        Page<Product> productPage;

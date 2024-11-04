@@ -1,5 +1,6 @@
 package com.lotte4.dto;
 
+import com.lotte4.entity.ProductVariants;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -16,7 +17,7 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductVariantsDTO {
+public class ProductVariantsWithoutProductDTO {
 
     private int variant_id;
 
@@ -36,6 +37,13 @@ public class ProductVariantsDTO {
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
 
-    private ProductDTO product;
-
+    public ProductVariantsWithoutProductDTO(ProductVariants productVariants) {
+        this.variant_id = productVariants.getVariant_id();
+        this.sku = productVariants.getSku();
+        this.price = productVariants.getPrice();
+        this.stock = productVariants.getStock();
+        this.options = productVariants.getOptions();
+        this.created_at = productVariants.getCreated_at();
+        this.updated_at = productVariants.getUpdated_at();
+    }
 }
