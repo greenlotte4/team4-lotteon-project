@@ -126,10 +126,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (matchingVariant) {
             console.log("Matched Variant ID:", matchingVariant.variant_id);
-            document.querySelector('.selected-variant-id').value = matchingVariant.variant_id;
+            document.querySelector('.selected-variant-price').value = matchingVariant.variant_id;
         } else {
             console.log("No matching variant found");
-            document.querySelector('.selected-variant-id').value = "선택된 Variant ID: 없음";
+            document.querySelector('.selected-variant-price').value = "선택된 제품 없음";
         }
     }
 

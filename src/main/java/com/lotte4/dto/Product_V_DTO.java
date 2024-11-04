@@ -9,12 +9,12 @@
 package com.lotte4.dto;
 
 import com.lotte4.entity.Product;
-import com.lotte4.entity.ProductVariants;
 import lombok.*;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -41,7 +41,7 @@ public class Product_V_DTO {
     private SellerInfoDTO sellerInfoId;
 
     @Builder.Default
-    private List<ProductVariants> productVariants = new ArrayList<>();
+    private List<ProductVariantsWithoutProductDTO> productVariants = new ArrayList<>();
 
     private LinkedHashMap<String, List<String>> options;
     private int status;
@@ -63,10 +63,26 @@ public class Product_V_DTO {
         this.img2 = product.getImg2();
         this.img3 = product.getImg3();
         this.detail = product.getDetail();
-        this.productVariants = product.getProductVariants();
+        this.status = product.getStatus();
         this.options = product.getOptions();
-    }
 
+        // SellerInfoDTO 매핑
+        if (product.getSellerInfoId() != null) {
+            this.sellerInfoId = new SellerInfoDTO(product.getSellerInfoId());
+        }
+
+        // ProductCateDTO 매핑
+        if (product.getProductCateId() != null) {
+            this.productCateId = new ProductCateDTO(product.getProductCateId());
+        }
+
+        // ProductVariants 매핑
+        if (product.getProductVariants() != null && !product.getProductVariants().isEmpty()) {
+            this.productVariants = product.getProductVariants().stream()
+                    .map(ProductVariantsWithoutProductDTO::new)
+                    .collect(Collectors.toList());
+        }
+    }
 
 }
 

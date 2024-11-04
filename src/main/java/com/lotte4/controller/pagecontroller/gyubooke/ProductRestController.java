@@ -9,7 +9,6 @@
 
 package com.lotte4.controller.pagecontroller.gyubooke;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lotte4.dto.*;
 import com.lotte4.service.CategoryService;
 import com.lotte4.service.ProductService;
@@ -119,7 +118,8 @@ public class ProductRestController {
 
     @DeleteMapping("/admin/product/{productId}")
     public ResponseEntity<Map<String, String>> productDelete(@PathVariable int productId) {
-        String status = productService.deleteById(productId);
+
+        String status = productService.deleteProductAndImagesById(productId);
         Map<String, String> response = new HashMap<>();
 
         log.info(status);
@@ -139,7 +139,7 @@ public class ProductRestController {
         int failure = 0;
         List<Integer> productIdList = stringToIntegerList(productIds);
         for (Integer productId : productIdList) {
-            String status = productService.deleteById(productId);
+            String status = productService.deleteProductAndImagesById(productId);
             if (!status.equals("success")) {
                 failure++;
             }
@@ -170,7 +170,7 @@ public class ProductRestController {
         log.info("optionsJson = " + optionsJson);
         log.info("productDTO = " + productDTO);
 
-        Product_V_DTO product_v_dto = productService.getProductById(productDTO.getProductId());
+        Product_V_DTO product_v_dto = productService.getProduct_V_ById(productDTO.getProductId());
         productDTO.setProductCateId(product_v_dto.getProductCateId());
 
         ProductDTO productDTO1 = productService.JsonToMapAndSetProductDTO(optionsJson, productDTO);
