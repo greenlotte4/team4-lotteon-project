@@ -76,8 +76,15 @@ public class ProductService {
         return optionValues;
     }
 
+    @Transactional
     public ProductDTO insertProduct(ProductDTO productDTO) {
         Product product = modelMapper.map(productDTO, Product.class);
+
+        // ProductDetailDTO를 ProductDetail 엔티티로 변환하고 설정
+        if (productDTO.getProductDetailId() != null) {
+            ProductDetail productDetail = modelMapper.map(productDTO.getProductDetailId(), ProductDetail.class);
+            product.setProductDetail(productDetail);
+        }
         Product savedEntity = productRepository.save(product);
         return modelMapper.map(savedEntity, ProductDTO.class);
     }
@@ -144,12 +151,12 @@ public class ProductService {
         return null;
     }
 
-    public ProductDetailDTO getProductDetailById(int productId) {
-        Optional<Product> productOptional = productRepository.findById(productId);
+
+    public ProductDetailDTO getProductDetailById(int productDetailId) {
+        Optional<ProductDetail> productOptional = productDetailRepository.findById(productDetailId);
         if (productOptional.isPresent()) {
-            Product product = productOptional.get();
-            ProductDTO productDTO = new ProductDTO(product);
-            ProductDetailDTO productDetailDTO = productDTO.getProductDetailId();
+            ProductDetail productDetail = productOptional.get();
+            ProductDetailDTO productDetailDTO = new ProductDetailDTO(productDetail);
             log.info("productDetailDTO : " + productDetailDTO);
             return productDetailDTO;
         }
