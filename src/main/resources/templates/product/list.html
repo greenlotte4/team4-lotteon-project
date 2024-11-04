@@ -47,11 +47,12 @@
             <!-- 상품 정렬 옵션 -->
             <div class="sort-options">
                 <div class="sort-left">
-                    <a href="#" class="sort-link f">인기순</a>
-                    <a href="#" class="sort-link">신상품순</a>
-                    <a href="#" class="sort-link">판매순</a>
-                    <a href="#" class="sort-link">낮은가격순</a>
-                    <a href="#" class="sort-link">할인율순</a>
+                    <a th:href="@{'/product/list/' + ${cate} + '/sold'}" class="sort-link f">판매많은순</a>
+                    <a th:href="@{'/product/list/' + ${cate} + '/lowPrice'}" class="sort-link">낮은가격순</a>
+                    <a th:href="@{'/product/list/' + ${cate} + '/highPrice'}" class="sort-link">높은가격순</a>
+                    <a th:href="@{'/product/list/' + ${cate} + '/highReview'}" class="sort-link">평점높은순</a>
+                    <a th:href="@{'/product/list/' + ${cate} + '/manyReview'}" class="sort-link">후기많은순</a>
+                    <a th:href="@{'/product/list/' + ${cate} + '/recent'}" class="sort-link">최근등록순</a>
                 </div>
 
                 <div class="sort-view-options">

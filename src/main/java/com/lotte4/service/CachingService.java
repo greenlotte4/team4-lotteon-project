@@ -1,14 +1,13 @@
 package com.lotte4.service;
 
-import com.lotte4.dto.BannerDTO;
-import com.lotte4.dto.ProductCateChildDTO;
-import com.lotte4.dto.ProductCateDTO;
-import com.lotte4.dto.ProductRegisterCateDTO;
+import com.lotte4.dto.*;
 import com.lotte4.dto.admin.config.InfoDTO;
 import com.lotte4.entity.Banner;
 import com.lotte4.entity.Info;
+import com.lotte4.entity.Product;
 import com.lotte4.entity.ProductCate;
 import com.lotte4.repository.CategoryRepository;
+import com.lotte4.repository.ProductRepository;
 import com.lotte4.repository.admin.config.BannerRepository;
 import com.lotte4.repository.admin.config.InfoRepository;
 import com.lotte4.service.admin.config.BannerService;
@@ -43,6 +42,7 @@ public class CachingService {
     private final BannerRepository bannerRepository;
     private final CategoryRepository categoryRepository;
     private final InfoRepository infoRepository;
+    private final ProductRepository productRepository;
 
 
 
@@ -301,6 +301,38 @@ public class CachingService {
 
         // Info 엔티티 저장
         return modelMapper.map(infoRepository.save(info), InfoDTO.class);
+    }
+
+    @Cacheable(key = "'BestProductDTO'", value = "BestProduct")
+    public List<ProductListDTO> getProductBest(){
+        List<Product> productList = productRepository.findAll();
+        List<ProductListDTO> productDTOList = new ArrayList<>();
+        for (Product product : productList) {
+            productDTOList.add(modelMapper.map(product, ProductListDTO.class));
+        }
+
+        productDTOList.sort(new Comparator<ProductListDTO>() {
+            @Override
+            public int compare(ProductListDTO o1, ProductListDTO o2) {
+                return Integer.compare(o2.getSold(), o1.getSold());
+            }
+        });
+
+        List<ProductListDTO> productDTOs = new ArrayList<>();
+
+        //8개만 추출
+        int count = 0;
+        int max = 5;
+
+        for(ProductListDTO productListDTO : productDTOList){
+            if(count < max){
+                productDTOs.add(productListDTO);
+                count++;
+            }else{
+                break;
+            }
+        }
+        return productDTOs;
     }
 
 }

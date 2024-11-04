@@ -31,6 +31,7 @@ import java.util.*;
         - 2024/10/29 강중원 - 상위 카테고리 리스트로 불러오는 기능 추가
         - 2024/10/31 전규찬 - JSON 문자열을 LinkedHashMap으로 변환하고 productDTO에 set하는 메서드 추가
                            - 파일 수정 발생 시 upload 에서 기존 파일 삭제 + 신규 파일 업로드, db에 파일명 업데이트
+        - 2024/11/04 강중원 - 카테고리와 타입에 따른 정렬 기능 추가
 */
 
 @Log4j2
@@ -44,6 +45,7 @@ public class ProductService {
     private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
     private final ObjectMapper objectMapper;
+    private final CachingService cachingService;
 
     //
     public static List<String> stringToStringList(String string) {
@@ -374,6 +376,154 @@ public List<ProductDTO> getProductWithCate(int cate) {
     log.info(productDTOList.toString());
     return productDTOList;
 }
+
+    //2024.11.04 - 강중원 - 리스트별 정렬 알고리즘
+    public List<ProductListDTO> getProductWithCateAndType(int cate, String type) {
+        List<ProductDTO> productDTOList = new ArrayList<>();
+        //home(전체상품)
+        if(cate==0){
+            productDTOList = getAllProducts();
+        }
+        //카테고리가 있을경우
+        else{
+            productDTOList = getProductWithCate(cate);
+        }
+        
+        List<ProductListDTO> productListDTOList = new ArrayList<>();
+            for (ProductDTO productDTO : productDTOList) {
+                productListDTOList.add(modelMapper.map(productDTO, ProductListDTO.class));
+            }
+        
+        
+        //정렬
+        switch (type) {
+            //낮은 가격
+            case "lowPrice":
+                productListDTOList.sort(new Comparator<ProductListDTO>() {
+                    @Override
+                    public int compare(ProductListDTO o1, ProductListDTO o2) {
+
+                        double o1Price = o1.getPrice() * (1 - o1.getDiscount() / 100.0);
+                        double o2Price = o2.getPrice() * (1 - o2.getDiscount() / 100.0);
+
+                        if(o1Price>o2Price){
+                            return 1;
+                        }else if(o1Price<o2Price){
+                            return -1;
+                        }
+                        return 0;
+                    }
+                });
+                break;
+
+                //높은 가격순
+            case "highPrice":
+                productListDTOList.sort(new Comparator<ProductListDTO>() {
+                    @Override
+                    public int compare(ProductListDTO o1, ProductListDTO o2) {
+                        double o1Price = o1.getPrice() * (1 - o1.getDiscount() / 100.0);
+                        double o2Price = o2.getPrice() * (1 - o2.getDiscount() / 100.0);
+
+                        if(o1Price>o2Price){
+                            return -1;
+                        }else if(o1Price<o2Price){
+                            return 1;
+                        }
+                        return 0;
+                    }
+                });
+                break;
+
+                //판매량
+            case "sold":
+
+                productListDTOList.sort(new Comparator<ProductListDTO>() {
+                    @Override
+                    public int compare(ProductListDTO o1, ProductListDTO o2) {
+                        return Integer.compare(o2.getSold(), o1.getSold());
+                    }
+                });
+                break;
+
+                //평점 높은순
+            case "highReview":
+                break;
+
+                //리뷰 많은순
+            case "manyReview":
+                productListDTOList.sort(new Comparator<ProductListDTO>() {
+                    @Override
+                    public int compare(ProductListDTO o1, ProductListDTO o2) {
+                        return Double.compare(o2.getReview(), o1.getReview());
+                    }
+                });
+                break;
+
+                //최근 등록순
+            case "recent":
+                break;
+        }
+        return productListDTOList;
+    }
+
+    //home(index)에서 사용
+    public List<ProductDTO> getProductWithType(String type) {
+        List<ProductDTO> productDTOList = getAllProducts();
+
+        //정렬
+        switch (type) {
+            case "Hit":
+                productDTOList.sort(new Comparator<ProductDTO>() {
+                    @Override
+                    public int compare(ProductDTO o1, ProductDTO o2) {
+                        return Integer.compare(o2.getHit(), o1.getHit());
+                    }
+                });
+                break;
+            case "Score":
+
+                break;
+            case "ScoreMany":
+                productDTOList.sort(new Comparator<ProductDTO>() {
+                    @Override
+                    public int compare(ProductDTO o1, ProductDTO o2) {
+                        return Integer.compare(o2.getReview(), o1.getReview());
+                    }
+                });
+                break;
+
+            case "Discount":
+                productDTOList.sort(new Comparator<ProductDTO>() {
+                    @Override
+                    public int compare(ProductDTO o1, ProductDTO o2) {
+                        return Integer.compare(o2.getDiscount(), o1.getDiscount());
+                    }
+                });
+                break;
+
+        }
+        List<ProductDTO> productDTOs = new ArrayList<>();
+
+        //8개만 추출
+        int count = 0;
+        int max = 8;
+
+        for(ProductDTO productDTO : productDTOList){
+            if(count < max){
+                productDTOs.add(productDTO);
+                count++;
+            }else{
+                break;
+            }
+        }
+        return productDTOs;
+    }
+
+    public List<ProductListDTO> getProductBest() {
+        return cachingService.getProductBest();
+    }
+
+
 
 public ProductDTO JsonToMapAndSetProductDTO(String optionsJson, ProductDTO productDTO) {
 
