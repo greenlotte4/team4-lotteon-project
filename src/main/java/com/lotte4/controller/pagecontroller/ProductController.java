@@ -4,19 +4,17 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lotte4.dto.*;
 import com.lotte4.entity.Cart;
-import com.lotte4.entity.ProductVariants;
 import com.lotte4.entity.User;
 import com.lotte4.service.CartService;
 import com.lotte4.service.ProductService;
 import com.lotte4.service.UserService;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -43,6 +41,7 @@ public class ProductController {
     private final ProductService productService;
     private final ObjectMapper objectMapper;
     private final UserService userService;
+    private final ModelMapper modelMapper;
 
     @GetMapping("/product/list")
     public String list(Model model) {
@@ -167,7 +166,9 @@ public class ProductController {
     @GetMapping("/product/view")
     public String view(int productId, Model model) throws JsonProcessingException {
 
-        Product_V_DTO productDTO = productService.getProductById(productId);
+        Product_V_DTO productDTO = productService.getProduct_V_ById(productId);
+
+        List<ProductVariantsWithoutProductDTO> productVariants = productDTO.getProductVariants();
 
         LinkedHashMap<String, List<String>> options = (LinkedHashMap<String, List<String>>) productDTO.getOptions();
 
@@ -175,7 +176,7 @@ public class ProductController {
         model.addAttribute("options", options);
         model.addAttribute("productDTOJson", productDTOJson);
         model.addAttribute("productDTO", productDTO);
-
+        model.addAttribute("productVariants", productVariants);
 
         return "/product/view";
     }
