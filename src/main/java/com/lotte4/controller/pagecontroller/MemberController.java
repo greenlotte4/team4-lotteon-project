@@ -26,6 +26,7 @@ import java.util.Map;
 
      수정이력
       - 2024/10/31 강은경 - 아이디찾기 & 비밀번호 찾기 메서드 추가
+      - 2024/11/03 강은경 - 아이디찾기 & 비밀번호 찾기&변경 메서드 추가
 */
 
 @Log4j2
@@ -150,6 +151,32 @@ public class MemberController {
         return ResponseEntity.ok().body(resultMap);
     }
 
+
+    // 사업자판매회원 중복확인 및 이메일 인증 코드 발송
+    @ResponseBody
+    @GetMapping("/seller/{type}/{value}")
+    public ResponseEntity<?> checkSeller(HttpSession session,
+                                         @PathVariable("type") String type,
+                                         @PathVariable("value") String value) {
+
+        log.info("type : " + type + ", value : " + value);
+
+        int count = userService.selectCountSellerUser(type, value);
+        log.info("count : " + count);
+
+        // 중복 없으면 이메일 인증코드 발송
+        if(count == 0 && type.equals("email")){
+            log.info("email : " + value);
+            userService.sendEmailCode(session, value);
+        }
+
+        // JSON 생성
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("result", count);
+
+        return ResponseEntity.ok().body(resultMap);
+    }
+
     // 이메일 인증 코드 검사
     @ResponseBody
     @PostMapping("/member/email")
@@ -222,7 +249,7 @@ public class MemberController {
     }
 
 
-    // 비밀번호찾기 결과 post
+    // 개인구매회원 비밀번호찾기 결과 post
     @PostMapping("/member/find_pass_result")
     public String handleFindPassResult(UserDTO userDTO, RedirectAttributes redirectAttributes) {
 
@@ -233,11 +260,31 @@ public class MemberController {
         if (uid != null) {
             UserDTO user = userService.selectUser(uid);
             log.info("user : " + user);
-            redirectAttributes.addFlashAttribute("user", user); // 찾은 유저 정보를 뷰로 전달
-            return "redirect:/member/pass_change";
+            redirectAttributes.addFlashAttribute("user", user); // 찾은 유저 정보를 Flash Attribute로 전달
+            return "redirect:/member/pass_change?uid=" + uid; // uid를 URL 파라미터로 추가
         } else {
             redirectAttributes.addFlashAttribute("error", "해당 정보로 등록된 회원이 없습니다."); // Flash 속성으로 에러 메시지 전달
             return "redirect:/member/find_member_pass";
+        }
+    }
+
+
+    // 사업자판매회원 비밀번호찾기 결과 post
+    @PostMapping("/member/find_seller_pass_result")
+    public String handleFindSellerPassResult(UserDTO userDTO, RedirectAttributes redirectAttributes) {
+
+        // 아이디와 사업자등록번호와 이메일로 아이디 조회
+        String uid = userService.findAllByUidAndComNumberAndEmail(userDTO.getUid(), userDTO.getSellerInfo().getComNumber(), userDTO.getSellerInfo().getEmail());
+        log.info("uid : " + uid);
+
+        if (uid != null) {
+            UserDTO user = userService.selectUser(uid);
+            log.info("user : " + user);
+            redirectAttributes.addFlashAttribute("user", user); // 찾은 유저 정보를 Flash Attribute로 전달
+            return "redirect:/member/pass_change?uid=" + uid; // uid를 URL 파라미터로 추가
+        } else {
+            redirectAttributes.addFlashAttribute("error", "해당 정보로 등록된 회원이 없습니다."); // Flash 속성으로 에러 메시지 전달
+            return "redirect:/member/find_seller_pass";
         }
     }
     
@@ -248,11 +295,20 @@ public class MemberController {
         return "/member/find_member_pass";
     }
 
+    // 사업자판매회원 비밀번호 찾기
+    @GetMapping("/member/find_seller_pass")
+    public String findSellerPass() {
+
+        return "/member/find_seller_pass";
+    }
+
     // 비밀번호 변경
     @GetMapping("/member/pass_change")
-    public String passChange(UserDTO userDTO) {
+    public String passChange(@RequestParam("uid") String uid, Model model, UserDTO userDTO) {
 
-        log.info("userDTO : " + userDTO);
+        UserDTO user = userService.selectUser(uid);
+
+        model.addAttribute("user", user);
 
 
         return "/member/pass_change";
@@ -275,5 +331,40 @@ public class MemberController {
             return "/member/pass_change";  // 비밀번호 변경 페이지로 다시 이동
         }
     }
+
+
+    // 사업자판매회원 아이디 찾기
+    @GetMapping("/member/find_seller_id")
+    public String findSellerId() {
+
+        return "/member/find_seller_id";
+    }
+
+    // 사업자판매회원 아이디 찾기
+    @GetMapping("/member/find_seller_id_result")
+    public String findSellerIdResult() {
+
+        return "/member/find_seller_id_result";
+    }
+
+    // 사업자판매회원 아이디찾기 결과 post
+    @PostMapping("/member/find_seller_id_result")
+    public String handleFindSellerIdResult(UserDTO userDTO, RedirectAttributes redirectAttributes) {
+
+        // 회사명과 사업자등록번호와 이메일로 아이디 조회
+        String uid = userService.findIdByComNameAndComNumberAndEmail(userDTO.getSellerInfo().getComName(), userDTO.getSellerInfo().getComNumber(), userDTO.getSellerInfo().getEmail());
+        log.info("uid : " + uid);
+
+        if (uid != null) {
+            UserDTO user = userService.selectUser(uid);
+            log.info("user : " + user);
+            redirectAttributes.addFlashAttribute("user", user); // 찾은 유저 정보를 뷰로 전달
+            return "redirect:/member/find_seller_id_result";
+        } else {
+            redirectAttributes.addFlashAttribute("error", "해당 정보로 등록된 아이디가 없습니다."); // Flash 속성으로 에러 메시지 전달
+            return "redirect:/member/find_seller_id";
+        }
+    }
+
 }
 

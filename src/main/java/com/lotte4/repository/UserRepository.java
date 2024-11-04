@@ -23,7 +23,8 @@ import java.util.Optional;
       - 2024/10/30 황수빈 - 포인트 조회 시 memberinfo로 uid를 찾아야함으로 메서드 추가
       - 2024/10/31 강은경 - 이름과 이메일로 아이디 조회하는 메서드 추가
       - 2024/10/31 황수빈 - 메서드 추가
-      - 2024/11/01 강은경 - 검색조건 카테고리에 따라 검색되게 만들기 위해 메소드 추가
+      - 2024/11/01 강은경 - 검색조건 카테고리에 따라 검색되게 만들기 위해 메서드 추가
+      - 2024/11/03 강은경 - 비밀번호 변경 및 정보에 따른 아이디 조회 하는 메서드 추가
 
 */
 @Repository
@@ -60,8 +61,16 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     // 아이디와 이메일로 정보 조회
     Optional<User> findByUidAndMemberInfo_email(String uid, String memberInfo_email);
 
+    // 비밀번호 변경
     @Modifying
     @Query("UPDATE User u SET u.pass = :pass WHERE u.uid = :uid")
     int updatePassword(@Param("uid") String uid, @Param("pass") String pass);
+
+    // 회사명&사업자등록번호&이메일로 아이디 조회
+    Optional<User> findBySellerInfo_ComNameAndSellerInfo_ComNumberAndSellerInfo_Email(String comName, String comNumber, String email);
+
+    // 아이디&업자등록번호&이메일로 정보 조회
+    Optional<User> findByUidAndAndSellerInfo_ComNumberAndSellerInfo_Email(String uid, String comNumber, String email);
+
 
 }

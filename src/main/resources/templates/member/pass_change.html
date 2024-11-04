@@ -17,7 +17,7 @@
 <main id="main">
     <div class="mainIn">
         <div class="findid">
-            <form th:action="@{/member/pass_change}" method="post" class="findIdForm">
+            <form th:action="@{/member/pass_change}" method="post" class="findIdForm" onsubmit="return validatePassword()">
                 <div id="error-message" th:if="${error}" th:text="${error}" style="display: none;"></div>
                 <section>
                     <input type="hidden" name="uid" th:value="${user.uid}"/>
@@ -112,29 +112,37 @@
 
         if (inputPasses.length > 1) {
             inputPasses[1].addEventListener('focusout', () => {
-                if (inputPasses[0].value === inputPasses[1].value) {
-                    if (!inputPasses[0].value.match(/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,12}$/)) {
-                        showResultInvalid(resultPass, '비밀번호 형식에 맞지 않습니다.');
-                        isPasswordValid = false; // 유효성 실패
-                    } else {
-                        showResultValid(resultPass, '사용 가능한 비밀번호입니다.');
-                        isPasswordValid = true; // 유효성 성공
-                    }
-                } else {
-                    showResultInvalid(resultPass, '비밀번호가 일치하지 않습니다.');
-                    isPasswordValid = false; // 유효성 실패
-                }
+                validatePasswords(); // 포커스 아웃 시 비밀번호 검사
             });
         }
 
         // 비밀번호 유효성 검사 함수
+        function validatePasswords() {
+            if (inputPasses[0].value === inputPasses[1].value) {
+                if (!inputPasses[0].value.match(/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,12}$/)) {
+                    showResultInvalid(resultPass, '비밀번호 형식에 맞지 않습니다.');
+                    isPasswordValid = false; // 유효성 실패
+                } else {
+                    showResultValid(resultPass, '사용 가능한 비밀번호입니다.');
+                    isPasswordValid = true; // 유효성 성공
+                }
+            } else {
+                showResultInvalid(resultPass, '비밀번호가 일치하지 않습니다.');
+                isPasswordValid = false; // 유효성 실패
+            }
+        }
+
+        // 폼 제출 시 비밀번호 유효성 검사
         window.validatePassword = function() {
+            validatePasswords(); // 비밀번호 유효성 검사 함수 호출
+
             if (!isPasswordValid) {
                 alert("비밀번호를 재확인 해주세요."); // 유효성 검사 실패 시 alert 표시
                 return false; // 폼 제출 방지
             }
             return true; // 모든 검사를 통과하면 true 반환
         };
+
 
     };
 </script>
