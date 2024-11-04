@@ -523,7 +523,7 @@ public List<ProductDTO> getProductWithCate(int cate) {
                 productListDTOList.sort(new Comparator<ProductListDTO>() {
                     @Override
                     public int compare(ProductListDTO o1, ProductListDTO o2) {
-                        return o1.getCreateTime().compareTo(o2.getCreateTime());
+                        return o2.getCreateTime().compareTo(o1.getCreateTime());
                     }
                 });
                 break;
