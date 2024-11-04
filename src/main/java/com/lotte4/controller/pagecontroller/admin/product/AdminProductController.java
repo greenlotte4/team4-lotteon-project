@@ -144,7 +144,7 @@ public class AdminProductController {
         LinkedHashMap<String, List<String>> options = productDTO.getOptions();
         model.addAttribute("options", options);
 
-        ProductDetailDTO productDetailDTO = productService.getProductDetailById(productId);
+        ProductDetailDTO productDetailDTO = productService.getProductDetailById(productDTO.getProductDetailId().getProductDetailId());
         model.addAttribute("productDetailDTO", productDetailDTO);
 
         ProductCateDTO productCateDTO = categoryService.getProductCate(productCateId);

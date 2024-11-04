@@ -44,7 +44,7 @@
                     <div class="price-section">
                         <span class="original-price" th:text="${productDTO.price}" th:attr="data-originalPrice=${productDTO.price}"></span>
                         <span class="discount-rate" th:text="${productDTO.discount + '% ↓'}" th:attr="data-discountRate=${productDTO.discount}"></span>
-                        <span class="discount-price">27000</span>
+                        <span class="discount-price"></span>
                     </div>
                     <div class="shipping-info">
                         <p th:if="${productDTO.deliveryFee == 0}" th:text="무료배송"></p>
@@ -65,15 +65,12 @@
                             </li>
                         </ul>
                     </span>
-                    <div>
-                        <span class="selected-variant-price">제품 가격 : </span>
-                    </div>
                     <div class="quantity-section">
                         <label for="quantity">수량</label>
                         <input type="number" id="quantity" name="quantity" min="1" value="1"/>
                     </div>
                     <div class="total-price">
-                        총 상품금액: <strong>27,000원</strong>
+                        총 상품금액: <strong>0원</strong>
                     </div>
                     <div class="purchase-actions">
                         <form th:action="@{/product/cart}" method="post" id="cartForm">

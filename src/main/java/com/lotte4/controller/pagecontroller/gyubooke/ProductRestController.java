@@ -56,15 +56,18 @@ public class ProductRestController {
                                                                         @ModelAttribute ProductDTO productDTO) {
 
         log.info("productdto = " + productDTO);
+        log.info("product_Detail_Id = " + product_Detail_Id);
 
         // 상품 카테고리 아이디 입력
         productDTO.setProductCateId(categoryService.getProductCate(cateId));
 
         // 판매자 정보 입력
         SellerInfoDTO sellerInfo = sellerInfoService.selectSellerInfoById(sellerId);
+        log.info("sellerInfo = " + sellerInfo);
 
         // 상품 상세 정보 입력
         ProductDetailDTO productDetail = productService.getProductDetailById(product_Detail_Id);
+        log.info("productDetail = " + productDetail);
 
         // 옵션을 LinkedHashMap으로 변환 후 productDTO에 주입
         ProductDTO productDTO1 = productService.JsonToMapAndSetProductDTO(optionsJson, productDTO);
@@ -82,6 +85,7 @@ public class ProductRestController {
         productDTO1.setProductDetailId(productDetail);
 
         ProductDTO dto = productService.insertProduct(productDTO1);
+        log.info("dto = " + dto);
 
         Map<String, Integer> response1 = new HashMap<>();
 
@@ -177,7 +181,6 @@ public class ProductRestController {
 
         Product_V_DTO product_v_dto = productService.getProduct_V_ById(productDTO.getProductId());
         productDTO.setProductCateId(product_v_dto.getProductCateId());
-        productDTO.setProductDetailId(productDTO.getProductDetailId());
 
         ProductDTO productDTO1 = productService.JsonToMapAndSetProductDTO(optionsJson, productDTO);
         log.info("productDTO1 = " + productDTO1);
@@ -189,6 +192,7 @@ public class ProductRestController {
         // 판매자 정보 입력
         SellerInfoDTO sellerInfo = sellerInfoService.selectSellerInfoById(sellerId);
         productDTO2.setSellerInfoId(sellerInfo);
+        productDTO2.setProductDetailId(product_v_dto.getProductDetailId());
 
         ProductDTO dto = productService.insertProduct(productDTO2);
 

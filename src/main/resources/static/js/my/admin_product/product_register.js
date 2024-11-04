@@ -265,7 +265,6 @@ form.addEventListener('submit', async function (e) {
             quality: quality,
             as_field: as_field,
             asPhone: asPhone,
-            productId: productId
         };
 
         const detailResponse = await fetch('/lotteon/admin/product/detail', {
