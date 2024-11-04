@@ -139,19 +139,26 @@
 .thumb > img {
   width: 100%;
   height: 100%;
+  border-radius: 10px;
 }
 
 .aside > .best > ol > li:first-child > a h2{
   font-size: 18px;
+  height:50px;
 }
 
 /* 상품 이름 */
 .aside > .best > ol > li > a h2 {
   font-weight: bold;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: wrap;
   overflow: hidden;
-  display: inline-block;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  word-break: keep-all;
+  height: 32px;
+  margin-bottom: 5px;
 }
 
 
