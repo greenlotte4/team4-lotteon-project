@@ -14,6 +14,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig {
 //    private final MyOauth2UserService myOauth2UserService;
     private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
+    private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
@@ -21,10 +22,11 @@ public class SecurityConfig {
         // 로그인 설정
         http.formLogin(login -> login
                                 .loginPage("/member/login")
-                                .defaultSuccessUrl("/index")
+                                .successHandler(customAuthenticationSuccessHandler)
                                 .failureUrl("/member/login?success=100")
                                 .usernameParameter("uid")
-                                .passwordParameter("pass"));
+                                .passwordParameter("pass"))
+                ;
 
         // 로그아웃 설정
         http.logout(logout -> logout

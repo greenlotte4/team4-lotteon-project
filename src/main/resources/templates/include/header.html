@@ -10,8 +10,8 @@
         <div class="util innerContent">
             <div class="accountArea">
                 <ul>
-                    <li  sec:authorize="isAuthenticated()">
-                        <span class="loginname area">[[${#authentication.name}]]님</span>
+                    <li sec:authorize="hasRole('member')">
+                        <span class="loginname area" th:text="${#authentication.principal.user.memberInfo.name + '님'}"></span>
                     </li>
                     <li sec:authorize="!isAuthenticated()">
                         <a th:href="@{/member/login}" class="area">로그인</a>

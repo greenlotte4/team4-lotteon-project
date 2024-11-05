@@ -37,11 +37,11 @@ public class User {
     private String createdAt;
     private String leaveDate;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "member_info_id")
     private MemberInfo memberInfo;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "seller_info_id")
     private SellerInfo sellerInfo;
 

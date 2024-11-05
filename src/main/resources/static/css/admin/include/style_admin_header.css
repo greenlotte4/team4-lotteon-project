@@ -15,9 +15,8 @@ header {
 }
 
 .header-top a {
-    color: black;
+    color: #757575;
     text-decoration: none;
-    font-weight: bold;
 }
 
 header nav a {
