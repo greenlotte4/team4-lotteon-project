@@ -14,9 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.security.Principal;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -44,62 +42,53 @@ public class AdminProductController {
         }
     }
 
-    @GetMapping("/admin/product/list")
-    public String AdminProductList(Model model, @AuthenticationPrincipal MyUserDetails userDetails) {
-        int sellerInfoId = userDetails.getUser().getSellerInfo().getSellerInfoId();
-        List<ProductDTO> products = productService.getAllProductBySellerId(sellerInfoId);
-        model.addAttribute("products", products);
-        return "/admin/product/list";
-    }
-
-//    // 상품현황
 //    @GetMapping("/admin/product/list")
-//    public String AdminMemberList(Model model,
-//                                  @RequestParam(defaultValue = "0") int page,
-//                                  @RequestParam(defaultValue = "5") int size,
-//                                  @RequestParam(required = false) String keyword,
-//                                  @RequestParam(required = false) String searchCategory, // searchCategory 추가
-//                                  @AuthenticationPrincipal MyUserDetails userDetails) {
-//
-//        log.info("keyword: " + keyword);
-//        log.info("searchCategory: " + searchCategory);
-//
-//
-//        int status = 0;
-//
+//    public String AdminProductList(Model model, @AuthenticationPrincipal MyUserDetails userDetails) {
 //        int sellerInfoId = userDetails.getUser().getSellerInfo().getSellerInfoId();
-//
-//        // 검색 조건에 따라 상품 목록을 가져옴
-//        Page<ProductDTO> productList = productService.selectProductListByStatus(status, page, size, keyword, searchCategory, sellerInfoId); // 검색 조건 추가
-//
-//        productList.stream().filter(product -> product.getSellerInfoId() != null) // sellerInfo가 null이 아닌 경우
-//                .filter(product -> sellerInfoId == product.getSellerInfoId().getSellerInfoId())
-//                .toList();
-//
-//        // 시작 번호 계산 (검색된 결과에 따른 시작 번호)
-//        long totalElements = productList.getTotalElements();
-//        int startNo = (int) totalElements - (page * size);
-//
-//        model.addAttribute("productList", productList);
-//        model.addAttribute("totalPages", productList.getTotalPages());
-//        model.addAttribute("currentPage", page);
-//        model.addAttribute("size", size);
-//        model.addAttribute("totalElements", totalElements);
-//        model.addAttribute("startNo", startNo); // 시작 번호 추가
-//        model.addAttribute("keyword", keyword); // keyword를 모델에 추가
-//        model.addAttribute("searchCategory", searchCategory); // searchCategory를 모델에 추가
-//
-//        log.info("productList: " + productList);
-//        log.info("totalPages: " + productList.getTotalPages());
-//        log.info("currentPage: " + page);
-//        log.info("size: " + size);
-//        log.info("totalElements: " + totalElements);
-//        log.info("startNo: " + startNo);
-//        log.info("keyword: " + keyword);
-//        log.info("userList size: " + productList.getContent().size());
-//
+//        List<ProductDTO> products = productService.getAllProductBySellerId(sellerInfoId);
+//        model.addAttribute("products", products);
 //        return "/admin/product/list";
 //    }
+
+    // 상품현황
+    @GetMapping("/admin/product/list")
+    public String AdminProductList(Model model,
+                                  @RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "5") int size,
+                                  @RequestParam(value = "keyword", required = false) String keyword,
+                                  @RequestParam(value = "searchCategory", required = false) String searchCategory, // searchCategory 추가
+                                  @AuthenticationPrincipal MyUserDetails userDetails) {
+
+        log.info("keyword: " + keyword);
+        log.info("searchCategory: " + searchCategory);
+
+        // 검색 조건에 따라 상품 목록을 가져옴
+        Page<ProductDTO> productList = productService.selectProductListByRole(page, size, keyword, searchCategory, userDetails); // 검색 조건 추가
+
+        // 시작 번호 계산 (검색된 결과에 따른 시작 번호)
+        long totalElements = productList.getTotalElements();
+        int startNo = (int) totalElements - (page * size);
+
+        model.addAttribute("products", productList);
+        model.addAttribute("totalPages", productList.getTotalPages());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("size", size);
+        model.addAttribute("totalElements", totalElements);
+        model.addAttribute("startNo", startNo); // 시작 번호 추가
+        model.addAttribute("keyword", keyword); // keyword를 모델에 추가
+        model.addAttribute("searchCategory", searchCategory); // searchCategory를 모델에 추가
+
+        log.info("products: " + productList);
+        log.info("totalPages: " + productList.getTotalPages());
+        log.info("currentPage: " + page);
+        log.info("size: " + size);
+        log.info("totalElements: " + totalElements);
+        log.info("startNo: " + startNo);
+        log.info("keyword: " + keyword);
+        log.info("userList size: " + productList.getContent().size());
+
+        return "/admin/product/list";
+    }
 
     // 상품등록
     @GetMapping("/admin/product/register")
