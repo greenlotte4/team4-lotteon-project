@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+
+import java.util.List;
+
 /*
      날짜 : 2024/10/30
      이름 : 강은경
@@ -22,10 +25,10 @@ public class CartResponseDTO {
 
     private UserDTO user;
 
-    private ProductVariants productVariants;
+    private List<Integer> productVariants;
 
     // 갯수
-    private int count;
+    private List<Integer> counts;
 
 
 

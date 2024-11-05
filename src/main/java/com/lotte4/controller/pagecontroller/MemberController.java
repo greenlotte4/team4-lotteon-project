@@ -229,7 +229,7 @@ public class MemberController {
         return "/member/find_id_result";
     }
 
-    // 아이디찾기 결과 post
+    // 개인구매회원 아이디찾기 결과 post
     @PostMapping("/member/find_id_result")
     public String handleFindIdResult(UserDTO userDTO, RedirectAttributes redirectAttributes) {
 
