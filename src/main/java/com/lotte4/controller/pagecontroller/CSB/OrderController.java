@@ -1,9 +1,6 @@
 package com.lotte4.controller.pagecontroller.CSB;
 
-import com.lotte4.dto.CartDTO;
-import com.lotte4.dto.ProductDTO;
-import com.lotte4.dto.ProductVariantsDTO;
-import com.lotte4.dto.Product_V_DTO;
+import com.lotte4.dto.*;
 import com.lotte4.service.CartService;
 import com.lotte4.service.OrderService;
 import com.lotte4.service.ProductService;
@@ -12,9 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -48,18 +43,18 @@ public class OrderController {
     }
 
     
-    //단품구매건
-    @GetMapping("/product/order/{variant_id}")
-    public String CartBuyOrder(
-            @PathVariable int variant_id,
-            @RequestParam(required = false, defaultValue = "1") int count,
-            Model model
-    ) {
-        CartDTO singleCartItem = orderService.selectByProductAsCartDTO(variant_id, count);
-        List<CartDTO> cartList = new ArrayList<>();
-        cartList.add(singleCartItem);
-        model.addAttribute("cartList", cartList);
-        model.addAttribute("isSingleProduct", true);
+    // 바로 구매하기
+    @ResponseBody
+    @PostMapping("/product/order")
+    public String CartBuyOrder(@RequestBody CartResponseDTO cartResponseDTO) {
+
+        log.info("cartResponseDTO: " + cartResponseDTO);
+
+        //        CartDTO singleCartItem = orderService.selectByProductAsCartDTO(variant_id, count);
+//        List<CartDTO> cartList = new ArrayList<>();
+//        cartList.add(singleCartItem);
+//        model.addAttribute("cartList", cartList);
+//        model.addAttribute("isSingleProduct", true);
 
         return "/product/order";
     }
