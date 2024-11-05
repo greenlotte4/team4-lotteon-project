@@ -47,6 +47,7 @@ h2 {
 .main-wrapper {
   display: flex;
   justify-content: center;
+  margin-bottom: 109px;
 }
 .main-box {
   width: 980px;
@@ -146,3 +147,4 @@ h2 {
 .desc {
   margin-bottom: -6px;
 }
+
