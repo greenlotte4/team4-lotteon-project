@@ -1,10 +1,17 @@
 package com.lotte4.service.review;
 
 import com.lotte4.document.ReviewDocument;
+
+import com.lotte4.dto.ProductVariantsDTO;
 import com.lotte4.dto.ReviewDTO;
+import com.lotte4.entity.ProductVariants;
+import com.lotte4.repository.ProductVariantsRepository;
 import com.lotte4.repository.review.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +23,9 @@ import java.util.stream.Collectors;
 public class ReviewService {
 
     private final ModelMapper modelMapper;
+
+    private final ProductVariantsRepository productVariantsRepository;
+
     private final ReviewRepository reviewRepository;
 
     // 모든 리뷰 조회
@@ -28,6 +38,26 @@ public class ReviewService {
                 .collect(Collectors.toList());
     }
 
+
+
+    public Page<ReviewDTO> findReviewsByUid(String uid, Pageable pageable) {
+
+        Page<ReviewDocument> reviewPage = reviewRepository.findByUid(uid, pageable);
+
+        return reviewPage.map(review -> {
+
+            int variantId = review.getVariantId();
+            Optional<ProductVariants> optionalProductVariants = productVariantsRepository.findById(variantId);
+            ReviewDTO reviewDTO = modelMapper.map(review, ReviewDTO.class);
+            optionalProductVariants.ifPresent(productVariants -> reviewDTO.setProductVariants(optionalProductVariants.get()));
+
+            return reviewDTO;
+        });
+    }
+
+
+
+
     // 특정 리뷰 조회
     public ReviewDTO findReview(String uid) {
         Optional<ReviewDocument> optReview = reviewRepository.findByUid(uid);
@@ -38,11 +68,11 @@ public class ReviewService {
 
     // 리뷰 추가
     public ReviewDTO insertReview(ReviewDTO reviewDTO) {
-        // DTO를 Document로 변환하여 저장
+
+
         ReviewDocument reviewDocument = modelMapper.map(reviewDTO, ReviewDocument.class);
         ReviewDocument savedReview = reviewRepository.save(reviewDocument);
 
-        // 저장된 Document를 다시 DTO로 변환하여 반환
         return modelMapper.map(savedReview, ReviewDTO.class);
     }
 

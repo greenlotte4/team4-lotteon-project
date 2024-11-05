@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProductVariantsRepository extends JpaRepository<ProductVariants, Integer> {
+
 }
