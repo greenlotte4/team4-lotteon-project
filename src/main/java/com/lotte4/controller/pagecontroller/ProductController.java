@@ -118,7 +118,7 @@ public class ProductController {
     // 장바구니 insert
     @ResponseBody
     @PostMapping("/product/cart")
-    public ResponseEntity<String> addCart(CartResponseDTO cartResponseDTO, Principal principal) {
+    public ResponseEntity<String> addCart(@RequestBody CartResponseDTO cartResponseDTO, Principal principal) {
 
         // 로그인 안 했으면 로그인 페이지로 리다이렉트
         if (principal == null) {
@@ -126,6 +126,8 @@ public class ProductController {
         }
 
         log.info("cartResponseDTO : " + cartResponseDTO);
+        log.info("cartResponseDTO : " + cartResponseDTO.getProductVariants().get(0));
+
 
         String username = principal.getName();
         User user = userService.findByUid(username);
