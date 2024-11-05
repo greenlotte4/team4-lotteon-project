@@ -1,5 +1,6 @@
 package com.lotte4.dto;
 
+import com.lotte4.entity.ProductVariants;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -24,5 +25,10 @@ public class ReviewDTO {
     private String regIp;
     private String img1;
     private String regDate;
+
+    // 추가 필드
+    private ProductVariants productVariants;
+
+
 
 }
