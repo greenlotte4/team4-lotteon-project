@@ -1,7 +1,5 @@
 package com.lotte4.document;
 
-
-import jakarta.persistence.GeneratedValue;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;

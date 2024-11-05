@@ -611,6 +611,18 @@ public ProductDTO updateProdImg(MultipartFile img1, MultipartFile img2, Multipar
     return productDTO;
 }
 
+public List<ProductListDTO> getProductListWithKeyword(String keyword, List<String> filters, int minPrice, int maxPrice) {
+        List<ProductListDTO> productListDTOList = new ArrayList<>();
+
+        List<Product> products = productRepository.findByKeywordWithFilters(keyword, filters, minPrice, maxPrice);
+        for (Product product : products) {
+            ProductListDTO productListDTO = modelMapper.map(product, ProductListDTO.class);
+            productListDTOList.add(productListDTO);
+        }
+        return productListDTOList;
+}
+
+
 // status가 0인 상품 목록 select
 //    public Page<ProductDTO> selectProductListByStatus(int status, int page, int size, String keyword) {
 //        Pageable pageable = PageRequest.of(page, size);

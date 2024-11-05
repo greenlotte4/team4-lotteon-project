@@ -12,6 +12,16 @@
   <link rel="stylesheet" th:href="@{/css/product/product_common.css}"/>
   <link rel="stylesheet" th:href="@{/css/product/style_product_search.css}"/>
 
+  <link id="pageStylesheet" rel="stylesheet" th:href="@{/css/product/style_product_list.css}"/>
+  <script>
+    // CSS 파일을 동적으로 변경하는 함수
+    function changeStylesheet(fileName) {
+      const stylesheet = document.getElementById('pageStylesheet');
+      stylesheet.href = fileName;
+    }
+  </script>
+
+
 </head>
 <body>
 <div id="bannerTop" class="on">
@@ -30,8 +40,8 @@
     <section class="product-list-section body-section">
       <!-- Breadcrumb -->
       <div class="breadcrumb">
-        <a href="#">Home</a> &gt; <a href="#">상품검색</a> &gt;
-        <a href="#" id="currentPage">검색결과</a>
+        Home &gt; 상품검색 &gt;
+        <span id="currentPage">검색결과</span>
       </div>
 
       <!-- 상품 목록 제목 -->
@@ -40,34 +50,43 @@
       <table>
         <tr>
           <td>
-            <span id="item">셔츠</span> 검색결과
+            <span id="item">[[${keyword}]]</span> 검색결과
             <span id="totalSearchedNum"
-            >(총 : <span id="searchedNum">20</span>건)</span
+            >(총 : <span id="searchedNum">[[${productDTOList.size}]]</span>건)</span
             >
           </td>
         </tr>
         <tr>
           <td>
             <div>
-              <input type="text" name="keyword" id="keyword" />
+              <input type="text" name="keyword" id="keyword" th:value="${keyword}"/>
               <button id="btnSearch">검색</button>
             </div>
             <input
                     type="checkbox"
-                    name="prodName"
-                    class="checkbox prodName"
+                    name="filter"
+                    class="checkbox"
+                    value="prodName"
+                    th:checked="${filters.contains('prodName')}"
             />상품명
             <input
                     type="checkbox"
-                    name="prodName"
-                    class="checkbox description"
+                    name="filter"
+                    class="checkbox"
+                    value="description"
+                    th:checked="${filters.contains('description')}"
             />설명
             <input
                     type="checkbox"
-                    name="prodName"
-                    class="checkbox price"
-            />가격 <input type="text" name="minPrice" id="minPrice" /> ~
-            <input type="text" name="maxPrice" id="maxPrice" />
+                    name="filter"
+                    class="checkbox"
+                    value="price"
+                    th:checked="${filters.contains('price')}"
+            />가격
+            <input type="text" name="minPrice" id="minPrice"
+                   th:value="${minPrice != 0 ? minPrice : ''}" /> ~
+            <input type="text" name="maxPrice" id="maxPrice"
+                   th:value="${maxPrice != 0 ? maxPrice : ''}" />
           </td>
         </tr>
       </table>
@@ -84,112 +103,53 @@
 
         <div class="sort-view-options">
           <span class="view-count">VIEW</span>
-          <a href="/product/list.html" class="sort-linkRight">목록보기</a>
-          <a href="/product/list_grid.html" class="sort-linkRight"
-          >바둑보기</a
-          >
+          <a href="javascript:void(0);" onclick="changeStylesheet('/lotteon/css/product/style_product_list.css')" class="sort-linkRight">목록보기</a>
+          <a href="javascript:void(1);" onclick="changeStylesheet('/lotteon/css/product/style_product_list_grid.css')" class="sort-linkRight">바둑보기</a>
         </div>
       </div>
 
       <!-- 상품목록 -->
       <div class="product-list">
-        <!-- 상품 1 -->
-        <div class="product-item">
-          <div class="product-image">
-            <img src="../images/product/image.png" alt="Product Image" />
-          </div>
-
-          <a href="/product/view.html" class="product-details">
-            <h3 class="product-name">상품명</h3>
-            <p class="product-description">간단한 상품 설명</p>
-            <div class="price-info">
-              <span class="original-price">30,000원</span>
-              <span class="discount-rate">10% ↓</span>
-              <span class="product-price">27,000원</span>
+        <div class="product-item" th:each="product : ${productDTOList}">
+          <a th:href="@{/product/view(productId = ${product.productId})}">
+            <div class="product-image">
+              <img th:src="@{'/uploads/product/' + ${product.img1}}" alt="Product Image" />
             </div>
-            <div class="shipping-info">
-              <span class="shipping-cost">무료배송</span>
+            <div class="product-details">
+              <h3 class="product-name">[[${product.name}]]</h3>
+              <p class="product-description">[[${product.description}]]</p>
+              <div class="price-info">
+                <th:block th:if="${product.discount} > 0">
+                  <span class="original-price">[[${product.price}]]</span>
+                  <span class="discount-rate">[[${product.discount}]]% ↓</span>
+                  <span class="product-price">[[${#numbers.formatDecimal(product.price * (1 - product.discount / 100.0), 0, 0)}]]</span>
+                </th:block>
+                <th:block th:if="${product.discount} == 0">
+                  <span class="original-price"></span>
+                  <span class="discount-rate"></span>
+                  <span class="product-price">[[${product.price}]]</span>
+                </th:block>
+              </div>
+              <div class="shipping-info">
+                <th:block th:if="${product.deliveryFee} > 0">
+                  <span class="shipping-cost">배송비 [[${product.deliveryFee}]]원</span>
+                </th:block>
+                <th:block th:if="${product.discount} == 0">
+                  <span class="shipping-cost">무료배송</span>
+                </th:block>
+              </div>
+            </div>
+            <div class="seller-info">
+              <p>판매자</p>
+              <span class="seller-badge">고객만족우수</span>
+              <div class="rating">
+                상품평 ⭐⭐⭐⭐
+              </div>
             </div>
           </a>
-
-          <div class="seller-info">
-            <p>판매자</p>
-            <span class="seller-badge">고객만족우수</span>
-            <div class="rating">상품평 ⭐⭐⭐⭐</div>
-          </div>
         </div>
-
-        <!-- 상품 3 -->
-        <div class="product-item">
-          <div class="product-image">
-            <img src="../images/product/image2.png" alt="Product Image" />
-          </div>
-          <div class="product-details">
-            <h3 class="product-name">상품명</h3>
-            <p class="product-description">간단한 상품 설명</p>
-            <div class="price-info">
-              <span class="original-price">30,000원</span>
-              <span class="discount-rate">10% ↓</span>
-              <span class="product-price">27,000원</span>
-            </div>
-            <div class="shipping-info">
-              <span class="shipping-cost">배송비 2,500원</span>
-            </div>
-          </div>
-          <div class="seller-info">
-            <p>판매자</p>
-            <span class="seller-badge">고객만족우수</span>
-            <div class="rating">상품평 ⭐⭐⭐⭐</div>
-          </div>
-        </div>
-        <!-- 상품 4 -->
-        <div class="product-item">
-          <div class="product-image">
-            <img src="../images/product/image.png" alt="Product Image" />
-          </div>
-          <div class="product-details">
-            <h3 class="product-name">상품명</h3>
-            <p class="product-description">간단한 상품 설명</p>
-            <div class="price-info">
-              <span class="original-price">30,000원</span>
-              <span class="discount-rate">10% ↓</span>
-              <span class="product-price">27,000원</span>
-            </div>
-            <div class="shipping-info">
-              <span class="shipping-cost">배송비 2,500원</span>
-            </div>
-          </div>
-          <div class="seller-info">
-            <p>판매자</p>
-            <span class="seller-badge">고객만족우수</span>
-            <div class="rating">상품평 ⭐⭐⭐⭐⭐</div>
-          </div>
-        </div>
-        <!-- 상품 4 -->
-        <div class="product-item">
-          <div class="product-image">
-            <img src="../images/product/image2.png" alt="Product Image" />
-          </div>
-          <div class="product-details">
-            <h3 class="product-name">상품명</h3>
-            <p class="product-description">간단한 상품 설명</p>
-            <div class="price-info">
-              <span class="original-price">30,000원</span>
-              <span class="discount-rate">10% ↓</span>
-              <span class="product-price">27,000원</span>
-            </div>
-            <div class="shipping-info">
-              <span class="shipping-cost">배송비 2,500원</span>
-            </div>
-          </div>
-          <div class="seller-info">
-            <p>판매자</p>
-            <span class="seller-badge">고객만족우수</span>
-            <div class="rating">상품평 ⭐⭐⭐⭐⭐</div>
-          </div>
-        </div>
-        <!-- 페이지네이션 -->
       </div>
+      <!-- 페이지네이션 -->
       <div class="pagination">
         <ul>
           <li><a href="#">&lt;</a></li>
@@ -206,4 +166,43 @@
   <footer th:replace="~{/include/footer.html}"></footer>
 </div>
 </body>
+<script>
+  document.getElementById("btnSearch").addEventListener("click", function(e) {
+    e.preventDefault();
+
+    // 검색어와 가격 범위 가져오기
+    const keyword = document.getElementById("keyword").value;
+    const minPrice = document.getElementById("minPrice").value;
+    const maxPrice = document.getElementById("maxPrice").value;
+
+    // 선택된 체크박스 필터 값 가져오기
+    const filters = Array.from(document.querySelectorAll('input[name="filter"]:checked'))
+            .map(checkbox => checkbox.value);
+
+    if (filters.includes("price") && (minPrice.trim() === "" || maxPrice.trim() === "")) {
+      alert("가격 범위를 입력해 주세요."); // 경고 메시지
+      return; // 전송 중지
+    }
+    if(keyword.trim() === ""){
+      alert("검색어를 입력해 주세요."); // 경고 메시지
+      return; // 전송 중지
+    }
+
+    // URL 생성
+    let url = `/lotteon/product/search/${encodeURIComponent(keyword)}?`;
+
+    if (filters.length > 0) {
+      url += `filters=${filters.join(",")}&`;
+    }
+    if (minPrice) {
+      url += `minPrice=${encodeURIComponent(minPrice)}&`;
+    }
+    if (maxPrice) {
+      url += `maxPrice=${encodeURIComponent(maxPrice)}&`;
+    }
+
+    // 생성된 URL로 이동
+    window.location.href = url;
+  });
+</script>
 </html>

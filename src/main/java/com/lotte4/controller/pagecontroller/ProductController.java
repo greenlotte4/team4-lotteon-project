@@ -118,7 +118,7 @@ public class ProductController {
     // 장바구니 insert
     @ResponseBody
     @PostMapping("/product/cart")
-    public ResponseEntity<String> addCart(CartResponseDTO cartResponseDTO, Principal principal) {
+    public ResponseEntity<String> addCart(@RequestBody CartResponseDTO cartResponseDTO, Principal principal) {
 
         // 로그인 안 했으면 로그인 페이지로 리다이렉트
         if (principal == null) {
@@ -126,6 +126,8 @@ public class ProductController {
         }
 
         log.info("cartResponseDTO : " + cartResponseDTO);
+        log.info("cartResponseDTO : " + cartResponseDTO.getProductVariants().get(0));
+
 
         String username = principal.getName();
         User user = userService.findByUid(username);
@@ -175,9 +177,33 @@ public class ProductController {
         return ResponseEntity.ok().build();
     }
 
+    //2024.11.05 강중원 - 검색기능
+    @GetMapping("/product/search/{keyword}")
+    public String search(
+            @PathVariable String keyword,
+            @RequestParam(required = false) List<String> filters,
+            @RequestParam(required = false) Integer minPrice,
+            @RequestParam(required = false) Integer maxPrice,
+            Model model){
+        log.info("keyword : " + keyword);
+        if (filters == null) {
+            filters = new ArrayList<>();
+            filters.add("prodName");
+        }
+        if(minPrice == null || !filters.contains("price")){
+            minPrice = 0;
+        }
+        if(maxPrice == null || !filters.contains("price")){
+            maxPrice = 0;
+        }
 
-    @GetMapping("/product/search")
-    public String search() {
+        List<ProductListDTO> productDTOList = productService.getProductListWithKeyword(keyword, filters, minPrice, maxPrice);
+
+        model.addAttribute("productDTOList", productDTOList);
+        model.addAttribute("filters", filters);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("minPrice", minPrice);
+        model.addAttribute("maxPrice", maxPrice);
         return "/product/search";
     }
 

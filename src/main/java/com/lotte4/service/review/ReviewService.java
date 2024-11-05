@@ -1,6 +1,7 @@
 package com.lotte4.service.review;
 
 import com.lotte4.document.ReviewDocument;
+
 import com.lotte4.dto.ProductVariantsDTO;
 import com.lotte4.dto.ReviewDTO;
 import com.lotte4.entity.ProductVariants;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +23,9 @@ import java.util.stream.Collectors;
 public class ReviewService {
 
     private final ModelMapper modelMapper;
+
     private final ProductVariantsRepository productVariantsRepository;
+
     private final ReviewRepository reviewRepository;
 
     // 모든 리뷰 조회
@@ -53,6 +57,7 @@ public class ReviewService {
 
 
 
+
     // 특정 리뷰 조회
     public ReviewDTO findReview(String uid) {
         Optional<ReviewDocument> optReview = reviewRepository.findByUid(uid);
@@ -63,6 +68,7 @@ public class ReviewService {
 
     // 리뷰 추가
     public ReviewDTO insertReview(ReviewDTO reviewDTO) {
+
 
         ReviewDocument reviewDocument = modelMapper.map(reviewDTO, ReviewDocument.class);
         ReviewDocument savedReview = reviewRepository.save(reviewDocument);

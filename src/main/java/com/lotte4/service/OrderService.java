@@ -54,55 +54,55 @@ public class OrderService {
     }
 
 
-    //상품 단품 구매 건(조회부분)
-    public CartDTO selectByProductAsCartDTO(int variantId, int count) {
-        // 상품 변형 조회
-        Optional<ProductVariants> productVariantsOptional = productVariantsRepository.findById(variantId);
-
-        if (productVariantsOptional.isPresent()) {
-            ProductVariants productVariants = productVariantsOptional.get();
-
-            // ProductVariantsDTO 생성
-            ProductVariantsDTO productVariantsDTO = new ProductVariantsDTO();
-            productVariantsDTO.setVariant_id(productVariants.getVariant_id());
-            productVariantsDTO.setSku(productVariants.getSku());
-            productVariantsDTO.setPrice(productVariants.getPrice());
-            productVariantsDTO.setStock(productVariants.getStock());
-            productVariantsDTO.setOptions(productVariants.getOptions());
-            productVariantsDTO.setCreated_at(productVariants.getCreated_at());
-            productVariantsDTO.setUpdated_at(productVariants.getUpdated_at());
-
-            // Product_V_DTO 생성 및 ProductVariantsDTO에 설정
-            Product_V_DTO product_V_DTO = new Product_V_DTO();
-            product_V_DTO.setProductId(productVariants.getProduct().getProductId());
-            product_V_DTO.setName(productVariants.getProduct().getName());
-            product_V_DTO.setDescription(productVariants.getProduct().getDescription());
-            product_V_DTO.setCompany(productVariants.getProduct().getCompany());
-            product_V_DTO.setPrice(productVariants.getProduct().getPrice());
-            product_V_DTO.setDiscount(productVariants.getProduct().getDiscount());
-            product_V_DTO.setPoint(productVariants.getProduct().getPoint());
-            product_V_DTO.setSold(productVariants.getProduct().getSold());
-            product_V_DTO.setDeliveryFee(productVariants.getProduct().getDeliveryFee());
-            product_V_DTO.setHit(productVariants.getProduct().getHit());
-            product_V_DTO.setReview(productVariants.getProduct().getReview());
-            product_V_DTO.setImg1(productVariants.getProduct().getImg1());
-            product_V_DTO.setImg2(productVariants.getProduct().getImg2());
-            product_V_DTO.setImg3(productVariants.getProduct().getImg3());
-            product_V_DTO.setDetail(productVariants.getProduct().getDetail());
-            productVariantsDTO.setProduct(ProductDTO.builder().build());
-
-            // CartDTO 생성 및 설정
-            CartDTO cartDTO = new CartDTO();
-            cartDTO.setProductVariants(productVariants);
-            cartDTO.setCount(count); // 단품 구매 시 수량 설정
-
-            log.info("CartDTO for single product purchase: " + cartDTO);
-            return cartDTO;
-        } else {
-            log.warn("옵션아이디 " + variantId + " 찾을 수 없음.");
-            return null;
-        }
-    }
+//    //상품 단품 구매 건(조회부분)
+//    public CartDTO selectByProductAsCartDTO(CartResponseDTO cartResponseDTO) {
+//        // 상품 변형 조회
+//        Optional<ProductVariants> productVariantsOptional = productVariantsRepository.findById(variantId);
+//
+//        if (productVariantsOptional.isPresent()) {
+//            ProductVariants productVariants = productVariantsOptional.get();
+//
+//            // ProductVariantsDTO 생성
+//            ProductVariantsDTO productVariantsDTO = new ProductVariantsDTO();
+//            productVariantsDTO.setVariant_id(productVariants.getVariant_id());
+//            productVariantsDTO.setSku(productVariants.getSku());
+//            productVariantsDTO.setPrice(productVariants.getPrice());
+//            productVariantsDTO.setStock(productVariants.getStock());
+//            productVariantsDTO.setOptions(productVariants.getOptions());
+//            productVariantsDTO.setCreated_at(productVariants.getCreated_at());
+//            productVariantsDTO.setUpdated_at(productVariants.getUpdated_at());
+//
+//            // Product_V_DTO 생성 및 ProductVariantsDTO에 설정
+//            Product_V_DTO product_V_DTO = new Product_V_DTO();
+//            product_V_DTO.setProductId(productVariants.getProduct().getProductId());
+//            product_V_DTO.setName(productVariants.getProduct().getName());
+//            product_V_DTO.setDescription(productVariants.getProduct().getDescription());
+//            product_V_DTO.setCompany(productVariants.getProduct().getCompany());
+//            product_V_DTO.setPrice(productVariants.getProduct().getPrice());
+//            product_V_DTO.setDiscount(productVariants.getProduct().getDiscount());
+//            product_V_DTO.setPoint(productVariants.getProduct().getPoint());
+//            product_V_DTO.setSold(productVariants.getProduct().getSold());
+//            product_V_DTO.setDeliveryFee(productVariants.getProduct().getDeliveryFee());
+//            product_V_DTO.setHit(productVariants.getProduct().getHit());
+//            product_V_DTO.setReview(productVariants.getProduct().getReview());
+//            product_V_DTO.setImg1(productVariants.getProduct().getImg1());
+//            product_V_DTO.setImg2(productVariants.getProduct().getImg2());
+//            product_V_DTO.setImg3(productVariants.getProduct().getImg3());
+//            product_V_DTO.setDetail(productVariants.getProduct().getDetail());
+//            productVariantsDTO.setProduct(ProductDTO.builder().build());
+//
+//            // CartDTO 생성 및 설정
+//            CartDTO cartDTO = new CartDTO();
+//            cartDTO.setProductVariants(productVariants);
+//            cartDTO.setCount(count); // 단품 구매 시 수량 설정
+//
+//            log.info("CartDTO for single product purchase: " + cartDTO);
+//            return cartDTO;
+//        } else {
+//            log.warn("옵션아이디 " + variantId + " 찾을 수 없음.");
+//            return null;
+//        }
+//    }
 
 
 

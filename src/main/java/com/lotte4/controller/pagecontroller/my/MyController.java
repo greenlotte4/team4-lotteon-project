@@ -32,7 +32,7 @@ import java.util.List;
 @Controller
 public class MyController {
 
-    private final ReviewService reviewService;
+
     private final MemberInfoService memberInfoService;
     private final UserService userService;
 
@@ -58,6 +58,7 @@ public class MyController {
     }
 
     @GetMapping("/review")
+
     public String review(Model model, Principal principal,
                          @RequestParam(defaultValue = "0") int page,
                          @RequestParam(defaultValue = "5") int size) {
@@ -67,6 +68,7 @@ public class MyController {
 
         Page<ReviewDTO> reviews =  reviewService.findReviewsByUid(uid, pageable);
         model.addAttribute("reviews",reviews);
+
         return "/my/review";
     }
 
