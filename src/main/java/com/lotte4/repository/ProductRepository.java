@@ -3,7 +3,6 @@ package com.lotte4.repository;
 import com.lotte4.entity.Product;
 import com.lotte4.entity.ProductCate;
 import com.lotte4.entity.SellerInfo;
-import com.lotte4.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,20 +15,25 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     List<Product> findByProductCateId(ProductCate productCateId);
     List<Product> findBySellerInfoId(SellerInfo sellerInfoId);
 
-    // status 가 0 인 회원 목록 select(관리자 상품목록을 위함)
-    Page<Product> findByStatus(int status, Pageable pageable);
+    // sellerInfoId 와 일치하는 상품 목록 select(관리자 상품목록을 위함)
+    Page<Product> findBySellerInfoId(SellerInfo sellerInfoId, Pageable pageable);
 
     // name 검색
-    Page<Product> findByStatusAndNameContaining(int status, String name, int sellerInfoId, Pageable pageable);
+    Page<Product> findBySellerInfoIdAndNameContaining(SellerInfo sellerInfoId, String name, Pageable pageable);
 
     // productId 검색
-    Page<Product> findByStatusAndProductIdContaining(int status, int productId, int sellerInfoId, Pageable pageable);
-
-    // sellerInfoId 검색
-    Page<Product> findByStatusAndSellerInfoIdContaining(int status, int sellerInfoId, Pageable pageable);
+    Page<Product> findBySellerInfoIdAndProductId(SellerInfo sellerInfoId, int productId, Pageable pageable);
 
     // company 검색
-    Page<Product> findByStatusAndCompanyContaining(int status, String company, int sellerInfoId, Pageable pageable);
+    Page<Product> findBySellerInfoIdAndCompanyContaining(SellerInfo sellerInfoId, String company, Pageable pageable);
 
+    // name 검색
+    Page<Product> findByName(String name, Pageable pageable);
+
+    // productId 검색
+    Page<Product> findByProductId(int productId, Pageable pageable);
+
+    // company 검색
+    Page<Product> findByCompany(String company, Pageable pageable);
 
 }

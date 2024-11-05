@@ -8,6 +8,7 @@ import com.lotte4.dto.*;
 import com.lotte4.entity.*;
 import com.lotte4.repository.*;
 import com.lotte4.repository.impl.ProductRepositoryImpl;
+import com.lotte4.security.MyUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -406,18 +407,18 @@ public class ProductService {
     public List<ProductListDTO> getProductWithCateAndType(int cate, String type) {
         List<ProductDTO> productDTOList = new ArrayList<>();
         //home(전체상품)
-        if(cate==0){
+        if (cate == 0) {
             productDTOList = getAllProducts();
         }
         //카테고리가 있을경우
-        else{
+        else {
             productDTOList = getProductWithCate(cate);
         }
 
         List<ProductListDTO> productListDTOList = new ArrayList<>();
         for (ProductDTO productDTO : productDTOList) {
             ProductListDTO productListDTO = modelMapper.map(productDTO, ProductListDTO.class);
-            ProductDetailDTO detail= productDTO.getProductDetailId();
+            ProductDetailDTO detail = productDTO.getProductDetailId();
             productListDTO.setCreateTime(detail.getCreateDate());
             productListDTOList.add(productListDTO);
         }
@@ -434,9 +435,9 @@ public class ProductService {
                         double o1Price = o1.getPrice() * (1 - o1.getDiscount() / 100.0);
                         double o2Price = o2.getPrice() * (1 - o2.getDiscount() / 100.0);
 
-                        if(o1Price>o2Price){
+                        if (o1Price > o2Price) {
                             return 1;
-                        }else if(o1Price<o2Price){
+                        } else if (o1Price < o2Price) {
                             return -1;
                         }
                         return 0;
@@ -452,9 +453,9 @@ public class ProductService {
                         double o1Price = o1.getPrice() * (1 - o1.getDiscount() / 100.0);
                         double o2Price = o2.getPrice() * (1 - o2.getDiscount() / 100.0);
 
-                        if(o1Price>o2Price){
+                        if (o1Price > o2Price) {
                             return -1;
-                        }else if(o1Price<o2Price){
+                        } else if (o1Price < o2Price) {
                             return 1;
                         }
                         return 0;
@@ -507,7 +508,7 @@ public class ProductService {
         List<ProductListDTO> productListDTOList = new ArrayList<>();
         for (ProductDTO productDTO : productDTOList) {
             ProductListDTO productListDTO = modelMapper.map(productDTO, ProductListDTO.class);
-            ProductDetailDTO detail= productDTO.getProductDetailId();
+            ProductDetailDTO detail = productDTO.getProductDetailId();
             productListDTO.setCreateTime(detail.getCreateDate());
             productListDTOList.add(productListDTO);
         }
@@ -558,11 +559,11 @@ public class ProductService {
         int count = 0;
         int max = 8;
 
-        for(ProductListDTO productListDTO : productListDTOList){
-            if(count < max){
+        for (ProductListDTO productListDTO : productListDTOList) {
+            if (count < max) {
                 productDTOs.add(productListDTO);
                 count++;
-            }else{
+            } else {
                 break;
             }
         }
@@ -572,7 +573,6 @@ public class ProductService {
     public List<ProductListDTO> getProductBest() {
         return cachingService.getProductBest();
     }
-
 
 
     public ProductDTO JsonToMapAndSetProductDTO(String optionsJson, ProductDTO productDTO) {
@@ -635,42 +635,76 @@ public class ProductService {
     }
 
 
-    // status가 0인 상품 목록 select
-    public Page<ProductDTO> selectProductListByStatus(int status, int page, int size, String keyword, String searchCategory, int sellerInfoId) {
+    // sellerInfoId 에 해당하는 상품 목록 select
+    public Page<ProductDTO> selectProductListByRole(int page, int size, String keyword, String searchCategory, MyUserDetails userDetails) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Product> productPage;
+        Page<Product> productPage = null;
+        String role = userDetails.getUser().getRole();
 
-        int intKeyword = Integer.parseInt(keyword);
+        if (keyword == null && role.equals("ADMIN")) {
+            productPage = productRepository.findAll(pageable);
+            // product 엔티티를 ProductDTO 변환
+            return productPage.map(ProductDTO::new);
+        } else if (keyword == null && role.equals("seller")) {
+            SellerInfo sellerInfoId = userDetails.getUser().getSellerInfo();
+            productPage = productRepository.findBySellerInfoId(sellerInfoId, pageable);
+            // product 엔티티를 ProductDTO 변환
+            assert productPage != null;
+            return productPage.map(ProductDTO::new);
+        }
+
+        int intKeyword = 0;
+
+        if (keyword != null) {
+            intKeyword = Integer.parseInt(keyword);
+        }
+
 
         // 검색 키워드가 있을 때 searchCategory에 따라 조건을 나눔
-        if (keyword != null && !keyword.isEmpty()) {
+        if (keyword != null && !keyword.isEmpty() && role.equals("seller")) {
+            SellerInfo sellerInfoId = userDetails.getUser().getSellerInfo();
             switch (searchCategory) {
                 case "name":
-                    productPage = productRepository.findByStatusAndNameContaining(status, keyword, sellerInfoId, pageable);
+                    productPage = productRepository.findBySellerInfoIdAndNameContaining(sellerInfoId, keyword, pageable);
                     break;
                 case "productId":
-                    productPage = productRepository.findByStatusAndProductIdContaining(status, intKeyword, sellerInfoId, pageable);
-                    break;
-                case "sellerInfoId":
-                    productPage = productRepository.findByStatusAndSellerInfoIdContaining(status, intKeyword, pageable);
+                    productPage = productRepository.findBySellerInfoIdAndProductId(sellerInfoId, intKeyword, pageable);
                     break;
                 case "company":
-                    productPage = productRepository.findByStatusAndCompanyContaining(status, keyword, sellerInfoId, pageable);
+                    productPage = productRepository.findBySellerInfoIdAndCompanyContaining(sellerInfoId, keyword, pageable);
                     break;
                 default:
                     // 기본적으로 모든 필드를 포함하는 검색
-                    productPage = productRepository.findByStatus(
-                            status, pageable);
+                    productPage = productRepository.findBySellerInfoId(
+                            sellerInfoId, pageable);
                     break;
             }
-        } else {
-            // 키워드가 없을 경우 기본값으로 모든 사용자 가져오기
-            productPage = productRepository.findByStatus(status, pageable);
+        } else if (keyword != null && !keyword.isEmpty() && role.equals("ADMIN")) {
+            switch (searchCategory) {
+                case "name":
+                    productPage = productRepository.findByName(keyword, pageable);
+                    break;
+                case "productId":
+                    productPage = productRepository.findByProductId(intKeyword, pageable);
+                    break;
+                case "sellerInfoId":
+                    Optional<SellerInfo> optional = sellerInfoRepository.findById(intKeyword);
+                    if (optional.isPresent()) {
+                        SellerInfo sellerInfo = optional.get();
+                        productPage = productRepository.findBySellerInfoId(sellerInfo, pageable);
+                    }
+                    break;
+                case "company":
+                    productPage = productRepository.findByCompany(keyword, pageable);
+                    break;
+                default:
+                    // 기본적으로 모든 필드를 포함하는 검색
+                    productPage = productRepository.findAll(pageable);
+                    break;
+            }
         }
-
         // product 엔티티를 ProductDTO 변환
+        assert productPage != null;
         return productPage.map(ProductDTO::new);
     }
-
-
 }
