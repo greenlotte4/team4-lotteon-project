@@ -1,16 +1,22 @@
 package com.lotte4.controller.pagecontroller.admin.product;
 
 import com.lotte4.dto.*;
+import com.lotte4.security.MyUserDetails;
 import com.lotte4.service.CategoryService;
 import com.lotte4.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -39,29 +45,39 @@ public class AdminProductController {
     }
 
     @GetMapping("/admin/product/list")
-    public String AdminProductList(Model model) {
-         List<ProductDTO> products = productService.getAllProducts();
-         model.addAttribute("products", products);
-         return "/admin/product/list";
+    public String AdminProductList(Model model, @AuthenticationPrincipal MyUserDetails userDetails) {
+        int sellerInfoId = userDetails.getUser().getSellerInfo().getSellerInfoId();
+        List<ProductDTO> products = productService.getAllProductBySellerId(sellerInfoId);
+        model.addAttribute("products", products);
+        return "/admin/product/list";
     }
 
-    // 상품현황
+//    // 상품현황
 //    @GetMapping("/admin/product/list")
 //    public String AdminMemberList(Model model,
 //                                  @RequestParam(defaultValue = "0") int page,
 //                                  @RequestParam(defaultValue = "5") int size,
 //                                  @RequestParam(required = false) String keyword,
-//                                  @RequestParam(required = false) String searchCategory) { // searchCategory 추가
+//                                  @RequestParam(required = false) String searchCategory, // searchCategory 추가
+//                                  @AuthenticationPrincipal MyUserDetails userDetails) {
 //
-//        // status가 0인 회원 목록 출력
+//        log.info("keyword: " + keyword);
+//        log.info("searchCategory: " + searchCategory);
+//
+//
 //        int status = 0;
 //
-//        // status에 해당하는 전체 회원 수를 가져옴
-//        long totalElements = productService.getTotalProductCountByRoleAndKeyword(status, keyword); // keyword에 따른 총 개수 가져오기
-//        // 회원 목록을 가져옴
-//        Page<ProductDTO> productList = productService.selectProductListByStatus(status, page, size, keyword); // 검색 조건 추가
+//        int sellerInfoId = userDetails.getUser().getSellerInfo().getSellerInfoId();
+//
+//        // 검색 조건에 따라 상품 목록을 가져옴
+//        Page<ProductDTO> productList = productService.selectProductListByStatus(status, page, size, keyword, searchCategory, sellerInfoId); // 검색 조건 추가
+//
+//        productList.stream().filter(product -> product.getSellerInfoId() != null) // sellerInfo가 null이 아닌 경우
+//                .filter(product -> sellerInfoId == product.getSellerInfoId().getSellerInfoId())
+//                .toList();
 //
 //        // 시작 번호 계산 (검색된 결과에 따른 시작 번호)
+//        long totalElements = productList.getTotalElements();
 //        int startNo = (int) totalElements - (page * size);
 //
 //        model.addAttribute("productList", productList);
@@ -182,7 +198,6 @@ public class AdminProductController {
 
         return "/admin/product/modifyMore";
     }
-
 
 
 }

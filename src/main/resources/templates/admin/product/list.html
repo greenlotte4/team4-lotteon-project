@@ -31,24 +31,24 @@
             </div>
             <h3>상품현황</h3>
             <div class="form">
-<!--                <div class="search-bar">-->
-<!--                    <form action="#" th:action="@{/admin/member/list}" method="get"> &lt;!&ndash; GET 방식으로 폼 전송 &ndash;&gt;-->
-<!--                        <select id="search-category" name="searchCategory" class="dropdown"> &lt;!&ndash; name 속성 추가 &ndash;&gt;-->
-<!--                            <option value="name" th:selected="${searchCategory == 'name'}">상품명</option>-->
-<!--                            <option value="productId" th:selected="${searchCategory == 'productId'}">상품번호</option>-->
-<!--                            <option value="sellerInfoId" th:selected="${searchCategory == 'sellerInfoId'}">판매자</option>-->
-<!--                            <option value="company" th:selected="${searchCategory == 'company'}">제조사</option>-->
-<!--                        </select>-->
-<!--                        <input-->
-<!--                                type="text"-->
-<!--                                name="keyword"-->
-<!--                                placeholder="키워드 입력"-->
-<!--                                class="search-input"-->
-<!--                                th:value="${keyword}"-->
-<!--                        />-->
-<!--                        <button type="submit" class="search-btn">검색</button> &lt;!&ndash; type을 submit으로 설정 &ndash;&gt;-->
-<!--                    </form>-->
-<!--                </div>-->
+                <div class="search-bar">
+                    <form action="#" th:action="@{/admin/product/list}" method="get"> <!-- GET 방식으로 폼 전송 -->
+                        <select id="search-category" name="searchCategory" class="dropdown"> <!-- name 속성 추가 -->
+                            <option value="name" th:selected="${searchCategory == 'name'}">상품명</option>
+                            <option value="productId" th:selected="${searchCategory == 'productId'}">상품번호</option>
+                            <option th:if="${#authentication.principal.user.role == 'ADMIN'}" value="sellerInfoId" th:selected="${searchCategory == 'sellerInfoId'}">판매자</option>
+                            <option value="company" th:selected="${searchCategory == 'company'}">제조사</option>
+                        </select>
+                        <input
+                                type="text"
+                                name="keyword"
+                                placeholder="키워드 입력"
+                                class="search-input"
+                                th:value="${keyword}"
+                        />
+                        <button type="submit" class="search-btn">검색</button> <!-- type을 submit으로 설정 -->
+                    </form>
+                </div>
 
                 <table class="inquiry-table">
                     <colgroup>
