@@ -57,6 +57,11 @@
     font-weight: bold;
     color: #ef2a23;
 }
+
+.product-price::after{
+    content: "원";
+}
+
 .original-price {
     text-decoration: line-through;
     color: #999;
