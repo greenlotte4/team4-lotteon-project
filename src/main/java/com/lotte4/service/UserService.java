@@ -28,6 +28,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -320,4 +322,25 @@ public class UserService {
             return null;
         }
     }
+
+    // 로그인 날짜 업데이트
+    public void updateLastLogin(String uid) {
+        // uid로 User 엔티티 조회
+        Optional<User> optionalUser = userRepository.findByUid(uid);
+
+        optionalUser.ifPresent(user -> {
+            // User의 memberInfo가 존재할 경우에만 lastLoginAt 업데이트
+            MemberInfo memberInfo = user.getMemberInfo();
+            if (memberInfo != null) {
+                // 현재 시간으로 lastLoginAt 업데이트
+                memberInfo.setLastLoginAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            }
+
+            // 변경 사항 저장
+            userRepository.save(user);
+        });
+    }
+
+
+
 }
