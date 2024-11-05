@@ -6,9 +6,7 @@ import com.lotte4.service.review.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -34,6 +32,15 @@ public class ReviewController {
         return ResponseEntity
                 .ok()
                 .body(savedUser1);
+    }
+    @DeleteMapping("/reviews/{uid}")
+    public ResponseEntity<Boolean> deleteReview(@PathVariable("uid") String uid) {
+
+        boolean result = reviewService.deleteReview(uid);
+
+        return ResponseEntity
+                .ok()
+                .body(result);
     }
 
 }

@@ -86,3 +86,6 @@ spring:
                     min-idle: 5
             host: 13.125.226.80
             port: 6379
+
+        mongodb:
+            uri: mongodb://lotteon:1234@13.125.226.80:27017/lotteon?authSource=lotteon

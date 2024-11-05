@@ -39,20 +39,20 @@
             </thead>
             <tbody>
               <!-- 반복 block -->
-              <tr th:each="review , i : ${reviewDTOList}">
+              <tr th:each="review , i : ${reviews}">
                 <td>
                   [[${i.index+1}]]
                 </td>
                 <td>
-                  [[${review.product.productId}]] / [[${review.product.name}]]
+                  [[${review.productVariants.product.name}]]
                 </td>
                 <td>
                   [[${review.content}]]
                 </td>
                 <td>
                   <th:block th:with="
-                      fullStars=${T(java.lang.Math).floor(review.getReviewStar() / 2)},
-                      halfStar=${review.getReviewStar() % 2 == 1},
+                      fullStars=${T(java.lang.Math).floor(review.getRating() / 2)},
+                      halfStar=${review.getRating() % 2 == 1},
                       emptyStars=${5 - fullStars - (halfStar ? 1 : 0)}">
 
                     <!-- 전체 별 -->
@@ -75,9 +75,6 @@
                     </th:block>
 
                   </th:block>
-                </td>
-                <td>
-                  [[${review.regDateSub}]]
                 </td>
               </tr>
               <!-- 반복 블럭 끝 -->
