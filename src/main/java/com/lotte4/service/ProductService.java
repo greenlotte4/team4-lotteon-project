@@ -534,7 +534,7 @@ public class ProductService {
                 }
                 break;
             case "Recent":
-                products = productRepository.findTop8ByOrderByCreateAtDesc();
+                products = productRepository.findTop8ByOrderByCreatedAtDesc();
                 for(Product product : products){
                     productDTOList.add(modelMapper.map(product, ProductListDTO.class));
                 }
