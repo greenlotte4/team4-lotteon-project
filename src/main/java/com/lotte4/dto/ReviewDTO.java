@@ -20,10 +20,12 @@ public class ReviewDTO {
 
     private String uid;
     private int variantId;
+    private int prodId;
     private int rating;
     private String content;
     private String regIp;
     private String img1;
+    private String img2;
     private String regDate;
 
     // 추가 필드

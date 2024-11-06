@@ -152,75 +152,113 @@
             </section>
 
             <!-- 상품리뷰 -->
-            <section id="additional-product-info">
+            <section id="additional-product-info" th:data-product-id="${productDTO.productId}">
                 <h3>상품리뷰</h3>
-
-                <div class="review-list">
-                    <div class="review-item">
-                        <div class="review-header">
-                            <span class="review-author">작성자: kko*****</span>
-                        </div>
-                        <div class="review-rating">★★★★★</div>
-                        <div class="review-content">
-                            <p>적극추천 합니다. 배송이 빠릅니다.</p>
-                            <span class="review-date">2024.10.09</span>
-                        </div>
-                    </div>
-                    <div class="review-item">
-                        <div class="review-header">
-                            <span class="review-author">작성자: kko*****</span>
-                        </div>
-                        <div class="review-rating">★★★★★</div>
-                        <div class="review-content">
-                            <p>적극추천 합니다. 배송이 빠릅니다.</p>
-                            <span class="review-date">2024.10.09</span>
-                        </div>
-                    </div>
-                    <div class="review-item">
-                        <div class="review-header">
-                            <span class="review-author">작성자: kko*****</span>
-                        </div>
-                        <div class="review-rating">★★★★★</div>
-                        <div class="review-content">
-                            <p>적극추천 합니다. 배송이 빠릅니다.</p>
-                            <span class="review-date">2024.10.09</span>
-                        </div>
-                    </div>
-                    <div class="review-item">
-                        <div class="review-header">
-                            <span class="review-author">작성자: kko*****</span>
-                        </div>
-                        <div class="review-rating">★★★★★</div>
-                        <div class="review-content">
-                            <p>적극추천 합니다. 배송이 빠릅니다.</p>
-                            <span class="review-date">2024.10.09</span>
-                        </div>
-                    </div>     <div class="review-item">
-                    <div class="review-header">
-                        <span class="review-author">작성자: kko*****</span>
-                    </div>
-                    <div class="review-rating">★★★★★</div>
-                    <div class="review-content">
-                        <p>적극추천 합니다. 배송이 빠릅니다.</p>
-                        <span class="review-date">2024.10.09</span>
-                    </div>
+                <div class="review-list" id="review-list">
+                    <!-- 리뷰가 JavaScript로 추가될 부분 -->
                 </div>
-                    <div class="pagination">
-                        <ul>
-                            <li><a href="#">&lt;</a></li>
-                            <li><a href="#">1</a></li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a href="#">4</a></li>
-                            <li><a href="#">5</a></li>
-                            <li><a href="#">&gt;</a></li>
-                        </ul>
-                    </div>
-                </div>
+                <div class="pagination"></div>
             </section>
+
         </section>
     </main>
     <footer th:replace="~{/include/footer.html}"></footer>
 </div>
+<script>
+    let currentPage = 0;
+    const pageSize = 8;
+    const prodId = document.getElementById("additional-product-info").dataset.productId;
+
+    async function loadReviews(page = 0) {
+        try {
+            const response = await fetch(`/lotteon/review/${prodId}?page=${page}&size=${pageSize}`);
+            const data = await response.json();
+
+            if (response.ok) {
+                renderReviews(data.content);
+                updatePagination(data.totalPages, page); // 현재 페이지 정보 전달
+                currentPage = page; // 현재 페이지 업데이트
+            } else {
+                console.error("리뷰를 불러오는 중 오류 발생:", data);
+            }
+        } catch (error) {
+            console.error("리뷰를 불러오는 중 오류 발생:", error);
+        }
+    }
+
+    function renderReviews(reviews) {
+        const reviewList = document.getElementById("review-list");
+        reviewList.innerHTML = ""; // 기존 리뷰 초기화
+
+        if (!reviews || reviews.length === 0) {
+            reviewList.innerHTML = "<p>리뷰가 없습니다.</p>";
+            return;
+        }
+
+        reviews.forEach(review => {
+            const reviewItem = document.createElement("div");
+            reviewItem.classList.add("review-item");
+
+            let starsHTML = '';
+            for (let i = 0; i < Math.floor(review.rating / 2); i++) {
+                starsHTML += '<img src="/lotteon/images/review/star.png" alt="Full Star" class="star">';
+            }
+            if (review.rating % 2 === 1) {
+                starsHTML += '<img src="/lotteon/images/review/star_half.png" alt="Half Star" class="star">';
+            }
+            for (let i = 0; i < 5 - Math.floor(review.rating / 2) - (review.rating % 2 === 1 ? 1 : 0); i++) {
+                starsHTML += '<img src="/lotteon/images/review/star_gray.png" alt="Gray Star" class="star">';
+            }
+
+            reviewItem.innerHTML = `
+            <div class="review-header">
+                <span class="review-author">${review.uid}</span>
+                <span class="review-date">${review.regDate ? review.regDate : '등록일 없음'}</span>
+            </div>
+            <div class="review-rating">${starsHTML}</div>
+            <div>
+                <p class="review_content">${review.content}</p>
+            </div>
+            <div>
+                ${review.img1 ? `<img class="review_img" src="/lotteon/uploads/review/${review.img1}" alt="리뷰 이미지1" class="review-image"/>` : ""}
+                ${review.img2 ? `<img class="review_img" src="/lotteon/uploads/review/${review.img2}" alt="리뷰 이미지2" class="review-image"/>` : ""}
+            </div>
+        `;
+            reviewList.appendChild(reviewItem);
+        });
+    }
+
+    function updatePagination(totalPages, currentPage) {
+        const paginationDiv = document.querySelector('.pagination');
+        paginationDiv.innerHTML = ''; // 기존 버튼 초기화
+
+        const prevButton = document.createElement('button');
+        prevButton.classList.add('page-btn');
+        prevButton.disabled = currentPage === 0;
+        prevButton.textContent = '이전';
+        prevButton.onclick = () => loadReviews(currentPage - 1);
+        paginationDiv.appendChild(prevButton);
+
+        for (let i = 0; i < totalPages; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.classList.add('page-num');
+            if (i === currentPage) pageButton.classList.add('active');
+            pageButton.textContent = i + 1;
+            pageButton.onclick = () => loadReviews(i);
+            paginationDiv.appendChild(pageButton);
+        }
+
+        const nextButton = document.createElement('button');
+        nextButton.classList.add('page-btn');
+        nextButton.disabled = currentPage + 1 === totalPages;
+        nextButton.textContent = '다음';
+        nextButton.onclick = () => loadReviews(currentPage + 1);
+        paginationDiv.appendChild(nextButton);
+    }
+
+    // 초기 리뷰 로드
+    document.addEventListener("DOMContentLoaded", () => loadReviews(currentPage));
+
+</script>
 </body>
 </html>

@@ -39,21 +39,27 @@ public class ReviewService {
     }
 
 
+    public Page<ReviewDTO> findReviewByProdId(int prodId, Pageable pageable) {
+        Page<ReviewDocument> reviewPage = reviewRepository.findByProdId(prodId, pageable);
+        return reviewPage.map(this::convertToReviewDTO);
+    }
 
     public Page<ReviewDTO> findReviewsByUid(String uid, Pageable pageable) {
-
         Page<ReviewDocument> reviewPage = reviewRepository.findByUid(uid, pageable);
-
-        return reviewPage.map(review -> {
-
-            int variantId = review.getVariantId();
-            Optional<ProductVariants> optionalProductVariants = productVariantsRepository.findById(variantId);
-            ReviewDTO reviewDTO = modelMapper.map(review, ReviewDTO.class);
-            optionalProductVariants.ifPresent(productVariants -> reviewDTO.setProductVariants(optionalProductVariants.get()));
-
-            return reviewDTO;
-        });
+        return reviewPage.map(this::convertToReviewDTO);
     }
+
+    // 공통 변환 로직을 메서드로 분리
+    private ReviewDTO convertToReviewDTO(ReviewDocument review) {
+
+        ReviewDTO reviewDTO = modelMapper.map(review, ReviewDTO.class);
+        int variantId = review.getVariantId();
+        Optional<ProductVariants> optionalProductVariants = productVariantsRepository.findById(variantId);
+        optionalProductVariants.ifPresent(reviewDTO::setProductVariants);
+
+        return reviewDTO;
+    }
+
 
 
 
