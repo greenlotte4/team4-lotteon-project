@@ -28,7 +28,7 @@
                         <td>[[${orderDTO.buyDate.toLocalDate()}]]</td>
                         <td>
                             <div class="myInfo_productInfo">
-<!--                                <img th:src="@{'/uploads/product/' + ${item.productVariants.product.img1}}" alt="">-->
+                                <!--                                <img th:src="@{'/uploads/product/' + ${item.productVariants.product.img1}}" alt="">-->
                                 <div th:each="item : ${orderItems}">
                                     <p>주문번호: [[${orderDTO.orderId}]]</p>
                                     <p th:text="${item.productVariants.product.company}"></p>

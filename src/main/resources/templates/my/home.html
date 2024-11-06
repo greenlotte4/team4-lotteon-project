@@ -27,7 +27,7 @@
           <div class="myInfo_ArticleTitle"><span>최근주문내역</span><a th:href="@{/my/order}">더보기 ></a></div>
           <ul class="myInfo_product">
             <li>
-              <span>[[${orderDTO.buyDate.toLocalDate()}]] / </span><a th:href="@{#}" class="orderDetailBtn"> 주문번호 : [[${orderDTO.orderId}]]</a>
+              <span>[[${orderDTO.buyDate.toLocalDate()}]] / </span><a href="#" class="orderDetailBtn"> 주문번호 : [[${orderDTO.orderId}]]</a>
               <div th:each="item : ${orderItems}">
                 <img th:src="@{'/uploads/product/' + ${item.productVariants.product.img1}}" alt="">
                 <div>
