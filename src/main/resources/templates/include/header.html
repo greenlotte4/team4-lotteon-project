@@ -47,7 +47,7 @@
                 </h1>
                 <div class="searchAreaWrap">
                     <div class="searchArea">
-                        <input type="search" id="headerSearchId" placeholder="조셉앤스테이시 베스트가방~50%" aria-label="조셉앤스테이시 베스트가방~50%">
+                        <input type="search" id="headerSearchId" th:placeholder="${SoldList.get(0).name}">
                         <button type="button" class="btnSearchInner"><span class="blind">검색</span></button>
                     </div>
                 </div>
@@ -140,4 +140,18 @@
     moreViewButton.addEventListener('click', function() {
         categoryMenu.classList.toggle('open');
     });
+
+
+    const btnSearchInner = document.querySelector('.btnSearchInner');
+    btnSearchInner.addEventListener('click', function(e){
+        e.preventDefault();
+
+        const keyword = document.querySelector('#headerSearchId').value; // 검색어 가져오기
+        if (keyword) {
+            // 검색어를 포함한 URL로 이동
+            window.location.href = `/lotteon/product/search/${encodeURIComponent(keyword)}`;
+        } else {
+            alert("검색어를 입력해주세요."); // 검색어가 비어 있는 경우 경고 메시지
+        }
+    })
 </script>

@@ -4,11 +4,13 @@ import com.lotte4.dto.MemberInfoDTO;
 import com.lotte4.dto.ReviewDTO;
 import com.lotte4.dto.UserDTO;
 import com.lotte4.service.MemberInfoService;
-import com.lotte4.service.ReviewService;
 import com.lotte4.service.UserService;
-import jakarta.transaction.Transactional;
+import com.lotte4.service.review.ReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +22,7 @@ import java.util.List;
 /*
 
     - 2024-10-28 강중원 - 리뷰 컨트롤러 수정
+    - 2024-11-05 황수빈 - 리뷰 컨트롤러 mongoDB 변환
 
  */
 
@@ -35,10 +38,6 @@ public class MyController {
 
     @GetMapping("/home")
     public String home(Model model) {
-
-        //임시 리뷰 추가
-        List<ReviewDTO> reviewDTOList = reviewService.findAllReviews();
-        model.addAttribute("reviewDTOList", reviewDTOList);
 
         return "/my/home";
     }
@@ -59,10 +58,17 @@ public class MyController {
     }
 
     @GetMapping("/review")
-    public String review(Model model) {
-        List<ReviewDTO> reviewDTOList = reviewService.findAllReviews();
-        model.addAttribute("reviewDTOList", reviewDTOList);
-        log.info(reviewDTOList);
+
+    public String review(Model model, Principal principal,
+                         @RequestParam(defaultValue = "0") int page,
+                         @RequestParam(defaultValue = "5") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        String uid = principal.getName(); // 현재 로그인한 사용자
+
+        Page<ReviewDTO> reviews =  reviewService.findReviewsByUid(uid, pageable);
+        model.addAttribute("reviews",reviews);
+
         return "/my/review";
     }
 

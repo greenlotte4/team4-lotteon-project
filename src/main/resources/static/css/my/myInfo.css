@@ -157,6 +157,7 @@ main {
 }
 
 .myInfo_Article {
+    width:920px;
     border-radius: 10px;
     padding: 15px;
     box-shadow: 2px 2px 10px #acabab4d;

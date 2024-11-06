@@ -5,119 +5,34 @@
 
      수정이력
      - 2024/11/04 전규찬 - 옵션 선택 시 해당 제품 수량 선택 영역 생성 / 제품 가격 명시 / 가격 총합 계산
+     - 2024/11/06 전규찬 - 옵션 선택 시 추가되는 제품 가격에 할인율 적용 / 숫자 입력란에 음수, 0, 최대수량 초과, 미입력에 대한 예외 처리
+                        - 옵션 선택 시 하위 옵션 초기화 기능 추가
 */
 
 'use strict'
 
-window.onload = function () {
-    // 할인가격 계산 후 주입
-    const originalPriceNode = document.querySelector('.original-price');
-    const discountRateNode = document.querySelector('.discount-rate');
-    const discountedPriceNode = document.querySelector('.discount-price');
+function roundToTens(num) {
+    return Math.round(num / 10) * 10;
+}
 
-    const originalPrice = parseFloat(originalPriceNode.getAttribute('data-originalPrice'));
-    const discountRate = parseFloat(discountRateNode.getAttribute('data-discountRate'));
-    const discountedPrice = originalPrice * (1 - discountRate / 100);
-    discountedPriceNode.textContent = discountedPrice.toLocaleString() + "원";
+const discountRateNode = document.querySelector('.discount-rate');
 
-    // 재고 0 인 제품 선택 비활성화
-    const optionSelectsNodes = document.querySelectorAll('.option-select');
+// 할인가격 계산 후 주입
+const originalPriceNode = document.querySelector('.original-price');
+const discountedPriceNode = document.querySelector('.discount-price');
 
+const originalPrice = parseInt(originalPriceNode.getAttribute('data-originalPrice'));
+const discountRate = parseInt(discountRateNode.getAttribute('data-discountRate'));
+const discountedPrice = originalPrice * (1 - discountRate / 100);
+discountedPriceNode.textContent = roundToTens(discountedPrice).toLocaleString() + "원";
 
-};
+function discounted_price(price) {
+    return roundToTens(price * (1 - discountRate / 100));
+}
 
+// 재고 0 인 제품 선택 비활성화
+const optionSelectsNodes = document.querySelectorAll('.option-select');
 
-// document.addEventListener('DOMContentLoaded', function() {
-//
-//     // 수량이 변경될 때마다 count 필드에 값 업데이트
-//     document.getElementById('quantity').addEventListener('input', function () {
-//         document.getElementById('count').value = this.value;
-//     });
-//
-//     // 페이지 로드 시 초기 수량 값 설정
-//     document.getElementById('count').value = document.getElementById('quantity').value;
-//
-//     const productDataElement = document.getElementById('product-dto');
-//     const productDTO = JSON.parse(productDataElement.textContent);
-//
-//     console.log("Loaded productDTO:", productDTO); // 전체 productDTO 객체 확인
-//
-//     const selects = document.querySelectorAll('#variant-options select');
-//
-//     function findMatchingVariant() {
-//         // 선택된 옵션을 배열에 담음
-//         const selectedOptions = [];
-//         selects.forEach(select => {
-//             selectedOptions.push(select.value);
-//         });
-//         console.log("Selected Options Array:", selectedOptions);
-//
-//         // 옵션의 키를 생성
-//         let selectedOptionsKey = `[${Array.from(selects).map(select => select.previousElementSibling.innerText.replace(':', '').trim()).join(', ')}]`;
-//         console.log("Generated Key for Selected Options (original):", selectedOptionsKey);
-//
-//         // 순열 생성 함수
-//         function generatePermutations(array) {
-//             if (array.length <= 1) return [array];
-//             const permutations = [];
-//             for (let i = 0; i < array.length; i++) {
-//                 const currentElement = array[i];
-//                 const remainingElements = array.slice(0, i).concat(array.slice(i + 1));
-//                 const remainingPermutations = generatePermutations(remainingElements);
-//                 remainingPermutations.forEach(permutation => {
-//                     permutations.push([currentElement, ...permutation]);
-//                 });
-//             }
-//             return permutations;
-//         }
-//
-//         // 모든 순열 생성
-//         const optionsPermutations = generatePermutations(selectedOptions);
-//         const keysPermutations = generatePermutations(Array.from(selects).map(select => select.previousElementSibling.innerText.replace(':', '').trim()));
-//
-//         console.log("All Options Permutations:", optionsPermutations);
-//         console.log("All Keys Permutations:", keysPermutations);
-//
-//         let matchingVariant = null;
-//
-//         if (selectedOptions.every(value => value)) {
-//             // 각 키와 옵션 배열의 모든 순열로 variant 찾기
-//             for (let keyPerm of keysPermutations) {
-//                 selectedOptionsKey = `[${keyPerm.join(', ')}]`;
-//                 console.log("Trying Key Permutation:", selectedOptionsKey);
-//
-//                 for (let optionsPerm of optionsPermutations) {
-//                     console.log("Trying Options Permutation:", optionsPerm);
-//
-//                     matchingVariant = productDTO.productVariants.find(variant => {
-//                         const variantOptions = variant.options[selectedOptionsKey];
-//                         console.log("Checking variant:", variant.variant_id, "with options:", variantOptions, "against selected options:", optionsPerm);
-//                         return JSON.stringify(variantOptions) === JSON.stringify(optionsPerm);
-//                     });
-//
-//                     if (matchingVariant) {
-//                         console.log("Match found with Key:", selectedOptionsKey, "and Options:", optionsPerm);
-//                         break; // 매칭이 되면 더 이상 반복하지 않음
-//                     }
-//                 }
-//                 if (matchingVariant) break;
-//             }
-//         }
-//
-//         if (matchingVariant) {
-//             console.log("Matched Variant ID:", matchingVariant.variant_id);
-//             document.querySelector('.selected-variant-price').value = matchingVariant.variant_id;
-//         } else {
-//             console.log("No matching variant found");
-//             document.querySelector('.selected-variant-price').value = "선택된 제품 없음";
-//         }
-//     }
-//
-//     selects.forEach(select => {
-//         select.addEventListener('change', findMatchingVariant);
-//     });
-//
-// });
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -126,7 +41,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const selects = document.querySelectorAll('#variant-options select');
 
-    function findMatchingVariant() {
+    function findMatchingVariant(e) {
+
+        // 옵션 선택 시 하위 옵션 초기화("선택하세요" 라는 첫 번째 옵션값으로 재설정)
+        if (e.target === selects[0]) {
+            for (let i = 1; i < selects.length; i++) {
+                selects[i].selectedIndex = 0;
+            }
+        } else if (e.target === selects[1]) {
+            for (let i = 2; i < selects.length; i++)
+                selects[i].selectedIndex = 0;
+        }
+
         // 선택된 옵션을 배열에 담음
         const selectedOptions = [];
         selects.forEach(select => {
@@ -163,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                             <input class="inputNum" type="number" min="1" max="${matchingVariant.stock}" value="1">
                                             <button class="btn_plus" type="button">+</button>
                                         </div>
-                                        <span class="variant_price">${matchingVariant.price.toLocaleString() + "원"}</span>
+                                        <span class="variant_price">${discounted_price(matchingVariant.price).toLocaleString() + "원"}</span>
                                     </div>
                                 </div>
                               `;
@@ -176,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         // 생성된 제품 1개 가격을 총 상품금액에 더하기
                         let totalPrice = total_price.querySelector('strong');
 
-                        totalPrice.textContent = (parseInt(totalPrice.textContent.replace(",", "").replace("원", "")) + parseInt(matchingVariant.price)).toLocaleString() + "원";
+                        totalPrice.textContent = (parseInt(totalPrice.textContent.replace(",", "").replace("원", "")) + parseInt(discounted_price(matchingVariant.price))).toLocaleString() + "원";
 
                         // 영역 제거 버튼 기능 추가
                         const btn_delete_variant = document.getElementById(`${matchingVariant.variant_id}`).querySelector('.delete_variant');
@@ -232,8 +158,23 @@ document.addEventListener('DOMContentLoaded', function () {
                         let previousNum = parseInt(inputNum.value);
                         console.log("previousNum = " + previousNum);
 
+                        // 숫자 입력으로 수량 조정 기능
                         inputNum.addEventListener('change', function (e) {
-                            const currentNum = parseInt(e.target.value);
+
+                            let currentNum = parseInt(e.target.value);
+                            if (currentNum > parseInt(e.target.max)) {
+                                alert(`해당 상품의 최대 수량은 ${e.target.max}개 입니다.`)
+                                e.target.value = previousNum;
+                                return;
+                            } else if (currentNum <= 0) {
+                                alert('0이나 음수 값은 입력하실 수 없습니다.')
+                                e.target.value = previousNum;
+                                return;
+                            } else if (isNaN(currentNum)) {
+                                alert('숫자를 입력해주세요')
+                                e.target.value = previousNum;
+                                return;
+                            }
                             console.log("currentNum = " + currentNum);
                             if (currentNum > previousNum) {
                                 const numDiff = currentNum - previousNum;
@@ -301,6 +242,46 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 } else if (data === "failed") {
                     alert("장바구니 등록에 실패했습니다.");
+                } else if (data === "noUser") {
+                    alert("로그인이 필요합니다."); // 로그인 필요 알림
+                    window.location.href = "/lotteon/member/login"; // 로그인 페이지로 리다이렉트
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    });
+
+    // 장바구니에 담기 위한 fetch post
+    btnBuy.addEventListener('click', function (event) {
+        event.preventDefault(); // 기본 폼 제출 방지
+
+        const variantsIdNodes = document.querySelectorAll('.variantsIds');
+        const variantsIds = Array.from(variantsIdNodes).map(node => parseInt(node.value.trim()));
+
+        const countsNodes = document.querySelectorAll('.inputNum');
+        const counts = Array.from(countsNodes).map(node => parseInt(node.value.trim()));
+
+        const json = {
+            productVariants: variantsIds,
+            counts: counts
+        }
+
+        // AJAX 요청
+        fetch('/lotteon/product/order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(json)
+        })
+            .then(response => response.text())
+            .then(data => {
+                if (data === "success") {
+                    // 성공 시 알림창 띄우기
+                    if (alert("상품 구매 화면으로 이동합니다.")) {
+                        window.location.href = "/lotteon/product/order"; // 장바구니 페이지로 리다이렉트
+                    }
+                } else if (data === "failed") {
+                    alert("상품 구매 중 문제가 발생하였습니다.");
                 } else if (data === "noUser") {
                     alert("로그인이 필요합니다."); // 로그인 필요 알림
                     window.location.href = "/lotteon/member/login"; // 로그인 페이지로 리다이렉트

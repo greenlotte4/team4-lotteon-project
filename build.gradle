@@ -6,7 +6,7 @@ plugins {
 
 group = 'com.lotte4'
 
-version = '4조-0.1.2-SNAPSHOT'
+version = '4조-0.1.3-SNAPSHOT'
 
 
 java {
@@ -26,6 +26,7 @@ repositories {
 }
 
 dependencies {
+
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -60,6 +61,14 @@ dependencies {
     //redis
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '3.3.5'
 
+     //QueryDsl
+    implementation 'com.querydsl:querydsl-jpa:5.1.0:jakarta'
+    annotationProcessor "com.querydsl:querydsl-apt:5.1.0:jakarta"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
+    //mongo
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 }
 
 tasks.named('test') {
@@ -76,4 +85,20 @@ processResources {
     filesMatching('**/application-dev.yml') {
         expand(version: version)
     }
+}
+
+
+// QueryDSL 경로설정
+def queryDslDir = "src/main/generated"
+
+sourceSets {
+    main.java.srcDirs queryDslDir
+}
+
+tasks.withType(JavaCompile) {
+    options.generatedSourceOutputDirectory = file(queryDslDir)
+}
+
+clean {
+    delete file(queryDslDir)
 }

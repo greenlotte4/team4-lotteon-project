@@ -1,5 +1,6 @@
 package com.lotte4.dto;
 
+import com.lotte4.entity.ProductVariants;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -16,26 +17,18 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class ReviewDTO {
-    private int reviewId;
 
-    private int reviewStar;
-
+    private String uid;
+    private int variantId;
+    private int rating;
     private String content;
-
     private String regIp;
-
     private String img1;
+    private String regDate;
 
-    private String img2;
+    // 추가 필드
+    private ProductVariants productVariants;
 
-    private String img3;
 
-    private LocalDateTime regDate;
 
-    private String regDateSub;
-    //외래키
-
-    private ProductDTO product;
-
-    private UserDTO user;
 }

@@ -65,10 +65,6 @@
                             </li>
                         </ul>
                     </span>
-                    <div class="quantity-section">
-                        <label for="quantity">수량</label>
-                        <input type="number" id="quantity" name="quantity" min="1" value="1"/>
-                    </div>
                     <div class="total-price">
                         총 상품금액: <strong>0원</strong>
                     </div>
@@ -99,8 +95,56 @@
                     <h3>상품정보제공공시</h3>
                     <table class="info-table">
                         <tr>
-                            <th>상품명</th>
-                            <td>내셔널지오그래픽키즈 벨루가 헤비다운</td>
+                            <th>상품상태</th>
+                            <td th:text="${productDTO.productDetailId.condition_field}"></td>
+                        </tr>
+                        <tr>
+                            <th>부가세 면세여부</th>
+                            <td th:text="${productDTO.productDetailId.duty}"></td>
+                        </tr>
+                        <tr>
+                            <th>영수증 발행</th>
+                            <td th:text="${productDTO.productDetailId.receipt}"></td>
+                        </tr>
+                        <tr>
+                            <th>사업자구분</th>
+                            <td th:text="${productDTO.productDetailId.sellerType}"></td>
+                        </tr>
+                        <tr>
+                            <th>브랜드</th>
+                            <td th:text="${productDTO.productDetailId.brand}"></td>
+                        </tr>
+                        <tr>
+                            <th>원산지</th>
+                            <td th:text="${productDTO.productDetailId.coa}"></td>
+                        </tr>
+                        <tr>
+                            <th>제조자 / 수입국</th>
+                            <td th:text="${productDTO.productDetailId.creator}"></td>
+                        </tr>
+                        <tr>
+                            <th>제조국</th>
+                            <td th:text="${productDTO.productDetailId.country}"></td>
+                        </tr>
+                        <tr>
+                            <th>취급시주의사항</th>
+                            <td th:text="${productDTO.productDetailId.warning}"></td>
+                        </tr>
+                        <tr>
+                            <th>제조연월</th>
+                            <td th:text="${productDTO.productDetailId.createDate}"></td>
+                        </tr>
+                        <tr>
+                            <th>품질보증기준</th>
+                            <td th:text="${productDTO.productDetailId.quality}"></td>
+                        </tr>
+                        <tr>
+                            <th>A/S 책임자</th>
+                            <td th:text="${productDTO.productDetailId.as_field}"></td>
+                        </tr>
+                        <tr>
+                            <th>전화번호</th>
+                            <td th:text="${productDTO.productDetailId.asPhone}"></td>
                         </tr>
                         <!-- Additional product info -->
                     </table>

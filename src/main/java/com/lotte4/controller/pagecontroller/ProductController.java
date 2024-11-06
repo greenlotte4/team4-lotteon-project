@@ -149,6 +149,7 @@ public class ProductController {
     }
 
 
+    
     // 선택구매용
     @PostMapping("/product/cart/selected")
     public ResponseEntity<?> storeSelectedCartItems(@RequestBody List<Map<String, Object>> selectedItems, HttpSession session) {
@@ -160,15 +161,7 @@ public class ProductController {
             Integer count = (Integer) item.get("count");
             cartService.updateCartItem(cartId, count);  // update 메서드 호출
         });
-
-<<<<<<< Updated upstream
-        cartService.updateCount(cartIds);
-
-        session.setAttribute("selectedCartIds", cartIds);
-=======
         session.setAttribute("selectedCartItems", selectedItems);
-        log.info("selectedItems1111111" + selectedItems);
->>>>>>> Stashed changes
         return ResponseEntity.ok().build();
     }
 
@@ -196,9 +189,33 @@ public class ProductController {
         return ResponseEntity.ok().build();
     }
 
+    //2024.11.05 강중원 - 검색기능
+    @GetMapping("/product/search/{keyword}")
+    public String search(
+            @PathVariable String keyword,
+            @RequestParam(required = false) List<String> filters,
+            @RequestParam(required = false) Integer minPrice,
+            @RequestParam(required = false) Integer maxPrice,
+            Model model){
+        log.info("keyword : " + keyword);
+        if (filters == null) {
+            filters = new ArrayList<>();
+            filters.add("prodName");
+        }
+        if(minPrice == null || !filters.contains("price")){
+            minPrice = 0;
+        }
+        if(maxPrice == null || !filters.contains("price")){
+            maxPrice = 0;
+        }
 
-    @GetMapping("/product/search")
-    public String search() {
+        List<ProductListDTO> productDTOList = productService.getProductListWithKeyword(keyword, filters, minPrice, maxPrice);
+
+        model.addAttribute("productDTOList", productDTOList);
+        model.addAttribute("filters", filters);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("minPrice", minPrice);
+        model.addAttribute("maxPrice", maxPrice);
         return "/product/search";
     }
 
