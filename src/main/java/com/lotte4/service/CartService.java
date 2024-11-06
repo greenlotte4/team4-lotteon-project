@@ -74,7 +74,7 @@ public class CartService {
         // 기존 장바구니에 동일한 상품이 있는지 확인
         Optional<Cart> existingCartOptional = cartRepository.findByUserUidAndProductVariantId(
                 cartResponseDTO.getUser().getUid(),
-                cartResponseDTO.getProductVariants().getVariant_id()
+                cartResponseDTO.getProductVariants().get(0)
         );
 
         log.info("existingCartDTO : " + existingCartOptional);

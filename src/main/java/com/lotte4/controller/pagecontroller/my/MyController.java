@@ -4,9 +4,7 @@ import com.lotte4.dto.MemberInfoDTO;
 import com.lotte4.dto.ReviewDTO;
 import com.lotte4.dto.UserDTO;
 import com.lotte4.service.MemberInfoService;
-import com.lotte4.service.ReviewService;
 import com.lotte4.service.UserService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
@@ -29,16 +27,12 @@ import java.util.List;
 @Controller
 public class MyController {
 
-    private final ReviewService reviewService;
+
     private final MemberInfoService memberInfoService;
     private final UserService userService;
 
     @GetMapping("/home")
     public String home(Model model) {
-
-        //임시 리뷰 추가
-        List<ReviewDTO> reviewDTOList = reviewService.findAllReviews();
-        model.addAttribute("reviewDTOList", reviewDTOList);
 
         return "/my/home";
     }
@@ -60,9 +54,7 @@ public class MyController {
 
     @GetMapping("/review")
     public String review(Model model) {
-        List<ReviewDTO> reviewDTOList = reviewService.findAllReviews();
-        model.addAttribute("reviewDTOList", reviewDTOList);
-        log.info(reviewDTOList);
+
         return "/my/review";
     }
 
