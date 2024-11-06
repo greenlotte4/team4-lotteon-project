@@ -52,7 +52,7 @@
                         <col style="width: 6%" />
                         <col style="width: 8%" />
                         <col style="width: 10%" />
-                        <col style="width: 10%" />
+                        <!--<col style="width: 10%" />-->
                     </colgroup>
                     <thead>
                     <tr>
@@ -64,7 +64,7 @@
                         <th>할인</th>
                         <th>포인트</th>
                         <th>배송비</th>
-                        <th>총합</th>
+                       <!-- <th>총합</th>-->
 <!--                        <th>선택</th>-->
                     </tr>
                     </thead>
@@ -90,7 +90,10 @@
                         </td>
                         <td>
                             <div class="quantity">
-                                <input type="number" th:attr="id='quantity-' + ${cart.cartId}" th:value="${cart.count}" class="changeCount" />
+                                <input type="number"
+                                       th:attr="id='quantity-' + ${cart.cartId}"
+                                       th:value="${cart.count}"
+                                       class="changeCount" />
                             </div>
                         </td>
                         <td th:attr="id='price-' + ${cart.cartId}" th:text="${#numbers.formatInteger(
@@ -102,9 +105,9 @@
                         <td th:attr="id='delivery-' + ${cart.cartId}" th:class="${cart.productVariants.product.deliveryFee == 0} ? 'shipping-info'"
                             th:text="${cart.productVariants.product.deliveryFee == 0 ? '무료배송' : #numbers.formatInteger(cart.productVariants.product.deliveryFee, 3, 'COMMA') + '원'}">
                         </td>
-                        <td>
+                        <!--<td>
                             <div class="price-info">
-                                <!--<del>[[${#numbers.formatInteger(cart.productVariants.product.price, 3, 'COMMA') + '원'}]]</del>-->
+                                &lt;!&ndash;<del>[[${#numbers.formatInteger(cart.productVariants.product.price, 3, 'COMMA') + '원'}]]</del>&ndash;&gt;
                                 <span class="discount-price" th:attr="id='total-' + ${cart.cartId}" th:text="${#numbers.formatInteger(
                                                 ((cart.productVariants.price
                                                 - (cart.productVariants.price * cart.productVariants.product.discount / 100))
@@ -112,7 +115,7 @@
                                                 + (cart.productVariants.product.deliveryFee != 0 ? cart.productVariants.product.deliveryFee : 0),
                                                 1, 'COMMA')}"></span>원
                             </div>
-                        </td>
+                        </td>-->
                     </tr>
                     <!-- 장바구니가 비어있을 때 메시지 -->
                     <tr th:if="${#lists.isEmpty(cartList)}" style="text-align: center;">
