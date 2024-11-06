@@ -76,6 +76,11 @@ margin-left : 10px;
   margin-left: 10px;
 }
 
+.rating img{
+  width: 13px;
+  margin-right: -2px;
+}
+
 
 /* 페이지네이션 */
 .pagination {

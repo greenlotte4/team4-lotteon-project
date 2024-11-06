@@ -404,7 +404,7 @@ public class ProductService {
     }
 
     //2024.11.04 - 강중원 - 리스트별 정렬 알고리즘
-    public List<ProductListDTO> getProductWithCateAndType(int cate, String type) {
+    public List<ProductDTO> getProductWithCateAndType(int cate, String type) {
         List<ProductDTO> productDTOList = new ArrayList<>();
         //home(전체상품)
         if (cate == 0) {
@@ -415,22 +415,15 @@ public class ProductService {
             productDTOList = getProductWithCate(cate);
         }
 
-        List<ProductListDTO> productListDTOList = new ArrayList<>();
-        for (ProductDTO productDTO : productDTOList) {
-            ProductListDTO productListDTO = modelMapper.map(productDTO, ProductListDTO.class);
-            ProductDetailDTO detail = productDTO.getProductDetailId();
-            productListDTO.setCreateTime(detail.getCreateDate());
-            productListDTOList.add(productListDTO);
-        }
 
 
         //정렬
         switch (type) {
             //낮은 가격
             case "lowPrice":
-                productListDTOList.sort(new Comparator<ProductListDTO>() {
+                productDTOList.sort(new Comparator<ProductDTO>() {
                     @Override
-                    public int compare(ProductListDTO o1, ProductListDTO o2) {
+                    public int compare(ProductDTO o1, ProductDTO o2) {
 
                         double o1Price = o1.getPrice() * (1 - o1.getDiscount() / 100.0);
                         double o2Price = o2.getPrice() * (1 - o2.getDiscount() / 100.0);
@@ -447,9 +440,9 @@ public class ProductService {
 
             //높은 가격순
             case "highPrice":
-                productListDTOList.sort(new Comparator<ProductListDTO>() {
+                productDTOList.sort(new Comparator<ProductDTO>() {
                     @Override
-                    public int compare(ProductListDTO o1, ProductListDTO o2) {
+                    public int compare(ProductDTO o1, ProductDTO o2) {
                         double o1Price = o1.getPrice() * (1 - o1.getDiscount() / 100.0);
                         double o2Price = o2.getPrice() * (1 - o2.getDiscount() / 100.0);
 
@@ -465,10 +458,9 @@ public class ProductService {
 
             //판매량
             case "sold":
-
-                productListDTOList.sort(new Comparator<ProductListDTO>() {
+                productDTOList.sort(new Comparator<ProductDTO>() {
                     @Override
-                    public int compare(ProductListDTO o1, ProductListDTO o2) {
+                    public int compare(ProductDTO o1, ProductDTO o2) {
                         return Integer.compare(o2.getSold(), o1.getSold());
                     }
                 });
@@ -476,13 +468,19 @@ public class ProductService {
 
             //평점 높은순
             case "highReview":
+                productDTOList.sort(new Comparator<ProductDTO>() {
+                    @Override
+                    public int compare(ProductDTO o1, ProductDTO o2) {
+                        return Double.compare(o2.getRating(), o1.getRating());
+                    }
+                });
                 break;
 
             //리뷰 많은순
             case "manyReview":
-                productListDTOList.sort(new Comparator<ProductListDTO>() {
+                productDTOList.sort(new Comparator<ProductDTO>() {
                     @Override
-                    public int compare(ProductListDTO o1, ProductListDTO o2) {
+                    public int compare(ProductDTO o1, ProductDTO o2) {
                         return Double.compare(o2.getReview(), o1.getReview());
                     }
                 });
@@ -490,15 +488,15 @@ public class ProductService {
 
             //최근 등록순
             case "recent":
-                productListDTOList.sort(new Comparator<ProductListDTO>() {
+                productDTOList.sort(new Comparator<ProductDTO>() {
                     @Override
-                    public int compare(ProductListDTO o1, ProductListDTO o2) {
-                        return o2.getCreateTime().compareTo(o1.getCreateTime());
+                    public int compare(ProductDTO o1, ProductDTO o2) {
+                        return o2.getCreatedAt().compareTo(o1.getCreatedAt());
                     }
                 });
                 break;
         }
-        return productListDTOList;
+        return productDTOList;
     }
 
     //home(index)에서 사용
