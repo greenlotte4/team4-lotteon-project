@@ -19,7 +19,7 @@ body {
 #section_wrapper {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+
     align-items: center;
     width: 975px;
     min-height:650px;
@@ -100,7 +100,7 @@ body {
     align-items: center;
 }
 #notice_title > td, #qna_title > td{
-    justify-content: space-between;
+    font-size:15px;
 }
 #faq_title > td{
     justify-content: flex-start;

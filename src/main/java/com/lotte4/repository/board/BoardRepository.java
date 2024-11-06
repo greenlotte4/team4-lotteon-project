@@ -16,6 +16,7 @@ import java.util.List;
 @Repository
 public interface BoardRepository extends JpaRepository<Board, Integer> {
     Page<Board> findByTypeOrderByRegDateDesc(String type, Pageable pageable);
+    Page<Board> findByTypeAndUser_UidOrderByRegDateDesc(String type, String uid, Pageable pageable);
 
     Page<Board> findByCate_BoardCateIdAndTypeOrderByRegDateDesc(int CateId,String type, Pageable pageable);
     Page<Board> findByCate_Parent_BoardCateIdAndTypeOrderByRegDateDesc(int parentId, String type,Pageable pageable);

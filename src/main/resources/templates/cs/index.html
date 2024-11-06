@@ -12,10 +12,7 @@
   <header th:replace="~{/include/header.html}"></header>
 
   <main>
-    <section class="main-title-section">
-      <p>롯데 ON</p>
-      <span>이 도와드릴게요!</span>
-    </section>
+
     <th:block th:replace="~{/cs/aside/aside.html}"></th:block>
 
   <section id="section_wrapper">
@@ -36,28 +33,28 @@
             <tr id="faq-tr">
               <td id="faq-td">
                 <div>
-                  <a th:href="@{/cs/faq/list}" class="image member"></a>
-                  <a th:href="@{/cs/faq/list}">회원</a>
+                  <a th:href="@{/cs/faq/list/1}" class="image member"></a>
+                  <a th:href="@{/cs/faq/list/1}">회원</a>
                 </div>
                 <div>
-                  <a th:href="@{/cs/faq/list(cate1=${coupon})}" class="image coupon"></a>
-                  <a th:href="@{/cs/faq/list(cate1=${coupon})}">쿠폰 / 이벤트</a>
+                  <a th:href="@{/cs/faq/list/2}" class="image coupon"></a>
+                  <a th:href="@{/cs/faq/list/2}">쿠폰 / 이벤트</a>
                 </div>
                 <div>
-                  <a th:href="@{/cs/faq/list(cate1=${order})}" class="image order"></a>
-                  <a th:href="@{/cs/faq/list(cate1=${order})}">주문 / 결제</a>
+                  <a th:href="@{/cs/faq/list/3}" class="image order"></a>
+                  <a th:href="@{/cs/faq/list/3}">주문 / 결제</a>
                 </div>
                 <div>
-                  <a th:href="@{/cs/faq/list(cate1=${delivery})}" class="image delivery"></a>
-                  <a th:href="@{/cs/faq/list(cate1=${delivery})}">배송</a>
+                  <a th:href="@{/cs/faq/list/4}" class="image delivery"></a>
+                  <a th:href="@{/cs/faq/list/4}">배송</a>
                 </div>
                 <div>
-                  <a th:href="@{/cs/faq/list(cate1=${refund})}" class="image refund"></a>
-                  <a th:href="@{/cs/faq/list(cate1=${refund})}">취소 / 반품 / 환불</a>
+                  <a th:href="@{/cs/faq/list/5}" class="image refund"></a>
+                  <a th:href="@{/cs/faq/list/5}">취소 / 반품 / 환불</a>
                 </div>
                 <div>
-                  <a th:href="@{/cs/faq/list(cate1=${safeDeal})}" class="image safe"></a>
-                  <a th:href="@{/cs/faq/list(cate1=${safeDeal})}">안전결제</a>
+                  <a th:href="@{/cs/faq/list/6}" class="image safe"></a>
+                  <a th:href="@{/cs/faq/list/6}">안전결제</a>
                 </div>
               </td>
             </tr>

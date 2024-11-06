@@ -6,7 +6,7 @@
     <title>공지사항 보기</title>
     <link rel="stylesheet" th:href="@{/css/common.css}">
     <link rel="stylesheet" th:href="@{/css/cs/cs_common.css}"/>
-    <link rel="stylesheet" th:href="@{/css/cs/cs_list.css}"/>
+    <link rel="stylesheet" th:href="@{/css/cs/cs_view.css}"/>
 </head>
 <body>
 <header th:replace="~{/include/header.html}"></header>
@@ -16,26 +16,24 @@
     <th:block th:replace="~{/cs/aside/aside.html}"></th:block>
     <section id="section_wrapper">
         <div id="category">
-            <p>전체<br><span class="subtitle">공지사항 전체 내용입니다.</span></p>
+            <p>공지사항<br><span class="subtitle">[[${board.cate.name}]] 관련 공지사항입니다.</span></p>
             <div class="breadcrumb">
-                <a th:href="@{/cs/index}">Home</a> > <a th:href="@{/cs/notice/list}">공지사항</a> > <a th:href="@{/cs/notice/list}" class="location">전체</a>
+                <a th:href="@{/cs/index}">Home</a> > <a th:href="@{/cs/notice/list}">공지사항</a> > <a th:href="@{/cs/notice/list}" class="location">[[${board.cate.name}]]</a>
             </div>
         </div>
         <table>
-            <tbody>
-            <tr id="notice_title">
-                <td>
-                    <span th:text="${board.cate.name}"></span><span th:text="${board.title}"> </span><br>
-                    <div>
-                     <span th:text= "${board.regDate}" class="r-date">2022.11.30</span>
-                    </div>
-                </td>
+            <tr>
+                <td>유형</td>
+                <td>[[${board.cate.name}]]</td>
             </tr>
-            <tr class="content">
-                <td th:text="${board.content}"></td>
+            <tr>
+                <td>제목</td>
+                <td>[[${board.title}]]</td>
             </tr>
-
-            </tbody>
+            <tr>
+                <td>내용</td>
+                <td class="board_content"><span>[[${board.content}]]</span></td>
+            </tr>
         </table>
         <a th:href="@{/cs/notice/list}">
             <button id="toList">목록</button>

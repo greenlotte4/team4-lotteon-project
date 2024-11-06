@@ -54,7 +54,7 @@
                     <a th:href="@{/admin/cs/qna/list}" class="back-btn">목록</a>
                     <a th:if="${board.comment == null}"
                        th:href="@{/admin/cs/qna/reply/{id}(id=${board.boardId})}"
-                       class="back-btn">답변하기</a>
+                       class="write_btn">답변하기</a>
 
                 </div>
             </div>
