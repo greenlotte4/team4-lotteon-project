@@ -192,7 +192,7 @@ public class ProductController {
 
         return ResponseEntity.ok().build();
     }
-
+    // TODO : 사용자 행동수집 type: search , keyword, uid 와 함께 mongoDB insert
     //2024.11.05 강중원 - 검색기능
     @GetMapping("/product/search/{keyword}")
     public String search(

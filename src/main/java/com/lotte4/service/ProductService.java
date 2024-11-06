@@ -118,7 +118,7 @@ public class ProductService {
         }
         return cateForProdRegisterDTOList;
     }
-
+    // TODO : 사용자 행동수집 type : view , uid 와 함께 mongoDB insert
     public Product_V_DTO getProduct_V_ById(int productId) {
         Optional<Product> productOptional = productRepository.findById(productId);
         if (productOptional.isPresent()) {

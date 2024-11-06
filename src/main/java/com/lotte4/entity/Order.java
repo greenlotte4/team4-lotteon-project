@@ -1,5 +1,6 @@
 package com.lotte4.entity;
 
+import com.lotte4.dto.OrderDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -65,5 +66,6 @@ public class Order {
         orderItems.add(orderItem);
         orderItem.setOrder(this); // 양방향 관계 설정
     }
+
 
 }
