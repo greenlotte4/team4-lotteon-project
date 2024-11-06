@@ -72,10 +72,14 @@
                     <tr th:each="cart, i:${cartList}" th:id="'cart-item-' + ${cart.cartId}">
                         <td><input type="checkbox" class="checkboxes order-checkbox" th:value="${cart.cartId}" onclick="toggleCheckbox(this)"></td>
                         <td class="product-info">
-                            <img th:src="@{'/uploads/product/' + ${cart.productVariants.product.getImg1()}}" alt="상품 사진" class="product-image">
-                            <div class="product-details">
-                                <p class="product-name">[[${cart.productVariants.product.name}]]</p>
-                            </div>
+                            <a th:href="@{/product/view(productId = ${cart.productVariants.product.productId})}">
+                             <img th:src="@{'/uploads/product/' + ${cart.productVariants.product.getImg1()}}" alt="상품 사진" class="product-image">
+                            </a>
+                            <a th:href="@{/product/view(productId = ${cart.productVariants.product.productId})}">
+                                <div class="product-details">
+                                    <p class="product-name">[[${cart.productVariants.product.name}]]</p>
+                                </div>
+                            </a>
                         </td>
                         <td>
                             <span id="variant-options" class="variant-options">
@@ -236,14 +240,14 @@
             const quantityElement = document.getElementById(`quantity-${cartId}`);
 
             // 가격을 0으로 초기화하여 가격이 없을 경우에도 계산이 진행되도록 설정
-            const price = priceElement ? parseInt(priceElement.innerText.replace(/[^0-9]/g, '')) : 0;
-            const discountRate = discountElement ? parseInt(discountElement.innerText.replace(/[^0-9]/g, '')) : 0;
+            const price = priceElement ? Math.floor(parseInt(priceElement.innerText.replace(/[^0-9]/g, ''))) : 0;
+            const discountRate = discountElement ? Math.floor(parseInt(discountElement.innerText.replace(/[^0-9]/g, ''))) : 0;
             const shippingFee = shippingElement && shippingElement.innerText !== '무료배송' ?
-                parseInt(shippingElement.innerText.replace(/[^0-9]/g, '')) : 0;
-            const quantity = quantityElement ? parseInt(quantityElement.value) : 0;
+                Math.floor(parseInt(shippingElement.innerText.replace(/[^0-9]/g, ''))) : 0;
+            const quantity = quantityElement ? Math.floor(parseInt(quantityElement.value)) : 0;
 
-            // 할인 금액 계산
-            const discountAmount = price * (discountRate / 100) * quantity;
+            // 할인 금액 계산 후 내림 처리
+            const discountAmount = Math.floor(price * (discountRate / 100) * quantity);
 
             // 총 판매가, 총 할인 금액, 총 배송비를 합산
             totalPrice += price * quantity;
@@ -252,14 +256,15 @@
         });
 
         // 계산된 합계 정보를 checkout-summary에 표시
-        document.querySelector('.checkout-total-price').textContent = `${totalPrice.toLocaleString()}원`;
-        document.querySelector('.checkout-total-discount').textContent = `${totalDiscount.toLocaleString()}원`;
-        document.querySelector('.checkout-total-shipping').textContent = `${totalShipping.toLocaleString()}원`;
+        document.querySelector('.checkout-total-price').textContent = `${Math.floor(totalPrice).toLocaleString()}원`;
+        document.querySelector('.checkout-total-discount').textContent = `${Math.floor(totalDiscount).toLocaleString()}원`;
+        document.querySelector('.checkout-total-shipping').textContent = `${Math.floor(totalShipping).toLocaleString()}원`;
 
         // 총 결제 예상 금액 계산 및 표시
-        const totalAmount = totalPrice - totalDiscount + totalShipping;
+        const totalAmount = Math.floor(totalPrice - totalDiscount + totalShipping);
         document.querySelector('.checkout-row.total span').textContent = `${totalAmount.toLocaleString()}원`;
     }
+
 
     // 체크박스와 수량 필드에 이벤트 리스너 추가
     document.querySelectorAll('.checkboxes').forEach(checkbox => {
