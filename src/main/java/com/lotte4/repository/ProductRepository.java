@@ -15,6 +15,15 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product, Integer>, ProductRepositoyCustom {
     List<Product> findByProductCateId(ProductCate productCateId);
 
+    //home에서 사용
+    List<Product> findTop8ByOrderByHitDesc();
+    List<Product> findTop8ByOrderByReviewDesc();
+    List<Product> findTop8ByOrderByDiscountDesc();
+//    List<Product> findTop8ByOrderByRatingDesc();
+//    List<Product> findTop8ByOrderByCreateAtDesc();
+
+
+
 //    // status가  0 인 상품 목록 select
 //    Page<Product> findByStatus(int status, Pageable pageable);
 //

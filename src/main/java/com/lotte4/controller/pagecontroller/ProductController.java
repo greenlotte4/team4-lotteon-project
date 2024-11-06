@@ -184,6 +184,9 @@ public class ProductController {
             @RequestParam(required = false) Integer maxPrice,
             Model model){
         log.info("keyword : " + keyword);
+        if(keyword.equals("none")){
+            keyword = "";
+        }
         if (filters == null) {
             filters = new ArrayList<>();
             filters.add("prodName");
