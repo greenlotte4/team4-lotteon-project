@@ -502,10 +502,10 @@ public List<ProductDTO> getProductWithCate(int cate) {
                 }
                 break;
             case "Score":
-//                products = productRepository.findTop8ByOrderByRatingDesc();
-//                for(Product product : products){
-//                    productDTOList.add(modelMapper.map(product, ProductListDTO.class));
-//                }
+                products = productRepository.findTop8ByOrderByRatingDesc();
+                for(Product product : products){
+                    productDTOList.add(modelMapper.map(product, ProductListDTO.class));
+                }
                 break;
             case "ScoreMany":
                 products = productRepository.findTop8ByOrderByReviewDesc();
@@ -521,10 +521,10 @@ public List<ProductDTO> getProductWithCate(int cate) {
                 }
                 break;
             case "Recent":
-//                products = productRepository.findTop8ByOrderByCreateAtDesc();
-//                for(Product product : products){
-//                    productDTOList.add(modelMapper.map(product, ProductListDTO.class));
-//                }
+                products = productRepository.findTop8ByOrderByCreateAtDesc();
+                for(Product product : products){
+                    productDTOList.add(modelMapper.map(product, ProductListDTO.class));
+                }
                 break;
         }
         return productDTOList;
