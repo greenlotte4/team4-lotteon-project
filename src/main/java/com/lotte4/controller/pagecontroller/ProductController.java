@@ -155,7 +155,7 @@ public class ProductController {
 
         log.info("cartIds : " + cartIds);
 
-        cartService.updateCount(cartIds);
+      /*  cartService.updateCount(cartIds);*/
 
         session.setAttribute("selectedCartIds", cartIds);
         return ResponseEntity.ok().build();
