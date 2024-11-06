@@ -1,5 +1,6 @@
 package com.lotte4.dto;
 
+import com.lotte4.entity.OrderItems;
 import com.lotte4.entity.ProductVariants;
 import lombok.*;
 
@@ -32,10 +33,19 @@ public class OrderItemsDTO {
     //주문당 상태값
     private int status;
 
+    private int variantId;
+
     private ProductVariantsDTO productVariants;
 
-    public int getVariantId(){
-        return productVariants.getVariant_id();
+    public OrderItemsDTO(OrderItems orderItems) {
+        this.orderItemId = orderItems.getOrderItemId();
+        this.count = orderItems.getCount();
+        this.originPrice = orderItems.getOriginPrice();
+        this.originDiscount = orderItems.getOriginDiscount();
+        this.originPoint = orderItems.getOriginPoint();
+        this.deliveryFee = orderItems.getDeliveryFee();
+        this.status = orderItems.getStatus();
+        this.variantId = orderItems.getVariantId();
     }
 
 }

@@ -1,9 +1,10 @@
 package com.lotte4.controller.pagecontroller.my;
 
-import com.lotte4.dto.MemberInfoDTO;
-import com.lotte4.dto.ReviewDTO;
-import com.lotte4.dto.UserDTO;
+import com.lotte4.dto.*;
+import com.lotte4.entity.MemberInfo;
+import com.lotte4.security.MyUserDetails;
 import com.lotte4.service.MemberInfoService;
+import com.lotte4.service.OrderService;
 import com.lotte4.service.UserService;
 import com.lotte4.service.review.ReviewService;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -35,11 +37,23 @@ public class MyController {
     private final ReviewService reviewService;
     private final MemberInfoService memberInfoService;
     private final UserService userService;
+    private final OrderService orderService;
+
 
     @GetMapping("/home")
-    public String home(Model model) {
+    public String home(Model model, @AuthenticationPrincipal MyUserDetails myUserDetails) {
 
+        if (myUserDetails.getUser() != null && myUserDetails.getUser().getRole().equals("member")) {
+            MemberInfo memberInfo = myUserDetails.getUser().getMemberInfo();
+            OrderDTO orderDTO = orderService.selectRecentOrder(memberInfo);
+            List<OrderItemsDTO> orderItemsDTOs = orderDTO.getOrderItems();
 
+            List<OrderItemsDTO> orderItems = orderService.selectProductCompany(orderItemsDTOs);
+
+            model.addAttribute("orderDTO", orderDTO);
+            model.addAttribute("orderItems", orderItems);
+            return "/my/home";
+        }
         return "/my/home";
     }
 

@@ -11,24 +11,7 @@
   <link rel="stylesheet" th:href="@{/css/my/myInfo_modal.css}" />
   <link rel="stylesheet" th:href="@{/css/my/myInfo_order.css}" />
   <link rel="stylesheet" th:href="@{/css/my/myInfo_qna.css}" />
-  <script th:src="@{/js/my/home.js}"></script>
-  <script>
-    window.onload = function () {
-      const orderLinks = document.getElementsByClassName('orderDetailBtn');
-      console.log("111");
-
-      for (let i = 0; i < orderLinks.length; i++) {
-        orderLinks[i].addEventListener('click', function(event) {
-          event.preventDefault(); // a 태그의 기본 동작(링크 이동)을 막음
-          console.log("123");
-          const modal = document.getElementById('productModal'); // id가 productModal인 요소 선택
-          if (modal) {
-            modal.classList.remove('Modalhidden'); // Modalhidden 클래스 제거
-          }
-        });
-      }
-    };
-  </script>
+  <script th:src="@{/js/my/home.js}" defer></script>
 </head>
 
 <body>
@@ -43,18 +26,15 @@
         <article class="myInfo_recentOrder myInfo_Article">
           <div class="myInfo_ArticleTitle"><span>최근주문내역</span><a th:href="@{/my/order}">더보기 ></a></div>
           <ul class="myInfo_product">
-
             <li>
-              <span>2022-12-13</span>
-              <div>
-                <img th:src="@{/images/my/임시 이미지.png}" alt="">
+              <span>[[${orderDTO.buyDate.toLocalDate()}]] / </span><a th:href="@{#}" class="orderDetailBtn"> 주문번호 : [[${orderDTO.orderId}]]</a>
+              <div th:each="item : ${orderItems}">
+                <img th:src="@{'/uploads/product/' + ${item.productVariants.product.img1}}" alt="">
                 <div>
-
-                  <a href="#" class="orderDetailBtn">주문번호: 1012211341</a>
-                  <a href="#" class="orderSellerBtn">{주}상호명</a>
-                  <a th:href="@{/product/list}">상품명</a>
-                  <p>수량: 1개</p>
-                  <p><strong>34,000원</strong></p>
+                  <a href="#" class="orderSellerBtn" th:text="${item.productVariants.product.company}"></a>
+                  <a th:href="@{/product/list}" th:text="${item.productVariants.sku}"></a>
+                  <p>수량: [[${item.count}]]개</p>
+                  <p><strong th:text="${#numbers.formatInteger(item.originPrice, 1, 'COMMA')} + '원'"></strong></p>
                 </div>
                 <div>
                   <span>
@@ -74,7 +54,7 @@
         </article>
         <!-- 최근 주문내역 끝 -->
 
-        <div th:replace="~{/my/modal.html}"></div>
+        <div th:replace="~{/my/modal :: modalFragment(orderDTO=${orderDTO}, orderItems=${orderItems})}"></div>
 
         <!-- 포인트 적립내역 -->
         <article class="myInfo_PointRecode myInfo_Article">

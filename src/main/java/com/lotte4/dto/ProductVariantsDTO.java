@@ -1,6 +1,7 @@
 package com.lotte4.dto;
 
 import com.lotte4.entity.Product;
+import com.lotte4.entity.ProductVariants;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -38,4 +39,17 @@ public class ProductVariantsDTO {
 
     private ProductDTO product;
     private Product product1;
+
+    public ProductVariantsDTO(ProductVariants productVariants) {
+        this.variant_id = productVariants.getVariant_id();
+        this.sku = productVariants.getSku();
+        this.price = productVariants.getPrice();
+        this.stock = productVariants.getStock();
+        this.options = productVariants.getOptions();
+        this.updated_at = productVariants.getUpdated_at();
+
+        if (productVariants.getProduct() != null) {
+            this.product = new ProductDTO(productVariants.getProduct());
+        }
+    }
 }
