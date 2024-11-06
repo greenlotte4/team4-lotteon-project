@@ -31,6 +31,7 @@ public class MemberInfoDTO {
     private String grade;
     private String etc;
 
+
     // 이름 마스킹 처리 메서드
     public String getMaskedName() {
         if (name == null || name.length() < 2) {

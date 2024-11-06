@@ -8,11 +8,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -176,7 +173,7 @@ public class OrderService {
             orderDTO.setMemberInfo(order.getMemberInfo().toDTO());
 
             if (order.getProductVariants() != null && order.getProductVariants().getProduct() != null) {
-                ProductDTO productDTO = modelMapper.map(order.getProductVariants().getProduct(), ProductDTO.class);
+                ProductDTO productDTO =new ProductDTO(order.getProductVariants().getProduct());
                 log.info("ProductDTO: " + productDTO);
             } else {
                 log.warn("Product is null for order ID: " + order.getOrderId());
@@ -219,6 +216,23 @@ public class OrderService {
         return modelMapper.map(coupon.get(), CouponDTO.class);
     }
 
+    public OrderDTO selectRecentOrder(MemberInfo memberInfo) {
+        Order recentOrder = orderRepository.findFirstByMemberInfoOrderByBuyDateDesc(memberInfo);
+        return new OrderDTO(recentOrder);
+    }
+
+    // orderItems 의 variantId를 받아와 조회하고 DTO로 변환 후 리스트에 담아 반환
+    public List<OrderItemsDTO> selectProductCompany(List<OrderItemsDTO> orderItems) {
+
+        for (OrderItemsDTO orderItem : orderItems) {
+            Optional<ProductVariants> optional = productVariantsRepository.findById(orderItem.getVariantId());
+            if (optional.isPresent()) {
+                ProductVariants productVariants = optional.get();
+                orderItem.setProductVariants(new ProductVariantsDTO(productVariants));
+            }
+        }
+        return orderItems;
+    }
 
 
 }

@@ -145,6 +145,9 @@ main {
     width : 810px;
 }
 
+.myInfo_ArticleTitle{
+    margin-left: 3px;
+}
 
 .myInfo_ArticleTitle > span{
     font-size: 17px;
@@ -154,6 +157,9 @@ main {
 .myInfo_ArticleTitle > a{
     float: right;
     margin-top: 5px;
+    &:hover {
+        color: grey;
+    }
 }
 
 .myInfo_Article {
@@ -260,6 +266,10 @@ td > a{
 
 .page_current {
     text-decoration: underline;
+}
+
+.myInfo_Table{
+    margin: 10px 0;
 }
 
 /* 푸터영역 */

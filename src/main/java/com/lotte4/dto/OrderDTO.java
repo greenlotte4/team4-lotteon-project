@@ -2,12 +2,15 @@ package com.lotte4.dto;
 
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.lotte4.entity.Order;
+import com.lotte4.entity.Product;
 import com.lotte4.entity.ProductVariants;
 import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Getter
@@ -43,4 +46,37 @@ public class OrderDTO {
 
     // 배송메세지위한 추가(데이터 연결점이슈)
     private String content;
+
+    public OrderDTO(Order order) {
+        this.orderId = order.getOrderId();
+        this.usePoint = order.getUsePoint();
+        this.totalPrice = order.getTotalPrice();
+        this.recipName = order.getRecipName();
+        this.recipHp = order.getRecipHp();
+        this.recipZip = order.getRecipZip();
+        this.recipAddr1 = order.getRecipAddr1();
+        this.recipAddr2 = order.getRecipAddr2();
+        this.Payment = order.getPayment();
+        this.Status = order.getStatus();
+        this.buyDate = order.getBuyDate();
+        this.couponUse = order.getCouponUse();
+
+        // ProductVariantsDTO 매핑
+        if (order.getProductVariants() != null) {
+            this.productVariants = new ProductVariantsDTO(order.getProductVariants());
+        }
+
+        // MemberInfoDTO 매핑
+        if (order.getMemberInfo() != null) {
+            this.memberInfo = order.getMemberInfo().toDTO();
+        }
+
+        // List<OrderItemsDTO> 매핑
+        if (order.getOrderItems() != null && !order.getOrderItems().isEmpty()) {
+            this.orderItems = order.getOrderItems().stream()
+                    .map(OrderItemsDTO::new)
+                    .collect(Collectors.toList());
+        }
+    }
+
 }
