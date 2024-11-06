@@ -77,6 +77,7 @@ public class CartService {
         cartRepository.deleteById(cartId); // cartId로 cart 삭제
     }
 
+    // TODO : 사용자 행동수집 type: order , uid 와 함께 mongoDB insert
     // cart insert
     public List<Cart> insertCart(CartResponseDTO cartResponseDTO) {
         User user = cartResponseDTO.getUser();
