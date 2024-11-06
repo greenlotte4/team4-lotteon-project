@@ -151,15 +151,28 @@ public class ProductController {
 
     // 선택구매용
     @PostMapping("/product/cart/selected")
-    public ResponseEntity<?> storeSelectedCartItems(@RequestBody List<Integer> cartIds, HttpSession session) {
+    public ResponseEntity<?> storeSelectedCartItems(@RequestBody List<Map<String, Object>> selectedItems, HttpSession session) {
+        log.info("selectedItems : " + selectedItems);
 
-        log.info("cartIds : " + cartIds);
+        // Map을 풀어서 각 cartId와 count에 접근하여 업데이트 수행
+        selectedItems.forEach(item -> {
+            Integer cartId = (Integer) item.get("cartId");
+            Integer count = (Integer) item.get("count");
+            cartService.updateCartItem(cartId, count);  // update 메서드 호출
+        });
 
+<<<<<<< Updated upstream
         cartService.updateCount(cartIds);
 
         session.setAttribute("selectedCartIds", cartIds);
+=======
+        session.setAttribute("selectedCartItems", selectedItems);
+        log.info("selectedItems1111111" + selectedItems);
+>>>>>>> Stashed changes
         return ResponseEntity.ok().build();
     }
+
+
 
 
 

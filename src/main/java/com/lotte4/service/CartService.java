@@ -16,10 +16,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 /*
      날짜 : 2024/10/30
@@ -40,13 +37,29 @@ public class CartService {
     private final ModelMapper modelMapper;
 
 
-    // 사용자 아이디와 장바구니 ID 목록으로 CartDTO 목록 조회
-    public List<CartDTO> getCartItemsByIds(String uid, List<Integer> cartIds) {
-        // 사용자의 cartIds에 포함된 장바구니 항목 조회
+    // 사용자 아이디와 선택된 장바구니 항목으로 CartDTO 목록 조회
+    public List<CartDTO> getCartItemsByIds(String uid, List<Map<String, Object>> selectedCartItems) {
+        // 선택된 장바구니 항목에서 cartId와 count 추출
+        List<Integer> cartIds = selectedCartItems.stream()
+                .map(item -> (Integer) item.get("cartId"))
+                .collect(Collectors.toList());
+
+        // 사용자의 선택된 cartIds에 포함된 장바구니 항목 조회 후 DTO로 매핑
         return cartRepository.findByUserUidAndCartIdIn(uid, cartIds).stream()
-                .map(cart -> modelMapper.map(cart, CartDTO.class))
+                .map(cart -> {
+                    CartDTO cartDTO = modelMapper.map(cart, CartDTO.class);
+
+                    // 선택된 항목의 count 값을 매칭하여 설정
+                    selectedCartItems.stream()
+                            .filter(item -> item.get("cartId").equals(cart.getCartId()))
+                            .findFirst()
+                            .ifPresent(item -> cartDTO.setCount((Integer) item.get("count")));
+
+                    return cartDTO;
+                })
                 .collect(Collectors.toList());
     }
+
 
     // 장바구니 목록 select
     public List<CartDTO> getCartByUserId(String uid) {
@@ -103,6 +116,14 @@ public class CartService {
         return savedCarts;
     }
 
+    // cart count update
+    public void updateCartItem(Integer cartId, Integer count) {
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid cart ID: " + cartId));
+        cart.setCount(count);
+        // count 저장
+        cartRepository.save(cart);
+    }
 
 
 
