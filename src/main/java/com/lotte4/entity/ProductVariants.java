@@ -32,9 +32,6 @@ public class ProductVariants {
     @Convert(converter = MapStringListToJsonConverter.class)
     private Map<List<String>, List<String>> options; // sku에 대한 옵션(ex 검은색 S / 파란색 L)
 
-    @CurrentTimestamp
-    private LocalDateTime created_at;
-
     private LocalDateTime updated_at;
 
     @ToString.Exclude

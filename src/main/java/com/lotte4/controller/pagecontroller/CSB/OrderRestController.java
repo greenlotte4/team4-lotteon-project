@@ -101,7 +101,6 @@ public class OrderRestController {
                             productVariantsDTO.setPrice(productVariants.getPrice());
                             productVariantsDTO.setStock(productVariants.getStock());
                             productVariantsDTO.setOptions(productVariants.getOptions());
-                            productVariantsDTO.setCreated_at(productVariants.getCreated_at());
                             productVariantsDTO.setUpdated_at(productVariants.getUpdated_at());
                             orderItemsDTO.setProductVariants(productVariantsDTO);
                         }
