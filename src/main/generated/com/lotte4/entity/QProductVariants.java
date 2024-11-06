@@ -22,8 +22,6 @@ public class QProductVariants extends EntityPathBase<ProductVariants> {
 
     public static final QProductVariants productVariants = new QProductVariants("productVariants");
 
-    public final DateTimePath<java.time.LocalDateTime> created_at = createDateTime("created_at", java.time.LocalDateTime.class);
-
     public final MapPath<java.util.List<String>, java.util.List<String>, SimplePath<java.util.List<String>>> options = this.<java.util.List<String>, java.util.List<String>, SimplePath<java.util.List<String>>>createMap("options", java.util.List.class, java.util.List.class, SimplePath.class);
 
     public final NumberPath<Integer> price = createNumber("price", Integer.class);
