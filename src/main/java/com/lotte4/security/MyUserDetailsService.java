@@ -18,17 +18,13 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String uid) throws UsernameNotFoundException {
-
         Optional<User> opt = userRepository.findByUid(uid);
-        if(opt.isPresent()) {
-
-            MyUserDetails myUserDetails = MyUserDetails.builder()
-                                                .user(opt.get())
-                                                .build();
-
-            return myUserDetails;
+        if (opt.isPresent()) {
+            return MyUserDetails.builder()
+                    .user(opt.get())
+                    .build();
         }
-        return null;
-
+        throw new UsernameNotFoundException("User not found: " + uid);
     }
+
 }
