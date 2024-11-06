@@ -1,6 +1,7 @@
 package com.lotte4.dto;
 
 import com.lotte4.entity.ProductVariants;
+import com.lotte4.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,7 +24,7 @@ import java.util.List;
 @Builder
 public class CartResponseDTO {
 
-    private UserDTO user;
+    private User user;
 
     private List<Integer> productVariants;
 

@@ -4,6 +4,7 @@ package com.lotte4.repository;
 import com.lotte4.entity.Cart;
 import com.lotte4.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;

@@ -90,7 +90,7 @@
                         </td>
                         <td>
                             <div class="quantity">
-                                <input type="number" th:attr="id='quantity-' + ${cart.cartId}" th:value="${cart.count}" />
+                                <input type="number" th:attr="id='quantity-' + ${cart.cartId}" th:value="${cart.count}" class="changeCount" />
                             </div>
                         </td>
                         <td th:attr="id='price-' + ${cart.cartId}">[[${#numbers.formatInteger(cart.productVariants.product.price, 3, 'COMMA') + '원'}]]</td>
@@ -350,6 +350,10 @@
     // 선택된 항목을 서버에 전송하고 주문 페이지로 이동하는 함수
     function orderSelectedItems() {
         const selectedCartIds = Array.from(document.querySelectorAll(".checkboxes:checked")).map(cb => cb.value);
+        console.log('selectedCartIds : ' + selectedCartIds); // 106 107
+        const changeCount = Array.from(document.querySelectorAll(".changeCount")).map(cb => cb.value);
+        console.log('changeCount : ' + changeCount);
+
 
         if (selectedCartIds.length === 0) {
             alert("선택 주문할 항목을 선택하세요.");

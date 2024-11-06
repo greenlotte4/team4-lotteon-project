@@ -1,16 +1,15 @@
 package com.lotte4.service;
 
 
-import com.lotte4.dto.CartDTO;
-import com.lotte4.dto.CartResponseDTO;
-import com.lotte4.dto.ProductCateDTO;
-import com.lotte4.dto.UserDTO;
+import com.lotte4.dto.*;
 import com.lotte4.dto.admin.config.InfoDTO;
 import com.lotte4.entity.Cart;
 import com.lotte4.entity.ProductCate;
+import com.lotte4.entity.ProductVariants;
 import com.lotte4.entity.User;
 import com.lotte4.repository.CartRepository;
 import com.lotte4.repository.ProductVariantsRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -66,30 +65,42 @@ public class CartService {
     }
 
     // cart insert
-    public Cart insertCart(CartResponseDTO cartResponseDTO) {
+    public List<Cart> insertCart(CartResponseDTO cartResponseDTO) {
+        User user = cartResponseDTO.getUser();
+        List<Cart> savedCarts = new ArrayList<>();
 
-        Cart cart = modelMapper.map(cartResponseDTO, Cart.class);
-        log.info("cart : " + cart);
+        for (int i = 0; i < cartResponseDTO.getProductVariants().size(); i++) {
+            int variantId = cartResponseDTO.getProductVariants().get(i);
+            int count = cartResponseDTO.getCounts().get(i);
 
-        // 기존 장바구니에 동일한 상품이 있는지 확인
-        Optional<Cart> existingCartOptional = cartRepository.findByUserUidAndProductVariantId(
-                cartResponseDTO.getUser().getUid(),
-                cartResponseDTO.getProductVariants().get(0)
-        );
+            // variant_id로 ProductVariants 조회
+            ProductVariants productVariant = productVariantsRepository.findById(variantId)
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid variant ID: " + variantId));
 
-        log.info("existingCartDTO : " + existingCartOptional);
+            // 기존 장바구니에 동일한 상품이 있는지 확인
+            Optional<Cart> existingCartOptional = cartRepository.findByUserUidAndProductVariantId(
+                    user.getUid(),
+                    productVariant.getVariant_id()
+            );
 
-        if (existingCartOptional.isPresent()) {
-            // 기존 상품이 있으면 count만 업데이트
-            Cart existingCart = existingCartOptional.get();
-            existingCart.setCount(existingCart.getCount() + cart.getCount());
-
-            log.info("existingCart : " + existingCart);
-            return cartRepository.save(existingCart);  // 기존 엔티티를 업데이트
-        } else {
-            // 기존 장바구니에 동일한 상품이 없으면 새로 저장
-            return cartRepository.save(cart);
+            if (existingCartOptional.isPresent()) {
+                // 기존 상품이 있으면 count만 업데이트
+                Cart existingCart = existingCartOptional.get();
+                existingCart.setCount(existingCart.getCount() + count);
+                savedCarts.add(cartRepository.save(existingCart));
+                log.info("Updated existingCart : " + existingCart);
+            } else {
+                // 새로운 Cart 객체 생성 및 저장
+                Cart newCart = Cart.builder()
+                        .user(user)
+                        .productVariants(productVariant)
+                        .count(count)
+                        .build();
+                savedCarts.add(cartRepository.save(newCart));
+                log.info("Saved newCart : " + newCart);
+            }
         }
+        return savedCarts;
     }
 
 
