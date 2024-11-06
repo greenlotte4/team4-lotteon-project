@@ -12,6 +12,7 @@ package com.lotte4.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Getter
 @Setter
@@ -37,8 +38,17 @@ public class ProductDetail {
     private String country;
     private String warning;
 
+    @CreationTimestamp
     private String createDate;
     private String quality;
     private String as_field;
     private String asPhone;
+
+    //status 추가 11-05 조수빈
+    private int status;
+
+    // 2024/11/04 삭제 - 황수빈
+    //    @OneToOne(mappedBy = "productDetail", fetch = FetchType.LAZY)
+    //    private Product product;
+
 }

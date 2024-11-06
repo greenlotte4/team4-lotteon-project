@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Builder
 public class DeliveryDTO {
 
-    private Long deliveryNo;
+    private Long deliveryId;
     //배송 시작일
     private LocalDateTime deliveryDate;
     //배송 무조건 완료일

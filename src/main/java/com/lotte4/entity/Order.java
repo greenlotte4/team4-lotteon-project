@@ -53,6 +53,7 @@ public class Order {
     @JoinColumn(name = "variant_id")
     private ProductVariants productVariants;
 
+    //null허용 안하면 지워야함 (error방지용)
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private List<OrderItems> orderItems = new ArrayList<>();

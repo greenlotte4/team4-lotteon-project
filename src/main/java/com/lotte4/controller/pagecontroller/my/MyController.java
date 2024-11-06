@@ -39,6 +39,7 @@ public class MyController {
     @GetMapping("/home")
     public String home(Model model) {
 
+
         return "/my/home";
     }
 

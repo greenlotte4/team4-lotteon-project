@@ -29,6 +29,9 @@ public class OrderItemsDTO {
     //배송비용
     private int deliveryFee;
 
+    //주문당 상태값
+    private int status;
+
     private ProductVariantsDTO productVariants;
 
     public int getVariantId(){

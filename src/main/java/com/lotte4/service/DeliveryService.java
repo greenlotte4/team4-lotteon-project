@@ -107,7 +107,7 @@ public class DeliveryService {
         delivery = deliveryRepository.save(delivery);
 
         DeliveryDTO savedDeliveryDTO = new DeliveryDTO();
-        savedDeliveryDTO.setDeliveryNo(delivery.getDeliveryId());
+        savedDeliveryDTO.setDeliveryId(delivery.getDeliveryId());
         savedDeliveryDTO.setDeliveryCompany(delivery.getDeliveryCompany());
         savedDeliveryDTO.setDeliveryWaybill(delivery.getDeliveryWaybill());
         savedDeliveryDTO.setContent(delivery.getContent());

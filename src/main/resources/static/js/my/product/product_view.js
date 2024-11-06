@@ -250,7 +250,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(error => console.error('Error:', error));
     });
 
-    // 장바구니에 담기 위한 fetch post
+    // 바로구매를 위한 fetch post
     btnBuy.addEventListener('click', function (event) {
         event.preventDefault(); // 기본 폼 제출 방지
 
@@ -277,9 +277,8 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(data => {
                 if (data === "success") {
                     // 성공 시 알림창 띄우기
-                    if (alert("상품 구매 화면으로 이동합니다.")) {
-                        window.location.href = "/lotteon/product/order"; // 장바구니 페이지로 리다이렉트
-                    }
+                        alert("주문 페이지로 이동합니다.");
+                        window.location.href = "/lotteon/product/order"; // 구매페이지로 바로 가기
                 } else if (data === "failed") {
                     alert("상품 구매 중 문제가 발생하였습니다.");
                 } else if (data === "noUser") {

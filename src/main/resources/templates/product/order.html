@@ -32,15 +32,18 @@
 
         <!-- 주문하기 영역 -->
         <section class="cart-section">
+
             <!-- Breadcrumb -->
             <div class="breadcrumb">
                 <a th:href="@{/index}">Home</a> &gt;
                 <a th:href="@{/product/cart}">장바구니</a> &gt;
                 <a th:href="@{/product/order}">주문하기</a>
+
                 <section class="order-section">
             </div>
             <!-- 주문하기 제목 -->
             <h2 class="section-title">주문하기</h2>
+            <input type="hidden" id="member_id" th:value="${#authentication.principal.user.memberInfo.memberInfoId}">
             <!-- 주문 상품목록 -->
             <div class="cart-">
                 <table class="cart-table">
@@ -55,15 +58,16 @@
                     </tr>
                     </thead>
                     <tbody >
-                    <tr th:each="cart : ${cartList}" th:id="'cart-item-' + ${cart.cartId}" th:attr="data-variant-id=${cart.productVariants.variant_id}">
+
+                    <tr th:each="cart : ${cartList}" th:attr="data-variant-id=${cart.productVariants.variant_id}">
                     <td class="product-info">
                             <img th:src="@{'/uploads/product/' + ${cart.productVariants.product.getImg1()}}" alt="상품 이미지">
                             <div class="product-details" th:text="${cart.productVariants.product.name}"></div>
                         </td>
                         <td>
-                            <div th:text="${cart.productVariants.sku}" class="option1"></div>
+                            <div th:text="${cart.sku}" class="option1"></div>
                         </td>
-                        <td id="price" th:text="${cart.productVariants.price} + '원'"></td>
+                        <td id="price" th:text="${cart.price} + '원'"></td>
                         <td>
                             <div class="quantity">
                                 <p id="quantity" th:text="${cart.count}"></p>
@@ -71,8 +75,8 @@
                         </td>
                         <td>
                             <div class="price-info">
-                                <del th:text="${cart.productVariants.price}"></del>
-                                <span id="discount" class="discount-price" th:text="${cart.productVariants.price - (cart.productVariants.price / cart.productVariants.product.discount)} + '원'"></span>
+                                <del th:text="${cart.price}"></del>
+                                <span id="discount" class="discount-price" th:text="${cart.price - (cart.price / cart.productVariants.product.getDiscount())} + '원'"></span>
                             </div>
                         </td>
                         <td class="shipping-info" id="deliveryFee" th:text="${cart.productVariants.product.deliveryFee != null ? cart.productVariants.product.deliveryFee + '원' : '무료배송'}"></td>
@@ -237,6 +241,8 @@
         const recip__name = document.getElementById('recip__name');
         const phone__number = document.getElementById('phone__number');
         const paymentMethods = document.getElementsByName("paymentMethod");
+        const member_id = document.getElementById("member_id").value;
+        console.log('멤버아이디'+member_id);
 
         //전체 금액 계산용
         const originPrice = document.getElementById("originPrice");
@@ -458,7 +464,7 @@
                 couponUse: document.getElementById("condition").value,
                 deliveryFee: parseInt(all__deliveryfee.innerText.replace(/[^0-9]/g, '')),
                 discount: parseInt(all__sold.innerText.replace(/[^0-9]/g, '')) - parseInt(all__totalPrice.innerText.replace(/[^0-9]/g, '')),
-                memberInfo: { memberInfoId: 1 },
+                memberInfo: { memberInfoId: member_id },
                 option1: option1Element.innerText,
                 price: parseInt(all__sold.innerText.replace(/[^0-9]/g, '')),
                 recipZip: postcodeInput.value,

@@ -34,6 +34,9 @@ public class OrderItems {
     //배송비용
     private int deliveryFee;
 
+    //주문당 상태값
+    private int status;
+
     
     // 연결 값 없이 아이디값을 조회 할 수 있도록 할려고 함
     private int variantId;

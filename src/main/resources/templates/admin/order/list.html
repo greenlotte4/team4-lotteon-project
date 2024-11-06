@@ -75,7 +75,7 @@
                         <td th:text="${order.product.name != null ? order.product.name : 'N/A'}">상품명</td>
                         <td th:text="${order.count}">2</td>
                         <td th:text="${#numbers.formatInteger(order.price * order.count, '0', 'COMMA')}">102,900</td>
-                        <td th:text="${order.Pay == 1 ? '무통장 입금' : '기타'}">신용카드</td>
+                        <td th:text="${order.Payment == 1 ? '무통장 입금' : '기타'}">신용카드</td>
                         <td th:classappend="${order.Status == 1 ? 'completed' : (order.Status == 0 ? 'pending' : 'cancelled')}"
                         <td th:text="${order.Status == 0 ? '결제대기' :
                                       (order.Status == 1 ? '결제완료' :

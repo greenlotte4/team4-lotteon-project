@@ -1,5 +1,6 @@
 package com.lotte4.dto;
 
+import com.lotte4.entity.Product;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -36,5 +37,5 @@ public class ProductVariantsDTO {
     private LocalDateTime updated_at;
 
     private ProductDTO product;
-
+    private Product product1;
 }

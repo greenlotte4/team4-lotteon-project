@@ -1,28 +1,22 @@
 package com.lotte4.controller.pagecontroller.CSB;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lotte4.dto.MemberInfoDTO;
 import com.lotte4.dto.OrderDTO;
 import com.lotte4.dto.OrderItemsDTO;
 import com.lotte4.dto.ProductVariantsDTO;
 import com.lotte4.entity.ProductVariants;
-import com.lotte4.repository.ProductRepository;
 import com.lotte4.repository.ProductVariantsRepository;
 import com.lotte4.service.OrderService;
-import com.lotte4.service.ProductService;
+import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 
-import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +32,7 @@ public class OrderRestController {
     private final ProductVariantsRepository productVariantsRepository;
 
     @PostMapping("/product/order/save")
-    public ResponseEntity<Map<String, Object>> insertOrder(@RequestBody Map<String, Object> orderData) {
+    public ResponseEntity<Map<String, Object>> insertOrder(@RequestBody Map<String, Object> orderData, HttpSession session) {
         // 아래와 같이 한 사유 = 자꾸 양방향 관계로 MappingJackson 이슈가 계속 발생해서 일일이 넣는것으로 바꿈 더럽긴 함 ㅠㅠ
 
         try {
@@ -110,6 +104,8 @@ public class OrderRestController {
                 orderDTO.setOrderItems(orderItemsDTOList);
             }
 
+            session.setAttribute("orderContent", orderDTO.getContent());
+            log.info("Order content stored in session: " + session.getAttribute("orderContent"));
 
             // OrderService에 orderDTO와 content 전달
             orderService.insertOrder(orderDTO);

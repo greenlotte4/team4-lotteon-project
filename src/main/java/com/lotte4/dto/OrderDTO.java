@@ -42,5 +42,5 @@ public class OrderDTO {
 
 
     // 배송메세지위한 추가(데이터 연결점이슈)
-    private String content; 
+    private String content;
 }

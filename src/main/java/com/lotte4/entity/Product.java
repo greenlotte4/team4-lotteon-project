@@ -67,7 +67,7 @@ public class Product {
     @JoinColumn(name = "productCateId")
     private ProductCate productCateId;
 
-    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "productDetailId")
     private ProductDetail productDetail;
     

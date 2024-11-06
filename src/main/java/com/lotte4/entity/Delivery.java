@@ -22,6 +22,7 @@ public class Delivery {
     //배송 순번(추후 년/월/일 + 번호 같이 만들어서 줘야함)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "deliveryId")
     private Long deliveryId;
 
 

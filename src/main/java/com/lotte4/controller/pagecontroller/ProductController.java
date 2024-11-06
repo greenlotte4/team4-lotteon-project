@@ -162,6 +162,7 @@ public class ProductController {
             cartService.updateCartItem(cartId, count);  // update 메서드 호출
         });
         session.setAttribute("selectedCartItems", selectedItems);
+        log.info("selectedItems1111 : " + selectedItems);
         return ResponseEntity.ok().build();
     }
 

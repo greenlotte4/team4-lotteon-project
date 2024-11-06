@@ -39,4 +39,6 @@ public class ProductVariants {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "productId")
     private Product product;
+
+
 }
