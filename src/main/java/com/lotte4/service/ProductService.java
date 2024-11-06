@@ -635,17 +635,17 @@ public class ProductService {
     }
 
 
-    // sellerInfoId 에 해당하는 상품 목록 select
+    // role 에 해당하는 상품 목록 select
     public Page<ProductDTO> selectProductListByRole(int page, int size, String keyword, String searchCategory, MyUserDetails userDetails) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Product> productPage = null;
         String role = userDetails.getUser().getRole();
 
-        if (keyword == null && role.equals("ADMIN")) {
+        if ((keyword == null || keyword.isEmpty()) && role.equals("ADMIN")) {
             productPage = productRepository.findAll(pageable);
             // product 엔티티를 ProductDTO 변환
             return productPage.map(ProductDTO::new);
-        } else if (keyword == null && role.equals("seller")) {
+        } else if ((keyword == null || keyword.isEmpty()) && role.equals("seller")) {
             SellerInfo sellerInfoId = userDetails.getUser().getSellerInfo();
             productPage = productRepository.findBySellerInfoId(sellerInfoId, pageable);
             // product 엔티티를 ProductDTO 변환

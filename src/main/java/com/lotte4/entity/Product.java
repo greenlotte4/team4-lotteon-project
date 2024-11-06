@@ -1,10 +1,21 @@
+/*
+     날짜 : 2024/11/06
+     이름 : 전규찬
+     내용 : product 엔티티 생성
+
+     수정이력
+     - 2024/11/06 전규찬 - 평균 평점을 위한 새로운 필드 rating 추가, 생성일 필드 createdAt 추가
+*/
+
 package com.lotte4.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lotte4.config.MapStringListToJsonConverter;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CurrentTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -59,6 +70,11 @@ public class Product {
     @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "productDetailId")
     private ProductDetail productDetail;
+    
+    private int rating;  // 2024-11-06 전규찬 평균평점 필드 추가
+
+    @CurrentTimestamp
+    private LocalDateTime createdAt;  // 2024-11-06 전규찬 생성일 필드 추가
 
     // 관계 관리 메서드
     public void addVariant(ProductVariants variant) {

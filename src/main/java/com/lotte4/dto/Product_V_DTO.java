@@ -3,7 +3,8 @@
      이름 : 전규찬
      내용 : Product_V_DTO 생성
 
-     수정이력
+     수정이력 : 2024-11-06 전규찬 평균평점 필드 추가, 생성일 필드 createdAt 추가
+
 */
 
 package com.lotte4.dto;
@@ -11,6 +12,7 @@ package com.lotte4.dto;
 import com.lotte4.entity.Product;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -47,6 +49,8 @@ public class Product_V_DTO {
     private int status;
     private ProductCateDTO productCateId;
     private ProductDetailDTO productDetailId;
+    private int rating;  // 2024-11-06 전규찬 평균평점 필드 추가
+    private LocalDateTime createdAt;  // 2024-11-06 전규찬 생성일 필드 추가
 
     public Product_V_DTO(Product product) {
         this.productId = product.getProductId();
@@ -66,6 +70,8 @@ public class Product_V_DTO {
         this.detail = product.getDetail();
         this.status = product.getStatus();
         this.options = product.getOptions();
+        this.rating = product.getRating();
+        this.createdAt = product.getCreatedAt();
 
         // SellerInfoDTO 매핑
         if (product.getSellerInfoId() != null) {

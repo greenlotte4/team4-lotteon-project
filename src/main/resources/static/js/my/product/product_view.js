@@ -5,6 +5,8 @@
 
      수정이력
      - 2024/11/04 전규찬 - 옵션 선택 시 해당 제품 수량 선택 영역 생성 / 제품 가격 명시 / 가격 총합 계산
+     - 2024/11/06 전규찬 - 옵션 선택 시 추가되는 제품 가격에 할인율 적용 / 숫자 입력란에 음수, 0, 최대수량 초과, 미입력에 대한 예외 처리
+                        - 옵션 선택 시 하위 옵션 초기화 기능 추가
 */
 
 'use strict'
@@ -39,7 +41,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const selects = document.querySelectorAll('#variant-options select');
 
-    function findMatchingVariant() {
+    function findMatchingVariant(e) {
+
+        // 옵션 선택 시 하위 옵션 초기화("선택하세요" 라는 첫 번째 옵션값으로 재설정)
+        if (e.target === selects[0]) {
+            for (let i = 1; i < selects.length; i++) {
+                selects[i].selectedIndex = 0;
+            }
+        } else if (e.target === selects[1]) {
+            for (let i = 2; i < selects.length; i++)
+                selects[i].selectedIndex = 0;
+        }
+
         // 선택된 옵션을 배열에 담음
         const selectedOptions = [];
         selects.forEach(select => {
@@ -145,8 +158,23 @@ document.addEventListener('DOMContentLoaded', function () {
                         let previousNum = parseInt(inputNum.value);
                         console.log("previousNum = " + previousNum);
 
+                        // 숫자 입력으로 수량 조정 기능
                         inputNum.addEventListener('change', function (e) {
-                            const currentNum = parseInt(e.target.value);
+
+                            let currentNum = parseInt(e.target.value);
+                            if (currentNum > parseInt(e.target.max)) {
+                                alert(`해당 상품의 최대 수량은 ${e.target.max}개 입니다.`)
+                                e.target.value = previousNum;
+                                return;
+                            } else if (currentNum <= 0) {
+                                alert('0이나 음수 값은 입력하실 수 없습니다.')
+                                e.target.value = previousNum;
+                                return;
+                            } else if (isNaN(currentNum)) {
+                                alert('숫자를 입력해주세요')
+                                e.target.value = previousNum;
+                                return;
+                            }
                             console.log("currentNum = " + currentNum);
                             if (currentNum > previousNum) {
                                 const numDiff = currentNum - previousNum;

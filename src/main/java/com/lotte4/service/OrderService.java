@@ -69,7 +69,6 @@ public class OrderService {
 //            productVariantsDTO.setPrice(productVariants.getPrice());
 //            productVariantsDTO.setStock(productVariants.getStock());
 //            productVariantsDTO.setOptions(productVariants.getOptions());
-//            productVariantsDTO.setCreated_at(productVariants.getCreated_at());
 //            productVariantsDTO.setUpdated_at(productVariants.getUpdated_at());
 //
 //            // Product_V_DTO 생성 및 ProductVariantsDTO에 설정
@@ -150,7 +149,6 @@ public class OrderService {
                         productVariantsDTO.setPrice(productVariants.getPrice());
                         productVariantsDTO.setStock(productVariants.getStock());
                         productVariantsDTO.setOptions(productVariants.getOptions());
-                        productVariantsDTO.setCreated_at(productVariants.getCreated_at());
                         productVariantsDTO.setUpdated_at(productVariants.getUpdated_at());
                         orderItems.setItemOption(productVariantsDTO.getSku());
                     });

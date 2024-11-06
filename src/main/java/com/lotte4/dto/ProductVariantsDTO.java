@@ -33,7 +33,6 @@ public class ProductVariantsDTO {
     @NotEmpty(message = "옵션은 비어 있을 수 없습니다.")
     private Map<List<String>, List<String>> options;
 
-    private LocalDateTime created_at;
     private LocalDateTime updated_at;
 
     private ProductDTO product;
