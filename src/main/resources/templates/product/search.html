@@ -12,7 +12,7 @@
   <link rel="stylesheet" th:href="@{/css/product/product_common.css}"/>
   <link rel="stylesheet" th:href="@{/css/product/style_product_search.css}"/>
 
-  <link id="pageStylesheet" rel="stylesheet" th:href="@{/css/product/style_product_list.css}"/>
+  <link id="pageStylesheet" rel="stylesheet" th:href="@{/css/product/style_product_list_grid.css}"/>
   <script>
     // CSS 파일을 동적으로 변경하는 함수
     function changeStylesheet(fileName) {
@@ -57,11 +57,8 @@
           </td>
         </tr>
         <tr>
-          <td>
-            <div>
-              <input type="text" name="keyword" id="keyword" th:value="${keyword}"/>
-              <button id="btnSearch">검색</button>
-            </div>
+          <td id="searchContainer" th:data-type="${type}">
+
             <input
                     type="checkbox"
                     name="filter"
@@ -87,18 +84,23 @@
                    th:value="${minPrice != 0 ? minPrice : ''}" /> ~
             <input type="text" name="maxPrice" id="maxPrice"
                    th:value="${maxPrice != 0 ? maxPrice : ''}" />
+            <div>
+              <input type="text" name="keyword" id="keyword" th:value="${keyword}"/>
+              <button id="btnSearch">검색</button>
+            </div>
           </td>
         </tr>
       </table>
 
       <!-- 상품 정렬 옵션 -->
       <div class="sort-options">
-        <div class="sort-left">
-          <a href="#" class="sort-link">인기순</a>
-          <a href="#" class="sort-link">신상품순</a>
-          <a href="#" class="sort-link">판매순</a>
-          <a href="#" class="sort-link">낮은가격순</a>
-          <a href="#" class="sort-link">할인율순</a>
+        <div class="sort-left" id="typeDiv" th:data-type="${type}">
+          <a class="sort-link" data-type="sold">판매많은순</a>
+          <a class="sort-link" data-type="lowPrice">낮은가격순</a>
+          <a class="sort-link" data-type="highPrice">높은가격순</a>
+          <a class="sort-link" data-type="highReview">평점높은순</a>
+          <a class="sort-link" data-type="manyReview">후기많은순</a>
+          <a class="sort-link" data-type="recent">최근등록순</a>
         </div>
 
         <div class="sort-view-options">
@@ -134,16 +136,45 @@
                 <th:block th:if="${product.deliveryFee} > 0">
                   <span class="shipping-cost">배송비 [[${product.deliveryFee}]]원</span>
                 </th:block>
-                <th:block th:if="${product.discount} == 0">
+                <th:block th:if="${product.deliveryFee} == 0">
                   <span class="shipping-cost">무료배송</span>
                 </th:block>
               </div>
             </div>
             <div class="seller-info">
-              <p>판매자</p>
-              <span class="seller-badge">고객만족우수</span>
+              <p th:text="${product.getSellerInfoId().getComName()}">판매자</p>
+              <th:block th:if="${product.getRating() >= 8}">
+                <span class="seller-badge">고객만족우수</span>
+              </th:block>
+              <th:block th:unless="${product.getRating() >= 8}">
+                <span class="seller-badge" style="visibility: hidden">고객만족우수</span>
+              </th:block>
               <div class="rating">
-                상품평 ⭐⭐⭐⭐
+                상품평
+                <th:block th:with="
+                                      fullStars=${T(java.lang.Math).floor(product.getRating() / 2)},
+                                      halfStar=${product.getRating() % 2 == 1},
+                                      emptyStars=${5 - fullStars - (halfStar ? 1 : 0)}">
+                  <!-- 전체 별 -->
+                  <th:block th:if="${fullStars > 0}">
+                    <th:block th:each="num : ${#numbers.sequence(1, fullStars)}">
+                      <img th:src="@{/images/review/star.png}" alt="Full Star">
+                    </th:block>
+                  </th:block>
+
+                  <!-- 반 별 -->
+                  <th:block th:if="${halfStar}">
+                    <img th:src="@{/images/review/star_half.png}" alt="Half Star">
+                  </th:block>
+
+                  <!-- 회색 별 -->
+                  <th:block th:if="${emptyStars > 0}">
+                    <th:block th:each="num : ${#numbers.sequence(1, emptyStars)}">
+                      <img th:src="@{/images/review/star_gray.png}" alt="Gray Star">
+                    </th:block>
+                  </th:block>
+
+                </th:block>
               </div>
             </div>
           </a>
@@ -167,10 +198,61 @@
 </div>
 </body>
 <script>
-  document.getElementById("btnSearch").addEventListener("click", function(e) {
-    e.preventDefault();
+  document.querySelectorAll('.sort-link').forEach(link => {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
 
-    // 검색어와 가격 범위 가져오기
+      // 클릭한 요소의 data-type 속성 값 가져오기
+      const type = link.getAttribute('data-type');
+
+      // performSearch 호출 시 type 전달
+      performSearchWithType(type);
+    });
+  });
+  // 검색 기능을 수행하는 함수 정의
+  function performSearch() {
+    let keyword = document.getElementById("keyword").value;
+    const minPrice = document.getElementById("minPrice").value;
+    const maxPrice = document.getElementById("maxPrice").value;
+
+
+    // type 값 가져오기
+    const type = document.getElementById("searchContainer").getAttribute("data-type");
+
+    // 선택된 체크박스 필터 값 가져오기
+    const filters = Array.from(document.querySelectorAll('input[name="filter"]:checked'))
+            .map(checkbox => checkbox.value);
+
+    if (filters.includes("price") && (minPrice.trim() === "" || maxPrice.trim() === "")) {
+      alert("가격 범위를 입력해 주세요."); // 경고 메시지
+      return; // 전송 중지
+    }
+    if (filters.includes("prodName") && keyword.trim() === "") {
+      alert("검색어를 입력해 주세요."); // 경고 메시지
+      return; // 전송 중지
+    } else if (keyword.trim() === "") {
+      keyword = "none";
+    }
+
+    // URL 생성
+    let url = `/lotteon/product/search/${encodeURIComponent(keyword)}?`;
+    if (filters.length > 0) {
+      url += `filters=${filters.join(",")}&`;
+    }
+    if (minPrice) {
+      url += `minPrice=${encodeURIComponent(minPrice)}&`;
+    }
+    if (maxPrice) {
+      url += `maxPrice=${encodeURIComponent(maxPrice)}&`;
+    }
+    url += `type=${encodeURIComponent(type)}&`;
+
+    // 생성된 URL로 이동
+    window.location.href = url;
+  }
+
+  // 검색 기능을 수행하는 함수 정의
+  function performSearchWithType(type) {
     let keyword = document.getElementById("keyword").value;
     const minPrice = document.getElementById("minPrice").value;
     const maxPrice = document.getElementById("maxPrice").value;
@@ -183,16 +265,15 @@
       alert("가격 범위를 입력해 주세요."); // 경고 메시지
       return; // 전송 중지
     }
-    if(filters.includes("prodName") && keyword.trim() === ""){
+    if (filters.includes("prodName") && keyword.trim() === "") {
       alert("검색어를 입력해 주세요."); // 경고 메시지
       return; // 전송 중지
-    }else if(keyword.trim() === ""){
-      keyword="none";
+    } else if (keyword.trim() === "") {
+      keyword = "none";
     }
 
     // URL 생성
     let url = `/lotteon/product/search/${encodeURIComponent(keyword)}?`;
-
     if (filters.length > 0) {
       url += `filters=${filters.join(",")}&`;
     }
@@ -202,9 +283,38 @@
     if (maxPrice) {
       url += `maxPrice=${encodeURIComponent(maxPrice)}&`;
     }
+    url += `type=${encodeURIComponent(type)}`;
 
     // 생성된 URL로 이동
     window.location.href = url;
+  }
+
+
+
+  // 버튼 클릭 시 검색 수행
+  document.getElementById("btnSearch").addEventListener("click", function (e) {
+    e.preventDefault();
+    performSearch();
+  });
+
+  // 엔터 키로 검색 수행
+  document.getElementById("keyword").addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      performSearch();
+    }
+  });
+
+  document.addEventListener("DOMContentLoaded", function () {
+
+    const currentType = document.getElementById("typeDiv").getAttribute("data-type"); // 현재 정렬 기준
+
+    // 모든 sort-link 요소에 대해 현재 페이지의 타입과 비교
+    document.querySelectorAll(".sort-link").forEach(link => {
+      if (link.getAttribute("data-type") === currentType) {
+        link.style.color = "red"; // 일치하는 링크에 붉은색 스타일 적용
+      }
+    });
   });
 </script>
 </html>

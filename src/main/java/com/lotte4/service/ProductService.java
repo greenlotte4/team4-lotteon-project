@@ -594,15 +594,15 @@ public class ProductService {
         return productDTO;
     }
 
-    public List<ProductListDTO> getProductListWithKeyword(String keyword, List<String> filters, int minPrice, int maxPrice) {
-        List<ProductListDTO> productListDTOList = new ArrayList<>();
+    public List<ProductDTO> getProductListWithKeyword(String keyword, List<String> filters, int minPrice, int maxPrice) {
+        List<ProductDTO> productDTOList = new ArrayList<>();
 
         List<Product> products = productRepositoryImpl.findByKeywordWithFilters(keyword, filters, minPrice, maxPrice);
         for (Product product : products) {
-            ProductListDTO productListDTO = modelMapper.map(product, ProductListDTO.class);
-            productListDTOList.add(productListDTO);
+            ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
+            productDTOList.add(productDTO);
         }
-        return productListDTOList;
+        return productDTOList;
     }
 
 
@@ -677,5 +677,88 @@ public class ProductService {
         // product 엔티티를 ProductDTO 변환
         assert productPage != null;
         return productPage.map(ProductDTO::new);
+    }
+
+    public List<ProductDTO> orderProductList(List<ProductDTO> productDTOListPre,String type) {
+
+        //정렬
+        switch (type) {
+            //낮은 가격
+            case "lowPrice":
+                productDTOListPre.sort(new Comparator<ProductDTO>() {
+                    @Override
+                    public int compare(ProductDTO o1, ProductDTO o2) {
+
+                        double o1Price = o1.getPrice() * (1 - o1.getDiscount() / 100.0);
+                        double o2Price = o2.getPrice() * (1 - o2.getDiscount() / 100.0);
+
+                        if (o1Price > o2Price) {
+                            return 1;
+                        } else if (o1Price < o2Price) {
+                            return -1;
+                        }
+                        return 0;
+                    }
+                });
+                break;
+
+            //높은 가격순
+            case "highPrice":
+                productDTOListPre.sort(new Comparator<ProductDTO>() {
+                    @Override
+                    public int compare(ProductDTO o1, ProductDTO o2) {
+                        double o1Price = o1.getPrice() * (1 - o1.getDiscount() / 100.0);
+                        double o2Price = o2.getPrice() * (1 - o2.getDiscount() / 100.0);
+
+                        if (o1Price > o2Price) {
+                            return -1;
+                        } else if (o1Price < o2Price) {
+                            return 1;
+                        }
+                        return 0;
+                    }
+                });
+                break;
+
+            //판매량
+            case "sold":
+                productDTOListPre.sort(new Comparator<ProductDTO>() {
+                    @Override
+                    public int compare(ProductDTO o1, ProductDTO o2) {
+                        return Integer.compare(o2.getSold(), o1.getSold());
+                    }
+                });
+                break;
+            //평점 높은순
+            case "highReview":
+                productDTOListPre.sort(new Comparator<ProductDTO>() {
+                    @Override
+                    public int compare(ProductDTO o1, ProductDTO o2) {
+                        return Double.compare(o2.getRating(), o1.getRating());
+                    }
+                });
+                break;
+
+            //리뷰 많은순
+            case "manyReview":
+                productDTOListPre.sort(new Comparator<ProductDTO>() {
+                    @Override
+                    public int compare(ProductDTO o1, ProductDTO o2) {
+                        return Double.compare(o2.getReview(), o1.getReview());
+                    }
+                });
+                break;
+
+            //최근 등록순
+            case "recent":
+                productDTOListPre.sort(new Comparator<ProductDTO>() {
+                    @Override
+                    public int compare(ProductDTO o1, ProductDTO o2) {
+                        return o2.getCreatedAt().compareTo(o1.getCreatedAt());
+                    }
+                });
+                break;
+        }
+        return productDTOListPre;
     }
 }

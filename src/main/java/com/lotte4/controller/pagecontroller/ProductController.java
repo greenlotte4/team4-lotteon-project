@@ -196,14 +196,19 @@ public class ProductController {
             @RequestParam(required = false) List<String> filters,
             @RequestParam(required = false) Integer minPrice,
             @RequestParam(required = false) Integer maxPrice,
+            @RequestParam(required = false) String type,
             Model model){
         log.info("keyword : " + keyword);
         if(keyword.equals("none")){
             keyword = "";
         }
+
         if (filters == null) {
             filters = new ArrayList<>();
             filters.add("prodName");
+        }
+        if(!filters.contains("prodName")){
+            keyword = "";
         }
         if(minPrice == null || !filters.contains("price")){
             minPrice = 0;
@@ -211,14 +216,22 @@ public class ProductController {
         if(maxPrice == null || !filters.contains("price")){
             maxPrice = 0;
         }
+        if(type == null){
+            type = "sold";
+        }
 
-        List<ProductListDTO> productDTOList = productService.getProductListWithKeyword(keyword, filters, minPrice, maxPrice);
+        List<ProductDTO> productDTOListPre = productService.getProductListWithKeyword(keyword, filters, minPrice, maxPrice);
+
+
+        List<ProductDTO> productDTOList = productService.orderProductList(productDTOListPre,type);
+        log.info(productDTOList);
 
         model.addAttribute("productDTOList", productDTOList);
         model.addAttribute("filters", filters);
         model.addAttribute("keyword", keyword);
         model.addAttribute("minPrice", minPrice);
         model.addAttribute("maxPrice", maxPrice);
+        model.addAttribute("type", type);
         return "/product/search";
     }
 
