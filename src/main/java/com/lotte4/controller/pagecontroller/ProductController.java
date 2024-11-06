@@ -94,6 +94,7 @@ public class ProductController {
         return "/product/list_grid";
     }
 
+    // cart list
     @GetMapping("/product/cart")
     public String cart(Model model, Principal principal, HttpSession session) {
 
@@ -135,9 +136,9 @@ public class ProductController {
         log.info("user : " + user);
 
         // principal user정보 set
-        cartResponseDTO.setUser(user.toDTO());
+        cartResponseDTO.setUser(user);
 
-        Cart savedCart = cartService.insertCart(cartResponseDTO);
+        List<Cart> savedCart = cartService.insertCart(cartResponseDTO);
         log.info("savedCart : " + savedCart);
         if(savedCart != null){
             return ResponseEntity.ok("success");
@@ -151,6 +152,11 @@ public class ProductController {
     // 선택구매용
     @PostMapping("/product/cart/selected")
     public ResponseEntity<?> storeSelectedCartItems(@RequestBody List<Integer> cartIds, HttpSession session) {
+
+        log.info("cartIds : " + cartIds);
+
+        cartService.updateCount(cartIds);
+
         session.setAttribute("selectedCartIds", cartIds);
         return ResponseEntity.ok().build();
     }
