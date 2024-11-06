@@ -372,7 +372,6 @@ input::-webkit-inner-spin-button {
 .selected_variant {
     display: flex;
     flex-direction: column;
-    align-content: space-between;
     margin: 10px 0;
     border-bottom: 1px solid #ccc;
 }
@@ -403,10 +402,13 @@ input::-webkit-inner-spin-button {
     &>span:first-child{
         color: #aeaeae;
         font-size: 14px;
+        width: 30%;
     }
     &>span:last-child{
         font-size: 16px;
         font-weight: bold;
+        width: 30%;
+        text-align: end;
     }
 }
 
@@ -414,6 +416,7 @@ input::-webkit-inner-spin-button {
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 40%;
 }
 
 .btnPlusMinusDiv > input {

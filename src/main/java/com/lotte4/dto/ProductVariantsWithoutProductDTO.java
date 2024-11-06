@@ -34,7 +34,6 @@ public class ProductVariantsWithoutProductDTO {
     @NotEmpty(message = "옵션은 비어 있을 수 없습니다.")
     private Map<List<String>, List<String>> options;
 
-    private LocalDateTime created_at;
     private LocalDateTime updated_at;
 
     public ProductVariantsWithoutProductDTO(ProductVariants productVariants) {
@@ -43,7 +42,6 @@ public class ProductVariantsWithoutProductDTO {
         this.price = productVariants.getPrice();
         this.stock = productVariants.getStock();
         this.options = productVariants.getOptions();
-        this.created_at = productVariants.getCreated_at();
         this.updated_at = productVariants.getUpdated_at();
     }
 }

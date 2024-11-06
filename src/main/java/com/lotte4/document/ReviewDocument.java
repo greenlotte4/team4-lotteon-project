@@ -1,6 +1,5 @@
 package com.lotte4.document;
 
-
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
@@ -27,4 +26,5 @@ public class ReviewDocument {
     private String img1;
     @CreationTimestamp
     private String regDate;
+
 }
