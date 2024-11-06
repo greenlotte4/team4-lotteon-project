@@ -51,7 +51,7 @@ public class ProductController {
     @GetMapping("/product/list")
     public String list(Model model) {
         //home - 모든 상품
-        List<ProductListDTO> productDTOList = productService.getProductWithCateAndType(0, "sold");
+        List<ProductDTO> productDTOList = productService.getProductWithCateAndType(0, "sold");
         model.addAttribute("productDTOList", productDTOList);
         log.info(productDTOList);
         List<String> categories = new ArrayList<>();
@@ -64,7 +64,7 @@ public class ProductController {
     public String listWithCate(@PathVariable int cate, Model model) {
         //List<ProductDTO> productDTOList = productService.getProductWithCate(cate);
         //기본 정렬 - 판매량
-        List<ProductListDTO> productDTOList = productService.getProductWithCateAndType(cate, "sold");
+        List<ProductDTO> productDTOList = productService.getProductWithCateAndType(cate, "sold");
         model.addAttribute("productDTOList", productDTOList);
 
         List<ProductCateDTO> cateList = productService.getProductCates(cate);
@@ -79,7 +79,7 @@ public class ProductController {
 
     @GetMapping("/product/list/{cate}/{type}")
     public String listWithCateAndType(@PathVariable int cate,@PathVariable String type, Model model) {
-        List<ProductListDTO> productDTOList = productService.getProductWithCateAndType(cate, type);
+        List<ProductDTO> productDTOList = productService.getProductWithCateAndType(cate, type);
         model.addAttribute("productDTOList", productDTOList);
 
         List<ProductCateDTO> cateList = productService.getProductCates(cate);

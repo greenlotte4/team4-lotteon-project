@@ -34,6 +34,7 @@ public class ProductListDTO implements Serializable {
     private int review;
     private String img1;
     private int status;
-    private String createTime;
+    private String createdAt;
+    private int rating;
 }
 
