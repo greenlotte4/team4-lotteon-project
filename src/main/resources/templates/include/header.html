@@ -143,15 +143,30 @@
 
 
     const btnSearchInner = document.querySelector('.btnSearchInner');
-    btnSearchInner.addEventListener('click', function(e){
-        e.preventDefault();
+    const headerSearchInput = document.querySelector('#headerSearchId');
 
-        const keyword = document.querySelector('#headerSearchId').value; // 검색어 가져오기
+    // 검색 수행 함수 정의
+    function performSearchHeader() {
+        const keyword = headerSearchInput.value; // 검색어 가져오기
         if (keyword) {
             // 검색어를 포함한 URL로 이동
             window.location.href = `/lotteon/product/search/${encodeURIComponent(keyword)}`;
         } else {
             alert("검색어를 입력해주세요."); // 검색어가 비어 있는 경우 경고 메시지
         }
-    })
+    }
+
+    // 버튼 클릭 시 검색 수행
+    btnSearchInner.addEventListener('click', function(e) {
+        e.preventDefault();
+        performSearchHeader();
+    });
+
+    // Enter 키로 검색 수행
+    headerSearchInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            performSearchHeader();
+        }
+    });
 </script>
