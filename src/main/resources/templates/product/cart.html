@@ -93,7 +93,10 @@
                                 <input type="number" th:attr="id='quantity-' + ${cart.cartId}" th:value="${cart.count}" class="changeCount" />
                             </div>
                         </td>
-                        <td th:attr="id='price-' + ${cart.cartId}">[[${#numbers.formatInteger(cart.productVariants.product.price, 3, 'COMMA') + '원'}]]</td>
+                        <td th:attr="id='price-' + ${cart.cartId}" th:text="${#numbers.formatInteger(
+                                                (cart.productVariants.price
+                                                - (cart.productVariants.price * cart.productVariants.product.discount / 100)),
+                                                1, 'COMMA')}"></td>
                         <td>[[${cart.productVariants.product.discount}]]%</td>
                         <td>[[${cart.productVariants.product.point}]]p</td>
                         <td th:attr="id='delivery-' + ${cart.cartId}" th:class="${cart.productVariants.product.deliveryFee == 0} ? 'shipping-info'"
@@ -103,8 +106,8 @@
                             <div class="price-info">
                                 <!--<del>[[${#numbers.formatInteger(cart.productVariants.product.price, 3, 'COMMA') + '원'}]]</del>-->
                                 <span class="discount-price" th:attr="id='total-' + ${cart.cartId}" th:text="${#numbers.formatInteger(
-                                                ((cart.productVariants.product.price
-                                                - (cart.productVariants.product.price * cart.productVariants.product.discount / 100))
+                                                ((cart.productVariants.price
+                                                - (cart.productVariants.price * cart.productVariants.product.discount / 100))
                                                 * cart.count)
                                                 + (cart.productVariants.product.deliveryFee != 0 ? cart.productVariants.product.deliveryFee : 0),
                                                 1, 'COMMA')}"></span>원
@@ -350,10 +353,18 @@
     // 선택된 항목을 서버에 전송하고 주문 페이지로 이동하는 함수
     function orderSelectedItems() {
         const selectedCartIds = Array.from(document.querySelectorAll(".checkboxes:checked")).map(cb => cb.value);
-        console.log('selectedCartIds : ' + selectedCartIds); // 106 107
-        const changeCount = Array.from(document.querySelectorAll(".changeCount")).map(cb => cb.value);
-        console.log('changeCount : ' + changeCount);
+        console.log('selectedCartIds : ' + selectedCartIds);
 
+        // 체크된 cartId와 수량 정보를 객체 배열로 만듦
+        const selectedItems = selectedCartIds.map(id => {
+            const countElement = document.querySelector(`#quantity-${id}`);
+            return {
+                cartId: parseInt(id),  // cartId를 key로 사용
+                count: countElement ? parseInt(countElement.value) : 0  // count를 value로 사용
+            };
+        });
+
+        console.log('selectedItems : ', selectedItems); // [{ "106": 2 }, { "107": 3 }]
 
         if (selectedCartIds.length === 0) {
             alert("선택 주문할 항목을 선택하세요.");
@@ -365,7 +376,7 @@
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(selectedCartIds)
+            body: JSON.stringify(selectedItems)
         })
             .then(response => {
                 if (response.ok) {
@@ -384,6 +395,17 @@
     function orderAllItems() {
         const allCartIds = Array.from(document.querySelectorAll(".checkboxes")).map(cb => cb.value);
 
+        // 체크된 cartId와 수량 정보를 객체 배열로 만듦
+        const selectedItems = allCartIds.map(id => {
+            const countElement = document.querySelector(`#quantity-${id}`);
+            return {
+                cartId: parseInt(id),  // cartId를 key로 사용
+                count: countElement ? parseInt(countElement.value) : 0  // count를 value로 사용
+            };
+        });
+
+        console.log('selectedItems : ', selectedItems); // [{ "106": 2 }, { "107": 3 }]
+
         if (allCartIds.length === 0) {
             alert("주문할 항목이 없습니다.");
             return;
@@ -394,7 +416,7 @@
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(allCartIds)
+            body: JSON.stringify(selectedItems)
         })
             .then(response => {
                 if (response.ok) {

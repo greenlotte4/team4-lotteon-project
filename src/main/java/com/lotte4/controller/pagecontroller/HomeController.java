@@ -39,6 +39,10 @@ public class HomeController {
         model.addAttribute("DiscountList", DiscountList);
 
         //인기상품 (평점 많은순)
+        List<ProductListDTO> ScoreList = productService.getProductWithType("Score");
+        model.addAttribute("ScoreList", ScoreList);
+
+        //인기상품 (평점 많은순)
         List<ProductListDTO> ScoreManyList = productService.getProductWithType("ScoreMany");
         model.addAttribute("ScoreManyList", ScoreManyList);
 

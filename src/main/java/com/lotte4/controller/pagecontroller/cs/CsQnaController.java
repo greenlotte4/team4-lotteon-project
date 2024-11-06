@@ -25,8 +25,8 @@ import java.util.Objects;
      내용 : csQnaController 생성
 
      수정이력
-      - 2025/10/29 황수빈 - 카테고리별로 다른 게시물 뿌리기 하는 중
-      - 2025/10/27 김춘추 - OOO 메서드 수정
+      - 2024/10/29 황수빈 - 카테고리별로 다른 게시물 뿌리기 하는 중
+      - 2024/11/06 전규찬 - 채용하기 페이지 출력
 */
 @Log4j2
 @RequiredArgsConstructor

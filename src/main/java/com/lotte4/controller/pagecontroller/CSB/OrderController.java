@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Log4j2
 @AllArgsConstructor
@@ -28,14 +29,14 @@ public class OrderController {
     //장바구니
     @GetMapping("/product/order")
     public String CartBuyOrder(Model model, HttpSession session, Principal principal) {
-        List<Integer> selectedCartIds = (List<Integer>) session.getAttribute("selectedCartIds");
-
+        // 세션에서 저장된 selectedCartItems를 List<Map<String, Object>> 형태로 가져옴
+        List<Map<String, Object>> selectedCartItems = (List<Map<String, Object>>) session.getAttribute("selectedCartItems");
         // 선택된 항목이 없을 경우 장바구니로 리다이렉트(선택해서 오지 않으면 다시 리턴)
-        if (selectedCartIds == null || selectedCartIds.isEmpty()) {
+        if (selectedCartItems == null || selectedCartItems.isEmpty()) {
             return "redirect:/product/cart";
         }
         String uid = principal.getName();
-        List<CartDTO> cartList = cartService.getCartItemsByIds(uid, selectedCartIds);
+        List<CartDTO> cartList = cartService.getCartItemsByIds(uid, selectedCartItems);
         model.addAttribute("cartList", cartList);
         model.addAttribute("isSingleProduct", false);
 

@@ -503,71 +503,44 @@ public class ProductService {
 
     //home(index)에서 사용
     public List<ProductListDTO> getProductWithType(String type) {
-        List<ProductDTO> productDTOList = getAllProducts();
+        List<ProductListDTO> productDTOList = new ArrayList<>();
 
-        List<ProductListDTO> productListDTOList = new ArrayList<>();
-        for (ProductDTO productDTO : productDTOList) {
-            ProductListDTO productListDTO = modelMapper.map(productDTO, ProductListDTO.class);
-            ProductDetailDTO detail = productDTO.getProductDetailId();
-            productListDTO.setCreateTime(detail.getCreateDate());
-            productListDTOList.add(productListDTO);
-        }
-
-
+        List<Product> products = new ArrayList<>();
         //정렬
         switch (type) {
             case "Hit":
-                productListDTOList.sort(new Comparator<ProductListDTO>() {
-                    @Override
-                    public int compare(ProductListDTO o1, ProductListDTO o2) {
-                        return Integer.compare(o2.getHit(), o1.getHit());
-                    }
-                });
+                products = productRepository.findTop8ByOrderByHitDesc();
+                for(Product product : products){
+                    productDTOList.add(modelMapper.map(product, ProductListDTO.class));
+                }
                 break;
             case "Score":
-
+                products = productRepository.findTop8ByOrderByRatingDesc();
+                for(Product product : products){
+                    productDTOList.add(modelMapper.map(product, ProductListDTO.class));
+                }
                 break;
             case "ScoreMany":
-                productListDTOList.sort(new Comparator<ProductListDTO>() {
-                    @Override
-                    public int compare(ProductListDTO o1, ProductListDTO o2) {
-                        return Integer.compare(o2.getReview(), o1.getReview());
-                    }
-                });
+                products = productRepository.findTop8ByOrderByReviewDesc();
+                for(Product product : products){
+                    productDTOList.add(modelMapper.map(product, ProductListDTO.class));
+                }
                 break;
 
             case "Discount":
-                productListDTOList.sort(new Comparator<ProductListDTO>() {
-                    @Override
-                    public int compare(ProductListDTO o1, ProductListDTO o2) {
-                        return Integer.compare(o2.getDiscount(), o1.getDiscount());
-                    }
-                });
+                products = productRepository.findTop8ByOrderByDiscountDesc();
+                for(Product product : products){
+                    productDTOList.add(modelMapper.map(product, ProductListDTO.class));
+                }
                 break;
             case "Recent":
-                productListDTOList.sort(new Comparator<ProductListDTO>() {
-                    @Override
-                    public int compare(ProductListDTO o1, ProductListDTO o2) {
-                        return o2.getCreateTime().compareTo(o1.getCreateTime());
-                    }
-                });
+                products = productRepository.findTop8ByOrderByCreatedAtDesc();
+                for(Product product : products){
+                    productDTOList.add(modelMapper.map(product, ProductListDTO.class));
+                }
                 break;
         }
-        List<ProductListDTO> productDTOs = new ArrayList<>();
-
-        //8개만 추출
-        int count = 0;
-        int max = 8;
-
-        for (ProductListDTO productListDTO : productListDTOList) {
-            if (count < max) {
-                productDTOs.add(productListDTO);
-                count++;
-            } else {
-                break;
-            }
-        }
-        return productDTOs;
+        return productDTOList;
     }
 
     public List<ProductListDTO> getProductBest() {

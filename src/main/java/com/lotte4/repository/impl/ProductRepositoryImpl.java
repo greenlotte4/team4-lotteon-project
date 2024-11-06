@@ -49,27 +49,32 @@ public class ProductRepositoryImpl implements ProductRepositoyCustom {
         // 필터 조건 추가
         if (filters != null && !filters.isEmpty()) {
             BooleanBuilder filterBuilder = new BooleanBuilder();
-            for (String filter : filters) {
-                switch (filter) {
-                    case "prodName":
-                        filterBuilder.or(qProduct.name.contains(keyword));
-                        break;
-                    case "description":
-                        filterBuilder.or(qProduct.description.contains(keyword));
-                        break;
-                    case "price":
-                        // 할인 적용 가격 계산
-                        NumberExpression<Integer> discountedPrice = qProduct.price
-                                .multiply(1.0).subtract(qProduct.price.multiply(qProduct.discount).divide(100.0));
 
-                        // 가격 필터가 활성화된 경우, 별도로 가격 범위 조건 추가
-                        if (minPrice != null) {
-                            builder.and(discountedPrice.goe(minPrice.doubleValue()));
-                        }
-                        if (maxPrice != null) {
-                            builder.and(discountedPrice.loe(maxPrice.doubleValue()));
-                        }
-                        break;
+            // 키워드를 공백으로 분리
+            String[] keywords = keyword.split("\\s+");
+            for (String k : keywords) {
+                for (String filter : filters) {
+                    switch (filter) {
+                        case "prodName":
+                            filterBuilder.or(qProduct.name.contains(k)); // 각 단어에 대해 or 조건 추가
+                            break;
+                        case "description":
+                            filterBuilder.or(qProduct.description.contains(k)); // 각 단어에 대해 or 조건 추가
+                            break;
+                        case "price":
+                            // 할인 적용 가격 계산
+                            NumberExpression<Integer> discountedPrice = qProduct.price
+                                    .multiply(1.0).subtract(qProduct.price.multiply(qProduct.discount).divide(100.0));
+
+                            // 가격 필터가 활성화된 경우, 별도로 가격 범위 조건 추가
+                            if (minPrice != null) {
+                                builder.and(discountedPrice.goe(minPrice.doubleValue()));
+                            }
+                            if (maxPrice != null) {
+                                builder.and(discountedPrice.loe(maxPrice.doubleValue()));
+                            }
+                            break;
+                    }
                 }
             }
             // 필터 조건을 최종 빌더에 추가
