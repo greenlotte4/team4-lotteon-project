@@ -49,6 +49,7 @@ main {
   flex-direction: column;
   align-items: center;
   height: auto;
+  width: 1000px;
 }
 
 .titlogin {
@@ -79,7 +80,7 @@ main {
 
 .login-form {
   display: flex;
-  width: 50%;
+  width: 55%;
   padding: 13px;
   box-sizing: border-box;
   flex-wrap: wrap;
@@ -116,14 +117,14 @@ main {
   height: 50px;
   padding: 0 16px;
   background-color: #f5f5f5;
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.5;
   color: #333;
 }
 
 .loginbtn {
   height: 58px;
-  width: 297px;
+  width: 328px;
   border: none;
   line-height: 60px;  /* 버튼 텍스트의 세로 중앙 정렬 */
   margin-top: 15px;
@@ -131,19 +132,19 @@ main {
   background-color: #ef2a23;
   border-radius: 10px;
 text-align: center;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 500;
   cursor: pointer;
 }
 
 .options {
-  margin-top:3px;
+  margin-top: 13px;
   display: flex;
   align-items: center;
   font-size: 14px;
   width: 384px;
-  margin-left:20px;
-  margin-bottom:30px;
+  margin-left: 11px;
+  margin-bottom: 30px;
 }
 
 .options span {
@@ -318,4 +319,8 @@ footer p > strong {
   border: none;
   font-size: 0;
   cursor: pointer;
+}
+
+.auto-login {
+  margin-right: 3px;
 }
