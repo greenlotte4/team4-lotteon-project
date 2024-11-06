@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface ReviewRepository extends MongoRepository<ReviewDocument, String> {
     public Optional<ReviewDocument> findByUid(String uid);
-
+    public Page<ReviewDocument> findByProdId(int prodId, Pageable pageable);
     public Page<ReviewDocument> findByUid(String uid, Pageable pageable);
     public Optional<ReviewDocument> deleteByUid(String uid);
 }

@@ -2,7 +2,10 @@
 .product-view-section {
     padding: 20px;
 }
-
+.review-rating > img{
+    width:20px;
+    height:20px;
+}
 /* 상품보기 섹션 */
 
 .product-view {
@@ -271,11 +274,30 @@ strong {
 }
 
 .review-rating {
+    margin-top:10px;
     color: #ffcc00;
     font-size: 16px;
     margin-bottom: 10px; /* 별점 아래 여백 추가 */
 }
 
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.page-btn, .page-num {
+    background: white;
+    border: 1px solid #ddd;
+    padding: 5px 10px;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.page-num.active {
+    border: 1px solid #333;
+    font-weight: bold;
+}
 .review-content {
     font-size: 14px;
     line-height: 1.5;
@@ -284,6 +306,15 @@ strong {
     justify-content: space-between;
 }
 
+.review_content{
+    margin-top :10px;
+    font-size:16px;
+}
+.review_img{
+    margin: 20px 0 10px 0;
+    width: 300px;
+    height:300px;
+}
 .review-date {
     color: #999;
     font-size: 13px;

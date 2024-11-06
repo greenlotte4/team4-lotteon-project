@@ -9,11 +9,13 @@ import com.lotte4.entity.User;
 import com.lotte4.service.CartService;
 import com.lotte4.service.ProductService;
 import com.lotte4.service.UserService;
+import com.lotte4.service.review.ReviewService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,12 +38,13 @@ import java.util.Map;
 //      - 2024/10/30 강은경 - 장바구니 insert하는 postmapping추가
 //      - 2024/10/31 조수빈 - session 정보 전달하는 HttpSession 추가
 //      - 2024/11/04 강중원 - 상품 카테고리와 타입에 따른 정렬 매핑 추가
+//      - 2024/11/06 황수빈 - 상품 view 리뷰 list 뿌리기
 
 @Log4j2
 @RequiredArgsConstructor
 @Controller
 public class ProductController {
-
+    private final ReviewService reviewService; // 황수빈
     private final CartService cartService;
     private final ProductService productService;
     private final ObjectMapper objectMapper;

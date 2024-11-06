@@ -20,10 +20,13 @@ public class ReviewDocument {
 
     private String uid;
     private int variantId;
+    private int prodId;
     private int rating;
     private String content;
     private String regIp;
     private String img1;
+    private String img2;
+
     @CreationTimestamp
     private String regDate;
 
