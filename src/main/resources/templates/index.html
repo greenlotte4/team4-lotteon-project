@@ -111,138 +111,22 @@
                 <h3><span class="scroll2" id="scroll2">추천상품</span></h3>
                 <article>
                     <!--반복 시작-->
-                    <a href="#">
+                    <a th:href="@{/product/view(productId = ${product.productId})}" th:each="product : ${ScoreList}">
                         <div class="thumb">
-                            <img th:src="@{/images/my/임시 이미지.png}" alt="">
+                            <img th:src="@{'/uploads/product/' + ${product.img1}}" alt="상품이미지">
                         </div>
-                        <h2>상품이름</h2>
-                        <p>상품설명</p>
+                        <h2>[[${product.name}]]</h2>
+                        <p>[[${product.description}]]</p>
                         <div class="org_price">
-                            <del>50000</del>
-                            <span>50%</span>
+                            <del>[[${product.price}]]</del>
+                            <span>[[${product.discount}]]%</span>
                         </div>
                         <div class="dis_price">
-                            <ins>25000</ins>
-                            <span class="free">무료배송</span>
-                        </div>
-                    </a>
-                    <!--반복 끝-->
-                    <!--반복 시작-->
-                    <a href="#">
-                        <div class="thumb">
-                            <img th:src="@{/images/my/임시 이미지.png}" alt="">
-                        </div>
-                        <h2>상품이름</h2>
-                        <p>상품설명</p>
-                        <div class="org_price">
-                            <del>50000</del>
-                            <span>50%</span>
-                        </div>
-                        <div class="dis_price">
-                            <ins>25000</ins>
-                            <span class="free">무료배송</span>
-                        </div>
-                    </a>
-                    <!--반복 끝-->
-                    <!--반복 시작-->
-                    <a href="#">
-                        <div class="thumb">
-                            <img th:src="@{/images/my/임시 이미지.png}" alt="">
-                        </div>
-                        <h2>상품이름</h2>
-                        <p>상품설명</p>
-                        <div class="org_price">
-                            <del>50000</del>
-                            <span>50%</span>
-                        </div>
-                        <div class="dis_price">
-                            <ins>25000</ins>
-                            <span class="free">무료배송</span>
-                        </div>
-                    </a>
-                    <!--반복 끝-->
-                    <!--반복 시작-->
-                    <a href="#">
-                        <div class="thumb">
-                            <img th:src="@{/images/my/임시 이미지.png}" alt="">
-                        </div>
-                        <h2>상품이름</h2>
-                        <p>상품설명</p>
-                        <div class="org_price">
-                            <del>50000</del>
-                            <span>50%</span>
-                        </div>
-                        <div class="dis_price">
-                            <ins>25000</ins>
-                            <span class="free">무료배송</span>
-                        </div>
-                    </a>
-                    <!--반복 끝-->
-                    <!--반복 시작-->
-                    <a href="#">
-                        <div class="thumb">
-                            <img th:src="@{/images/my/임시 이미지.png}" alt="">
-                        </div>
-                        <h2>상품이름</h2>
-                        <p>상품설명</p>
-                        <div class="org_price">
-                            <del>50000</del>
-                            <span>50%</span>
-                        </div>
-                        <div class="dis_price">
-                            <ins>25000</ins>
-                            <span class="free">무료배송</span>
-                        </div>
-                    </a>
-                    <!--반복 끝-->
-                    <!--반복 시작-->
-                    <a href="#">
-                        <div class="thumb">
-                            <img th:src="@{/images/my/임시 이미지.png}" alt="">
-                        </div>
-                        <h2>상품이름</h2>
-                        <p>상품설명</p>
-                        <div class="org_price">
-                            <del>50000</del>
-                            <span>50%</span>
-                        </div>
-                        <div class="dis_price">
-                            <ins>25000</ins>
-                            <span class="free">무료배송</span>
-                        </div>
-                    </a>
-                    <!--반복 끝-->
-                    <!--반복 시작-->
-                    <a href="#">
-                        <div class="thumb">
-                            <img th:src="@{/images/my/임시 이미지.png}" alt="">
-                        </div>
-                        <h2>상품이름</h2>
-                        <p>상품설명</p>
-                        <div class="org_price">
-                            <del>50000</del>
-                            <span>50%</span>
-                        </div>
-                        <div class="dis_price">
-                            <ins>25000</ins>
-                            <span class="free">무료배송</span>
-                        </div>
-                    </a>
-                    <!--반복 끝-->
-                    <!--반복 시작-->
-                    <a href="#">
-                        <div class="thumb">
-                            <img th:src="@{/images/my/임시 이미지.png}" alt="">
-                        </div>
-                        <h2>상품이름</h2>
-                        <p>상품설명</p>
-                        <div class="org_price">
-                            <del>50000</del>
-                            <span>50%</span>
-                        </div>
-                        <div class="dis_price">
-                            <ins>25000</ins>
-                            <span class="free">무료배송</span>
+                            <ins>[[${#numbers.formatDecimal(product.price * (1 - product.discount / 100.0), 0, 0)}]]</ins>
+                            <th:block th:if="${product.deliveryFee} eq 0">
+                                <span class="free">무료배송</span>
+                            </th:block>
+
                         </div>
                     </a>
                     <!--반복 끝-->

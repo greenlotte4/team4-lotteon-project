@@ -171,7 +171,7 @@
     e.preventDefault();
 
     // 검색어와 가격 범위 가져오기
-    const keyword = document.getElementById("keyword").value;
+    let keyword = document.getElementById("keyword").value;
     const minPrice = document.getElementById("minPrice").value;
     const maxPrice = document.getElementById("maxPrice").value;
 
@@ -183,9 +183,11 @@
       alert("가격 범위를 입력해 주세요."); // 경고 메시지
       return; // 전송 중지
     }
-    if(keyword.trim() === ""){
+    if(filters.includes("prodName") && keyword.trim() === ""){
       alert("검색어를 입력해 주세요."); // 경고 메시지
       return; // 전송 중지
+    }else if(keyword.trim() === ""){
+      keyword="none";
     }
 
     // URL 생성
