@@ -114,8 +114,9 @@ public class BoardController {
             List<BoardCateDTO> cate1 = boardCateService.selectBoardCatesByDepth(1);
             model.addAttribute("cate1", cate1);
         }
-        BoardResponseDTO board = boardService.selectBoardById(boardId);
 
+        BoardResponseDTO board = boardService.selectBoardById(boardId);
+        log.info("수정에서 왜 카테고리가 안되지?"+ board);
         model.addAttribute("board", board);
 
         return "/admin/cs/"+type+"/modify";

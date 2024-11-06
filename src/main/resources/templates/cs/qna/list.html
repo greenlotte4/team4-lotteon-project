@@ -44,19 +44,26 @@
         </tr>
         </thead>
         <tbody>
-
-        <tr class = qna th:each="board : ${boards}">
+        <!-- 문의 내역이 있을 경우 목록 출력 -->
+        <tr class="qna" th:each="board : ${boards}" th:unless="${#lists.isEmpty(boards)}">
           <input type="hidden" th:value="${board.boardId}">
           <td><input type="checkbox" class="chkbox" th:data-board-id="${board.boardId}"></td>
           <td class="title">
-            <span>[</span>[[${board.cate.name}]]<span>]&nbsp;</span><a th:href="@{/cs/qna/view/{id}(id=${board.boardId})}" th:text="${board.title}">개인회원과 법인회원에 차이가 있나요?</a>
+            <span>[</span>[[${board.cate.name}]]<span>]&nbsp;</span>
+            <a th:href="@{/cs/qna/view/{id}(id=${board.boardId})}" th:text="${board.title}">개인회원과 법인회원에 차이가 있나요?</a>
           </td>
           <td class="st1" th:if="${board.state == 0}">검토중</td>
           <td class="st2" th:if="${board.state == 1}">답변완료</td>
           <td th:text="${board.user.uid}"></td>
           <td th:text="${board.regDate}"></td>
         </tr>
+
+        <!-- 문의 내역이 없을 경우 메시지 출력 -->
+        <tr th:if="${#lists.isEmpty(boards)}">
+          <td colspan="6" style="text-align: center;">문의 내역이 없습니다.</td>
+        </tr>
         </tbody>
+
       </table>
       <div class="buttons">
         <button class="delete-btn" disabled>선택 삭제</button>

@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -36,15 +37,25 @@ public class BoardService {
     private final BoardCateRepository boardCateRepository;
     private final ModelMapper modelMapper;
 
-    // 글 타입별로 찾는 메서드 ( qna | faq | notice )
+    // 글 타입별로 찾기 ( qna | faq | notice )
     public Page<BoardResponseDTO> selectAllBoardByType(String type, int page, int size) {
+
+
         Pageable pageable = PageRequest.of(page, size);
         Page<Board> boardEntities = boardRepository.findByTypeOrderByRegDateDesc(type, pageable);
+        return applyRowNumber(boardEntities, pageable, page, size);
+    }
+
+    public Page<BoardResponseDTO> selectArticleByQnaAndUid(String type, String uid, int page, int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Board> boardEntities = boardRepository.findByTypeAndUser_UidOrderByRegDateDesc(type, uid, pageable);
 
         return applyRowNumber(boardEntities, pageable, page, size);
     }
 
-    // 카테고리 아이디로 찾는 메서드 (부모 카테고리, 자식 카테고리 공용)
+
+    // 카테고리 아이디로 글 찾기 (부모 카테고리, 자식 카테고리 공용)
     public Page<BoardResponseDTO> selectAllBoardByCateId(int cateId, String type, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Board> boardEntities;
@@ -67,7 +78,7 @@ public class BoardService {
         return applyRowNumber(boardEntities, pageable, page, size);
     }
 
-    // rowNumber - 게시글 번호 인덱스를 넣어주기 위한 함수
+    // applyRowNumber - 게시글 번호 인덱스를 넣기
     private Page<BoardResponseDTO> applyRowNumber(Page<Board> boardEntities, Pageable pageable, int page, int size) {
         int totalElements = (int) boardEntities.getTotalElements();
         AtomicInteger startNumber = new AtomicInteger(totalElements - (page * size));
@@ -149,7 +160,6 @@ public class BoardService {
     public List<Board> findTop5ByOrderByRegdateDesc(String type) {
         return boardRepository.findTop5ByTypeOrderByRegDateDesc(type);
     }
-
     public Board findById(int boardId) {
         return boardRepository.findById(boardId)
                 .orElseThrow(() -> new EntityNotFoundException("Board not found with ID: " + boardId));

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Objects;
 /*
@@ -38,11 +39,16 @@ public class  CsQnaController {
 
     // qna 글쓰기
     @GetMapping("/cs/qna/write")
-    public String qnaWrite(Model model){
+    public String qnaWrite(Model model, Principal principal) {
+        if (principal == null) {
+            return "redirect:/member/login";
+        }
+
         List<BoardCateDTO> cate1 = boardCateService.selectBoardCatesByDepth(1);
         model.addAttribute("cate1", cate1);
         return "/cs/qna/write";
     }
+
 
     @PostMapping("/cs/{type}/write")
     public String qnaWrite(BoardRegisterDTO dto, HttpServletRequest req, @PathVariable String type) {
@@ -70,30 +76,39 @@ public class  CsQnaController {
         model.addAttribute("cates",boardCateService.getSubCategories(8));
         return "/admin/cs/notice/write";
     }
-    // 글목록 : qna, faq
-    @GetMapping({"/cs/{type}/list", "/cs/{type}/list/{cate}"})  // 선택적인 cate 경로 처리
+
+    // cs
+    @GetMapping({"/cs/{type}/list", "/cs/{type}/list/{cate}"})
     public String qna(Model model,
                       @PathVariable String type,
-                      @PathVariable(required = false) Integer cate,// cate가 없으면 null로 처리
+                      Principal principal,
+                      @PathVariable(required = false) Integer cate,
                       @RequestParam(defaultValue = "0") int page,
                       @RequestParam(defaultValue = "8") int size) {
 
-        Page<BoardResponseDTO> boardList;
-
-        if (cate == null) {
-            // cate가 없거나 null일 때 전체 보드 가져오기
-            boardList = boardService.selectAllBoardByType(type, page,  size);
-        } else {
-            // cate가 있을 때 해당 카테고리에 맞는 보드 가져오기
-            boardList = boardService.selectAllBoardByCateId(cate, type, page, size);
+        // QnA 타입의 경우 로그인 필수 확인
+        if ("qna".equals(type) && principal == null) {
+            return "redirect:/member/login";
         }
-
+        // 사용자 ID 설정
+        String uid = (principal != null) ? principal.getName() : null;
+        log.info("uid뭐라고 들어옴 ? "+uid);
+        Page<BoardResponseDTO> boardList;
+        if(type.equals("qna")){
+            boardList = boardService.selectArticleByQnaAndUid(type, uid, page, size);
+            log.info("qna일때"+boardList);
+        }else {
+            boardList = (cate == null)
+                    ? boardService.selectAllBoardByType(type, page, size)
+                    : boardService.selectAllBoardByCateId(cate, type, page, size);
+        }
         model.addAttribute("boards", boardList.getContent());
         model.addAttribute("totalPages", boardList.getTotalPages());
         model.addAttribute("currentPage", page);
 
         return "/cs/" + type + "/list";
     }
+
 
 
 

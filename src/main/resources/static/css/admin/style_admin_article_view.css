@@ -14,7 +14,7 @@
 .inquiry-table td {
     padding: 15px;
     vertical-align: top;
-    font-family: Inter;
+
     font-size: 15.99px;
     font-weight: 400;
     text-align: left;
@@ -89,4 +89,15 @@
 
 .back-btn {
     background-color: #d82a2a;
+}
+.write_btn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 15px;
+    cursor: pointer;
+    text-decoration: none;
+    background-color : white;
+    border : 1px solid  #d82a2a;
+    box-sizing: border-box;
+    color :  #d82a2a;
 }
