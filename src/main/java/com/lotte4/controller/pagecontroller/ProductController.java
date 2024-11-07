@@ -3,11 +3,14 @@ package com.lotte4.controller.pagecontroller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lotte4.dto.*;
+import com.lotte4.dto.mongodb.RecommendationResult;
 import com.lotte4.entity.Cart;
+import com.lotte4.entity.Product;
 import com.lotte4.entity.User;
 import com.lotte4.service.CartService;
 import com.lotte4.service.ProductService;
 import com.lotte4.service.UserService;
+import com.lotte4.service.mongodb.RecommendationService;
 import com.lotte4.service.mongodb.ReviewService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +38,7 @@ import java.util.Map;
 //      - 2024/10/31 조수빈 - session 정보 전달하는 HttpSession 추가
 //      - 2024/11/04 강중원 - 상품 카테고리와 타입에 따른 정렬 매핑 추가
 //      - 2024/11/06 황수빈 - 상품 view 리뷰 list 뿌리기
+//      - 2024/11/07 황수빈 - 연관 상품 추천 List 뿌리기
 
 @Log4j2
 @RequiredArgsConstructor
@@ -46,6 +50,8 @@ public class ProductController {
     private final ObjectMapper objectMapper;
     private final UserService userService;
     private final ModelMapper modelMapper;
+    private final RecommendationService recommendationService;
+
 
     @GetMapping("/product/list")
     public String list(Model model) {
@@ -234,6 +240,23 @@ public class ProductController {
 
     @GetMapping("/product/view")
     public String view(int productId, Model model, HttpSession session, Principal principal) throws JsonProcessingException {
+        // 추천된 상품 ID 목록 가져오기
+        List<RecommendationResult> results = recommendationService.getRecommendedProducts(productId, null);
+
+// 추천 상품 리스트를 담을 리스트 생성
+        List<ProductDTO> recommendedProducts = new ArrayList<>();
+
+// 반복문으로 각 추천 결과의 relatedId를 사용하여 Product 조회
+        for (RecommendationResult result : results) {
+            int relatedId = result.getRelatedProdId();
+            ProductDTO product = productService.getProductById(relatedId); // Product 조회 메서드 호출
+            if (product != null) { // 상품이 존재할 경우 리스트에 추가
+                recommendedProducts.add(product);
+            }
+        }
+
+        log.info("recommendedProducts"+recommendedProducts);
+        model.addAttribute("recommendedProducts", recommendedProducts);
 
         Product_V_DTO productDTO = productService.getProduct_V_ById(productId);
         List<ProductVariantsWithoutProductDTO> productVariants = productDTO.getProductVariants();

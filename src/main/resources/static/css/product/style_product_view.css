@@ -1,3 +1,27 @@
+
+.recommend-article{
+    width:20% !important;
+    height:250px;
+}
+.recommend-article > a{
+    display:table-cell;
+
+}
+.recommend-article .thumb {
+    width: 150px !important;
+    height: 150px !important;
+    margin: 0 !important;
+    overflow: hidden;
+    text-align: center;}
+
+.recommend-article h2 {
+    font-size: 10px !important;
+    font-weight: bold;
+    margin-top: 4px;
+    text-align: left !important;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;}
 /* 기본 스타일 */
 .product-view-section {
     padding: 20px;
