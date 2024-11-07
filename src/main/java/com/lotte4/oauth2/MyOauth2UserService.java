@@ -50,7 +50,7 @@ public class MyOauth2UserService extends DefaultOAuth2UserService {
 
             // 사용자 확인 및 회원가입 처리
             String email = (String) attributes.get("email");
-            String uid = email.split("@")[0];
+            String uid = "GOOGLE_" + email.split("@")[0];
             String name = attributes.get("given_name").toString();
 
 
@@ -126,7 +126,7 @@ public class MyOauth2UserService extends DefaultOAuth2UserService {
             String name = (String) profile.get("nickname");
 
             // 이메일에서 사용자 uid 추출
-            String uid = email != null ? email.split("@")[0] : null;
+            String uid = email != null ? "KAKAO_" + email.split("@")[0] : null;
 
             // 결과 출력
             System.out.println("이메일: " + email);
