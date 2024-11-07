@@ -26,12 +26,10 @@ public class AdminController {
 
         int yesterdayVisitor = visitorService.getVisitorCountYesterday();      //어제 방문자수
         int todayVisitor = visitorService.getVisitorCountToday();          //오늘 방문자수
-        int totalVisitor = visitorService.getTotalVisitorCount();
 
         //방문자수
         model.addAttribute("yesterdayVisitor", yesterdayVisitor);
         model.addAttribute("todayVisitor", todayVisitor);
-        model.addAttribute("totalVisitor", totalVisitor);
 
         return "/admin/index";
     }

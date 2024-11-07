@@ -84,6 +84,7 @@ public class VisitorService {
         }
         return 0;
     }
+    //전체 방문자수
     public Integer getTotalVisitorCount() {
         int total = 0;
         List<VisitorCount> visitorCountList = visitorCountRepository.findAll();
