@@ -1,5 +1,6 @@
 package com.lotte4.security;
 
+import com.lotte4.oauth2.MyOauth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +24,9 @@ public class SecurityConfig {
 
 
     @Bean
-    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
+    public SecurityFilterChain configure(HttpSecurity http, MyOauth2UserService myOauth2UserService) throws Exception {
+        
+        // 로그인 설정
         http.formLogin(login -> login
                 .loginPage("/member/login")
                 .successHandler(customAuthenticationSuccessHandler)
@@ -31,24 +34,36 @@ public class SecurityConfig {
                 .usernameParameter("uid")
                 .passwordParameter("pass"));
 
+        // 자동로그인 설정
         http.rememberMe(rememberMe -> rememberMe
                 .key("lotteonlogincookiekey")
                 .tokenValiditySeconds(60 * 60 * 24) // 24시간을 초단위로 설정
                 .rememberMeParameter("remember-me")
                 .userDetailsService(myUserDetailsService));
 
+        // 로그아웃 설정
         http.logout(logout -> logout
                 .invalidateHttpSession(true)
                 .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
                 .logoutSuccessHandler(customLogoutSuccessHandler)
-                .deleteCookies("JSESSIONID", "remember-me"));  // 쿠키 삭제);
+                .deleteCookies("JSESSIONID", "remember-me"));  // 로그아웃시 쿠키 삭제
 
+        // 인가 설정
         http.authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/market/**").permitAll()
                 .requestMatchers("/article/**").permitAll()
                 .requestMatchers("/intro/**").permitAll()
                 .requestMatchers("/user/**").permitAll()
                 .anyRequest().permitAll());
+
+        // 기타 보안 설정
+        http.oauth2Login(login->login
+                .loginPage("/member/login")
+                .defaultSuccessUrl("/index")
+                .userInfoEndpoint(endpoint->endpoint
+                        .userService(myOauth2UserService)
+                )
+        );
 
         http.csrf(csrf -> csrf.disable());
 

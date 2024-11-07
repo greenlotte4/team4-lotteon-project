@@ -54,16 +54,21 @@
             <span class="tit2">간편하게 시작하기</span>
         </div>
         <div class="sociallogin_section">
-            <input type="button" class="kakao_login">
-            <input type="button" class="naver_login">
-            <input type="button" class="google_login">
+            <a th:href="@{/oauth2/authorization/kakao}" class="kakao_login">
+                <img th:src="@{/images/member/kakaosocial_icon.png}" alt="Kakao Login" />
+            </a>
+            <a th:href="@{/oauth2/authorization/naver}" class="naver_login">
+                <img th:src="@{/images/member/naversocial_icon.png}" alt="Naver Login" />
+            </a>
+            <a th:href="@{/oauth2/authorization/google}" class="google_login">
+                <img th:src="@{/images/member/googlesocial_icon.png}" alt="Google Login" />
+            </a>
             <div class="login_text">
                 <span class="tit3">카카오</span>
                 <span class="tit4">네이버</span>
                 <span class="tit5">구글</span>
             </div>
         </div>
-
     </div>
     <!-- banner section-->
 
