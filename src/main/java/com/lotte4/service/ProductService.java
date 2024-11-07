@@ -35,6 +35,7 @@ import java.util.*;
         - 2024/10/31 전규찬 - JSON 문자열을 LinkedHashMap으로 변환하고 productDTO에 set하는 메서드 추가
                            - 파일 수정 발생 시 upload 에서 기존 파일 삭제 + 신규 파일 업로드, db에 파일명 업데이트
         - 2024/11/04 강중원 - 카테고리와 타입에 따른 정렬 기능 추가
+        - 2024/11/07 전규찬 - variantId 로 productId 찾는 메서드 추가
 */
 
 @Log4j2
@@ -761,4 +762,15 @@ public class ProductService {
         }
         return productDTOListPre;
     }
+
+    public int getProductIdByVariantId(int variantId) {
+
+        // variant_id로 ProductVariants 조회
+        ProductVariants productVariant = productVariantsRepository.findById(variantId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid variant ID: " + variantId));
+
+        return productVariant.getProduct().getProductId();
+    }
+
+
 }

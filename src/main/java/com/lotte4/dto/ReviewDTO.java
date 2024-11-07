@@ -26,7 +26,7 @@ public class ReviewDTO {
     private String regIp;
     private String img1;
     private String img2;
-    private String regDate;
+    private LocalDateTime regDate;
 
     // 추가 필드
     private ProductVariants productVariants;

@@ -6,6 +6,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
+
 @Setter
 @Getter
 @Builder
@@ -27,7 +29,7 @@ public class ReviewDocument {
     private String img1;
     private String img2;
 
-    @CreationTimestamp
-    private String regDate;
+    @CreatedDate
+    private LocalDateTime regDate;
 
 }
