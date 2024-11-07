@@ -6,6 +6,7 @@ import com.lotte4.dto.SellerInfoDTO;
 import com.lotte4.dto.UserDTO;
 import com.lotte4.entity.Address;
 import com.lotte4.entity.MemberInfo;
+import com.lotte4.entity.User;
 import com.lotte4.repository.MemberInfoRepository;
 import com.lotte4.repository.SellerInfoRepository;
 import jakarta.transaction.Transactional;
@@ -16,6 +17,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PutMapping;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
