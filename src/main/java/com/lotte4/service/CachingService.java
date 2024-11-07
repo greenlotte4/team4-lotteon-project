@@ -172,10 +172,33 @@ public class CachingService {
     @Cacheable(key = "'getProductCateListWithDepth'", value = "categories")
     public List<ProductCateChildDTO> getProductCateListWithDepth(int depth){
         List<ProductCate> productCateList = categoryRepository.findByDepth(depth);
+        //인덱스별로 정렬
+        List<ProductCate> productCateOrderByIndex = OrderCate(productCateList);
 
-        return productCateList.stream().map(ProductCateChildDTO::new).collect(Collectors.toList());
+        return productCateOrderByIndex.stream().map(ProductCateChildDTO::new).collect(Collectors.toList());
     }
 
+    public List<ProductCate> OrderCate(List<ProductCate> productCateList) {
+
+        for(ProductCate productCate : productCateList){
+            //만일 자식리스트가 있다면
+            if(!productCate.getChildren().isEmpty()){
+                //자식 리스트 먼저 정렬
+                List<ProductCate> OrderedChild = OrderCate(productCate.getChildren());
+                productCate.setChildren(OrderedChild);
+            }
+        }
+        //자식이 없거나 자식 정렬이 끝났으면
+        productCateList.sort(new Comparator<ProductCate>() {
+            @Override
+            public int compare(ProductCate o1, ProductCate o2) {
+                return Integer.compare(o1.getCateIndex(), o2.getCateIndex());
+            }
+        });
+        return productCateList;
+    }
+
+    // 삭제
     @CacheEvict(key = "'getProductCateListWithDepth'", value = "categories")
     public boolean deleteProductCate(String name){
 
@@ -190,6 +213,7 @@ public class CachingService {
 
     }
 
+    //삽입
     @CacheEvict(key = "'getProductCateListWithDepth'", value = "categories")
     public void insertProductCate(ProductRegisterCateDTO productCateDTO, String parent){
 
@@ -199,9 +223,30 @@ public class CachingService {
         //--> 제일 상위 카테고리가 아닌경우
         if(productCate.getDepth() > 1){
             ProductCate parentCate = categoryRepository.findByName(parent);
+            productCate.setCateIndex(parentCate.getChildren().size());
             productCate.setParent(parentCate);
         }
+        else{
+            productCate.setCateIndex(categoryRepository.findByDepth(1).size());
+        }
         categoryRepository.save(productCate);
+    }
+
+    @CacheEvict(key = "'getProductCateListWithDepth'", value = "categories")
+    public boolean updateProductCateOrder(List<Map<String, Object>> changes){
+        try {
+            for (Map<String, Object> change : changes) {
+                log.info("change: "+change);
+                log.info("name: "+change.get("name"));
+                ProductCate productCate = categoryRepository.findByName(change.get("name").toString());
+                productCate.setCateIndex(Integer.parseInt(change.get("order").toString()));
+                categoryRepository.save(productCate);
+            }
+            return true;
+        }
+        catch (Exception e) {
+            return false;
+        }
     }
 
 

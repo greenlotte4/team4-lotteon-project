@@ -31,6 +31,9 @@ public class ProductCateChildDTO implements Serializable {
     // 계층
     private int depth; // 추가함(241024 10:25)
 
+    // 인덱스
+    private int cateIndex; // 추가 강중원 2024.11.07
+
     private List<ProductCateChildDTO> children = new ArrayList<>();
 
     public ProductCateChildDTO(ProductCate productCate) {

@@ -18,9 +18,6 @@
     </style>
     <script th:src="@{https://code.jquery.com/jquery-3.7.1.js}"></script>
     <script th:src="@{https://code.jquery.com/ui/1.14.0/jquery-ui.js}"></script>
-
-
-
     <script>
         $( function() {
             $( ".sortable" ).sortable();
@@ -242,6 +239,104 @@
         }
     });
 
+
+
+    // 초기 상태 저장
+    let initialOrder = getOrderData();
+
+    // '수정하기' 버튼 클릭 시
+    $(".write-btn").on("click", function() {
+        let currentOrder = getOrderData();
+        let changes = getOrderChanges(initialOrder, currentOrder);
+
+        // 변경 사항이 있을 경우에만 서버로 전송
+        if (changes.length > 0) {
+            fetch("/lotteon/admin/config/category", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(changes)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert("변경되었습니다!");
+                    } else {
+                        alert("업데이트 중 오류가 발생했습니다.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("서버와의 연결 중 오류가 발생했습니다.");
+                });
+        } else {
+            alert("변경된 순서가 없습니다.");
+        }
+    });
+
+    // 리스트의 계층별 순서 데이터를 추출하는 함수
+    function getOrderData() {
+        let data = [];
+        $('#category-list > .category-item').each(function(index, item) {
+            let category = {
+                name: $(item).data('name'),
+                order: index, // 현재 순서
+                depth: 1,
+                children: []
+            };
+
+            // 2단계 하위 요소 추출
+            $(item).find('.deps2').each(function(subIndex, subItem) {
+                let subCategory = {
+                    name: $(subItem).data('name'),
+                    order: subIndex,
+                    depth: 2,
+                    children: []
+                };
+
+                // 3단계 하위 요소 추출
+                $(subItem).find('.deps3').each(function(subSubIndex, subSubItem) {
+                    let subSubCategory = {
+                        name: $(subSubItem).data('name'),
+                        order: subSubIndex,
+                        depth: 3
+                    };
+                    subCategory.children.push(subSubCategory);
+                });
+
+                category.children.push(subCategory);
+            });
+
+            data.push(category);
+        });
+        return data;
+    }
+
+    // 변경된 순서만 비교하여 추출하는 함수
+    function getOrderChanges(initialOrder, currentOrder) {
+        let changes = [];
+
+        function compareOrders(initItems, currItems) {
+            for (let i = 0; i < currItems.length; i++) {
+                // 초기와 현재 항목이 모두 존재할 때만 비교 수행
+                if (initItems[i] && currItems[i]) {
+                    // order 또는 name이 다른 경우 변경 사항으로 추가
+                    if (initItems[i].order !== currItems[i].order || initItems[i].name !== currItems[i].name) {
+                        changes.push(currItems[i]);
+                    }
+
+                    // 하위 요소가 있는 경우에만 재귀적으로 비교
+                    if (initItems[i].children && currItems[i].children) {
+                        compareOrders(initItems[i].children, currItems[i].children);
+                    }
+                }
+            }
+        }
+
+        compareOrders(initialOrder, currentOrder);
+        console.log(changes);
+        return changes;
+    }
 
 
 
