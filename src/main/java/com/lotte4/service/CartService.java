@@ -72,6 +72,7 @@ public class CartService {
         return cartDTOList;
     }
 
+    // TODO : LoggingAspect 추가
     // 장바구니 삭제
     public void deleteCartItems(int cartId){
         cartRepository.deleteById(cartId); // cartId로 cart 삭제
@@ -127,6 +128,10 @@ public class CartService {
     }
 
 
+    // 2024.11.07 황수빈 - 사용자 패턴분석을 위해 메서드 추가
+    public Cart selectCartById(int id) {
+        return cartRepository.findById(id).orElse(null);
+    }
 
 
 }

@@ -773,4 +773,14 @@ public class ProductService {
     }
 
 
+    public ProductVariants findProductVariantById(int id) {
+        Optional<ProductVariants> optionalProductVariant = productVariantsRepository.findById(id);
+
+        if (optionalProductVariant.isPresent()) {
+            return optionalProductVariant.get();
+        } else {
+            // 값이 없을 때 처리, 예외 던지기 또는 null 반환
+            throw new NoSuchElementException("Product variant with ID " + id + " not found");
+        }
+    }
 }

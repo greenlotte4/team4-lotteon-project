@@ -24,6 +24,15 @@ orderLink.addEventListener('click', function (event) {
 const showVariantId = document.querySelector('#showVariantId');
 const showSku = document.querySelector('#showSku');
 
+orderLink.addEventListener('click', function (event) {
+    event.preventDefault(); // a 태그의 기본 동작(링크 이동)을
+    const modal = document.getElementById('productModal');
+    if (modal) {
+        modal.classList.remove('Modalhidden'); // Modalhidden 클래스 제거
+    }
+})
+
+
 for (let i = 0; i < orderReviewBtns.length; i++) {
     orderReviewBtns[i].addEventListener('click', function (event) {
         event.preventDefault(); // a 태그의 기본 동작(링크 이동)을 막음

@@ -73,7 +73,6 @@ public class OrderService {
         log.info("orderDirectBuyDTO: " + orderDirectBuyDTO);
         return orderDirectBuyDTO;
     }
-    // TODO : 사용자 행동수집 type: order , uid 와 함께 mongoDB insert
     // 2024-11-04 수정 완료
     public void insertOrder(OrderDTO orderDTO) {
         Order order = new Order();

@@ -1,11 +1,7 @@
-package com.lotte4.dto;
+package com.lotte4.dto.mongodb;
 
 import com.lotte4.entity.ProductVariants;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.*;
-import org.hibernate.annotations.CurrentTimestamp;
 
 import java.time.LocalDateTime;
 

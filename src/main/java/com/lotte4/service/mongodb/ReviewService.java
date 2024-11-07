@@ -7,16 +7,15 @@
       - 2024/11/07 전규찬 - insertReview 메서드 생성
 */
 
-package com.lotte4.service.review;
+package com.lotte4.service.mongodb;
 
 import com.lotte4.document.ReviewDocument;
 
-import com.lotte4.dto.ProductVariantsDTO;
-import com.lotte4.dto.ReviewDTO;
-import com.lotte4.entity.Product;
+import com.lotte4.dto.mongodb.ReviewDTO;
+
 import com.lotte4.entity.ProductVariants;
 import com.lotte4.repository.ProductVariantsRepository;
-import com.lotte4.repository.review.ReviewRepository;
+import com.lotte4.repository.mongodb.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -97,6 +96,7 @@ public class ReviewService {
 
         return modelMapper.map(savedReview, ReviewDTO.class);
     }
+
 
     // 리뷰 업데이트
     public ReviewDTO updateReview(ReviewDTO reviewDTO) {
