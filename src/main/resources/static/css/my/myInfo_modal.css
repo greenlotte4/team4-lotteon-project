@@ -214,7 +214,7 @@ td > a {
 
 
 .myInfo_ModalTable input {
-    height: 22px;
+    height: 25px;
     border: 1px solid #e4eaec;
     background: white;
     text-indent: 6px;
@@ -230,6 +230,26 @@ td > a {
     display: inline-block;
     vertical-align: 6px;
     font-size: 12px;
+}
+
+#rating_td {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0 !important;
+    & > label {
+        margin-right: 10px;
+    }
+    & > div {
+        display: flex;
+        align-items: center;
+    }
+}
+
+.star-rating >img {
+    width: 120px;
+    height: 25px;
+    cursor: pointer;
 }
 
 /* 문의하기 input */

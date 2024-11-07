@@ -1,22 +1,38 @@
+/*
+     날짜 : 2024/11/06
+     이름 : 황수빈
+     내용 : ReviewService 생성
+
+     수정이력
+      - 2024/11/07 전규찬 - insertReview 메서드 생성
+*/
+
 package com.lotte4.service.mongodb;
 
 import com.lotte4.document.ReviewDocument;
 
 import com.lotte4.dto.mongodb.ReviewDTO;
+
 import com.lotte4.entity.ProductVariants;
 import com.lotte4.repository.ProductVariantsRepository;
 import com.lotte4.repository.mongodb.ReviewRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Log4j2
 @RequiredArgsConstructor
 @Service
 public class ReviewService {
@@ -112,5 +128,34 @@ public class ReviewService {
         }
 
         return false;
+    }
+
+    // 리뷰 사진 업로드
+    public String uploadReviewImage(MultipartFile file) {
+
+        String uploadDir = System.getProperty("user.dir") + "/uploads/review/";
+        File fileUploadPath = new File(uploadDir);
+
+        // 파일 업로드 디렉터리가 존재하지 않으면 디렉터리 생성
+        if (!fileUploadPath.exists()) {
+            fileUploadPath.mkdirs();
+        }
+
+        if (!file.isEmpty()) {
+            String oName = file.getOriginalFilename();
+            assert oName != null;
+            String ext = oName.substring(oName.lastIndexOf("."));
+            String sName = UUID.randomUUID().toString() + ext;
+
+            // 파일 저장
+            try {
+                file.transferTo(new File(uploadDir + "review_img_" + sName));
+            } catch (IOException e) {
+                log.error(e);
+            }
+            return "review_img_" + sName;
+        }
+        return null;
+
     }
 }

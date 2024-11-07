@@ -122,41 +122,45 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         console.log("inputNum = " + inputNum);
 
+                        let previousNum = parseInt(inputNum.value);
+                        console.log("previousNum = " + previousNum);
+
                         btn_minus.addEventListener('click', function (e) {
                             e.preventDefault();
 
                             // 숫자 입력란 호출
-                            const currentNum = e.target.nextElementSibling;
+                            let currentNum = parseInt(e.target.nextElementSibling.value);
                             console.log("currentNum = " + currentNum);
 
                             // 최소값보다 작거나 같으면 비활성화
-                            if (parseInt(currentNum.value) <= parseInt(currentNum.min)) {
+                            if (currentNum <= parseInt(e.target.nextElementSibling.min)) {
                                 e.target.disabled;
                             } else {
                                 // 클릭마다 1씩 감소, 제품 가격만큼 총 상품금액에서 차감
-                                currentNum.value = parseInt(currentNum.value) - 1;
+                                e.target.nextElementSibling.value = currentNum - 1;
                                 let currentVariantPrice = e.target.parentElement.nextElementSibling.textContent.replace(",", "").replace("원", "");
                                 totalPrice.textContent = (parseInt(totalPrice.textContent.replace(",", "").replace("원", "")) - parseInt(currentVariantPrice)).toLocaleString() + "원";
+                                previousNum = currentNum - 1;
+                                console.log("previousNum 마이너스" + previousNum)
                             }
                         });
 
                         btn_plus.addEventListener('click', function (e) {
                             e.preventDefault();
 
-                            const currentNum = e.target.previousElementSibling;
+                            let currentNum = parseInt(e.target.previousElementSibling.value);
                             console.log("currentNum = " + currentNum);
-                            if (parseInt(currentNum.value) >= parseInt(currentNum.max)) {
+                            if (currentNum >= parseInt(e.target.previousElementSibling.max)) {
                                 e.target.disabled;
                             } else {
-                                currentNum.value = parseInt(currentNum.value) + 1;
+                                e.target.previousElementSibling.value = currentNum + 1;
                                 let currentVariantPrice = e.target.parentElement.nextElementSibling.textContent.replace(",", "").replace("원", "");
                                 totalPrice.textContent = (parseInt(totalPrice.textContent.replace(",", "").replace("원", "")) + parseInt(currentVariantPrice)).toLocaleString() + "원";
+                                previousNum = currentNum + 1;
+                                console.log("previousNum 플러스" + previousNum)
                             }
 
                         });
-
-                        let previousNum = parseInt(inputNum.value);
-                        console.log("previousNum = " + previousNum);
 
                         // 숫자 입력으로 수량 조정 기능
                         inputNum.addEventListener('change', function (e) {
