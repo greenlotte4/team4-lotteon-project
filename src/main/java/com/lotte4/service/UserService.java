@@ -341,6 +341,24 @@ public class UserService {
         });
     }
 
+    // 최근 로그인 날짜 업데이트 - 2024-11-07 강은경
+    @Transactional
+    public void updateLastLoginDate(String username) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDate = LocalDateTime.now().format(formatter);
+
+        Optional<User> userOptional = userRepository.findByUid(username);
+
+        // User 객체가 존재하는지 확인 후 업데이트 수행
+        userOptional.ifPresent(user -> {
+            MemberInfo memberInfo = user.getMemberInfo();  // User의 MemberInfo 객체 가져오기
+            if (memberInfo != null) {
+                memberInfo.setLastLoginAt(formattedDate); // 최근 로그인 날짜 설정
+            }
+            userRepository.save(user); // 변경 사항 저장
+        });
+    }
 
 
 }
