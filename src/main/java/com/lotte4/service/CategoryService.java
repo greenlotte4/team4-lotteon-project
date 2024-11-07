@@ -1,9 +1,6 @@
 package com.lotte4.service;
 
-import com.lotte4.dto.CartDTO;
-import com.lotte4.dto.ProductCateChildDTO;
-import com.lotte4.dto.ProductCateDTO;
-import com.lotte4.dto.ProductRegisterCateDTO;
+import com.lotte4.dto.*;
 import com.lotte4.entity.ProductCate;
 import com.lotte4.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,9 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /*
@@ -72,4 +67,10 @@ public class CategoryService {
         return cachingService.deleteProductCate(name);
 
     }
+
+    public boolean updateProductCateOrder(List<Map<String, Object>> changes){
+        return cachingService.updateProductCateOrder(changes);
+    }
+
+
 }
