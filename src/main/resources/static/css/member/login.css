@@ -195,31 +195,28 @@ text-align: center;
   flex-wrap: wrap;
 }
 
-.kakao_login{
+.kakao_login > img{
   width: 53px;
   height: 53px;
   border: none;
-  background-image: url(/lotteon/images/member/kakaosocial_icon.png);
   background-size: 100% 100%;
   margin: 10px 20px;
   border-radius: 24px;
   cursor: pointer;
 }
-.naver_login{
+.naver_login > img{
   width: 53px;
   height: 53px;
   border: none;
-  background-image: url(/lotteon/images/member/naversocial_icon.png);
   background-size: 100% 100%;
   margin: 10px 20px;
   cursor: pointer;
   border-radius: 27px;
 }
-.google_login{
+.google_login > img{
   width: 53px;
   height: 53px;
   border: none;
-  background-image: url(/lotteon/images/member/googlesocial_icon.png);
   background-size: 100% 100%;
   margin: 10px 20px;
   cursor: pointer;

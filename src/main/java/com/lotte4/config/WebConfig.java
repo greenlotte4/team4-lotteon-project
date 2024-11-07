@@ -3,6 +3,7 @@ package com.lotte4.config;
 import com.lotte4.interceptor.AppInfoInterceptor;
 import com.lotte4.service.CategoryService;
 import com.lotte4.service.ProductService;
+import com.lotte4.service.VisitorService;
 import com.lotte4.service.admin.config.BannerService;
 import com.lotte4.service.admin.config.InfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,8 @@ public class WebConfig implements WebMvcConfigurer {
     private CategoryService categoryService;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private VisitorService visitorService;
 
     // 업로드된 이미지를 html에서 가져오기 위해서
     @Override
@@ -36,7 +39,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new AppInfoInterceptor(appInfo, infoService, bannerService, categoryService,productService));
+        registry.addInterceptor(new AppInfoInterceptor(appInfo, infoService, bannerService, categoryService,productService,visitorService));
 
     }
 }

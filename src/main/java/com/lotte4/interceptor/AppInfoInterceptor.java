@@ -5,6 +5,7 @@ import com.lotte4.dto.*;
 import com.lotte4.dto.admin.config.InfoDTO;
 import com.lotte4.service.CategoryService;
 import com.lotte4.service.ProductService;
+import com.lotte4.service.VisitorService;
 import com.lotte4.service.admin.config.BannerService;
 import com.lotte4.service.admin.config.InfoService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,6 +31,7 @@ public class AppInfoInterceptor implements HandlerInterceptor {
     private final BannerService bannerService;
     private final CategoryService categoryService;
     private final ProductService productService;
+    private final VisitorService visitorService;
 
 
 
@@ -47,6 +49,8 @@ public class AppInfoInterceptor implements HandlerInterceptor {
             modelAndView.addObject("productCateDTOList", productCateDTOList);
             List<ProductListDTO> SoldList = productService.getProductBest();
             modelAndView.addObject("SoldList", SoldList);
+            visitorService.registerVisit(request);
+
         }
     }
     @Override

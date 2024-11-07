@@ -220,6 +220,24 @@ public class ConfigController {
         return "success";
     }
 
+    @PutMapping("/admin/config/category")
+    public ResponseEntity<String> updateCategoryOrder(@RequestBody List<Map<String, Object>> changes) {
+        // changes 리스트를 처리하여 카테고리 순서 업데이트 로직 추가
+        // 각 Map에는 'name', 'order', 'depth' 등이 포함됨
+
+        log.info("changes: "+changes);
+        boolean result = categoryService.updateProductCateOrder(changes);
+        if(result) {
+            // 성공적인 업데이트 후 응답
+            return ResponseEntity.ok("카테고리 순서가 업데이트되었습니다.");
+        }
+        else{
+            // 실패한 경우, 400 Bad Request 상태 코드와 메시지 반환
+            return ResponseEntity.badRequest().body("카테고리 순서 업데이트에 실패했습니다.");
+        }
+    }
+
+
     @DeleteMapping("/admin/config/category")
     @ResponseBody
     public String AdminConfigCategoryDelete(@RequestBody Map<String, String> requestBody) {

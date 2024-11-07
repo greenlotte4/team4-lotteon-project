@@ -73,7 +73,6 @@ public class OrderService {
         log.info("orderDirectBuyDTO: " + orderDirectBuyDTO);
         return orderDirectBuyDTO;
     }
-    // TODO : LoggingAspect 추가
     // 2024-11-04 수정 완료
     public void insertOrder(OrderDTO orderDTO) {
         Order order = new Order();
@@ -222,7 +221,7 @@ public class OrderService {
     }
 
     // orderItems 의 variantId를 받아와 조회하고 DTO로 변환 후 리스트에 담아 반환
-    public List<OrderItemsDTO> selectProductCompany(List<OrderItemsDTO> orderItems) {
+    public List<OrderItemsDTO> getMissingProductVariants(List<OrderItemsDTO> orderItems) {
 
         for (OrderItemsDTO orderItem : orderItems) {
             Optional<ProductVariants> optional = productVariantsRepository.findById(orderItem.getVariantId());

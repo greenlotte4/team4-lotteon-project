@@ -37,7 +37,7 @@ public class User {
     private String createdAt;
     private String leaveDate;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "member_info_id")
     private MemberInfo memberInfo;
 

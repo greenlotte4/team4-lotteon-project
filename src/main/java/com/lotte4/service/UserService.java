@@ -323,24 +323,24 @@ public class UserService {
         }
     }
 
-    // 로그인 날짜 업데이트
-    public void updateLastLogin(String uid) {
-        // uid로 User 엔티티 조회
-        Optional<User> optionalUser = userRepository.findByUid(uid);
+    // 최근 로그인 날짜 업데이트 - 2024-11-07 강은경
+    @Transactional
+    public void updateLastLoginDate(String username) {
 
-        optionalUser.ifPresent(user -> {
-            // User의 memberInfo가 존재할 경우에만 lastLoginAt 업데이트
-            MemberInfo memberInfo = user.getMemberInfo();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDate = LocalDateTime.now().format(formatter);
+
+        Optional<User> userOptional = userRepository.findByUid(username);
+
+        // User 객체가 존재하는지 확인 후 업데이트 수행
+        userOptional.ifPresent(user -> {
+            MemberInfo memberInfo = user.getMemberInfo();  // User의 MemberInfo 객체 가져오기
             if (memberInfo != null) {
-                // 현재 시간으로 lastLoginAt 업데이트
-                memberInfo.setLastLoginAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                memberInfo.setLastLoginAt(formattedDate); // 최근 로그인 날짜 설정
             }
-
-            // 변경 사항 저장
-            userRepository.save(user);
+            userRepository.save(user); // 변경 사항 저장
         });
     }
-
 
 
 }

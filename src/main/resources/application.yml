@@ -77,6 +77,40 @@ spring:
                     timeout: 5000
                     starttls:
                         enable: true
+
+    security:
+        oauth2:
+            client:
+                registration:
+                    google:
+                        client-id: 735533272101-jmn7ronqp4q43gbaihgb652kbs9skr7f.apps.googleusercontent.com
+                        client-secret: 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
+                        redirect-uri: http://ec2-13-125-226-80.ap-northeast-2.compute.amazonaws.com:8080/lotteon/login/oauth2/code/google
+                        scope:
+                            - email
+                            - profile
+                    kakao:
+                        client-id: c56f604e9e2dbda714e9198ca2579d5a
+                        client-secret: THvJHmr3e2C1WyezpEQzCZHavkapYBTt
+                        scope:
+                            - profile_nickname
+                            - account_email
+                        redirect-uri: http://ec2-13-125-226-80.ap-northeast-2.compute.amazonaws.com:8080/lotteon/login/oauth2/code/kakao
+                        authorization-grant-type: authorization_code
+                        client-authentication-method: client_secret_post
+                        client-name: Kakao
+                provider:
+                    google:
+                        authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
+                        token-uri: https://oauth2.googleapis.com/token
+                        user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+                        user-name-attribute: name
+                    kakao:
+                        authorization-uri: https://kauth.kakao.com/oauth/authorize
+                        token-uri: https://kauth.kakao.com/oauth/token
+                        user-info-uri: https://kapi.kakao.com/v2/user/me
+                        user-name-attribute: id
+
     data:
 
         redis:
