@@ -8,6 +8,7 @@ import com.lotte4.service.admin.config.BannerService;
 import com.lotte4.service.admin.config.InfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -41,5 +42,14 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new AppInfoInterceptor(appInfo, infoService, bannerService, categoryService,productService,visitorService));
 
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/sse/**") // SSE URL 패턴에 대해 CORS 설정
+                .allowedOrigins("http://localhost:8080") // 클라이언트 도메인
+                .allowedMethods("GET")
+                .allowedHeaders("*")
+                .allowCredentials(true);
     }
 }
