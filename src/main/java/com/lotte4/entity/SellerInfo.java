@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 
      수정이력
       - 2024/11/03 강은경 - email 속성 추가
+      - 2024/11/07 전규찬 - grade 속성 추가
 */
 
 @Getter
@@ -51,6 +52,8 @@ import java.time.LocalDateTime;
     private String updateAt;
     // 상태
     private int state;
+    // 등급
+    private String grade;
 
     public SellerInfoDTO toDTO(){
         return SellerInfoDTO.builder()
@@ -65,6 +68,7 @@ import java.time.LocalDateTime;
                 .regIp(regIp)
                 .updateAt(updateAt)
                 .state(state)
+                .grade(grade)
                 .build();
     }
 

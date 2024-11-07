@@ -14,9 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 /*
@@ -123,6 +121,11 @@ public class DeliveryService {
         log.info("Saved delivery: " + savedDeliveryDTO);
 
         return savedDeliveryDTO;
+    }
+
+    public String getDeliveryContentByOrderItem(OrderItems orderItems) {
+        Delivery delivery = deliveryRepository.findByOrderItem(orderItems);
+        return delivery.getContent();
     }
 
 }
