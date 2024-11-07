@@ -57,7 +57,7 @@ main {
   text-align: center;
   /* 텍스트를 가운데 정렬 */
   margin : 0 auto;
-  padding-bottom : 30px;
+  padding-bottom: 11px;
 }
 .tit {
   font-size: 30px;
@@ -124,10 +124,10 @@ main {
 
 .loginbtn {
   height: 58px;
-  width: 328px;
+  width: 329px;
   border: none;
   line-height: 60px;  /* 버튼 텍스트의 세로 중앙 정렬 */
-  margin-top: 15px;
+  margin-top: 9px;
   color: #fbf2ff;
   background-color: #ef2a23;
   border-radius: 10px;
@@ -231,7 +231,7 @@ text-align: center;
 }
 
 .tit2 {
-  font-size: 20px;
+  font-size: 17px;
 }
 
 .login_text {

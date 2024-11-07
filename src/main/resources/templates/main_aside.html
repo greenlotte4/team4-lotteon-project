@@ -10,13 +10,17 @@
         let aside = document.querySelector('.aside');
         aside.style.height = height+"px";
 
-
+ㅃ
     });
 </script>
 <aside class="aside">
     <!-- 베스트상품 배너 -->
     <article class="best">
-        <h1><i class="fas fa-crown"></i>베스트상품</h1>
+        <div class="best-item-container">
+            <i><img th:src="@{/images/main/best_item.jpg}" class="best-item"></i>
+            <h1>베스트 상품</h1>
+        </div>
+
         <ol>
             <!-- 상품만큼 반복 -->
             <!-- 반복시 i값(인덱스) 증가 필요 -->
