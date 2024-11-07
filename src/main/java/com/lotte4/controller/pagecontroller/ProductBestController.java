@@ -69,6 +69,7 @@ public class ProductBestController {
         for (SseEmitter emitter : emitters) {
             try {
                 emitter.send(SseEmitter.event().name("top5").data(currentTop5));
+                log.info("emitter sent to top5");
             } catch (Exception e) {
                 emitters.remove(emitter);
                 log.error("Error sending update to client, removing emitter: {}", emitter, e);
