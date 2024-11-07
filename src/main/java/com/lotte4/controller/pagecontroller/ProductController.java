@@ -4,23 +4,19 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lotte4.dto.*;
 import com.lotte4.entity.Cart;
-import com.lotte4.entity.ProductVariants;
 import com.lotte4.entity.User;
 import com.lotte4.service.CartService;
 import com.lotte4.service.ProductService;
 import com.lotte4.service.UserService;
-import com.lotte4.service.review.ReviewService;
+import com.lotte4.service.mongodb.ReviewService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -122,13 +118,12 @@ public class ProductController {
     // 장바구니 insert
     @ResponseBody
     @PostMapping("/product/cart")
-    public ResponseEntity<String> addCart(@RequestBody CartResponseDTO cartResponseDTO, Principal principal) {
+    public ResponseEntity<String> addCart( @RequestBody CartResponseDTO cartResponseDTO,  Principal principal) {
 
         // 로그인 안 했으면 로그인 페이지로 리다이렉트
         if (principal == null) {
             return ResponseEntity.ok("noUser");
         }
-
         log.info("cartResponseDTO : " + cartResponseDTO);
         log.info("cartResponseDTO : " + cartResponseDTO.getProductVariants().get(0));
 
@@ -225,8 +220,6 @@ public class ProductController {
         }
 
         List<ProductDTO> productDTOListPre = productService.getProductListWithKeyword(keyword, filters, minPrice, maxPrice);
-
-
         List<ProductDTO> productDTOList = productService.orderProductList(productDTOListPre,type);
         log.info(productDTOList);
 
@@ -240,12 +233,10 @@ public class ProductController {
     }
 
     @GetMapping("/product/view")
-    public String view(int productId, Model model, HttpSession session) throws JsonProcessingException {
+    public String view(int productId, Model model, HttpSession session, Principal principal) throws JsonProcessingException {
 
         Product_V_DTO productDTO = productService.getProduct_V_ById(productId);
-
         List<ProductVariantsWithoutProductDTO> productVariants = productDTO.getProductVariants();
-
         LinkedHashMap<String, List<String>> options = (LinkedHashMap<String, List<String>>) productDTO.getOptions();
 
         String productDTOJson = objectMapper.writeValueAsString(productDTO);

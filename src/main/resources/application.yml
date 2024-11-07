@@ -78,6 +78,7 @@ spring:
                     starttls:
                         enable: true
     data:
+
         redis:
             lettuce:
                 pool:

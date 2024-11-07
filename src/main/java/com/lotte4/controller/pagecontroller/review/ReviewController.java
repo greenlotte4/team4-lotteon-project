@@ -1,8 +1,7 @@
 package com.lotte4.controller.pagecontroller.review;
 
-import com.lotte4.document.ReviewDocument;
-import com.lotte4.dto.ReviewDTO;
-import com.lotte4.service.review.ReviewService;
+import com.lotte4.dto.mongodb.ReviewDTO;
+import com.lotte4.service.mongodb.ReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
