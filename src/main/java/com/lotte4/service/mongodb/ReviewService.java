@@ -1,12 +1,11 @@
-package com.lotte4.service.review;
+package com.lotte4.service.mongodb;
 
 import com.lotte4.document.ReviewDocument;
 
-import com.lotte4.dto.ProductVariantsDTO;
-import com.lotte4.dto.ReviewDTO;
+import com.lotte4.dto.mongodb.ReviewDTO;
 import com.lotte4.entity.ProductVariants;
 import com.lotte4.repository.ProductVariantsRepository;
-import com.lotte4.repository.review.ReviewRepository;
+import com.lotte4.repository.mongodb.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -81,6 +80,7 @@ public class ReviewService {
 
         return modelMapper.map(savedReview, ReviewDTO.class);
     }
+
 
     // 리뷰 업데이트
     public ReviewDTO updateReview(ReviewDTO reviewDTO) {

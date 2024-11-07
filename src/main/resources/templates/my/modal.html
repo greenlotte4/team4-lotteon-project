@@ -27,6 +27,7 @@
                         <td>[[${orderDTO.buyDate.toLocalDate()}]]</td>
                         <td>
                             <div class="myInfo_productInfo">
+
                                 <div th:each="item : ${orderItems}">
                                     <div>
                                         <img th:src="@{'/uploads/product/' + ${item.productVariants.product.img1}}"

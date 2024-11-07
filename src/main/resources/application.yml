@@ -112,6 +112,7 @@ spring:
                         user-name-attribute: id
 
     data:
+
         redis:
             lettuce:
                 pool:
