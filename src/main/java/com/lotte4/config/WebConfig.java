@@ -47,7 +47,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/sse/**") // SSE URL 패턴에 대해 CORS 설정
-                .allowedOrigins("http://13.125.226.80:8080") // 클라이언트 도메인
+                .allowedOrigins("http://13.125.226.80:8080","http://localhost:8080") // 클라이언트 도메인
                 .allowedMethods("GET")
                 .allowedHeaders("*")
                 .allowCredentials(true);
