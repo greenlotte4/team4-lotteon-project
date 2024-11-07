@@ -41,7 +41,7 @@
 }
 
 .aside > .best > h1 {
-  font-size: 14px;
+  font-size: 18px;
   font-weight: bold;
   color: #111;
   margin: 6px;
@@ -201,4 +201,29 @@
 }
 .aside > .best > ol > li > a .dis_price > ins::after {
   content: "원";
+}
+
+.best-item-container {
+  display: flex;
+  align-items: center; /* 세로 중앙 정렬 */
+  gap: 10px; /* 이미지와 텍스트 사이의 간격 조절 */
+}
+
+.best-item-container h1 {
+  font-size: 18px;
+  font-weight: bold;
+  color: #111;
+  margin: 6px;
+  margin-left: -6px;
+  margin-bottom: 3px;
+}
+
+.best-item {
+  font-size: 0;
+  width: 30px;
+  height: 30px;
+  padding: 11px;
+  margin-top: 8px;
+  margin-left: 6px;
+  margin-right: -10px;
 }

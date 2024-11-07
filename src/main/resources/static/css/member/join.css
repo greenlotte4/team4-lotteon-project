@@ -16,13 +16,13 @@ main {
 }
 
 .info1 {
-  font-size: 30px;
+  font-size: 28px;
   color: #808080;
   margin-bottom: 20px;
 }
 
 .info2 {
-  font-size: 40px;
+  font-size: 39px;
   font-weight: 540;
 }
 
@@ -38,7 +38,7 @@ main {
 
 
 .custjoin, .selljoin {
-  width: 248px;
+  width: 331px;
   height: 200px;
   border: 2px solid #e3e3e3;
   box-sizing: border-box;
@@ -56,25 +56,25 @@ main {
 
 .customer_join {
   width: 100%;
-  background-color: #cc3434;
+  background-color: #d82a2a;
   color: #e9e9e9;
   height: 44px;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 18px;
+  font-size: 17px;
 
 }
 
 .seller_join {
   width: 100%;
-  background-color: #31859c;
+  background-color: #d82a2a;
   color: #e9e9e9;
   height: 44px;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 18px;
+  font-size: 17px;
 }
 
 .joininfo {
@@ -97,27 +97,47 @@ main {
 
 }
 
+.join1 {
+  color: #464646;
+  font-size: 16px;
+  font-weight: 600;
+}
+
 .join2 {
   color: #808080;
   text-align: left !important;
+  font-size: 14px;
+  margin-top: 4px;
 }
 
 .join4 {
   color: #808080;
   text-align: left !important;
+  font-size: 14px;
+  margin-top: 4px;
 }
 
 .join-btn {
-  padding: 10px 20px;
-  background-color: #BFBFBF;
+  padding: 9px 41px;
+  border: 1px solid #BFBFBF;
   color: black;
-  border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px;
   text-decoration: none;
 
 }
+
+.join-btn:hover {
+  border-color: #464646;
+  color: #464646;
+}
+
+.info-detail {
+  color: #d82a2a;
+  font-weight: bold;
+}
+
 
 /* 푸터영역 */
 footer {
