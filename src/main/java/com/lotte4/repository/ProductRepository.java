@@ -21,6 +21,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     List<Product> findTop8ByOrderByDiscountDesc();
     List<Product> findTop8ByOrderByRatingDesc();
     List<Product> findTop8ByOrderByCreatedAtDesc();
+    List<Product> findTop5ByOrderBySoldDesc();
 
 
 
