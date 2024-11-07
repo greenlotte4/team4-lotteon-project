@@ -20,7 +20,7 @@ public class RecommendationController {
     @GetMapping("/{productId}")
     public ResponseEntity<List<RecommendationResult>> getRecommendations(@PathVariable int productId, @RequestParam String currentUserId) {
         List<RecommendationResult> recommendations = recommendationService.getRecommendedProducts(productId, currentUserId);
-        log.info("여기는들어오나"+recommendations);
+        log.info("여기는 api"+recommendations);
         return ResponseEntity.ok(recommendations);
     }
 }

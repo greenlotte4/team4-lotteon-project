@@ -21,4 +21,5 @@ public class UserLogService {
         return userLogRepository.save(userLogDocument); // insert 여부 파악을 위해 Return 값으로 설정
     }
 
+
 }

@@ -84,6 +84,32 @@
                 </div>
             </section>
 
+
+            <section class="product-details">
+                <h3>연관상품</h3>
+                <article class="recommend-article" th:each="product : ${recommendedProducts}">
+                <a th:href="@{/product/view(productId = ${product.productId})}" >
+                    <div class="thumb">
+                        <img th:src="@{'/uploads/product/' + ${product.img1}}" alt="상품이미지">
+                    </div>
+                    <h2>[[${product.name}]]</h2>
+                    <p>[[${product.description}]]</p>
+                    <div class="org_price">
+                        <del>[[${product.price}]]</del>
+                        <span>[[${product.discount}]]%</span>
+                    </div>
+                    <div class="dis_price">
+                        <ins>[[${#numbers.formatDecimal(product.price * (1 - product.discount / 100.0), 0, 0)}]]</ins>
+                        <th:block th:if="${product.deliveryFee} eq 0">
+                            <span class="free">무료배송</span>
+                        </th:block>
+
+                    </div>
+
+                </a>
+                </article>
+
+            </section>
             <section class="product-details">
                 <h3>상품정보</h3>
                 <div class="product-detail-image">
@@ -255,7 +281,6 @@
         nextButton.onclick = () => loadReviews(currentPage + 1);
         paginationDiv.appendChild(nextButton);
     }
-
     // 초기 리뷰 로드
     document.addEventListener("DOMContentLoaded", () => loadReviews(currentPage));
 
