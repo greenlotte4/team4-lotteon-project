@@ -32,6 +32,17 @@
                 <img th:src="@{'/uploads/product/' + ${item.productVariants.product.img1}}" alt="">
                 <div>
                   <a href="#" class="orderSellerBtn" th:text="${item.productVariants.product.company}"></a>
+                  <!-- 해당 제품에 대한 판매자 정보를 modal 에 출력하기 위한 데이터 보관 -->
+                  <input class="seller_grade" type="hidden" th:value="${item.productVariants.product.sellerInfoId.grade}">
+                  <input class="seller_comName" type="hidden" th:value="${item.productVariants.product.sellerInfoId.comName}">
+                  <input class="seller_ceo" type="hidden" th:value="${item.productVariants.product.sellerInfoId.ceo}">
+                  <input class="seller_hp" type="hidden" th:value="${item.productVariants.product.sellerInfoId.hp}">
+                  <input class="seller_fax" type="hidden" th:value="${item.productVariants.product.sellerInfoId.fax}">
+                  <input class="seller_email" type="hidden" th:value="${item.productVariants.product.sellerInfoId.email}">
+                  <input class="seller_comNumber" type="hidden" th:value="${item.productVariants.product.sellerInfoId.comNumber}">
+                  <input class="seller_zipCode" type="hidden" th:value="${item.productVariants.product.sellerInfoId.address.zipCode}">
+                  <input class="seller_addr1" type="hidden" th:value="${item.productVariants.product.sellerInfoId.address.addr1}">
+                  <input class="seller_addr2" type="hidden" th:value="${item.productVariants.product.sellerInfoId.address.addr2}">
                   <a th:href="@{/product/list}" th:text="${item.productVariants.sku}"></a>
                   <p>수량: [[${item.count}]]개</p>
                   <p><strong th:text="${#numbers.formatInteger(item.originPrice, 1, 'COMMA')} + '원'"></strong></p>

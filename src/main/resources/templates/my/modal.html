@@ -20,7 +20,6 @@
                         <th>날짜</th>
                         <th>상품정보</th>
                         <th>상태</th>
-                        <th>확인/신청</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -28,24 +27,30 @@
                         <td>[[${orderDTO.buyDate.toLocalDate()}]]</td>
                         <td>
                             <div class="myInfo_productInfo">
-                                <!--                                <img th:src="@{'/uploads/product/' + ${item.productVariants.product.img1}}" alt="">-->
                                 <div th:each="item : ${orderItems}">
-                                    <p>주문번호: [[${orderDTO.orderId}]]</p>
-                                    <p th:text="${item.productVariants.product.company}"></p>
-                                    <p th:text="${item.productVariants.sku}"></p>
-                                    <p>수량: [[${item.count}]]개</p>
-                                    <p><strong
-                                            th:text="${#numbers.formatInteger(item.originPrice, 1, 'COMMA')} + '원'"></strong>
-                                    </p>
+                                    <div>
+                                        <img th:src="@{'/uploads/product/' + ${item.productVariants.product.img1}}"
+                                             alt="">
+                                    </div>
+                                    <div>
+                                        <p>주문번호: [[${orderDTO.orderId}]]</p>
+                                        <p th:text="${item.productVariants.product.company}"></p>
+                                        <p th:text="${item.productVariants.sku}"></p>
+                                        <p>수량: [[${item.count}]]개</p>
+                                        <p><strong
+                                                th:text="${#numbers.formatInteger(item.originPrice, 1, 'COMMA')} + '원'"></strong>
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </td>
-                        <td>배송완료</td>
-                        <td class="myInfo_product_buttons">
-                            <button>수취확인</button>
-                            <button>상품평쓰기</button>
-                            <button>반품신청</button>
-                            <button>교환신청</button>
+                        <td>
+                            <div class="orderItem_status">
+                                <div th:each="item : ${orderItems}">
+                                    <!-- 지금은 status 값이 숫자라서 각 숫자마다 알맞은 상태안내멘트를 매칭시켜줘야함 -->
+                                    <p th:if="${item.status == 0}">배송 대기중</p>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                     </tbody>
@@ -56,25 +61,25 @@
                     <tr>
                         <td>이름</td>
                         <td>
-                            <span>홍길동</span>
+                            <span th:text="${orderDTO.recipName}"></span>
                         </td>
                     </tr>
                     <tr>
                         <td>연락처</td>
                         <td>
-                            <span>010-1234-1001</span>
+                            <span th:text="${orderDTO.recipHp}"></span>
                         </td>
                     </tr>
                     <tr>
                         <td>주소</td>
                         <td>
-                            <span>[210**] 부산광역시 부산진구 대연동 121 10층 1004호</span>
+                            <span th:text="${'[' + orderDTO.recipZip.substring(0, 3) + '**' + ']' + ' ' + orderDTO.recipAddr1 + ' ' + orderDTO.recipAddr2}"></span>
                         </td>
                     </tr>
                     <tr>
                         <td>배송 요청 사항</td>
                         <td>
-                            <span>없음</span>
+                            <span th:text="${content}"></span>
                         </td>
                     </tr>
                 </table>
@@ -98,49 +103,49 @@
                     <tr>
                         <td>판매자 등급</td>
                         <td>
-                            <span>파워 딜러</span>
+                            <span id="sellerGrade"></span>
                         </td>
                     </tr>
                     <tr>
                         <td>상호</td>
                         <td>
-                            <span>(주) 상호명</span>
+                            <span id="sellerComName"></span>
                         </td>
                     </tr>
                     <tr>
                         <td>대표자</td>
                         <td>
-                            <span>홍길동</span>
+                            <span id="sellerCeo"></span>
                         </td>
                     </tr>
                     <tr>
                         <td>전화번호</td>
                         <td>
-                            <span>051-123-1000</span>
+                            <span id="sellerHp"></span>
                         </td>
                     </tr>
                     <tr>
                         <td>FAX</td>
                         <td>
-                            <span>051-123-1001</span>
+                            <span id="sellerFax"></span>
                         </td>
                     </tr>
                     <tr>
                         <td>Email</td>
                         <td>
-                            <span>company@abc.com</span>
+                            <span id="sellerEmail"></span>
                         </td>
                     </tr>
                     <tr>
                         <td>사업자번호</td>
                         <td>
-                            <span>123-12-123457</span>
+                            <span id="sellerComNumber"></span>
                         </td>
                     </tr>
                     <tr>
                         <td>영업소재지</td>
                         <td>
-                            <span>[210**] 부산광역시 부산진구 대연동 121 10층 1004호</span>
+                            <span id="sellerAddress"></span>
                         </td>
                     </tr>
                 </table>

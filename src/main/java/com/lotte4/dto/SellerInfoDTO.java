@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 
      수정이력
       - 2024/11/03 강은경 - email 속성 추가
+      - 2024/11/07 전규찬 - grade 속성 추가
 */
 @Data
 @NoArgsConstructor
@@ -48,6 +49,8 @@ public class SellerInfoDTO {
     private String updateAt;
     // 상태
     private int state;
+    // 등급
+    private String grade;
 
     public SellerInfoDTO(SellerInfo sellerInfo) {
         if (sellerInfo != null) {
@@ -61,6 +64,7 @@ public class SellerInfoDTO {
             this.regIp = sellerInfo.getRegIp();
             this.updateAt = sellerInfo.getUpdateAt() != null ? sellerInfo.getUpdateAt().toString() : null;
             this.state = sellerInfo.getState();
+            this.grade = sellerInfo.getGrade();
 
             // Address 매핑
             if (sellerInfo.getAddress() != null) {
@@ -83,6 +87,7 @@ public class SellerInfoDTO {
                 .regIp(regIp)
                 .updateAt(updateAt)
                 .state(state)
+                .grade(grade)
                 .build();
     }
 

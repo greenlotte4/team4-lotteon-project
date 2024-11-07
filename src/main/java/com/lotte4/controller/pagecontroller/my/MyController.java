@@ -2,13 +2,16 @@ package com.lotte4.controller.pagecontroller.my;
 
 import com.lotte4.dto.*;
 import com.lotte4.entity.MemberInfo;
+import com.lotte4.entity.OrderItems;
 import com.lotte4.security.MyUserDetails;
+import com.lotte4.service.DeliveryService;
 import com.lotte4.service.MemberInfoService;
 import com.lotte4.service.OrderService;
 import com.lotte4.service.UserService;
 import com.lotte4.service.review.ReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -38,6 +41,8 @@ public class MyController {
     private final MemberInfoService memberInfoService;
     private final UserService userService;
     private final OrderService orderService;
+    private final DeliveryService deliveryService;
+    private final ModelMapper modelMapper;
 
 
     @GetMapping("/home")
@@ -48,10 +53,14 @@ public class MyController {
             OrderDTO orderDTO = orderService.selectRecentOrder(memberInfo);
             List<OrderItemsDTO> orderItemsDTOs = orderDTO.getOrderItems();
 
-            List<OrderItemsDTO> orderItems = orderService.selectProductCompany(orderItemsDTOs);
+            // variantsId 만 있는 orderItemsDTOs 의 variantsDTO 채워주기
+            List<OrderItemsDTO> orderItems = orderService.getMissingProductVariants(orderItemsDTOs);
+
+            String content = deliveryService.getDeliveryContentByOrderItem(modelMapper.map(orderItems.get(0), OrderItems.class));
 
             model.addAttribute("orderDTO", orderDTO);
             model.addAttribute("orderItems", orderItems);
+            model.addAttribute("content", content);
             return "/my/home";
         }
         return "/my/home";
