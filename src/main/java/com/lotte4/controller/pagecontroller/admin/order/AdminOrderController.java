@@ -3,7 +3,11 @@ package com.lotte4.controller.pagecontroller.admin.order;
 import com.lotte4.controller.pagecontroller.CSB.OrderController;
 import com.lotte4.dto.DeliveryDTO;
 import com.lotte4.dto.OrderDTO;
+import com.lotte4.dto.OrderItemsDTO;
 import com.lotte4.dto.UserDTO;
+import com.lotte4.entity.OrderItems;
+import com.lotte4.repository.OrderItemsRepository;
+import com.lotte4.repository.OrderRepository;
 import com.lotte4.service.DeliveryService;
 import com.lotte4.service.OrderService;
 import lombok.AllArgsConstructor;
@@ -29,32 +33,23 @@ public class AdminOrderController {
 
     @GetMapping("/admin/order/list")
     public String orderList(Model model) {
-        List<OrderDTO> orderDTOS = orderService.selectAllOrders();
-        model.addAttribute("orderDTOS", orderDTOS);
-        log.info("orderDTOS = "+ orderDTOS);
 
-        List<UserDTO> userDTOS = orderService.selectAllUser();
-        model.addAttribute("userDTOS", userDTOS);
-        log.info("userDTOS = "+ userDTOS);
+        model.addAttribute("orderDTO", orderService.getAllOrderItems());
+
+        log.info("TetastajksdeaT = " + orderService.getAllOrderItems());
 
         return "/admin/order/list";
     }
 
     @GetMapping("admin/order/list/{type}")
     public String orderSelect(Model model,@PathVariable String type) {
-        List<OrderDTO> orderDTOS = orderService.selectAllOrders();
-        model.addAttribute("orderDTOS", orderDTOS);
-        log.info("orderDTOS = " + orderDTOS);
+
         return "/admin/order/list";
     }
 
 
     @GetMapping("/admin/order/delivery")
     public String orderDelivery(Model model) {
-
-//        model.addAttribute("deliverys", deliveryService.selectDeliveries());
-//        log.info("deliverys = "+ deliveryService.selectDeliveries());
-
         return "/admin/order/delivery";
     }
 

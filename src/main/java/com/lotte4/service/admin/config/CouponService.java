@@ -98,4 +98,7 @@ public class CouponService {
         return couponDTO;
     }
 
+    public List<CouponDTO> getCouponsByMemberInfoId(int memberInfoId) {
+        return couponRepository.findCouponsByMemberInfoId(memberInfoId);
+    }
 }

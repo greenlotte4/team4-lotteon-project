@@ -1,15 +1,20 @@
 package com.lotte4.controller.pagecontroller.CSB;
 
 import com.lotte4.dto.*;
+import com.lotte4.entity.Order;
 import com.lotte4.entity.ProductVariants;
+import com.lotte4.repository.OrderRepository;
 import com.lotte4.repository.ProductVariantsRepository;
-import com.lotte4.service.CartService;
-import com.lotte4.service.OrderService;
-import com.lotte4.service.ProductService;
+import com.lotte4.service.*;
+import com.lotte4.service.admin.config.CouponService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,14 +24,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Log4j2
 @AllArgsConstructor
 @Controller
+
 public class OrderController {
 
     private final CartService cartService;
     private final ProductVariantsRepository productVariantsRepository;
+    private final OrderService orderService;
+    private final CouponService couponService;
 
     // 구매이전에는 세션이나 메모리에 잠시 보관하는것이 좋음.
 
@@ -43,6 +52,18 @@ public class OrderController {
 
         String uid = principal.getName();
 
+        UserPointCouponDTO point = orderService.selectUserPoint(uid);
+        List<CouponDTO> couponList = orderService.selectUserCoupon(uid);
+        log.info("Point = ="+point);
+        log.info("CouponList = ="+couponList);
+
+        model.addAttribute("point", point);
+        model.addAttribute("couponList", couponList);
+
+        //getCouponByUid로 한개 생성 필요
+        couponService.getAllCoupons();
+
+
         // 공통 메서드를 통한 CartItemDTO 생성
         if (cartResponseDTO != null) {  // 바로 구매 시
             List<Integer> ids = cartResponseDTO.getProductVariants();
@@ -50,17 +71,18 @@ public class OrderController {
 
             // 상품 구매 정보 조회 //일단 되는것으로 빨리 끝내고 추후 시간 남으면 바로 처리
             List<ProductVariants> productVariantsList = productVariantsRepository.findByVariantIdIn(ids);
+            log.info("variants" +  productVariantsList);
             for (int i = 0; i < productVariantsList.size(); i++) {
                 ProductVariants variant = productVariantsList.get(i);
                 int count = counts.get(i);
-
+                
+                // 0으로 카트아이디는 설정
                 // 공통화된 CartItemDTO 생성
-                CartItemDTO item = createCartItemDTO(variant, count);
+                CartItemDTO item = CartItemDTO.createCartItemDTO(variant, count, 0);
                 cartItems.add(item);
             }
         } else {  // 카트 구매 시
             List<Map<String, Object>> selectedCartItems = (List<Map<String, Object>>) session.getAttribute("selectedCartItems");
-
             if (selectedCartItems == null || selectedCartItems.isEmpty()) {
                 return "redirect:/product/cart";
             }
@@ -69,8 +91,13 @@ public class OrderController {
             for (CartDTO cart : cartList) {
                 ProductVariants variant = cart.getProductVariants();
 
-                // 공통화된 CartItemDTO 생성
-                CartItemDTO item = createCartItemDTO(variant, cart.getCount());
+                Integer cartId = selectedCartItems.stream()
+                        .filter(item -> item.get("cartId").equals(cart.getCartId()))
+                        .map(item -> (Integer) item.get("cartId"))
+                        .findFirst()
+                        .orElse(0);
+                // 공통화된 CartItemDTO 생성  cart.getCartId() 추가작업분
+                CartItemDTO item = CartItemDTO.createCartItemDTO(variant, cart.getCount(), cartId);
                 cartItems.add(item);
             }
             log.info("multiCart = {}", cartItems);
@@ -78,7 +105,6 @@ public class OrderController {
 
         model.addAttribute("cartList", cartItems);
         session.setAttribute("selectedOrderItems", cartItems);
-        log.info("test1231123" + cartItems);
         return "/product/order";
     }
 
@@ -97,35 +123,19 @@ public class OrderController {
     }
 
     @GetMapping("/product/complete")
-    public String complete(HttpSession session, Model model) {
-        session.getAttribute("selectedOrderItems");
-        log.info("complete session"+ session.getAttribute("selectedOrderItems"));
+    public String complete(Model model, HttpSession session, Principal principal) {
 
+        if (principal == null) {
+            return "redirect:/member/login";
+        }
+
+        Object cartItemDTO = session.getAttribute("selectedOrderItems");
+        List<Order> order = orderService.selectLastOrder();
+        model.addAttribute("orderDTO", order);
+        model.addAttribute("cartList", cartItemDTO);
+
+        orderService.updateSold();
+        orderService.testProcedure();
         return "/product/complete";
-    }
-
-
-    
-    //공통 메서드
-    private CartItemDTO createCartItemDTO(ProductVariants variant, int count) {
-        // Product 정보 설정
-        ProductDTO productDTO = OrderDirectBuyDTO.fromEntity(variant.getProduct());
-        ProductVariantsDTO productVariantsDTO = new ProductVariantsDTO();
-        productVariantsDTO.setVariant_id(variant.getVariant_id());
-        productVariantsDTO.setProduct(productDTO);
-
-        // CartItemDTO 설정
-        CartItemDTO item = new CartItemDTO();
-        item.setVariantId(variant.getVariant_id());
-        item.setSku(variant.getSku());
-        item.setProductName(variant.getProduct().getName());
-        item.setPrice(variant.getPrice());
-        item.setCount(count);
-        item.setStock(variant.getStock());
-        item.setImg(variant.getProduct().getImg1());
-        item.setDeliveryFee(variant.getProduct().getDeliveryFee());
-        item.setProductVariants(productVariantsDTO);
-
-        return item;
     }
 }

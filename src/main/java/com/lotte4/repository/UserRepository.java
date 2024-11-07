@@ -33,6 +33,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     User findByMemberInfo(MemberInfo memberInfo);
     List<User> findByUidContaining(String uid); // 2024/10/31(목) - 황수빈
 
+    @Query("SELECT u.memberInfo.memberInfoId FROM User u WHERE u.uid = :uid")
+    Integer findMemberInfoIdByUid(@Param("uid") String uid);
 
     // uid로 정보 조회
     Optional<User> findByUid(String uid);

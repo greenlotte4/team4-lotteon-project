@@ -4,10 +4,14 @@ import com.lotte4.dto.*;
 import com.lotte4.entity.*;
 import com.lotte4.repository.*;
 import com.lotte4.repository.admin.config.CouponRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -39,6 +43,13 @@ public class OrderService {
     private final MemberInfoRepository memberInfoRepository;
     private final PointRepository pointRepository;
     private final CouponRepository couponRepository;
+    private final OrderItemsRepository orderItemsRepository;
+    private final ProductRepository productRepository;
+
+
+    private final EntityManager entityManager;
+
+    private final UserService userService;
 
 
     public List<OrderDTO> getOrders() {
@@ -73,8 +84,10 @@ public class OrderService {
         log.info("orderDirectBuyDTO: " + orderDirectBuyDTO);
         return orderDirectBuyDTO;
     }
+
     // 2024-11-04 수정 완료
     public void insertOrder(OrderDTO orderDTO) {
+        log.info("insertOrder: " + orderDTO);
         Order order = new Order();
         order.setPayment(orderDTO.getPayment());
         order.setStatus(orderDTO.getStatus());
@@ -111,14 +124,9 @@ public class OrderService {
                     Optional<ProductVariants> productVariantsOptional = productVariantsRepository.findById(variantId);
 
                     productVariantsOptional.ifPresent(productVariants -> {
-                        ProductVariantsDTO productVariantsDTO = new ProductVariantsDTO();
-                        productVariantsDTO.setVariant_id(productVariants.getVariant_id());
-                        productVariantsDTO.setSku(productVariants.getSku());
-                        productVariantsDTO.setPrice(productVariants.getPrice());
-                        productVariantsDTO.setStock(productVariants.getStock());
-                        productVariantsDTO.setOptions(productVariants.getOptions());
-                        productVariantsDTO.setUpdated_at(productVariants.getUpdated_at());
-                        orderItems.setItemOption(productVariantsDTO.getSku());
+                        // OrderItems에 ProductVariants 엔티티를 직접 설정
+                        orderItems.setVariantId(variantId);
+                        log.info("ProductVariants 엔티티 설정 완료: " + productVariants);
                     });
                 }
 
@@ -140,15 +148,6 @@ public class OrderService {
         orderRepository.save(order);
         log.info("주문저장 로그 " + order);
     }
-
-
-
-
-    //각 repository 가져와서 업데이트 하기
-    public Optional<OrderDTO> updateOrder(List<OrderDTO> orderDTOList) {
-        return null;
-    }
-
 
     public List<OrderDTO> selectAllOrders(){
         List<Order> orders = orderRepository.findAll();
@@ -185,6 +184,12 @@ public class OrderService {
         return orderDTOS;
     }
 
+    public List<Order> selectLastOrder() {
+        Pageable pageable = PageRequest.of(0, 1);
+        List<Order> result = orderRepository.findOrdersWithDetailsAndDelivery(pageable);
+        log.info("123123123"+ result);
+        return result;
+    }
     public List<UserDTO> selectAllUser(){
         List<User> users = userRepository.findAll();
         List<UserDTO> userDTOS = new ArrayList<>();
@@ -199,20 +204,61 @@ public class OrderService {
 
 
 
-    //포인트값 넣는 곳
-    public PointDTO selectUserPoint(int uid){
-        Point points = pointRepository.findById(uid).get();
-        log.info("selectUserPoint uid: " + points);
-        return modelMapper.map(points, PointDTO.class);
+    //포인트값 조회
+    public UserPointCouponDTO selectUserPoint(String uid) {
+        int memberInfoId = userService.getMemberInfoIdByUid(uid);
+        Integer totalPoints = pointRepository.findTotalPointsByMemberInfoId(memberInfoId);
+        log.info("totalPoints = " + totalPoints);
+        return new UserPointCouponDTO(totalPoints);
+    }
+
+
+    //사용자 가지고있는 쿠폰 값
+    public List<CouponDTO> selectUserCoupon(String uid){
+        int memberInfoId = userService.getMemberInfoIdByUid(uid);
+        return couponRepository.findCouponsByMemberInfoId(memberInfoId);
+    }
+
+
+    public List<OrderItems> getAllOrderItems(){
+
+        log.info("test1235412351" + orderRepository.findAllOrderItems());
+        return orderRepository.findAllOrderItems();
 
     }
 
 
-    //사용자 납품된 쿠폰 값
-    public CouponDTO selectUserCoupon(int uid){
-        Optional<Coupon> coupon = couponRepository.findById(uid);
-        log.info("selectUserCoupon uid: " + coupon);
-        return modelMapper.map(coupon.get(), CouponDTO.class);
+
+
+    //업데이트 처리
+    public void testProcedure() {
+        Query query = entityManager.createNativeQuery("CALL testProcedure()");
+        query.executeUpdate();
+    }
+
+    public void updateSold(){
+        List<Order> completedOrders = orderRepository.findByStatus(1);
+        for (Order order : completedOrders) {
+            List<OrderItems> orderItemsList = orderItemsRepository.findByOrderId(order.getOrderId());
+            for (OrderItems orderItem : orderItemsList) {
+                int variantId = orderItem.getVariantId();
+                int count = orderItem.getCount();
+                Optional<ProductVariants> productVariantOptional = productVariantsRepository.findById(variantId);
+                if (productVariantOptional.isPresent()) {
+                    int productId = productVariantOptional.get().getProduct().getProductId();
+                    Optional<Product> productOptional = productRepository.findById(productId);
+                    if (productOptional.isPresent()) {
+                        Product product = productOptional.get();
+                        product.setSold(product.getSold() + count);
+                        productRepository.save(product);
+                    } else {
+                        log.warn("찾지못함" + productId);
+                    }
+                } else {
+                    log.warn("variantId못찾음: " + variantId);
+                }
+            }
+        }
     }
 
     public OrderDTO selectRecentOrder(MemberInfo memberInfo) {

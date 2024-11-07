@@ -46,18 +46,18 @@ public class CartService {
 
         // 사용자의 선택된 cartIds에 포함된 장바구니 항목 조회 후 DTO로 매핑
         return cartRepository.findByUserUidAndCartIdIn(uid, cartIds).stream()
-                .map(cart -> {
-                    CartDTO cartDTO = modelMapper.map(cart, CartDTO.class);
+            .map(cart -> {
+                CartDTO cartDTO = modelMapper.map(cart, CartDTO.class);
 
-                    // 선택된 항목의 count 값을 매칭하여 설정
-                    selectedCartItems.stream()
-                            .filter(item -> item.get("cartId").equals(cart.getCartId()))
-                            .findFirst()
-                            .ifPresent(item -> cartDTO.setCount((Integer) item.get("count")));
+                // 선택된 항목의 count 값을 매칭하여 설정
+                selectedCartItems.stream()
+                        .filter(item -> item.get("cartId").equals(cart.getCartId()))
+                        .findFirst()
+                        .ifPresent(item -> cartDTO.setCount((Integer) item.get("count")));
 
-                    return cartDTO;
-                })
-                .collect(Collectors.toList());
+                return cartDTO;
+            })
+            .collect(Collectors.toList());
     }
 
 

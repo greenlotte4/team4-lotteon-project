@@ -35,6 +35,8 @@ public class OrderItemsDTO {
 
     private int variantId;
 
+    private ProductVariants variants;
+
     private ProductVariantsDTO productVariants;
 
     public OrderItemsDTO(OrderItems orderItems) {
@@ -47,5 +49,6 @@ public class OrderItemsDTO {
         this.status = orderItems.getStatus();
         this.variantId = orderItems.getVariantId();
     }
+    private DeliveryDTO deliveryDTO;
 
 }

@@ -58,7 +58,6 @@
                     </tr>
                     </thead>
                     <tbody >
-
                     <tr th:each="cart : ${cartList}" th:attr="data-variant-id=${cart.productVariants.variant_id}">
                     <td class="product-info">
                             <img th:src="@{'/uploads/product/' + ${cart.productVariants.product.getImg1()}}" alt="상품 이미지">
@@ -76,7 +75,7 @@
                         <td>
                             <div class="price-info">
                                 <del th:text="${cart.price}"></del>
-                                <span id="discount" class="discount-price" th:text="${cart.price - (cart.price / cart.productVariants.product.getDiscount())} + '원'"></span>
+                                <span id="discount" class="discount-price" th:text="${cart.price - (cart.price * cart.productVariants.product.getDiscount() / 100)} + '원'"></span>
                             </div>
                         </td>
                         <td class="shipping-info" id="deliveryFee" th:text="${cart.productVariants.product.deliveryFee != null ? cart.productVariants.product.deliveryFee + '원' : '무료배송'}"></td>
@@ -93,7 +92,7 @@
                             <tr>
                                 <th>현재포인트 : </th>
                                 <td>
-                                    <span id="nowPoint">53000p</span>
+                                    <span th:text="${point.getTotalPoints()+'p'}" id="nowPoint">53000p</span>
                                 </td>
                             </tr>
                             <tr>
@@ -109,13 +108,21 @@
                             <tr>
                                 <th>쿠폰선택</th>
                                 <td>
-                                    <select name="etc" id="condition" >
-                                        <option value="condition">쿠폰 사용 안함</option>
-                                        <option value="condition">[나이키] 20000원 쿠폰</option>
-                                        <option value="condition">[나이키] 10000원 쿠폰</option>
-                                        <option value="condition">[나이키] 5000원 쿠폰</option>
-                                        <option value="condition">[나이키] 3000원 쿠폰</option>
-                                        <option value="condition">[나이키] 2000원 쿠폰</option>
+                                    <select name="etc" id="condition">
+                                        <option value="">쿠폰 사용 안함</option>
+
+                                        <!-- 쿠폰 리스트가 비어 있는지 확인 -->
+                                        <th:block th:if="${couponList == null || couponList.isEmpty()}">
+                                            <option disabled>발급된 쿠폰이 없습니다</option>
+                                        </th:block>
+
+                                        <!-- 쿠폰 리스트가 있을 경우 반복 출력 -->
+                                        <th:block th:unless="${couponList == null || couponList.isEmpty()}">
+                                            <option th:each="coupon : ${couponList}"
+                                                    th:value="${coupon.couponId}"
+                                                    th:text="${coupon.name} + ' ' + coupon.benefit + '원 쿠폰'">
+                                            </option>
+                                        </th:block>
                                     </select>
                                 </td>
                             </tr>
@@ -457,9 +464,9 @@
             });
 
             const data = {
-                Date: YYYYMMDDHHMMSS(new Date()),     // 주문 날짜
-                Payment: paymentType,                 // 결제 방법
-                Status: status,                       // 결제 상태
+                Date: YYYYMMDDHHMMSS(new Date()),
+                Payment: paymentType,
+                Status: status,
                 count: orderItems.reduce((acc, item) => acc + item.count, 0),
                 couponUse: document.getElementById("condition").value,
                 deliveryFee: parseInt(all__deliveryfee.innerText.replace(/[^0-9]/g, '')),

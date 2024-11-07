@@ -46,6 +46,7 @@ public class Delivery {
     private String content;
 
 
+    @ToString.Exclude
     @OneToOne
     @JoinColumn(name = "orderItemId")  // OrderItems의 orderItemId를 외래 키로 사용
     private OrderItems orderItem;

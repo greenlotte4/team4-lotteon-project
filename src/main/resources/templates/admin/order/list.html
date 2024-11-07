@@ -62,40 +62,26 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="order : ${orderDTOS}">
+
+                    <tr th:each="order : ${orderDTO}">
                         <td>
-                            <a href="#" th:onclick="'openOrderDetailModal(' + ${order.orderId} + ')'" th:text="${order.orderId}">10121211341</a>
+                            <a href="#" th:onclick="'openOrderDetailModal(' + ${order.getOrderItemId()} + ')'" th:text="${order.getOrderItemId()}">10121211341</a>
                         </td>
                         <td>
-                            <span th:each="user : ${userDTOS}"
-                                  th:if="${user.memberInfo != null and order.memberInfo != null and user.memberInfo.memberInfoId == order.memberInfo.memberInfoId}"
-                                  th:text="${user.uid}">아이디 없음</span>
+<!--                            <span th:each="user : ${userDTOS}"-->
+<!--                                  th:if="${user.memberInfo != null and order.memberInfo != null and user.memberInfo.memberInfoId == order.memberInfo.memberInfoId}"-->
+<!--                                  th:text="${user.uid}">아이디 없음</span>-->
+                            wkqk1
                         </td>
-                        <td th:text="${order.memberInfo != null ? order.memberInfo.name : 'N/A'}">김유신</td>
-                        <td th:text="${order.product.name != null ? order.product.name : 'N/A'}">상품명</td>
-                        <td th:text="${order.count}">2</td>
-                        <td th:text="${#numbers.formatInteger(order.price * order.count, '0', 'COMMA')}">102,900</td>
-                        <td th:text="${order.Payment == 1 ? '무통장 입금' : '기타'}">신용카드</td>
-                        <td th:classappend="${order.Status == 1 ? 'completed' : (order.Status == 0 ? 'pending' : 'cancelled')}"
-                        <td th:text="${order.Status == 0 ? '결제대기' :
-                                      (order.Status == 1 ? '결제완료' :
-                                      (order.Status == 2 ? '결제완료' :
-                                      (order.Status == 3 ? '결제완료' :
-                                      (order.Status == 4 ? '결제완료' :
-                                      (order.Status == 5 ? '취소' :
-                                      (order.Status == 6 ? '교환' :
-                                      (order.Status == 7 ? '반품' : '알 수 없음')))))))}">
-                        </td>
-                        <td th:text="${#temporals.format(order.buyDate, 'yyyy-MM-dd HH:mm:ss')}">2024-10-17 10:00:06</td>
+                        <td >김유신</td>
+                        <td >상품명</td>
+                        <td >2</td>
+                        <td >100,000</td>
+                        <td>신용카드</td>
+                        <td>결재상태</td>
+                        <td >2024-10-17 10:00:06</td>
                         <td>
-                            <a href="#"
-                               th:attr="data-order-id=${order.orderId},
-                                        data-recip-name=${order.recipName},
-                                        data-recip-zip=${order.recipZip},
-                                        data-recip-addr1=${order.recipAddr1},
-                                        data-recip-addr2=${order.recipAddr2}"
-                               onclick="openRegisterModal(this)"
-                               class="delivery-btn">배송하기</a>
+                            <a href="#" class="delivery-btn">배송하기</a>
                         </td>
                     </tr>
                     </tbody>
@@ -329,11 +315,6 @@
     </div>
 </div>
 <footer th:replace="~{/admin/include/footer.html}"></footer>
-
-
-
-
-
 <!-- 자바스크립트 코드 -->
 <script>
     // 전역 변수로 모달 선언
