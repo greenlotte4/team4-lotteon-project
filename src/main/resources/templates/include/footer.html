@@ -1,10 +1,10 @@
 <footer>
     <link rel="stylesheet" th:href="@{/css/include/footer.css}"/>
     <ul>
-        <li><a th:href="@{/company/index}">회사소개</a></li>
-        <li><a th:href="@{/policy/buyer}">서비스이용약관</a></li>
-        <li><a th:href="@{/policy/privacy}">개인정보처리방침</a></li>
-        <li><a th:href="@{/policy/finance}">전자금융거래약관</a></li>
+        <li><a th:href="@{/company/index}" class="policy">회사소개</a></li>
+        <li><a th:href="@{/policy/buyer}" class="policy">서비스이용약관</a></li>
+        <li><a th:href="@{/policy/privacy}" class="policy">개인정보처리방침</a></li>
+        <li><a th:href="@{/policy/finance}" class="policy">전자금융거래약관</a></li>
     </ul>
     <div>
         <p class="logo-section"> <img class="logo-image" th:src="@{'/uploads/config/' + ${info.footerLogo}}" alt="LOTTE ON"></p>
