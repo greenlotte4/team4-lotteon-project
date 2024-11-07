@@ -2,9 +2,15 @@ package com.lotte4.document;
 
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import java.time.LocalDateTime;
 
 @Setter
 @Getter
@@ -27,7 +33,7 @@ public class ReviewDocument {
     private String img1;
     private String img2;
 
-    @CreationTimestamp
-    private String regDate;
+    @CreatedDate
+    private LocalDateTime regDate;
 
 }

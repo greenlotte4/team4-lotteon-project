@@ -28,7 +28,7 @@
           <ul class="myInfo_product">
             <li>
               <span>[[${orderDTO.buyDate.toLocalDate()}]] / </span><a href="#" class="orderDetailBtn"> 주문번호 : [[${orderDTO.orderId}]]</a>
-              <div th:each="item : ${orderItems}">
+              <div th:if="${orderItems.size() > 0}" th:each="item : ${orderItems}">
                 <img th:src="@{'/uploads/product/' + ${item.productVariants.product.img1}}" alt="">
                 <div>
                   <a href="#" class="orderSellerBtn" th:text="${item.productVariants.product.company}"></a>
@@ -55,6 +55,9 @@
                 <div>
                   <button class="orderAcceptBtn">구매확정</button>
                   <button class="orderReviewBtn">상품평쓰기</button>
+                  <!-- 상품평에 필요한 데이터 숨겨놓기 -->
+                  <input class="variantId" type="hidden" th:value="${item.productVariants.variant_id}">
+                  <input class="sku" type="hidden" th:value="${item.productVariants.sku}">
                   <button class="orderReturnBtn">반품신청</button>
                   <button class="orderChangeBtn">교환신청</button>
                 </div>

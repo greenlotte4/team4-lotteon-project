@@ -27,6 +27,7 @@
                         <td>[[${orderDTO.buyDate.toLocalDate()}]]</td>
                         <td>
                             <div class="myInfo_productInfo">
+
                                 <div th:each="item : ${orderItems}">
                                     <div>
                                         <img th:src="@{'/uploads/product/' + ${item.productVariants.product.img1}}"
@@ -244,32 +245,48 @@
             </div>
             <!-- 모달 내용 -->
             <article class="myInfo_ModalDetail">
-
-                <table class="myInfo_ModalTable">
-                    <tr>
-                        <td>상품명</td>
-                        <td>
-                            <span>상품명 출력</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>만족도</td>
-                        <td>
-                            <span><img th:src="@{../images/my/임시 별점.png}" alt=""></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>내용</td>
-                        <td>
-                            <span class="ModalInput"><textarea name=""
+                <form>
+                    <table class="myInfo_ModalTable">
+                        <tr>
+                            <input id="variant_id" type="hidden">
+                            <td>상품명</td>
+                            <td>
+                                <input id="showVariantId" type="hidden">
+                                <span id="showSku">상품명 출력</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>만족도</td>
+                            <td id="rating_td">
+                                <label for="rating">별점 선택 :</label>
+                                <div class="star-rating" id="starRating">
+                                    <!-- 초기 별점 이미지 (별점 1으로 설정) -->
+                                    <img th:src="@{/images/review/rating_2.png}" alt="별점" id="starImage">
+                                </div>
+                                <!-- 선택된 별점을 저장할 숨겨진 입력 필드 -->
+                                <input type="hidden" name="rating" id="rating" value="0">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>리뷰사진</td>
+                            <td>
+                                <input id="reviewImage1" type="file" name="files">
+                                <input id="reviewImage2" type="file" name="files">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>내용</td>
+                            <td>
+                            <span class="ModalInput"><textarea id="reviewContent" name=""
                                                                placeholder="최소 10자 이상 200자 내외로 작성하세요."></textarea></span>
-                        </td>
-                    </tr>
-                </table>
-                <div class="modalButtons">
-                    <button type="button">작성완료</button>
-                    <button type="button" class="cancelBtn">취소</button>
-                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="modalButtons">
+                        <button id="reviewBtn" type="submit">작성완료</button>
+                        <button type="button" class="cancelBtn">취소</button>
+                    </div>
+                </form>
             </article>
         </div>
     </article>

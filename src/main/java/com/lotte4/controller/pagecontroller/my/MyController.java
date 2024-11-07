@@ -1,6 +1,7 @@
 package com.lotte4.controller.pagecontroller.my;
 
 import com.lotte4.dto.*;
+import com.lotte4.dto.mongodb.ReviewDTO;
 import com.lotte4.entity.MemberInfo;
 import com.lotte4.entity.OrderItems;
 import com.lotte4.security.MyUserDetails;
@@ -8,7 +9,7 @@ import com.lotte4.service.DeliveryService;
 import com.lotte4.service.MemberInfoService;
 import com.lotte4.service.OrderService;
 import com.lotte4.service.UserService;
-import com.lotte4.service.review.ReviewService;
+import com.lotte4.service.mongodb.ReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;

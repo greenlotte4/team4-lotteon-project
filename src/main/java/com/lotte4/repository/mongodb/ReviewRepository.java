@@ -1,4 +1,4 @@
-package com.lotte4.repository.review;
+package com.lotte4.repository.mongodb;
 
 import com.lotte4.document.ReviewDocument;
 
