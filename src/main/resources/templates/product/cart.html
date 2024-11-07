@@ -101,8 +101,7 @@
                             </div>
                         </td>
                         <td th:attr="id='price-' + ${cart.cartId}" th:text="${#numbers.formatInteger(
-                                                (cart.productVariants.price
-                                                - (cart.productVariants.price * cart.productVariants.product.discount / 100)),
+                                                (cart.productVariants.price),
                                                 1, 'COMMA')}"></td>
                         <td>[[${cart.productVariants.product.discount}]]%</td>
                         <td>[[${cart.productVariants.product.point}]]p</td>
