@@ -109,12 +109,12 @@ li.fadeOut {
     const eventSource = new EventSource("/lotteon/sse/top5");
 
     eventSource.onopen = function(event) {
-        // console.log("SSE 연결이 열렸습니다.");
+        console.log("SSE 연결이 열렸습니다.");
     };
 
 
     eventSource.onerror = (error) => {
-        // console.error("SSE 연결 오류:", error);
+        console.error("SSE 연결 오류:", error);
         if (eventSource.readyState === EventSource.CLOSED) {
             console.error("연결이 닫혔습니다.");
         }
@@ -147,7 +147,8 @@ li.fadeOut {
                         <i>${index + 1}</i>  <!-- 순위 표시 -->
                     </div>
                     <div class="thumb">
-                        <img src="/lotteon/uploads/product/${product.img1}" alt="${product.name}" />
+<!--                        <img src="/lotteon/uploads/product/${product.img1}" alt="${product.name}" />-->
+                        <img src="" alt="${product.name}" />
                     </div>
                     <div class="aside_desc">
                         <h2>${product.name}</h2>

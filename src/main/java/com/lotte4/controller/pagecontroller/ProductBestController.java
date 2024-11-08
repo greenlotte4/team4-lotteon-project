@@ -41,7 +41,7 @@ public class ProductBestController {
     @GetMapping(value = "/sse/top5", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     @ResponseBody
     public SseEmitter subscribeToTop5() {
-        SseEmitter emitter = new SseEmitter();
+        SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
         emitters.add(emitter);  // 연결된 클라이언트를 리스트에 추가
 
         // 연결이 끝나면 emitter를 제거
@@ -82,8 +82,8 @@ public class ProductBestController {
 
         // 순서만 비교
         if (!isSameOrder(currentTop5, previousTop5)) {
-//            log.info("currentTop5: {}", currentTop5);
-//            log.info("previousTop5: {}", previousTop5);
+            log.info("currentTop5: {}", currentTop5);
+            log.info("previousTop5: {}", previousTop5);
 
             previousTop5 = new ArrayList<>(currentTop5); // 깊은 복사하여 갱신
 
