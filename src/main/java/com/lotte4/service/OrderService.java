@@ -192,6 +192,73 @@ public class OrderService {
         return orderDTOS;
     }
 
+    // 해당 사용자의 주문 목록을 최신순으로 조회
+    public List<OrderDTO> selectAllByMemberInfoOrderByDateDesc(MemberInfo memberInfo) {
+        List<Order> orders = orderRepository.findAllByMemberInfoOrderByBuyDateDesc(memberInfo);
+        List<OrderDTO> orderDTOS = new ArrayList<>();
+        for (Order order : orders) {
+            OrderDTO orderDTO = new OrderDTO(order);
+            orderDTO.setOrderItems(getMissingProductVariants(orderDTO.getOrderItems()));
+            orderDTOS.add(orderDTO);
+        }
+        return orderDTOS;
+    }
+
+    // 1. 상대적인 기간 조회
+    public List<OrderDTO> getOrdersByRelativePeriod(String period, MemberInfo memberInfo) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime targetDate;
+
+        switch (period.toLowerCase()) {
+            case "week":
+                targetDate = now.minusDays(7);
+                break;
+            case "15days":
+                targetDate = now.minusDays(15);
+                break;
+            case "month":
+                targetDate = now.minusMonths(1);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid period specified");
+        }
+
+        List<Order> orders = orderRepository.findAllByMemberInfoAndBuyDateAfterOrderByBuyDateDesc(memberInfo, targetDate);
+        List<OrderDTO> orderDTOS = new ArrayList<>();
+        for (Order order : orders) {
+            OrderDTO orderDTO = new OrderDTO(order);
+            orderDTO.setOrderItems(getMissingProductVariants(orderDTO.getOrderItems()));
+            orderDTOS.add(orderDTO);
+        }
+        return orderDTOS;
+    }
+
+    // 2. 특정 월 단위 조회
+    public List<OrderDTO> getOrdersByMonth(int month, int year) {
+        List<Order> orders = orderRepository.findAllByMonthAndYear(month, year);
+        List<OrderDTO> orderDTOS = new ArrayList<>();
+        for (Order order : orders) {
+            OrderDTO orderDTO = new OrderDTO(order);
+            orderDTO.setOrderItems(getMissingProductVariants(orderDTO.getOrderItems()));
+            orderDTOS.add(orderDTO);
+        }
+        return orderDTOS;
+    }
+
+    // 3. 사용자 지정 기간 조회
+    public List<OrderDTO> getOrdersByCustomDateRange(LocalDateTime startDate, LocalDateTime endDate) {
+        List<Order> orders = orderRepository.findAllByBuyDateBetweenOrderByBuyDateDesc(startDate, endDate);
+        List<OrderDTO> orderDTOS = new ArrayList<>();
+        for (Order order : orders) {
+            OrderDTO orderDTO = new OrderDTO(order);
+            orderDTO.setOrderItems(getMissingProductVariants(orderDTO.getOrderItems()));
+            orderDTOS.add(orderDTO);
+        }
+        return orderDTOS;
+    }
+
+
+
     public List<Order> selectLastOrder() {
         Pageable pageable = PageRequest.of(0, 1);
         List<Order> result = orderRepository.findOrdersWithDetailsAndDelivery(pageable);

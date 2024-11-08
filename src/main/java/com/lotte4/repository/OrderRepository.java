@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
      내용 : OrderRepository 생성
 
      수정이력
-       -
+       - 2024-11-08 전규찬 모든 주문을 최신순으로 조회하는 기능 추가 / 기간별 주문 목록 조회 기능 추가
 
 */
 
@@ -39,4 +39,17 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 
     @Procedure(name = "testProcedure")
     void testProcedure();
+
+    // 해당 사용자의 모든 주문을 최신순으로 조회
+    List<Order> findAllByMemberInfoOrderByBuyDateDesc(MemberInfo memberInfo);
+
+    // 1. 현재 시점 기준 상대적인 기간 조회
+    List<Order> findAllByMemberInfoAndBuyDateAfterOrderByBuyDateDesc(MemberInfo memberInfo, LocalDateTime buyDate);
+
+    // 2. 특정 월 단위로 조회
+    @Query("SELECT o FROM Order o WHERE FUNCTION('MONTH', o.buyDate) = :month AND FUNCTION('YEAR', o.buyDate) = :year ORDER BY o.buyDate DESC")
+    List<Order> findAllByMonthAndYear(@Param("month") int month, @Param("year") int year);
+
+    // 3. 사용자 지정 기간 조회
+    List<Order> findAllByBuyDateBetweenOrderByBuyDateDesc(LocalDateTime startDate, LocalDateTime endDate);
 }
