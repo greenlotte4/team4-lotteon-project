@@ -10,12 +10,15 @@
   font-weight: bold;
 }
 
-
-.myInfo_product > li > div{
-  background: #ffffff;
-  margin-top: 10px;
+.myInfo_product > li > div {
   box-shadow: 2px 2px 10px #acabab4d;
   border-radius: 10px;
+}
+
+.myInfo_product > li > div > div{
+  background: #ffffff;
+  margin-top: 10px;
+  border-bottom: 1px solid #ededed;
   padding : 20px;
   display: flex;
   justify-content: space-between;
@@ -23,35 +26,35 @@
 }
 
 
-.myInfo_product > li > div > img{
+.myInfo_product > li > div > div > img{
   width: 150px;
   height: 150px;
 }
 
-.myInfo_product > li > div > div:nth-child(2){
+.myInfo_product > li > div > div > div:nth-child(2){
   width: 350px;
 }
-.myInfo_product > li > div > div:nth-child(2) > a{
+.myInfo_product > li > div > div > div:nth-child(2) > a{
   font-size: 14px;
   display: block;
   margin-bottom: 5px;
 }
 
-.myInfo_product > li > div > div:nth-child(2) > a:hover{
+.myInfo_product > li > div > div > div:nth-child(2) > a:hover{
   text-decoration-line: underline;
 }
-.myInfo_product > li > div > div:nth-child(2) > p > strong{
+.myInfo_product > li > div > div > div:nth-child(2) > p > strong{
   font-size: 20px;
   font-weight: bold;
 }
-.myInfo_product > li > div > div:nth-child(3) > span{
+.myInfo_product > li > div > div > div:nth-child(3) > span{
   font-size: 15px;
 }
-.myInfo_product > li > div > div:nth-child(4){
+.myInfo_product > li > div > div > div:nth-child(4){
   width: 100px;
 }
 
-.myInfo_product > li > div > div:nth-child(4) > button{
+.myInfo_product > li > div > div > div:nth-child(4) > button{
   display: block;
   width: 100px;
   margin: 5px 0;
@@ -64,11 +67,11 @@
   border-radius: 10px;
 }
 
-.myInfo_product > li > div > div:nth-child(4) > button:hover{
+.myInfo_product > li > div > div > div:nth-child(4) > button:hover{
   opacity: 90%;
 }
 
-.myInfo_product > li > div > div:nth-child(4) > button:nth-child(3){
+.myInfo_product > li > div > div > div:nth-child(4) > button:nth-child(3){
   background-color: #ffffff;
   color: #EF2A23;
   box-sizing: border-box;
@@ -76,7 +79,7 @@
   cursor: pointer;
 }
 
-.myInfo_product > li > div > div:nth-child(4) > button:nth-child(4){
+.myInfo_product > li > div > div > div:nth-child(4) > button:nth-child(4){
   background-color: #ffffff;
   color: #EF2A23;
   box-sizing: border-box;

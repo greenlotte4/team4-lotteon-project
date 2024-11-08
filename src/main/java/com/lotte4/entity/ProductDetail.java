@@ -38,7 +38,6 @@ public class ProductDetail {
     private String country;
     private String warning;
 
-    @CreationTimestamp
     private String createDate;
     private String quality;
     private String as_field;

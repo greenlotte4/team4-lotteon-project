@@ -16,6 +16,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -23,12 +24,17 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 /*
 
     - 2024-10-28 강중원 - 리뷰 컨트롤러 수정
     - 2024-11-05 황수빈 - 리뷰 컨트롤러 mongoDB 변환
+    - 2024-11-08 전규찬 - 마이페이지 출력, 기간별 조회 기능
 
  */
 
@@ -45,6 +51,18 @@ public class MyController {
     private final DeliveryService deliveryService;
     private final ModelMapper modelMapper;
 
+    private List<String> getLastFiveMonths() {
+        List<String> months = new ArrayList<>();
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월");
+
+        for (int i = 4; i >= 0; i--) { // 최근 5개월 (현재 포함)
+            LocalDate date = currentDate.minusMonths(i);
+            months.add(date.format(formatter));
+        }
+
+        return months;
+    }
 
     @GetMapping("/home")
     public String home(Model model, @AuthenticationPrincipal MyUserDetails myUserDetails) {
@@ -67,8 +85,59 @@ public class MyController {
         return "/my/home";
     }
 
-    @GetMapping("/order")
-    public String order() {
+    // 전체 주문 목록 조회
+    @GetMapping("/order/{period}")
+    public String order(@PathVariable(required = false) String period,@AuthenticationPrincipal MyUserDetails myUserDetails, Model model) {
+
+        if (myUserDetails.getUser() != null && myUserDetails.getUser().getRole().equals("member")) {
+            MemberInfo memberInfo = myUserDetails.getUser().getMemberInfo();
+            List<OrderDTO> orderDTOS = orderService.selectAllByMemberInfoOrderByDateDesc(memberInfo);
+
+            model.addAttribute("orderDTOs", orderDTOS);
+
+            // 최근 5개월 출력을 위한 데이터
+            List<String> lastFiveMonths = getLastFiveMonths();
+            model.addAttribute("months", lastFiveMonths);
+
+            return "/my/order";
+        }
+
+        return "/my/order";
+    }
+
+    // 1. 상대적인 기간 조회
+    @GetMapping("/period/{period}")
+    public String getOrdersByRelativePeriod(@PathVariable String period, Model model, @AuthenticationPrincipal MyUserDetails myUserDetails) {
+        if (myUserDetails.getUser() != null && myUserDetails.getUser().getRole().equals("member")) {
+            MemberInfo memberInfo = myUserDetails.getUser().getMemberInfo();
+            List<OrderDTO> orderDTOS = orderService.getOrdersByRelativePeriod(period, memberInfo);
+            log.info("orderDTOS = " + orderDTOS);
+            model.addAttribute("orderDTOs", orderDTOS);
+            // 최근 5개월 출력을 위한 데이터
+            List<String> lastFiveMonths = getLastFiveMonths();
+            model.addAttribute("months", lastFiveMonths);
+            return "/my/order";
+        }
+        return "redirect:/my/order";
+    }
+
+    // 2. 특정 월 단위 조회
+    @GetMapping("/order/month")
+    public String getOrdersByMonth(@RequestParam int month, Model model) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
+        int year = Integer.parseInt(LocalDate.now().format(formatter));
+        List<OrderDTO> orderDTOS = orderService.getOrdersByMonth(month, year);
+        model.addAttribute("orderDTOs", orderDTOS);
+        return "/my/order";
+    }
+
+    // 3. 사용자 지정 기간 조회
+    @GetMapping("/order/custom")
+    public String getOrdersByCustomDateRange(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate, Model model) {
+        List<OrderDTO> orderDTOS = orderService.getOrdersByCustomDateRange(startDate, endDate);
+        model.addAttribute("orderDTOs", orderDTOS);
         return "/my/order";
     }
 
