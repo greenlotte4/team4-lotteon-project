@@ -5,185 +5,84 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <title>롯데ON::롯데 온라인 쇼핑몰</title>
-  <link rel="stylesheet" href="../css/my/myInfo.css" />
-  <link rel="stylesheet" href="../css/my/myInfo_search.css" />
-  <link rel="stylesheet" href="../css/my/myInfo_order.css" />
+    <meta charset="UTF-8"/>
+    <title>롯데ON::롯데 온라인 쇼핑몰</title>
+    <link rel="stylesheet" href="../css/my/myInfo.css"/>
+    <link rel="stylesheet" href="../css/my/myInfo_search.css"/>
+    <link rel="stylesheet" href="../css/my/myInfo_order.css"/>
+    <script th:src="@{/js/my/my_order.js}" defer></script>
 </head>
 
 <body>
-  <div id="wrapper">
+<div id="wrapper">
     <main>
-      <header th:replace="~{/include/my_header.html}"></header>
-      <!--어사이드-->
-      <div th:replace="~{/my/my_aside.html}"></div>
+        <header th:replace="~{/include/my_header.html}"></header>
+        <!--어사이드-->
+        <div th:replace="~{/my/my_aside.html}"></div>
 
-      <section class="myInfo_sec">
-        <div th:replace="~{/my/banner.html}"></div>
-        <!-- 최근 주문내역 -->
-        <article class="myInfo_recentOrder myInfo_Article">
-          <div class="myInfo_ArticleTitle"><span>전체주문내역</span></div>
-          <div class="myInfo_Search">
-            <p>기간별조회</p>
-            <ol class="myInfo_Search_Time">
-              <li><a href="">1 주일</a></li>
-              <li><a href="">15 일</a></li>
-              <li><a href="" class="Time_current">1 개월</a></li>
-            </ol>
-            <ol class="myInfo_Search_Time">
-              <li><a href="">8 월</a></li>
-              <li><a href="">9 월</a></li>
-              <li><a href="">10 월</a></li>
-              <li><a href="">11 월</a></li>
-              <li><a href="" class="Time_current">12월</a></li>
-            </ol>
-            <ol class="myInfo_Search_Time">
-              <li><input type="date"><span>~</span><input type="date"></li>
-            </ol>
-            <button>조회</button>
-          </div>
-          <ul class="myInfo_product">
-            <li>
-              <span>2022-12-13</span>
-              <div>
-                <img src="../images/my/임시 이미지.png" alt="">
-                <div>
-                  <a href="">주문번호: 1012211341</a>
-                  <a href="">{주}상호명</a>
-                  <a href="">상품명</a>
-                  <p>수량: 1개</p>
-                  <p><strong>34,000원</strong></p>
+        <section class="myInfo_sec">
+            <div th:replace="~{/my/banner.html}"></div>
+            <!-- 최근 주문내역 -->
+            <article class="myInfo_recentOrder myInfo_Article">
+                <div class="myInfo_ArticleTitle"><span>전체주문내역</span></div>
+                <div class="myInfo_Search">
+                    <p>기간별조회</p>
+                    <ol class="myInfo_Search_Time">
+                        <li><a th:href="@{/my/period/week}">1주일</a></li>
+                        <li><a th:href="@{/my/period/15days}">15일</a></li>
+                        <li><a th:href="@{/my/period/month}" class="Time_current">1개월</a></li>
+                    </ol>
+                    <ol class="myInfo_Search_Time">
+                        <li class="months" th:each="month : ${months}">
+                            <a th:href="@{/order/month(month=${month.replace('월','')})}" th:text="${month}"></a>
+                        </li>
+                    </ol>
+                    <ol class="myInfo_Search_Time">
+                        <li><input type="date"><span>~</span><input type="date"></li>
+                    </ol>
+                    <button>조회</button>
                 </div>
-                <div>
-                  <span>
-                  배송완료
-                  </span>
-                </div>
-                <div>
-                  <button>수취확인</button>
-                  <button>상품평쓰기</button>
-                  <button>반품신청</button>
-                  <button>교환신청</button>
-                </div>
-              </div>
-            </li>
-
-            <li>
-              <span>2022-12-13</span>
-              <div>
-                <img src="../images/my/임시 이미지.png" alt="">
-                <div>
-                  <a href="">주문번호: 1012211341</a>
-                  <a href="">{주}상호명</a>
-                  <a href="">상품명</a>
-                  <p>수량: 1개</p>
-                  <p><strong>34,000원</strong></p>
-                </div>
-                <div>
-                  <span>
-                  배송완료
-                  </span>
-                </div>
-                <div>
-                  <button>수취확인</button>
-                  <button>상품평쓰기</button>
-                  <button>반품신청</button>
-                  <button>교환신청</button>
-                </div>
-              </div>
-            </li>
-
-            <li>
-              <span>2022-12-13</span>
-              <div>
-                <img src="../images/my/임시 이미지.png" alt="">
-                <div>
-                  <a href="">주문번호: 1012211341</a>
-                  <a href="">{주}상호명</a>
-                  <a href="">상품명</a>
-                  <p>수량: 1개</p>
-                  <p><strong>34,000원</strong></p>
-                </div>
-                <div>
-                  <span>
-                  배송완료
-                  </span>
-                </div>
-                <div>
-                  <button>수취확인</button>
-                  <button>상품평쓰기</button>
-                  <button>반품신청</button>
-                  <button>교환신청</button>
-                </div>
-              </div>
-            </li>
-
-            <li>
-              <span>2022-12-13</span>
-              <div>
-                <img src="../images/my/임시 이미지.png" alt="">
-                <div>
-                  <a href="">주문번호: 1012211341</a>
-                  <a href="">{주}상호명</a>
-                  <a href="">상품명</a>
-                  <p>수량: 1개</p>
-                  <p><strong>34,000원</strong></p>
-                </div>
-                <div>
-                  <span>
-                  배송완료
-                  </span>
-                </div>
-                <div>
-                  <button>수취확인</button>
-                  <button>상품평쓰기</button>
-                  <button>반품신청</button>
-                  <button>교환신청</button>
-                </div>
-              </div>
-            </li>
-
-            <li>
-              <span>2022-12-13</span>
-              <div>
-                <img src="../images/my/임시 이미지.png" alt="">
-                <div>
-                  <a href="">주문번호: 1012211341</a>
-                  <a href="">{주}상호명</a>
-                  <a href="">상품명</a>
-                  <p>수량: 1개</p>
-                  <p><strong>34,000원</strong></p>
-                </div>
-                <div>
-                  <span>
-                  배송완료
-                  </span>
-                </div>
-                <div>
-                  <button>수취확인</button>
-                  <button>상품평쓰기</button>
-                  <button>반품신청</button>
-                  <button>교환신청</button>
-                </div>
-              </div>
-            </li>
-          </ul>
-        </article>
-        <div class="page">
-          <a href="#">이전</a>
-          <a href="#" class="page_current">1</a>
-          <a href="#">2</a>
-          <a href="#">3</a>
-          <a href="#">다음</a>
-        </div>
-        <!-- 최근 주문내역 끝 -->
+                <ul class="myInfo_product">
+                    <li th:each="order : ${orderDTOs}">
+                        <span th:text="${order.buyDate.toLocalDate()}"></span>
+                        <div>
+                            <div th:each="item : ${order.orderItems}">
+                                <img th:src="@{'/uploads/product/' + ${item.productVariants.product.img1}}" alt="">
+                                <div>
+                                    <p th:text="'주문번호' + ${order.orderId}"></p>
+                                    <p th:text="${item.productVariants.product.company}"></p>
+                                    <p th:text="${item.productVariants.sku}"></p>
+                                    <p th:text="'수량 : ' + ${item.count}"></p>
+                                    <p><strong th:text="${#numbers.formatInteger(item.originPrice, 1, 'COMMA')} + '원'">34,000원</strong></p>
+                                </div>
+                                <div>
+                                    <span th:text="${item.status}"></span>
+                                </div>
+                                <div>
+                                    <button>수취확인</button>
+                                    <button>상품평쓰기</button>
+                                    <button>반품신청</button>
+                                    <button>교환신청</button>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </article>
+            <div class="page">
+                <a href="#">이전</a>
+                <a href="#" class="page_current">1</a>
+                <a href="#">2</a>
+                <a href="#">3</a>
+                <a href="#">다음</a>
+            </div>
+            <!-- 최근 주문내역 끝 -->
 
 
-      </section>
+        </section>
     </main>
-  </div>
-  <footer th:replace="~{/include/footer.html}"></footer>
+</div>
+<footer th:replace="~{/include/footer.html}"></footer>
 </body>
 
 </html>
