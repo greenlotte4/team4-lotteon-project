@@ -79,21 +79,20 @@ public class ProductBestController {
 
 
     // 트리거 발생 시 상위 5개가 변경되면 SSE 전송
-    @Scheduled(fixedRate = 3000) //10초
+    @Scheduled(fixedRate = 10000) //10초
     public void checkAndNotifyTop5Change() {
         List<ProductBestDTO> currentTop5 = bestProductService.getTop5BestSelling();
 
         // 순서만 비교
         if (!isSameOrder(currentTop5, previousTop5)) {
-            log.info("changed!!");
-            log.info("currentTop5: {}", currentTop5);
-            log.info("previousTop5: {}", previousTop5);
+//            log.info("currentTop5: {}", currentTop5);
+//            log.info("previousTop5: {}", previousTop5);
 
             previousTop5 = new ArrayList<>(currentTop5); // 깊은 복사하여 갱신
 
             sendUpdateToClients(currentTop5); // SSE로 클라이언트에 전달
         } else {
-            log.info("not Changed!!");
+//            log.info("not Changed!!");
         }
     }
 
