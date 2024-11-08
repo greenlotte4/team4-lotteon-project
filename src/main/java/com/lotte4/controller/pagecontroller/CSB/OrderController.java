@@ -135,7 +135,8 @@ public class OrderController {
         model.addAttribute("orderDTO", order);
         model.addAttribute("cartList", cartItemDTO);
 
-        orderService.updateSold();
+//        orderService.updateSold();
+
         orderService.testProcedure();
         return "/product/complete";
     }

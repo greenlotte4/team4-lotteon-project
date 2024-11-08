@@ -18,7 +18,7 @@ import java.util.*;
 public class BestProductService {
     private final RedisTemplate redisTemplate;
 
-    public void updateSalesInRedis(ProductBestDTO productBestDTO) {
+    public void updateSalesInRedis(ProductBestDTO productBestDTO, int sold) {
         String key = "ProductBest:" + productBestDTO.getProductId(); // Redis 키 생성
         if (redisTemplate.hasKey(key)) {
 
@@ -27,16 +27,19 @@ public class BestProductService {
             redisTemplate.opsForHash().put(key, "name", productBestDTO.getName());
             redisTemplate.opsForHash().put(key, "price", productBestDTO.getPrice());
             redisTemplate.opsForHash().put(key, "discount", productBestDTO.getDiscount());
-            redisTemplate.opsForHash().put(key, "sold", productBestDTO.getSold());
             redisTemplate.opsForHash().put(key, "img1", productBestDTO.getImg1());
 
 
             // Redis에 기존 판매량이 있는 경우
             Integer currentSold = (Integer) redisTemplate.opsForHash().get(key, "sold");
 
+            redisTemplate.opsForHash().put(key, "sold", currentSold+sold);
+
+            // Redis에 기존 판매량이 있는 경우
+            Integer changedSold = (Integer) redisTemplate.opsForHash().get(key, "sold");
 
             // ZSet에 판매량 업데이트
-            redisTemplate.opsForZSet().add("best_selling_products", key, currentSold);
+            redisTemplate.opsForZSet().add("best_selling_products", key, changedSold);
         } else {
             // Redis에 키가 없으면, 현재 ProductBestDTO 정보를 저장
             Map<String, Object> productData = new HashMap<>();
@@ -44,14 +47,14 @@ public class BestProductService {
             productData.put("name", productBestDTO.getName());
             productData.put("price", productBestDTO.getPrice());
             productData.put("discount", productBestDTO.getDiscount());
-            productData.put("sold", productBestDTO.getSold());
+            productData.put("sold", sold);
             productData.put("img1", productBestDTO.getImg1());
 
             // Redis에 해당 데이터 저장
             redisTemplate.opsForHash().putAll(key, productData);
 
             // ZSet에 추가하여 순위 관리
-            redisTemplate.opsForZSet().add("best_selling_products", key, productBestDTO.getSold());
+            redisTemplate.opsForZSet().add("best_selling_products", key, sold);
         }
     }
 
@@ -85,7 +88,6 @@ public class BestProductService {
                 .name((String) productData.get("name"))
                 .price((Integer) productData.get("price"))
                 .discount((Integer) productData.get("discount"))
-                .sold((Integer) productData.get("sold"))
                 .img1((String) productData.get("img1"))
                 .build();
     }

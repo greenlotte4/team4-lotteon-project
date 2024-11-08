@@ -46,6 +46,7 @@ public class OrderService {
     private final CouponRepository couponRepository;
     private final OrderItemsRepository orderItemsRepository;
     private final ProductRepository productRepository;
+    private final BestProductService bestProductService;
 
 
     private final EntityManager entityManager;
@@ -128,6 +129,11 @@ public class OrderService {
                         // OrderItems에 ProductVariants 엔티티를 직접 설정
                         orderItems.setVariantId(variantId);
                         log.info("ProductVariants 엔티티 설정 완료: " + productVariants);
+
+                        //Redis에 판매 순위 업데이트 - 강중원 11.08
+                        Product product = productVariants.getProduct();
+                        ProductBestDTO bestDTO = modelMapper.map(product, ProductBestDTO.class);
+                        bestProductService.updateSalesInRedis(bestDTO, orderItemsDTO.getCount());
                     });
                 }
 
@@ -144,6 +150,8 @@ public class OrderService {
                 deliveryRepository.save(delivery);
             }
         }
+
+
 
         // 최종 Order 저장
         orderRepository.save(order);
