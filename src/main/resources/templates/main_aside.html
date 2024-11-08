@@ -109,7 +109,7 @@ li.fadeOut {
     const eventSource = new EventSource("/lotteon/sse/top5");
 
     eventSource.onopen = function(event) {
-        // console.log("SSE 연결이 열렸습니다.");
+        console.log("SSE 연결이 열렸습니다.");
     };
 
 
@@ -148,6 +148,7 @@ li.fadeOut {
                     </div>
                     <div class="thumb">
                         <img src="/lotteon/uploads/product/${product.img1}" alt="${product.name}" />
+<!--                        <img src="" alt="${product.name}" />-->
                     </div>
                     <div class="aside_desc">
                         <h2>${product.name}</h2>

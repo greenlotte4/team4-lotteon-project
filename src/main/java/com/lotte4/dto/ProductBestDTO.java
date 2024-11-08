@@ -24,7 +24,6 @@ public class ProductBestDTO {
     private String name;
     private int price;
     private int discount;
-    private int sold;
     private String img1;
 }
 

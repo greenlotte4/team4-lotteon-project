@@ -7,10 +7,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
@@ -34,10 +31,10 @@ public class ProductBestController {
     private List<ProductBestDTO> previousTop5 = new ArrayList<>();
 
 
-    @PostMapping("/product/soldUpdate")
+    @PostMapping("/product/soldUpdate/{sold}")
     @ResponseBody
-    public void updateBest(@RequestBody ProductBestDTO soldItem){
-        bestProductService.updateSalesInRedis(soldItem);
+    public void updateBest(@RequestBody ProductBestDTO soldItem, @PathVariable int sold) {
+        bestProductService.updateSalesInRedis(soldItem, sold);
     }
 
     // 클라이언트가 SSE에 연결을 요청하면 이를 처리
@@ -45,6 +42,7 @@ public class ProductBestController {
     @ResponseBody
     public SseEmitter subscribeToTop5() {
         SseEmitter emitter = new SseEmitter();
+//        SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
         emitters.add(emitter);  // 연결된 클라이언트를 리스트에 추가
 
         // 연결이 끝나면 emitter를 제거
@@ -79,13 +77,12 @@ public class ProductBestController {
 
 
     // 트리거 발생 시 상위 5개가 변경되면 SSE 전송
-    @Scheduled(fixedRate = 3000) //10초
+    @Scheduled(fixedRate = 10000) //10초
     public void checkAndNotifyTop5Change() {
         List<ProductBestDTO> currentTop5 = bestProductService.getTop5BestSelling();
 
         // 순서만 비교
         if (!isSameOrder(currentTop5, previousTop5)) {
-            log.info("changed!!");
             log.info("currentTop5: {}", currentTop5);
             log.info("previousTop5: {}", previousTop5);
 
@@ -93,7 +90,7 @@ public class ProductBestController {
 
             sendUpdateToClients(currentTop5); // SSE로 클라이언트에 전달
         } else {
-            log.info("not Changed!!");
+//            log.info("not Changed!!");
         }
     }
 
