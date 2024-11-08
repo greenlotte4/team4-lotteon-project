@@ -7,10 +7,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
@@ -34,10 +31,10 @@ public class ProductBestController {
     private List<ProductBestDTO> previousTop5 = new ArrayList<>();
 
 
-    @PostMapping("/product/soldUpdate")
+    @PostMapping("/product/soldUpdate/{sold}")
     @ResponseBody
-    public void updateBest(@RequestBody ProductBestDTO soldItem){
-        bestProductService.updateSalesInRedis(soldItem);
+    public void updateBest(@RequestBody ProductBestDTO soldItem, @PathVariable int sold) {
+        bestProductService.updateSalesInRedis(soldItem, sold);
     }
 
     // 클라이언트가 SSE에 연결을 요청하면 이를 처리
