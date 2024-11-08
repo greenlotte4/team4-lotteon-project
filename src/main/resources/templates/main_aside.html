@@ -114,7 +114,7 @@ li.fadeOut {
 
 
     eventSource.onerror = (error) => {
-        console.error("SSE 연결 오류:", error);
+        // console.error("SSE 연결 오류:", error);
         if (eventSource.readyState === EventSource.CLOSED) {
             console.error("연결이 닫혔습니다.");
         }
