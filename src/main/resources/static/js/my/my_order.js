@@ -1,7 +1,6 @@
 'use strict'
 
 // 기간별 조회 선택한 기간 하이라이트 처리
-const myInfo_Search_Times = document.querySelectorAll('.myInfo_Search_Time');
 
 // 숨겨뒀던 선택된 기간의 값 불러오기
 const selected_period = document.querySelector('#selected_period').value;
@@ -25,7 +24,7 @@ if (selected_period !== null) {
 console.log("selected_month = " + selected_month);
 
 // 숨겨놓은 개월 이름을 포함하는 태그에 하이라이트용 클래스 명 추가 (변환 과정에서 09월과 9월로 나뉘어서 일치하는 조건문은 불가)
-if (selected_month != null) {
+if (selected_month !== "") {
     const months = document.querySelectorAll('.months');
     for (const month of months) {
         if (month.textContent.trim().includes(selected_month)) {

@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="../css/my/myInfo_search.css"/>
     <link rel="stylesheet" href="../css/my/myInfo_order.css"/>
     <script th:src="@{/js/my/my_order.js}" defer></script>
+    <script th:src="@{/js/my/home.js}" defer></script>
 </head>
 
 <body>
@@ -61,10 +62,14 @@
                                     <span th:text="${item.status}"></span>
                                 </div>
                                 <div>
-                                    <button>수취확인</button>
-                                    <button>상품평쓰기</button>
-                                    <button>반품신청</button>
-                                    <button>교환신청</button>
+                                    <button class="orderAcceptBtn">구매확정</button>
+                                    <button class="orderReviewBtn">상품평쓰기</button>
+                                    <!-- 상품평에 필요한 데이터 숨겨놓기 -->
+                                    <input class="variantId" type="hidden"
+                                           th:value="${item.productVariants.variant_id}">
+                                    <input class="sku" type="hidden" th:value="${item.productVariants.sku}">
+                                    <button class="orderReturnBtn">반품신청</button>
+                                    <button class="orderChangeBtn">교환신청</button>
                                 </div>
                             </div>
                         </div>
@@ -79,8 +84,7 @@
                 <a href="#">다음</a>
             </div>
             <!-- 최근 주문내역 끝 -->
-
-
+            <div th:if="${orderDTOs}" th:replace="~{/my/modal_order :: modalFragment(orderDTOs=${orderDTOs})}"></div>
         </section>
     </main>
 </div>
