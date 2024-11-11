@@ -1,4 +1,118 @@
 
+    /* 쿠폰 발급 버튼 스타일 */
+.coupon-button-section {
+    margin-top: 10px;
+}
+
+.coupon-button {
+    float: right;
+    color: white;
+    background-color: #ef2a23;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.coupon-button:hover {
+    border: 1px solid #ef2a23;
+}
+.coupon-section {
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    border-radius: 7px;
+    padding: 20px;
+    margin: 10px;
+}
+.download-btn{
+    background-image: url("/lotteon/images/product/downloadBtn.png");
+    margin-top: -14px;
+    float: right;
+
+    width: 40px;
+    height: 40px;
+    background-size: 41px 40px;
+    border: none;
+}
+.strong-span{
+    font-size: 14px;
+    font-weight: bold;
+}
+/* 모달 창 전체 배경 */
+.modal {
+    display: none; /* 기본적으로 숨김 */
+    flex-direction: column;
+    box-sizing: border-box;
+    justify-content: center;
+    position: fixed;
+    z-index: 100; /* 화면 위에 띄우기 */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
+}
+
+/* 모달 내용 */
+.modal-content {
+    box-sizing: border-box;
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 0; /* 패딩 제거 */
+    border: 1px solid #888;
+    width: 600px; /* 너비 조정 */
+    border-radius: 10px;
+}
+
+/* 모달 헤더 */
+.modal-header {
+
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: black;
+    border-bottom:1px solid #ddd;
+    padding: 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    height: 100%;
+}
+
+.modal-header h4 {
+
+    font-size: 15px;
+    margin: 0 auto;
+}
+.modal-main{
+    margin: 20px;
+
+}
+.modal-main h4{
+    margin: 15px;
+    font-size: 14px;
+}
+.modal-main p{
+    color: gray;
+    margin: 20px;
+    margin-top: 40px;
+    padding-top: 15px;
+    border-top: 1px solid #ddd;}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #000;
+    text-decoration: none;
+}
+
 .recommend-article{
     width:20% !important;
     height:250px;
