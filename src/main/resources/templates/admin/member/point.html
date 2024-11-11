@@ -141,11 +141,13 @@
         `;
             pointTableBody.appendChild(row);
         });
-    }ㄴ
+    }
 
     function updatePagination(totalPages, currentPage) {
         const paginationContainer = document.getElementById("paginationContainer");
         paginationContainer.innerHTML = "";
+
+        if (totalPages === 0) return;
 
         const prevButton = document.createElement("button");
         prevButton.classList.add("page-btn");

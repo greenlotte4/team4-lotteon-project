@@ -4,11 +4,16 @@ import com.lotte4.dto.ProductDTO;
 import com.lotte4.dto.SellerInfoDTO;
 import com.lotte4.dto.coupon.CouponDTO;
 import com.lotte4.dto.UserDTO;
+import com.lotte4.dto.coupon.CouponIssuedResponseDTO;
 import com.lotte4.dto.coupon.CouponRequestDTO;
+import com.lotte4.dto.coupon.CouponResponseDTO;
 import com.lotte4.entity.Coupon;
+import com.lotte4.entity.CouponIssued;
 import com.lotte4.entity.Product;
 import com.lotte4.entity.User;
+import com.lotte4.repository.CouponIssuedRepository;
 import com.lotte4.repository.admin.config.CouponRepository;
+import com.lotte4.service.CouponIssuedService;
 import com.lotte4.service.ProductService;
 import com.lotte4.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +34,8 @@ public class CouponService {
     private final CouponRepository couponRepository;
     private final UserService userService;
     private final ProductService productService;
+    private final CouponIssuedService couponIssuedService; // 2024/11/11 황수빈 추가
+    private final CouponIssuedRepository couponIssuedRepository;
 
     public List<CouponDTO> getAllCoupons() {
         List<Coupon> coupons = couponRepository.findAll();
@@ -106,5 +113,14 @@ public class CouponService {
         return coupons.stream()
                 .map(coupon -> modelMapper.map(coupon, CouponDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    public List<CouponIssuedResponseDTO> getIssuedCouponsByUid(String uid){
+        List<CouponIssued> IssuedCoupons = couponIssuedRepository.findByUser_uid(uid);
+
+        return IssuedCoupons.stream()
+                .map(coupon -> modelMapper.map(coupon, CouponIssuedResponseDTO.class))
+                .collect(Collectors.toList());
+
     }
 }
