@@ -148,6 +148,16 @@ public class ProductService {
         return productDTOList;
     }
 
+    public List<ProductListDTO> getAllProductsWithPage(int page) {
+        Pageable pageable = PageRequest.of(page, 4); // 페이지당 4개의 상품을 가져옴
+        return productRepository.findAll(pageable)
+                .getContent()
+                .stream()
+                .map(product -> modelMapper.map(product, ProductListDTO.class)) // ProductDTO로 변환
+                .toList();
+    }
+
+
     public List<ProductDTO> getAllProductBySellerId(int sellerId) {
 
         Optional<SellerInfo> optional = sellerInfoRepository.findById(sellerId);

@@ -12,6 +12,7 @@
     <th:block th:replace="~{/include/common_head}"></th:block>
     <script src="https://kit.fontawesome.com/20962f3e4b.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css}"/>
+
     <style>
 
     </style>
@@ -44,7 +45,6 @@
         });
     </script>
 <!--슬라이드 끝-->
-
 </head>
 <body>
 <div id="bannerTop" class="on">
@@ -77,154 +77,16 @@
             </section>
             <!--슬라이더 끝-->
 
-            <!-- 히트상품 영역 -->
-            <section class="hit">
-                <h3><span class="scroll1" id="scroll1">히트상품</span></h3>
-                <article>
-                    <!--반복 시작-->
-                    <a th:href="@{/product/view(productId = ${product.productId})}" th:each="product : ${HitList}">
-                        <div class="thumb">
-                            <img th:src="@{'/uploads/product/' + ${product.img1}}" alt="상품이미지">
-                        </div>
-                        <h2>[[${product.name}]]</h2>
-                        <p>[[${product.description}]]</p>
-                        <div class="org_price">
-                            <del>[[${product.price}]]</del>
-                            <span>[[${product.discount}]]%</span>
-                        </div>
-                        <div class="dis_price">
-                            <ins>[[${#numbers.formatDecimal(product.price * (1 - product.discount / 100.0), 0, 0)}]]</ins>
-                            <th:block th:if="${product.deliveryFee} eq 0">
-                                <span class="free">무료배송</span>
-                            </th:block>
+            <div id="content"></div> <!-- 동적으로 추가할 섹션들을 포함할 컨테이너 -->
 
-                        </div>
-                    </a>
-                    <!--반복 끝-->
-                </article>
-            </section>
-
-
-
-            <!-- 추천상품 영역 -->
-            <section class="recommend">
-                <h3><span class="scroll2" id="scroll2">추천상품</span></h3>
-                <article>
-                    <!--반복 시작-->
-                    <a th:href="@{/product/view(productId = ${product.productId})}" th:each="product : ${ScoreList}">
-                        <div class="thumb">
-                            <img th:src="@{'/uploads/product/' + ${product.img1}}" alt="상품이미지">
-                        </div>
-                        <h2>[[${product.name}]]</h2>
-                        <p>[[${product.description}]]</p>
-                        <div class="org_price">
-                            <del>[[${product.price}]]</del>
-                            <span>[[${product.discount}]]%</span>
-                        </div>
-                        <div class="dis_price">
-                            <ins>[[${#numbers.formatDecimal(product.price * (1 - product.discount / 100.0), 0, 0)}]]</ins>
-                            <th:block th:if="${product.deliveryFee} eq 0">
-                                <span class="free">무료배송</span>
-                            </th:block>
-
-                        </div>
-                    </a>
-                    <!--반복 끝-->
-
-                </article>
-            </section>
-
-
-
-
-            <!-- 최신상품 영역 -->
-            <section class="new">
-                <h3><span class="scroll3" id="scroll3">최신상품</span></h3>
-                <article>
-                    <!--반복 시작-->
-                    <a th:href="@{/product/view(productId = ${product.productId})}" th:each="product : ${RecentList}">
-                        <div class="thumb">
-                            <img th:src="@{'/uploads/product/' + ${product.img1}}" alt="상품이미지">
-                        </div>
-                        <h2>[[${product.name}]]</h2>
-                        <p>[[${product.description}]]</p>
-                        <div class="org_price">
-                            <del>[[${product.price}]]</del>
-                            <span>[[${product.discount}]]%</span>
-                        </div>
-                        <div class="dis_price">
-                            <ins>[[${#numbers.formatDecimal(product.price * (1 - product.discount / 100.0), 0, 0)}]]</ins>
-                            <th:block th:if="${product.deliveryFee} eq 0">
-                                <span class="free">무료배송</span>
-                            </th:block>
-
-                        </div>
-                    </a>
-                    <!--반복 끝-->
-                </article>
-            </section>
-
-
-            <section class="popularity">
-                <h3><span class="scroll4" id="scroll4">인기상품</span></h3>
-                <article>
-                    <!--반복 시작-->
-                    <a th:href="@{/product/view(productId = ${product.productId})}" th:each="product : ${ScoreManyList}">
-                        <div class="thumb">
-                            <img th:src="@{'/uploads/product/' + ${product.img1}}" alt="상품이미지">
-                        </div>
-                        <h2>[[${product.name}]]</h2>
-                        <p>[[${product.description}]]</p>
-                        <div class="org_price">
-                            <del>[[${product.price}]]</del>
-                            <span>[[${product.discount}]]%</span>
-                        </div>
-                        <div class="dis_price">
-                            <ins>[[${#numbers.formatDecimal(product.price * (1 - product.discount / 100.0), 0, 0)}]]</ins>
-                            <th:block th:if="${product.deliveryFee} eq 0">
-                                <span class="free">무료배송</span>
-                            </th:block>
-
-                        </div>
-                    </a>
-                    <!--반복 끝-->
-                </article>
-            </section>
-
-
-
-
-            <!-- 할인상품 영역 -->
-            <section class="discount">
-                <h3><span class="scroll5" id="scroll5">할인상품</span></h3>
-                <article>
-                    <!--반복 시작-->
-                    <a th:href="@{/product/view(productId = ${product.productId})}" th:each="product : ${DiscountList}">
-                        <div class="thumb">
-                            <img th:src="@{'/uploads/product/' + ${product.img1}}" alt="상품이미지">
-                        </div>
-                        <h2>[[${product.name}]]</h2>
-                        <p>[[${product.description}]]</p>
-                        <div class="org_price">
-                            <del>[[${product.price}]]</del>
-                            <span>[[${product.discount}]]%</span>
-                        </div>
-                        <div class="dis_price">
-                            <ins>[[${#numbers.formatDecimal(product.price * (1 - product.discount / 100.0), 0, 0)}]]</ins>
-                            <th:block th:if="${product.deliveryFee} eq 0">
-                                <span class="free">무료배송</span>
-                            </th:block>
-
-                        </div>
-                    </a>
-                    <!--반복 끝-->
-                </article>
-            </section>
         </section>
+
     </main>
     <footer th:replace="~{/include/footer.html}">
     </footer>
-
 </div>
 </body>
+
+<!--비동기 처리 스크립트-->
+<script th:src="@{/js/index.js}"></script>
 </html>
