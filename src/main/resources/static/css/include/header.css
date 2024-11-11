@@ -279,3 +279,9 @@ header {
     z-index: 5;
 }
 
+.loginNick {font-weight: bold;}
+.loginRole {font-size: 12px; color:#aaa; font-style: italic;}
+.role {
+    margin-top: 1px;
+    font-size: 12px;
+}

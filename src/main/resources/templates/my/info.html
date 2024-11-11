@@ -29,7 +29,7 @@
               <tr>
                 <td>사용자 ID</td>
                 <td>
-                  <span id="userId">[[${userDTO.maskedUid}]]</span>
+                  <span id="userId">[[${userDTO.uid}]]</span>
                 </td>
               </tr>
               <tr>
@@ -76,7 +76,7 @@
               <tr>
                 <td>탈퇴</td>
                 <td>
-                  <button type="button" class="secessionBtn">탈퇴하기</button>
+                  <button type="button" class="secessionBtn" onclick="quitUser()">탈퇴하기</button>
                 </td>
               </tr>
             </table>
@@ -91,6 +91,45 @@
   <footer th:replace="~{/include/footer.html}"></footer>
 </body>
 <script>
+
+  // 탈퇴하기
+  function quitUser() {
+    if(confirm("정말로 탈퇴하시겠습니까?")) {
+
+      // 탈퇴 요청 데이터(사용자 상태 변경)
+      const quitData = {
+        uid: document.getElementById("userId").innerText  // 사용자의 ID
+      };
+
+      console.log('quitData : ' + quitData.toString());
+
+      // AJAX 요청
+      fetch('/lotteon/my/info/quit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(quitData),
+      })
+      .then(response => {
+        if (response.ok) {
+          window.location.href="/lotteon/member/login?success=400";
+        } else {
+          alert("탈퇴 처리 중 오류가 발생했습니다.");
+          console.error('Error:', response.statusText);
+        }
+      })
+      .catch(error => {
+        alert("탈퇴 요청에 실패했습니다.");
+        console.error('Error:', error);
+      })
+
+    }
+
+
+
+  }
+
 
   // 우편번호 검색 기능
   document.getElementById('btnZip').onclick = function () {

@@ -50,11 +50,11 @@ public class SecurityConfig {
 
         // 인가 설정
         http.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/market/**").permitAll()
-                .requestMatchers("/article/**").permitAll()
-                .requestMatchers("/intro/**").permitAll()
-                .requestMatchers("/user/**").permitAll()
+                .requestMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_seller")
+                .requestMatchers("/my/**").hasAnyAuthority("ROLE_member")
                 .anyRequest().permitAll());
+
+
 
         // 기타 보안 설정
         http.oauth2Login(login->login

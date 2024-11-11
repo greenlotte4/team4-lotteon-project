@@ -10,8 +10,19 @@
         <div class="util innerContent">
             <div class="accountArea">
                 <ul>
-                    <li sec:authorize="hasRole('member')">
-                        <span class="loginname area" th:text="${#authentication.principal.user.memberInfo.name + '님'}"></span>
+                    <!-- Member Role -->
+                    <li sec:authorize="hasRole('member')" class="role"><span class="loginNick">[[${#authentication.principal.user.memberInfo.name}]]</span>
+                        <i class="loginRole">[ [[${#authentication.principal.user.role}]] ]</i> 님
+                    </li>
+
+                    <!-- Seller Role -->
+                    <li sec:authorize="hasRole('seller')" class="role"><span class="loginNick">[[${#authentication.principal.user.sellerInfo.comName}]]</span>
+                        <i class="loginRole">[ [[${#authentication.principal.user.role}]] ]</i> 님
+                    </li>
+
+                    <!-- Admin Role -->
+                    <li sec:authorize="hasRole('ADMIN')" class="role"><span class="loginNick">관리자</span>
+                        <i class="loginRole">[ [[${#authentication.principal.user.role}]] ]</i> 님
                     </li>
                     <li sec:authorize="!isAuthenticated()">
                         <a th:href="@{/member/login}" class="area">로그인</a>

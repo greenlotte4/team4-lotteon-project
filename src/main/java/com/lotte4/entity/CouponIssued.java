@@ -32,7 +32,7 @@ public class CouponIssued {
     private int status;
 
     //사용일
-    @CreationTimestamp
+   @CreationTimestamp
     private LocalDateTime uDate;
 
 }
