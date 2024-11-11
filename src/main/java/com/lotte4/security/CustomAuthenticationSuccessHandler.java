@@ -1,6 +1,7 @@
 
 package com.lotte4.security;
 
+import com.lotte4.entity.User;
 import com.lotte4.service.UserService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Log4j2
 @Component
@@ -49,6 +51,19 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
         // 최근 로그인 날짜 업데이트
         String username = authentication.getName();
+
+        Optional<User> userOptional = Optional.ofNullable(userService.findByUid(username));
+
+        // user가 존재하고, 상태가 "탈퇴"인 경우
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            if ("탈퇴".equals(user.getMemberInfo().getStatus())) {
+                log.warn("로그인 실패: 사용자 " + username + "는 탈퇴 상태입니다.");
+                response.sendRedirect("/lotteon/member/login?success=401"); // 탈퇴된 사용자는 로그인 불가
+                return; // 이후 로직을 실행하지 않도록 종료
+            }
+        }
+
         userService.updateLastLoginDate(username);
 
         // 역할에 따라 리다이렉트할 URL 결정
