@@ -7,6 +7,7 @@
     <link rel="stylesheet" th:href="@{/css/product/product_common.css}"/>
     <link rel="stylesheet" th:href="@{/css/product/style_product_view.css}"/>
     <script th:src="@{/js/my/product/product_view.js}" defer></script>
+
 </head>
 <body>
 <div id="bannerTop" class="on">
@@ -46,6 +47,12 @@
                         <span class="discount-rate" th:text="${productDTO.discount + '% ↓'}" th:attr="data-discountRate=${productDTO.discount}"></span>
                         <span class="discount-price"></span>
                     </div>
+
+                    <!-- 쿠폰 발급받기 버튼 추가 -->
+                    <div class="coupon-button-section">
+                        <button id="couponButton" class="coupon-button">쿠폰 발급받기</button>
+                    </div>
+
                     <div class="shipping-info">
                         <p th:if="${productDTO.deliveryFee == 0}" th:text="무료배송"></p>
                         <p th:if="${productDTO.deliveryFee != 0}" th:text="${productDTO.deliveryFee + '원'}"></p>
@@ -88,28 +95,53 @@
             <section class="product-details">
                 <h3>연관상품</h3>
                 <article class="recommend-article" th:each="product : ${recommendedProducts}">
-                <a th:href="@{/product/view(productId = ${product.productId})}" >
-                    <div class="thumb">
-                        <img th:src="@{'/uploads/product/' + ${product.img1}}" alt="상품이미지">
-                    </div>
-                    <h2>[[${product.name}]]</h2>
-                    <p>[[${product.description}]]</p>
-                    <div class="org_price">
-                        <del>[[${product.price}]]</del>
-                        <span>[[${product.discount}]]%</span>
-                    </div>
-                    <div class="dis_price">
-                        <ins>[[${#numbers.formatDecimal(product.price * (1 - product.discount / 100.0), 0, 0)}]]</ins>
-                        <th:block th:if="${product.deliveryFee} eq 0">
-                            <span class="free">무료배송</span>
-                        </th:block>
-
-                    </div>
-
-                </a>
+                    <a th:href="@{/product/view(productId = ${product.productId})}" >
+                        <div class="thumb">
+                            <img th:src="@{'/uploads/product/' + ${product.img1}}" alt="상품이미지">
+                        </div>
+                        <h2>[[${product.name}]]</h2>
+                        <p>[[${product.description}]]</p>
+                        <div class="org_price">
+                            <del>[[${product.price}]]</del>
+                            <span>[[${product.discount}]]%</span>
+                        </div>
+                        <div class="dis_price">
+                            <ins>[[${#numbers.formatDecimal(product.price * (1 - product.discount / 100.0), 0, 0)}]]</ins>
+                            <th:block th:if="${product.deliveryFee} eq 0">
+                                <span class="free">무료배송</span>
+                            </th:block>
+                        </div>
+                    </a>
                 </article>
-
             </section>
+
+            <!-- 쿠폰 모달 -->
+            <div id="couponModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4>쿠폰정보</h4>
+                        <span class="close-button" id="closeCouponModal">&times;</span>
+                    </div>
+                    <div class="modal-main">
+                        <ul id="couponList">
+                            <h4>현재 발급가능한 쿠폰은 <span class="strong-span">[[${coupons.size()}]]장</span>입니다.</h4>
+                            <li class="coupon-section" th:each="coupon : ${coupons}">
+                                <span th:text="${coupon.name}"></span>
+                                <button class="download-btn" th:data-coupon-id="${coupon.couponId}">
+                                </button>
+                            </li>
+                        </ul>
+
+                        <p>쿠폰 사용기간 내에 할인받고 구매하세요.<br>
+                            쿠폰 사용 시 최소구매금액과 최대할인금액을 확인하세요.<br>
+                            일부 쿠폰은 조기소진될 수 있습니다.<br>
+                        </p>
+                    </div>
+
+
+                </div>
+            </div>
+
             <section class="product-details">
                 <h3>상품정보</h3>
                 <div class="product-detail-image">
@@ -117,72 +149,12 @@
                     <img th:src="@{'/uploads/product/' + ${productDTO.getImg3()}}" alt="상품 상세 사진" class="product-image">
                     <img th:src="@{'/uploads/product/' + ${productDTO.getDetail()}}" alt="상품 상세 정보 사진" class="product-image">
                 </div>
-                <div id="product-info-public-announcement" class="hidden">
-                    <h3>상품정보제공공시</h3>
-                    <table class="info-table">
-                        <tr>
-                            <th>상품상태</th>
-                            <td th:text="${productDTO.productDetailId.condition_field}"></td>
-                        </tr>
-                        <tr>
-                            <th>부가세 면세여부</th>
-                            <td th:text="${productDTO.productDetailId.duty}"></td>
-                        </tr>
-                        <tr>
-                            <th>영수증 발행</th>
-                            <td th:text="${productDTO.productDetailId.receipt}"></td>
-                        </tr>
-                        <tr>
-                            <th>사업자구분</th>
-                            <td th:text="${productDTO.productDetailId.sellerType}"></td>
-                        </tr>
-                        <tr>
-                            <th>브랜드</th>
-                            <td th:text="${productDTO.productDetailId.brand}"></td>
-                        </tr>
-                        <tr>
-                            <th>원산지</th>
-                            <td th:text="${productDTO.productDetailId.coa}"></td>
-                        </tr>
-                        <tr>
-                            <th>제조자 / 수입국</th>
-                            <td th:text="${productDTO.productDetailId.creator}"></td>
-                        </tr>
-                        <tr>
-                            <th>제조국</th>
-                            <td th:text="${productDTO.productDetailId.country}"></td>
-                        </tr>
-                        <tr>
-                            <th>취급시주의사항</th>
-                            <td th:text="${productDTO.productDetailId.warning}"></td>
-                        </tr>
-                        <tr>
-                            <th>제조연월</th>
-                            <td th:text="${productDTO.productDetailId.createDate}"></td>
-                        </tr>
-                        <tr>
-                            <th>품질보증기준</th>
-                            <td th:text="${productDTO.productDetailId.quality}"></td>
-                        </tr>
-                        <tr>
-                            <th>A/S 책임자</th>
-                            <td th:text="${productDTO.productDetailId.as_field}"></td>
-                        </tr>
-                        <tr>
-                            <th>전화번호</th>
-                            <td th:text="${productDTO.productDetailId.asPhone}"></td>
-                        </tr>
-                        <!-- Additional product info -->
-                    </table>
-                </div>
+                <!-- Additional product info -->
             </section>
 
-            <!-- 상품리뷰 -->
             <section id="additional-product-info" th:data-product-id="${productDTO.productId}">
                 <h3>상품리뷰</h3>
-                <div class="review-list" id="review-list">
-                    <!-- 리뷰가 JavaScript로 추가될 부분 -->
-                </div>
+                <div class="review-list" id="review-list"></div>
                 <div class="pagination"></div>
             </section>
 
@@ -190,100 +162,125 @@
     </main>
     <footer th:replace="~{/include/footer.html}"></footer>
 </div>
-<script>
-    let currentPage = 0;
-    const pageSize = 8;
-    const prodId = document.getElementById("additional-product-info").dataset.productId;
 
-    async function loadReviews(page = 0) {
-        try {
-            const response = await fetch(`/lotteon/review/${prodId}?page=${page}&size=${pageSize}`);
-            const data = await response.json();
-
-            if (response.ok) {
-                renderReviews(data.content);
-                updatePagination(data.totalPages, page); // 현재 페이지 정보 전달
-                currentPage = page; // 현재 페이지 업데이트
-            } else {
-                console.error("리뷰를 불러오는 중 오류 발생:", data);
-            }
-        } catch (error) {
-            console.error("리뷰를 불러오는 중 오류 발생:", error);
-        }
+<!-- CSS -->
+<style>
+    /* 쿠폰 발급 버튼 스타일 */
+    .coupon-button-section {
+        margin-top: 10px;
     }
 
-    function renderReviews(reviews) {
-        const reviewList = document.getElementById("review-list");
-        reviewList.innerHTML = ""; // 기존 리뷰 초기화
-
-        if (!reviews || reviews.length === 0) {
-            reviewList.innerHTML = "<p>리뷰가 없습니다.</p>";
-            return;
-        }
-
-        reviews.forEach(review => {
-            const reviewItem = document.createElement("div");
-            reviewItem.classList.add("review-item");
-
-            let starsHTML = '';
-            for (let i = 0; i < Math.floor(review.rating / 2); i++) {
-                starsHTML += '<img src="/lotteon/images/review/star.png" alt="Full Star" class="star">';
-            }
-            if (review.rating % 2 === 1) {
-                starsHTML += '<img src="/lotteon/images/review/star_half.png" alt="Half Star" class="star">';
-            }
-            for (let i = 0; i < 5 - Math.floor(review.rating / 2) - (review.rating % 2 === 1 ? 1 : 0); i++) {
-                starsHTML += '<img src="/lotteon/images/review/star_gray.png" alt="Gray Star" class="star">';
-            }
-
-            reviewItem.innerHTML = `
-            <div class="review-header">
-                <span class="review-author">${review.uid}</span>
-                <span class="review-date">${review.regDate ? review.regDate : '등록일 없음'}</span>
-            </div>
-            <div class="review-rating">${starsHTML}</div>
-            <div>
-                <p class="review_content">${review.content}</p>
-            </div>
-            <div>
-                ${review.img1 ? `<img class="review_img" src="/lotteon/uploads/review/${review.img1}" alt="리뷰 이미지1" class="review-image"/>` : ""}
-                ${review.img2 ? `<img class="review_img" src="/lotteon/uploads/review/${review.img2}" alt="리뷰 이미지2" class="review-image"/>` : ""}
-            </div>
-        `;
-            reviewList.appendChild(reviewItem);
-        });
+    .coupon-button {
+        float: right;
+        color: white;
+        background-color: #ef2a23;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
     }
 
-    function updatePagination(totalPages, currentPage) {
-        const paginationDiv = document.querySelector('.pagination');
-        paginationDiv.innerHTML = ''; // 기존 버튼 초기화
-
-        const prevButton = document.createElement('button');
-        prevButton.classList.add('page-btn');
-        prevButton.disabled = currentPage === 0;
-        prevButton.textContent = '이전';
-        prevButton.onclick = () => loadReviews(currentPage - 1);
-        paginationDiv.appendChild(prevButton);
-
-        for (let i = 0; i < totalPages; i++) {
-            const pageButton = document.createElement('button');
-            pageButton.classList.add('page-num');
-            if (i === currentPage) pageButton.classList.add('active');
-            pageButton.textContent = i + 1;
-            pageButton.onclick = () => loadReviews(i);
-            paginationDiv.appendChild(pageButton);
-        }
-
-        const nextButton = document.createElement('button');
-        nextButton.classList.add('page-btn');
-        nextButton.disabled = currentPage + 1 === totalPages;
-        nextButton.textContent = '다음';
-        nextButton.onclick = () => loadReviews(currentPage + 1);
-        paginationDiv.appendChild(nextButton);
+    .coupon-button:hover {
+        border: 1px solid #ef2a23;
     }
-    // 초기 리뷰 로드
-    document.addEventListener("DOMContentLoaded", () => loadReviews(currentPage));
+    .coupon-section {
+        border: 1px solid #ddd;
+        box-sizing: border-box;
+        border-radius: 7px;
+        padding: 20px;
+        margin: 10px;
+    }
+    .download-btn{
+        background-image: url("/lotteon/images/product/downloadBtn.png");
+        margin-top: -14px;
+        float: right;
 
-</script>
+        width: 40px;
+        height: 40px;
+        background-size: 41px 40px;
+        border: none;
+    }
+    .strong-span{
+        font-size: 14px;
+        font-weight: bold;
+    }
+    /* 모달 창 전체 배경 */
+    .modal {
+        display: none; /* 기본적으로 숨김 */
+        flex-direction: column;
+        box-sizing: border-box;
+        justify-content: center;
+        position: fixed;
+        z-index: 100; /* 화면 위에 띄우기 */
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
+    }
+
+    /* 모달 내용 */
+    .modal-content {
+        box-sizing: border-box;
+        background-color: #fff;
+        margin: 15% auto;
+        padding: 0; /* 패딩 제거 */
+        border: 1px solid #888;
+        width: 600px; /* 너비 조정 */
+        border-radius: 10px;
+    }
+
+    /* 모달 헤더 */
+    .modal-header {
+
+        box-sizing: border-box;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: black;
+        border-bottom:1px solid #ddd;
+        padding: 10px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        height: 100%;
+    }
+
+    .modal-header h4 {
+
+        font-size: 15px;
+        margin: 0 auto;
+    }
+    .modal-main{
+        margin: 20px;
+
+    }
+    .modal-main h4{
+        margin: 15px;
+        font-size: 14px;
+    }
+    .modal-main p{
+        color: gray;
+        margin: 20px;
+        margin-top: 40px;
+        padding-top: 15px;
+        border-top: 1px solid #ddd;}
+
+    .close-button {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .close-button:hover,
+    .close-button:focus {
+        color: #000;
+        text-decoration: none;
+    }
+</style>
+
+<!-- JavaScript -->
+
 </body>
 </html>

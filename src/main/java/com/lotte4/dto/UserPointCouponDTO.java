@@ -1,5 +1,6 @@
 package com.lotte4.dto;
 
+import com.lotte4.dto.coupon.CouponDTO;
 import lombok.*;
 
 @Getter

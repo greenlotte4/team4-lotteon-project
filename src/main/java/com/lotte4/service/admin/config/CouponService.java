@@ -1,19 +1,24 @@
 package com.lotte4.service.admin.config;
 
-import com.lotte4.dto.CouponDTO;
+import com.lotte4.dto.ProductDTO;
+import com.lotte4.dto.SellerInfoDTO;
+import com.lotte4.dto.coupon.CouponDTO;
 import com.lotte4.dto.UserDTO;
+import com.lotte4.dto.coupon.CouponRequestDTO;
 import com.lotte4.entity.Coupon;
+import com.lotte4.entity.Product;
 import com.lotte4.entity.User;
 import com.lotte4.repository.admin.config.CouponRepository;
+import com.lotte4.service.ProductService;
 import com.lotte4.service.UserService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Log4j2
 @Service
@@ -23,6 +28,7 @@ public class CouponService {
     private final ModelMapper modelMapper;
     private final CouponRepository couponRepository;
     private final UserService userService;
+    private final ProductService productService;
 
     public List<CouponDTO> getAllCoupons() {
         List<Coupon> coupons = couponRepository.findAll();
@@ -37,25 +43,16 @@ public class CouponService {
         return couponDTOS;
     }
 
-    public void insertCoupon(CouponDTO couponDTO) {
+    public void insertCoupon(CouponRequestDTO couponDTO) {
 
-        //"임시" 유저지정 삭제필요!!!!
-        UserDTO user = userService.selectUser("ekkang2");
-
-        log.info(user.toString());
-
-        couponDTO.setUsers(user);
-
-        log.info(couponDTO);
-
+        UserDTO user = userService.selectUser(couponDTO.getUid());
         Coupon coupon = modelMapper.map(couponDTO, Coupon.class);
+        coupon.setUsers(modelMapper.map(user, User.class));
 
         log.info(coupon);
         couponRepository.save(coupon);
     }
 
-
-    //시간날때 enum으로 변경하기
     public CouponDTO changeBenefit(Coupon coupon, CouponDTO couponDTO) {
         int benefit = coupon.getBenefit();
 
@@ -97,8 +94,17 @@ public class CouponService {
 
         return couponDTO;
     }
+    public List<CouponDTO> getAvailableCouponsForProduct(int productId) {
+        // 1. Product와 SellerInfoId 조회
+        ProductDTO product = productService.getProductById(productId);
+        SellerInfoDTO sellerInfoId = product.getSellerInfoId();
 
-    public List<CouponDTO> getCouponsByMemberInfoId(int memberInfoId) {
-        return couponRepository.findCouponsByMemberInfoId(memberInfoId);
+        // 2. 쿠폰 조회 조건 설정
+        List<Coupon> coupons = couponRepository.findAllByConditions(sellerInfoId.getSellerInfoId(), productId);
+
+        // 3. 쿠폰을 CouponDTO로 변환하여 반환
+        return coupons.stream()
+                .map(coupon -> modelMapper.map(coupon, CouponDTO.class))
+                .collect(Collectors.toList());
     }
 }
