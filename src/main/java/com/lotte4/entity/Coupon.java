@@ -23,17 +23,15 @@ public class Coupon {
     private String type;
     //쿠폰 이름
     private String name;
-
+    private int prodId;
     private int benefit;
 
 
     private Date sDate;
-
     private Date eDate;
 
     // duration_days 예) 50일
     private int dDate;
-
     private int status;
 
     //발급자 확인용 User
@@ -42,6 +40,7 @@ public class Coupon {
     private User users;
 
     // 발급수
+
     private int totalIssued;
 
     //사용수
@@ -49,7 +48,7 @@ public class Coupon {
 
     // 발급일
     @CurrentTimestamp
-    private LocalDateTime IDate;
+    private LocalDateTime iDATE;
 
     //유의 사항
     private String ect;

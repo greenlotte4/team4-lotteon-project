@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="../css/my/myInfo_search.css"/>
     <link rel="stylesheet" href="../css/my/myInfo_order.css"/>
     <script th:src="@{/js/my/my_order.js}" defer></script>
+    <script th:src="@{/js/my/home.js}" defer></script>
 </head>
 
 <body>
@@ -28,19 +29,21 @@
                 <div class="myInfo_Search">
                     <p>기간별조회</p>
                     <ol class="myInfo_Search_Time">
-                        <li><a th:href="@{/my/period/week}">1주일</a></li>
-                        <li><a th:href="@{/my/period/15days}">15일</a></li>
-                        <li><a th:href="@{/my/period/month}" class="Time_current">1개월</a></li>
+                        <input id="selected_period" type="hidden" th:value="${selected_period}">
+                        <li><a id="period_week" th:href="@{/my/order(period=${'week'})}">1주일</a></li>
+                        <li><a id="period_15days" th:href="@{/my/order(period=${'15days'})}">15일</a></li>
+                        <li><a id="period_month" th:href="@{/my/order(period=${'month'})}">1개월</a></li>
                     </ol>
                     <ol class="myInfo_Search_Time">
+                        <input id="selected_month" type="hidden" th:value="${selected_month}">
                         <li class="months" th:each="month : ${months}">
-                            <a th:href="@{/order/month(month=${month.replace('월','')})}" th:text="${month}"></a>
+                            <a th:href="@{/my/order(month=${T(java.lang.Integer).parseInt(month.replace('월',''))})}" th:text="${month}"></a>
                         </li>
                     </ol>
                     <ol class="myInfo_Search_Time">
                         <li><input type="date"><span>~</span><input type="date"></li>
+                        <button id="customDate">조회</button>
                     </ol>
-                    <button>조회</button>
                 </div>
                 <ul class="myInfo_product">
                     <li th:each="order : ${orderDTOs}">
@@ -59,10 +62,14 @@
                                     <span th:text="${item.status}"></span>
                                 </div>
                                 <div>
-                                    <button>수취확인</button>
-                                    <button>상품평쓰기</button>
-                                    <button>반품신청</button>
-                                    <button>교환신청</button>
+                                    <button class="orderAcceptBtn">구매확정</button>
+                                    <button class="orderReviewBtn">상품평쓰기</button>
+                                    <!-- 상품평에 필요한 데이터 숨겨놓기 -->
+                                    <input class="variantId" type="hidden"
+                                           th:value="${item.productVariants.variant_id}">
+                                    <input class="sku" type="hidden" th:value="${item.productVariants.sku}">
+                                    <button class="orderReturnBtn">반품신청</button>
+                                    <button class="orderChangeBtn">교환신청</button>
                                 </div>
                             </div>
                         </div>
@@ -77,8 +84,7 @@
                 <a href="#">다음</a>
             </div>
             <!-- 최근 주문내역 끝 -->
-
-
+            <div th:if="${orderDTOs}" th:replace="~{/my/modal_order :: modalFragment(orderDTOs=${orderDTOs})}"></div>
         </section>
     </main>
 </div>

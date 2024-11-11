@@ -1,6 +1,7 @@
 package com.lotte4.controller.pagecontroller.CSB;
 
 import com.lotte4.dto.*;
+import com.lotte4.dto.coupon.CouponDTO;
 import com.lotte4.entity.Order;
 import com.lotte4.entity.ProductVariants;
 import com.lotte4.repository.OrderRepository;
