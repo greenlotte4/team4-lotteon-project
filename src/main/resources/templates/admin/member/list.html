@@ -26,6 +26,7 @@
             <div class="search-bar">
               <form action="#" th:action="@{/admin/member/list}" method="get"> <!-- GET 방식으로 폼 전송 -->
                 <select id="search-category" name="searchCategory" class="dropdown"> <!-- name 속성 추가 -->
+                  <option value="all" th:selected="${searchCategory == ''}">전체</option>
                   <option value="uid" th:selected="${searchCategory == 'uid'}">아이디</option>
                   <option value="name" th:selected="${searchCategory == 'name'}">이름</option>
                   <option value="email" th:selected="${searchCategory == 'email'}">이메일</option>
