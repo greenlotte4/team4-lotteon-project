@@ -28,19 +28,21 @@
                 <div class="myInfo_Search">
                     <p>기간별조회</p>
                     <ol class="myInfo_Search_Time">
-                        <li><a th:href="@{/my/period/week}">1주일</a></li>
-                        <li><a th:href="@{/my/period/15days}">15일</a></li>
-                        <li><a th:href="@{/my/period/month}" class="Time_current">1개월</a></li>
+                        <input id="selected_period" type="hidden" th:value="${selected_period}">
+                        <li><a id="period_week" th:href="@{/my/order(period=${'week'})}">1주일</a></li>
+                        <li><a id="period_15days" th:href="@{/my/order(period=${'15days'})}">15일</a></li>
+                        <li><a id="period_month" th:href="@{/my/order(period=${'month'})}">1개월</a></li>
                     </ol>
                     <ol class="myInfo_Search_Time">
+                        <input id="selected_month" type="hidden" th:value="${selected_month}">
                         <li class="months" th:each="month : ${months}">
-                            <a th:href="@{/order/month(month=${month.replace('월','')})}" th:text="${month}"></a>
+                            <a th:href="@{/my/order(month=${T(java.lang.Integer).parseInt(month.replace('월',''))})}" th:text="${month}"></a>
                         </li>
                     </ol>
                     <ol class="myInfo_Search_Time">
                         <li><input type="date"><span>~</span><input type="date"></li>
+                        <button id="customDate">조회</button>
                     </ol>
-                    <button>조회</button>
                 </div>
                 <ul class="myInfo_product">
                     <li th:each="order : ${orderDTOs}">
