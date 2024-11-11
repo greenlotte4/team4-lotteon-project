@@ -10,6 +10,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import org.springframework.data.domain.Pageable;
+
+import java.time.LocalDate;
 import java.util.List;
 
 import java.time.LocalDateTime;
@@ -47,9 +49,10 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     List<Order> findAllByMemberInfoAndBuyDateAfterOrderByBuyDateDesc(MemberInfo memberInfo, LocalDateTime buyDate);
 
     // 2. 특정 월 단위로 조회
-    @Query("SELECT o FROM Order o WHERE FUNCTION('MONTH', o.buyDate) = :month AND FUNCTION('YEAR', o.buyDate) = :year ORDER BY o.buyDate DESC")
-    List<Order> findAllByMonthAndYear(@Param("month") int month, @Param("year") int year);
+    @Query("SELECT o FROM Order o WHERE o.memberInfo = :memberInfo AND FUNCTION('MONTH', o.buyDate) = :month AND FUNCTION('YEAR', o.buyDate) = :year ORDER BY o.buyDate DESC")
+    List<Order> findAllByMemberInfoAndMonthAndYear(@Param("memberInfo") MemberInfo memberInfo, @Param("month") int month, @Param("year") int year);
+
 
     // 3. 사용자 지정 기간 조회
-    List<Order> findAllByBuyDateBetweenOrderByBuyDateDesc(LocalDateTime startDate, LocalDateTime endDate);
+    List<Order> findAllByMemberInfoAndBuyDateBetweenOrderByBuyDateDesc(MemberInfo memberInfo, LocalDateTime buyDate, LocalDateTime buyDate2);
 }

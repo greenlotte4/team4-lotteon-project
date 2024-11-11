@@ -1,6 +1,7 @@
 package com.lotte4.service;
 
 import com.lotte4.dto.*;
+import com.lotte4.dto.coupon.CouponDTO;
 import com.lotte4.entity.*;
 import com.lotte4.repository.*;
 import com.lotte4.repository.admin.config.CouponRepository;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -234,8 +236,8 @@ public class OrderService {
     }
 
     // 2. 특정 월 단위 조회
-    public List<OrderDTO> getOrdersByMonth(int month, int year) {
-        List<Order> orders = orderRepository.findAllByMonthAndYear(month, year);
+    public List<OrderDTO> getOrdersByMonth(MemberInfo memberInfo, int month, int year) {
+        List<Order> orders = orderRepository.findAllByMemberInfoAndMonthAndYear(memberInfo ,month, year);
         List<OrderDTO> orderDTOS = new ArrayList<>();
         for (Order order : orders) {
             OrderDTO orderDTO = new OrderDTO(order);
@@ -246,8 +248,8 @@ public class OrderService {
     }
 
     // 3. 사용자 지정 기간 조회
-    public List<OrderDTO> getOrdersByCustomDateRange(LocalDateTime startDate, LocalDateTime endDate) {
-        List<Order> orders = orderRepository.findAllByBuyDateBetweenOrderByBuyDateDesc(startDate, endDate);
+    public List<OrderDTO> getOrdersByCustomDateRange(MemberInfo memberInfo, LocalDateTime startDate, LocalDateTime endDate) {
+        List<Order> orders = orderRepository.findAllByMemberInfoAndBuyDateBetweenOrderByBuyDateDesc(memberInfo, startDate, endDate);
         List<OrderDTO> orderDTOS = new ArrayList<>();
         for (Order order : orders) {
             OrderDTO orderDTO = new OrderDTO(order);

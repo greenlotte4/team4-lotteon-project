@@ -10,16 +10,25 @@
 package com.lotte4.controller.pagecontroller.gyubooke;
 
 import com.lotte4.dto.*;
-import com.lotte4.service.CategoryService;
-import com.lotte4.service.ProductService;
-import com.lotte4.service.SellerInfoService;
+import com.lotte4.dto.coupon.CouponIssuedRequestDTO;
+import com.lotte4.entity.MemberInfo;
+import com.lotte4.entity.User;
+import com.lotte4.repository.CouponIssuedRepository;
+import com.lotte4.service.*;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,11 +37,12 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RestController
 public class ProductRestController {
+    private final ModelMapper modelMapper;
 
     private final ProductService productService;
     private final CategoryService categoryService;
     private final SellerInfoService sellerInfoService;
-
+    private final CouponIssuedService couponIssuedService;
 
     public static List<Integer> stringToIntegerList(String string) {
         return ProductService.stringToIntegerList(string);
@@ -245,4 +255,24 @@ public class ProductRestController {
         productService.makeVariantDTOAndUpdate(prodONames, prodPrices, prodStocks, variantsIds, valuesList, optionNames, productId);
     }
 
+    @PostMapping("/api/coupons/issue")
+    public ResponseEntity<String> issueCoupon(@RequestBody CouponIssuedRequestDTO request, Principal principal) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 필요");
+        }
+
+        String uid = principal.getName();
+        request.setUid(uid);
+
+        try {
+            boolean issued = couponIssuedService.issueCoupon(request);
+            if (issued) {
+                return ResponseEntity.ok("쿠폰이 성공적으로 발급되었습니다.");
+            } else {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 발급된 쿠폰입니다.");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("쿠폰 발급 중 오류가 발생했습니다.");
+        }
+    }
 }

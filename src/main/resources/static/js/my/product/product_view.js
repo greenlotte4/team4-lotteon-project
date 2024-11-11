@@ -281,8 +281,8 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(data => {
                 if (data === "success") {
                     // 성공 시 알림창 띄우기
-                        alert("주문 페이지로 이동합니다.");
-                        window.location.href = "/lotteon/product/order"; // 구매페이지로 바로 가기
+                    alert("주문 페이지로 이동합니다.");
+                    window.location.href = "/lotteon/product/order"; // 구매페이지로 바로 가기
                 } else if (data === "failed") {
                     alert("상품 구매 중 문제가 발생하였습니다.");
                 } else if (data === "noUser") {
@@ -292,6 +292,60 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .catch(error => console.error('Error:', error));
     });
+    const couponButton = document.getElementById("couponButton");
+    const couponModal = document.getElementById("couponModal");
+    const closeCouponModal = document.getElementById("closeCouponModal");
+
+    couponButton?.addEventListener("click", () => {
+        couponModal.style.display = "block";
+    });
+
+    closeCouponModal?.addEventListener("click", () => {
+        couponModal.style.display = "none";
+    });
+
+    window.addEventListener("click", (event) => {
+        if (event.target === couponModal) {
+            couponModal.style.display = "none";
+        }
+    });
+
+// 쿠폰 발급
+    const buttons = document.querySelectorAll(".download-btn");
+
+    // 각 버튼에 클릭 이벤트 리스너 추가
+    buttons.forEach(button => {
+        button.addEventListener("click", function () {
+            issueCoupon(button);
+        });
+    });
+
+    function issueCoupon(button) {
+        console.log("버튼눌림");
+        const couponId = button.getAttribute("data-coupon-id");
+        console.log(couponId);
+
+        fetch(`/lotteon/api/coupons/issue`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ couponId: couponId })
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert("쿠폰이 성공적으로 발급되었습니다.");
+                } else if (response.status === 409) {
+                    alert("이미 발급된 쿠폰입니다.");
+                } else if (response.status === 401) {
+                    alert("로그인이 필요합니다.");
+                    window.location.href = "/lotteon/member/login"; // 로그인 페이지로 리다이렉트
+                } else {
+                    alert("쿠폰 발급 중 오류가 발생했습니다.");
+                }
+            })
+            .catch(error => console.error("Error issuing coupon:", error));
+    }
 
 
 });

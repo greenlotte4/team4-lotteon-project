@@ -3,6 +3,7 @@ package com.lotte4.controller.pagecontroller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lotte4.dto.*;
+import com.lotte4.dto.coupon.CouponDTO;
 import com.lotte4.dto.mongodb.RecommendationResult;
 import com.lotte4.entity.Cart;
 import com.lotte4.entity.Product;
@@ -10,6 +11,7 @@ import com.lotte4.entity.User;
 import com.lotte4.service.CartService;
 import com.lotte4.service.ProductService;
 import com.lotte4.service.UserService;
+import com.lotte4.service.admin.config.CouponService;
 import com.lotte4.service.mongodb.RecommendationService;
 import com.lotte4.service.mongodb.ReviewService;
 import jakarta.servlet.http.HttpSession;
@@ -39,12 +41,15 @@ import java.util.Map;
 //      - 2024/11/04 강중원 - 상품 카테고리와 타입에 따른 정렬 매핑 추가
 //      - 2024/11/06 황수빈 - 상품 view 리뷰 list 뿌리기
 //      - 2024/11/07 황수빈 - 연관 상품 추천 List 뿌리기
+//      - 2024/11/09 황수빈 - 해당 상품에 사용가능한 쿠폰 List 뿌리기
+
 
 @Log4j2
 @RequiredArgsConstructor
 @Controller
 public class ProductController {
-    private final ReviewService reviewService; // 황수빈
+    private final ReviewService reviewService;
+    private final CouponService couponService;// 황수빈
     private final CartService cartService;
     private final ProductService productService;
     private final ObjectMapper objectMapper;
@@ -240,41 +245,51 @@ public class ProductController {
 
     @GetMapping("/product/view")
     public String view(int productId, Model model, HttpSession session, Principal principal) throws JsonProcessingException {
-        // 추천된 상품 ID 목록 가져오기
-        List<RecommendationResult> results = recommendationService.getRecommendedProducts(productId, null);
+        // 추천 상품 목록 설정
+        List<ProductDTO> recommendedProducts = getRecommendedProductsByProductId(productId);
+        model.addAttribute("recommendedProducts", recommendedProducts);
 
-// 추천 상품 리스트를 담을 리스트 생성
+        // 해당 상품에 사용가능한 쿠폰 목록
+
+        List<CouponDTO> coupons = couponService.getAvailableCouponsForProduct(productId);
+        model.addAttribute("coupons",coupons);
+        log.info("해당 상품에 사용가능한 쿠폰 목록"+coupons);
+        // 제품 상세 정보 설정
+        setProductDetailsById(productId, model, session);
+
+        return "/product/view";
+    }
+
+    // 추천 상품 목록을 가져오는 메서드
+    private List<ProductDTO> getRecommendedProductsByProductId(int productId) {
+        List<RecommendationResult> results = recommendationService.getRecommendedProducts(productId, null);
         List<ProductDTO> recommendedProducts = new ArrayList<>();
 
-// 반복문으로 각 추천 결과의 relatedId를 사용하여 Product 조회
         for (RecommendationResult result : results) {
             int relatedId = result.getRelatedProdId();
-            ProductDTO product = productService.getProductById(relatedId); // Product 조회 메서드 호출
-            if (product != null) { // 상품이 존재할 경우 리스트에 추가
+            ProductDTO product = productService.getProductById(relatedId);
+            if (product != null) {
                 recommendedProducts.add(product);
             }
         }
-
-        log.info("recommendedProducts"+recommendedProducts);
-        model.addAttribute("recommendedProducts", recommendedProducts);
-
+        log.info("recommendedProducts: " + recommendedProducts);
+        return recommendedProducts;
+    }
+    // 제품 상세 정보를 모델에 설정하는 메서드
+    private void setProductDetailsById(int productId, Model model, HttpSession session) throws JsonProcessingException {
         Product_V_DTO productDTO = productService.getProduct_V_ById(productId);
         List<ProductVariantsWithoutProductDTO> productVariants = productDTO.getProductVariants();
         LinkedHashMap<String, List<String>> options = (LinkedHashMap<String, List<String>>) productDTO.getOptions();
 
         String productDTOJson = objectMapper.writeValueAsString(productDTO);
+
         model.addAttribute("options", options);
         model.addAttribute("productDTOJson", productDTOJson);
         model.addAttribute("productDTO", productDTO);
-
-        session.setAttribute("productDTO", productDTO);
-        log.info("productDTO : " + productDTO);
-        log.info("productDTOJson : " + productDTOJson);
-        log.info("options : " + options);
-
         model.addAttribute("productVariants", productVariants);
 
-        return "/product/view";
+        session.setAttribute("productDTO", productDTO);
+
     }
 
 }

@@ -86,59 +86,61 @@ public class MyController {
     }
 
     // 전체 주문 목록 조회
-    @GetMapping("/order/{period}")
-    public String order(@PathVariable(required = false) String period,@AuthenticationPrincipal MyUserDetails myUserDetails, Model model) {
+    @GetMapping("/order")
+    public String order(@RequestParam(required = false) String period,
+                        @RequestParam(required = false) Integer month,
+                        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate startDate,
+                        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate endDate,
+                        @AuthenticationPrincipal MyUserDetails myUserDetails,
+                        Model model) {
 
-        if (myUserDetails.getUser() != null && myUserDetails.getUser().getRole().equals("member")) {
-            MemberInfo memberInfo = myUserDetails.getUser().getMemberInfo();
-            List<OrderDTO> orderDTOS = orderService.selectAllByMemberInfoOrderByDateDesc(memberInfo);
+        log.info("period : " + period);
+        log.info("month : " + month);
+        log.info("startDate : " + startDate);
+        log.info("endDate : " + endDate);
 
-            model.addAttribute("orderDTOs", orderDTOS);
+        // null 이 아닌 값을 기준으로 기간별 주문 목록을 조회하기
+        MemberInfo memberInfo = myUserDetails.getUser().getMemberInfo();
 
-            // 최근 5개월 출력을 위한 데이터
-            List<String> lastFiveMonths = getLastFiveMonths();
-            model.addAttribute("months", lastFiveMonths);
+        if (period != null) {
 
-            return "/my/order";
-        }
-
-        return "/my/order";
-    }
-
-    // 1. 상대적인 기간 조회
-    @GetMapping("/period/{period}")
-    public String getOrdersByRelativePeriod(@PathVariable String period, Model model, @AuthenticationPrincipal MyUserDetails myUserDetails) {
-        if (myUserDetails.getUser() != null && myUserDetails.getUser().getRole().equals("member")) {
-            MemberInfo memberInfo = myUserDetails.getUser().getMemberInfo();
+            // 현재 시점으로부터 7, 15, 30일 이내의 주문 목록 조회
             List<OrderDTO> orderDTOS = orderService.getOrdersByRelativePeriod(period, memberInfo);
-            log.info("orderDTOS = " + orderDTOS);
             model.addAttribute("orderDTOs", orderDTOS);
-            // 최근 5개월 출력을 위한 데이터
-            List<String> lastFiveMonths = getLastFiveMonths();
-            model.addAttribute("months", lastFiveMonths);
-            return "/my/order";
+            model.addAttribute("selected_period", period);
+
+        } else if (month != null) {
+
+            // 특정 달에 대한 주문 목록 조회
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
+            int year = Integer.parseInt(LocalDate.now().format(formatter));
+            List<OrderDTO> orderDTOS = orderService.getOrdersByMonth(memberInfo, month, year);
+            model.addAttribute("orderDTOs", orderDTOS);
+            model.addAttribute("selected_month", month+"월");
+
+        } else if (startDate != null && endDate != null) {
+
+            // LocalDate 로 받은 값을 LocalDateTime 으로 변환(시분초는 00시 00분 00초 로 고정)
+            LocalDateTime startDateTime = startDate.atStartOfDay();
+            LocalDateTime endDateTime = endDate.atStartOfDay();
+
+            // 사용자가 지정한 기간에 대한 주문 목록 조회
+            List<OrderDTO> orderDTOS = orderService.getOrdersByCustomDateRange(memberInfo, startDateTime, endDateTime);
+            model.addAttribute("orderDTOs", orderDTOS);
+
+        } else {
+
+            // 특정한 기간 설정이 없을 경우 전체 주문 목록 최신순으로 조회
+            List<OrderDTO> orderDTOS = orderService.selectAllByMemberInfoOrderByDateDesc(memberInfo);
+            model.addAttribute("orderDTOs", orderDTOS);
         }
-        return "redirect:/my/order";
-    }
 
-    // 2. 특정 월 단위 조회
-    @GetMapping("/order/month")
-    public String getOrdersByMonth(@RequestParam int month, Model model) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
-        int year = Integer.parseInt(LocalDate.now().format(formatter));
-        List<OrderDTO> orderDTOS = orderService.getOrdersByMonth(month, year);
-        model.addAttribute("orderDTOs", orderDTOS);
-        return "/my/order";
-    }
+        // 최근 5개월 출력을 위한 데이터
+        List<String> lastFiveMonths = getLastFiveMonths();
+        model.addAttribute("months", lastFiveMonths);
 
-    // 3. 사용자 지정 기간 조회
-    @GetMapping("/order/custom")
-    public String getOrdersByCustomDateRange(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate, Model model) {
-        List<OrderDTO> orderDTOS = orderService.getOrdersByCustomDateRange(startDate, endDate);
-        model.addAttribute("orderDTOs", orderDTOS);
         return "/my/order";
+
     }
 
     @GetMapping("/point")
@@ -160,8 +162,8 @@ public class MyController {
         Pageable pageable = PageRequest.of(page, size);
         String uid = principal.getName(); // 현재 로그인한 사용자
 
-        Page<ReviewDTO> reviews =  reviewService.findReviewsByUid(uid, pageable);
-        model.addAttribute("reviews",reviews);
+        Page<ReviewDTO> reviews = reviewService.findReviewsByUid(uid, pageable);
+        model.addAttribute("reviews", reviews);
 
         return "/my/review";
     }
