@@ -1,6 +1,7 @@
 package com.lotte4.service;
 
 import com.lotte4.dto.CartDTO;
+import com.lotte4.dto.MemberInfoDTO;
 import com.lotte4.dto.UserDTO;
 import com.lotte4.dto.UserPointCouponDTO;
 import com.lotte4.entity.MemberInfo;
@@ -29,6 +30,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.lang.reflect.Member;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
@@ -383,4 +385,28 @@ public class UserService {
         // User 엔티티를 UserDTO로 변환
         return userPage.map(user -> modelMapper.map(user, UserDTO.class));
     }
+
+    // 탈퇴 처리 메서드
+    public boolean quitUser(String uid) {
+        // uid로 사용자를 찾음
+        Optional<User> userOptional = userRepository.findByUid(uid);
+
+        // User 객체가 존재하는지 확인 후 업데이트 수행
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();  // User 객체 가져오기
+            MemberInfo memberInfo = user.getMemberInfo();  // User의 MemberInfo 객체 가져오기
+
+            if (memberInfo != null) {
+                memberInfo.setStatus("탈퇴");  // 상태를 '탈퇴'로 설정
+                userRepository.save(user);  // 변경 사항 저장
+
+                return true;  // 성공적으로 탈퇴 처리됨
+            }
+        }
+
+        return false;  // 해당 사용자가 존재하지 않거나 상태 업데이트 실패
+    }
+
+
+
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -30,6 +31,6 @@ public class CouponIssued {
     private int status;
 
     //사용일
-    private Date uDate;
+    private LocalDateTime uDate;
 
 }
