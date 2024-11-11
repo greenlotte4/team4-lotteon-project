@@ -216,6 +216,7 @@ public class UserService {
         return code + "";
     }
 
+    // 검색조건에 따른 회원 목록 출력
     public Page<UserDTO> selectUserListByMember(String role, int page, int size, String keyword, String searchCategory) {
         Pageable pageable = PageRequest.of(page, size);
         Page<User> userPage;
@@ -348,4 +349,38 @@ public class UserService {
         return userRepository.findMemberInfoIdByUid(uid);
     }
 
+    // 검색조건에 따른 상점 목록 출력
+    public Page<UserDTO> selectUserListBySeller(String role, int page, int size, String keyword, String searchCategory) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<User> userPage;
+
+        // 검색 키워드가 있을 때 searchCategory에 따라 조건을 나눔
+        if (keyword != null && !keyword.isEmpty()) {
+            switch (searchCategory) {
+                case "comName":
+                    userPage = userRepository.findByRoleAndSellerInfoComNameContaining(role, keyword, pageable);
+                    break;
+                case "ceo":
+                    userPage = userRepository.findByRoleAndSellerInfoCeoContaining(role, keyword, pageable);
+                    break;
+                case "bizNumber":
+                    userPage = userRepository.findByRoleAndSellerInfoBizNumberContaining(role, keyword, pageable);
+                    break;
+                case "hp":
+                    userPage = userRepository.findByRoleAndSellerInfoHpContaining(role, keyword, pageable);
+                    break;
+                default:
+                    // 기본적으로 모든 필드를 포함하는 검색
+                    userPage = userRepository.findByRole(
+                            role, pageable);
+                    break;
+            }
+        } else {
+            // 키워드가 없을 경우 기본값으로 모든 사용자 가져오기
+            userPage = userRepository.findByRole(role, pageable);
+        }
+
+        // User 엔티티를 UserDTO로 변환
+        return userPage.map(user -> modelMapper.map(user, UserDTO.class));
+    }
 }
