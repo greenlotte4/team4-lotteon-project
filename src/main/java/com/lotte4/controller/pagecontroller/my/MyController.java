@@ -51,6 +51,18 @@ public class MyController {
     private final DeliveryService deliveryService;
     private final ModelMapper modelMapper;
 
+    // 각 orderDTO의 orderItems에 빠져있는 variants 주입 후 리턴
+    private List<OrderDTO> getOrderItems(List<OrderDTO> orderDTOS) {
+        List<OrderDTO> orderDTOList = new ArrayList<>();
+        for (OrderDTO orderDTO : orderDTOS) {
+            List<OrderItemsDTO> orderItems = orderService.getMissingProductVariants(orderDTO.getOrderItems());
+            orderDTO.setOrderItems(orderItems);
+            orderDTOList.add(orderDTO);
+        }
+
+        return orderDTOList;
+    }
+
     private List<String> getLastFiveMonths() {
         List<String> months = new ArrayList<>();
         LocalDate currentDate = LocalDate.now();
@@ -106,7 +118,7 @@ public class MyController {
 
             // 현재 시점으로부터 7, 15, 30일 이내의 주문 목록 조회
             List<OrderDTO> orderDTOS = orderService.getOrdersByRelativePeriod(period, memberInfo);
-            model.addAttribute("orderDTOs", orderDTOS);
+            model.addAttribute("orderDTOs", getOrderItems(orderDTOS));
             model.addAttribute("selected_period", period);
 
         } else if (month != null) {
@@ -115,7 +127,7 @@ public class MyController {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
             int year = Integer.parseInt(LocalDate.now().format(formatter));
             List<OrderDTO> orderDTOS = orderService.getOrdersByMonth(memberInfo, month, year);
-            model.addAttribute("orderDTOs", orderDTOS);
+            model.addAttribute("orderDTOs", getOrderItems(orderDTOS));
             model.addAttribute("selected_month", month+"월");
 
         } else if (startDate != null && endDate != null) {
@@ -126,13 +138,14 @@ public class MyController {
 
             // 사용자가 지정한 기간에 대한 주문 목록 조회
             List<OrderDTO> orderDTOS = orderService.getOrdersByCustomDateRange(memberInfo, startDateTime, endDateTime);
-            model.addAttribute("orderDTOs", orderDTOS);
+            model.addAttribute("orderDTOs", getOrderItems(orderDTOS));
 
         } else {
 
             // 특정한 기간 설정이 없을 경우 전체 주문 목록 최신순으로 조회
             List<OrderDTO> orderDTOS = orderService.selectAllByMemberInfoOrderByDateDesc(memberInfo);
             model.addAttribute("orderDTOs", orderDTOS);
+            model.addAttribute("orderItems", getOrderItems(orderDTOS));
         }
 
         // 최근 5개월 출력을 위한 데이터
@@ -211,20 +224,5 @@ public class MyController {
         return ResponseEntity.ok().build();
     }
 
-    // 나의 정보 탈퇴 요청 처리
-    @PostMapping("/info/quit")
-    public ResponseEntity<String> quitUser(@RequestBody UserDTO userDTO) {
-        log.info("userDTO : " + userDTO);
-        try {
-            boolean success = userService.quitUser(userDTO.getUid());
-            if (success) {
-                return ResponseEntity.ok("탈퇴 완료");
-            } else {
-                return ResponseEntity.status(400).body("탈퇴 처리 실패");
-            }
-        } catch(Exception e) {
-            return ResponseEntity.status(500).body("서버 오류");
-        }
-    }
 
 }
