@@ -33,17 +33,16 @@
                     <input type="text" placeholder="검색어 입력" class="search-input"/>
                     <button class="search-btn">검색</button>
                 </div>
-
                 <table class="inquiry-table">
                     <colgroup>
                         <col style="width: 11%" />
-                        <col style="width: 9%" />
+                        <col style="width: 14%" />
                         <col style="width: 9%" />
                         <col style="width: 8%" />
                         <col style="width: 9%" />
                         <col style="width: 9%" />
                         <col style="width: 9%" />
-                        <col style="width: 9%" />
+                        <col style="width: 10%" />
                         <col style="width: 14%" />
                         <col style="width: 12%" />
                     </colgroup>
@@ -65,23 +64,31 @@
 
                     <tr th:each="order : ${orderDTO}">
                         <td>
-                            <a href="#" th:onclick="'openOrderDetailModal(' + ${order.getOrderItemId()} + ')'" th:text="${order.getOrderItemId()}">10121211341</a>
+                            <a href="#" th:onclick="'openOrderDetailModal(' + ${order.getOrderId()} + ')'" th:text="${order.getOrderId()}">10121211341</a>
                         </td>
-                        <td>
-<!--                            <span th:each="user : ${userDTOS}"-->
-<!--                                  th:if="${user.memberInfo != null and order.memberInfo != null and user.memberInfo.memberInfoId == order.memberInfo.memberInfoId}"-->
-<!--                                  th:text="${user.uid}">아이디 없음</span>-->
-                            wkqk1
+                        <td th:each="user : ${users}"
+                            th:if="${user.memberInfo != null and order.memberInfo != null and user.memberInfo.memberInfoId == order.memberInfo.memberInfoId}">
+                            <p th:text="${user.uid}"></p>
                         </td>
-                        <td >김유신</td>
-                        <td >상품명</td>
-                        <td >2</td>
-                        <td >100,000</td>
-                        <td>신용카드</td>
-                        <td>결재상태</td>
-                        <td >2024-10-17 10:00:06</td>
+                        <td th:text="${order.memberInfo.name}" >김유신</td>
+                        <td>상품</td>
+                        <td th:text="${orderItemCounts[order.getOrderId()]}">2</td>
+                        <td th:text="${order.getTotalPrice()}">100,000</td>
+                        <td th:switch="${order.getPayment()}">
+                            <span th:case="1">카카오페이</span>
+                            <span th:case="2">토스</span>
+                            <span th:case="3">페이코</span>
+                            <span th:case="4">무통장입금</span>
+                            <span th:case="5">네이버페이</span>
+                        </td>
+                        <td th:switch="${order.getStatus()}">
+                            <span th:case="0">미결제상태</span>
+                            <span th:case="1">결제완료</span>
+                        </td>
+                        <td th:text="${order.getBuyDate()}">2024-10-17 10:00:06</td>
                         <td>
-                            <a href="#" class="delivery-btn">배송하기</a>
+                            <a href="#" class="delivery-btn"
+                               th:classappend="${order.status == 0} ? 'disabled' : ''">배송하기</a>
                         </td>
                     </tr>
                     </tbody>

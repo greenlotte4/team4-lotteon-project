@@ -194,6 +194,12 @@
     text-decoration: none;
 }
 
+.delivery-btn.disabled {
+    pointer-events: none; /* 클릭 불가능 */
+    opacity: 0.5; /* 희미하게 표시 */
+    cursor: default; /* 마우스 포인터 기본값 */
+}
+
 /******* 주문상세 모달 *******/
 /* 모달 창 전체 배경 */
 .modal {

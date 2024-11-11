@@ -1,7 +1,6 @@
 package com.lotte4.service;
 
 import com.lotte4.dto.*;
-import com.lotte4.dto.coupon.CouponDTO;
 import com.lotte4.entity.*;
 import com.lotte4.repository.*;
 import com.lotte4.repository.admin.config.CouponRepository;
@@ -18,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /*
      날짜 : 2024/10/30
@@ -48,12 +48,12 @@ public class OrderService {
     private final OrderItemsRepository orderItemsRepository;
     private final ProductRepository productRepository;
     private final BestProductService bestProductService;
+    private final CouponIssuedRepository couponIssuedRepository;
 
 
     private final EntityManager entityManager;
 
     private final UserService userService;
-
 
     public List<OrderDTO> getOrders() {
         List<Order> orders = orderRepository.findAll();
@@ -280,6 +280,23 @@ public class OrderService {
 
 
 
+    public Map<Integer, Integer> getOrderItemCounts(List<Order> orders) {
+        List<Integer> orderIds = orders.stream()
+                .map(Order::getOrderId)
+                .collect(Collectors.toList());
+
+        List<Map<String, Object>> results = orderRepository.countItemsByOrderIds(orderIds);
+
+        Map<Integer, Integer> orderItemCounts = new HashMap<>();
+        for (Map<String, Object> result : results) {
+            Integer orderId = (Integer) result.get("orderId");
+            Integer itemCount = ((Number) result.get("itemCount")).intValue();
+            orderItemCounts.put(orderId, itemCount);
+        }
+        return orderItemCounts;
+    }
+
+
 
     //포인트값 조회
     public UserPointCouponDTO selectUserPoint(String uid) {
@@ -291,27 +308,40 @@ public class OrderService {
 
 
     //사용자 가지고있는 쿠폰 값
-    public List<CouponDTO> selectUserCoupon(String uid){
-        int memberInfoId = userService.getMemberInfoIdByUid(uid);
-        return couponRepository.findCouponsByMemberInfoId(memberInfoId);
+    public List<CouponIssued> selectUserCoupon(String uid) {
+        Optional<User> userInfo = userService.getUserByUid(uid);
+
+        if (userInfo.isEmpty()) {
+            log.warn("No user found with UID: " + uid);
+            return Collections.emptyList();
+        }
+
+        // Step 2: Get User ID and Fetch Coupons
+        int userId = userInfo.get().getUserId();
+        log.info("userId = " + userId);
+        List<CouponIssued> result = couponIssuedRepository.findByUserUid(userId);
+
+        log.info("Fetched Coupons: " + result);
+        return result;
     }
 
 
     public List<OrderItems> getAllOrderItems(){
-
-        log.info("test1235412351" + orderRepository.findAllOrderItems());
         return orderRepository.findAllOrderItems();
-
     }
 
 
-
+    public List<Order> getAllOrders(){
+        return orderRepository.findAllOrders();
+    }
 
     //업데이트 처리
     public void testProcedure() {
         Query query = entityManager.createNativeQuery("CALL testProcedure()");
         query.executeUpdate();
     }
+
+
 
     public void updateSold(){
         List<Order> completedOrders = orderRepository.findByStatus(1);

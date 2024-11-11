@@ -9,6 +9,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -79,4 +80,6 @@ public class OrderDTO {
         }
     }
 
+    public OrderDTO(long l, Date date, String s, double v, long l1, String s1, String s2, long l2, int i, double v1, long l3, String s3, String s4) {
+    }
 }

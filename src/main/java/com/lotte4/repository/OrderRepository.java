@@ -1,5 +1,6 @@
 package com.lotte4.repository;
 
+import com.lotte4.dto.OrderWithDetailsDTO;
 import com.lotte4.entity.MemberInfo;
 import com.lotte4.entity.Order;
 import com.lotte4.entity.OrderItems;
@@ -11,10 +12,10 @@ import org.springframework.stereotype.Repository;
 
 import org.springframework.data.domain.Pageable;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 /*
      날짜 : 2024/10/30
@@ -31,8 +32,20 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     @Query("SELECT o FROM Order o JOIN FETCH o.orderItems oi JOIN FETCH oi.delivery ORDER BY o.orderId DESC")
     List<Order> findOrdersWithDetailsAndDelivery(Pageable pageable);
 
-    @Query("SELECT oi FROM OrderItems oi JOIN FETCH oi.delivery ORDER BY oi.orderItemId DESC")
+    @Query("SELECT oi FROM OrderItems oi " +
+            "JOIN FETCH oi.delivery " +
+            "JOIN FETCH oi.order")
     List<OrderItems> findAllOrderItems();
+
+    @Query("SELECT oi FROM OrderItems oi " +
+            "JOIN FETCH oi.delivery " +
+            "JOIN FETCH oi.order WHERE oi.order.orderId = :orderId")
+    List<OrderItems> findAllOrderItemsByOrderId(@Param("orderId") int orderId);
+
+    @Query("SELECT o FROM Order o " +
+            "JOIN FETCH o.orderItems oi " +
+            "JOIN FETCH o.memberInfo m order by o.orderId desc")
+    List<Order> findAllOrders();
 
     Order findFirstByMemberInfoOrderByBuyDateDesc(MemberInfo memberInfo);
 
@@ -41,6 +54,17 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 
     @Procedure(name = "testProcedure")
     void testProcedure();
+
+    @Query("SELECT o.orderId AS orderId, COUNT(oi) AS itemCount " +
+            "FROM Order o JOIN o.orderItems oi " +
+            "WHERE o.orderId IN :orderIds " +
+            "GROUP BY o.orderId")
+    List<Map<String, Object>> countItemsByOrderIds(@Param("orderIds") List<Integer> orderIds);
+
+
+    //test용 안됨 변환하기 빡셈
+//    @Procedure(name = "allOrder")
+//    void allOrder();
 
     // 해당 사용자의 모든 주문을 최신순으로 조회
     List<Order> findAllByMemberInfoOrderByBuyDateDesc(MemberInfo memberInfo);
@@ -55,4 +79,11 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 
     // 3. 사용자 지정 기간 조회
     List<Order> findAllByMemberInfoAndBuyDateBetweenOrderByBuyDateDesc(MemberInfo memberInfo, LocalDateTime buyDate, LocalDateTime buyDate2);
+
+    @Query("SELECT COUNT(oi) " +
+            "FROM OrderItems oi " +
+            "WHERE oi.order.orderId = :orderId")
+    Integer findOrderItemCountByOrderId(@Param("orderId") int orderId);
+
+
 }

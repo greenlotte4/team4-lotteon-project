@@ -12,7 +12,6 @@
     <link rel="stylesheet" th:href="@{/css/product/product_common.css}"/>
     <link rel="stylesheet" th:href="@{/css/product/style_product_order.css}"/>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<!--    <script th:src="@{/js/order.js}" defer></script>-->
 
 </head>
 <body>
@@ -109,8 +108,8 @@
                                 <th>쿠폰선택</th>
                                 <td>
                                     <select name="etc" id="condition">
-                                        <option value="">쿠폰 사용 안함</option>
 
+                                        <option value="">쿠폰 사용 안함</option>
                                         <!-- 쿠폰 리스트가 비어 있는지 확인 -->
                                         <th:block th:if="${couponList == null || couponList.isEmpty()}">
                                             <option disabled>발급된 쿠폰이 없습니다</option>
@@ -118,9 +117,9 @@
 
                                         <!-- 쿠폰 리스트가 있을 경우 반복 출력 -->
                                         <th:block th:unless="${couponList == null || couponList.isEmpty()}">
-                                            <option th:each="coupon : ${couponList}"
-                                                    th:value="${coupon.couponId}"
-                                                    th:text="${coupon.name} + ' ' + coupon.benefit + '원 쿠폰'">
+                                            <option id="couponeDTO_id" th:each="coupon : ${couponList}"
+                                                    th:value="${coupon.getCoupon().getCouponId()}"
+                                                    th:text="${coupon.getCoupon().getName()} + ' ' + ${coupon.getCoupon().getBenefit()} + '원 쿠폰'">
                                             </option>
                                         </th:block>
                                     </select>
@@ -322,16 +321,32 @@
         }
 
         // 최종 계산 수행 함수
+        // 숫자 변환 함수 (콤마와 원 단위 제거)
+        function parsePrice(priceText) {
+            return parseInt(priceText.replace(/[^0-9]/g, ''), 10) || 0;
+        }
+
+        // 최종 계산 수행 함수
         function calculateFinalPrice() {
             let soldPrice = totalPrice();                  // 판매가 총합
-            let discountTotal = totalDiscount();            // 할인 총합
+            let discountTotal = totalDiscount();           // 할인 총합
             let deliveryFee = parseFloat(all__deliveryfee.innerText.replace(/,/g, '')) || 0; // 배송비 총합
             let usedPoint = parseInt(addPoint.value) || 0; // 사용 포인트
 
-            // 쿠폰 금액 추출
+            // 쿠폰 금액 추출 및 타입 처리
             const selectedOptionText = selectElement.options[selectElement.selectedIndex].text;
-            const couponValue = selectedOptionText.match(/\d+/);
-            let couponDiscount = couponValue ? parseInt(couponValue[0]) : 0;
+            const couponValue = selectedOptionText.match(/\d+/); // 쿠폰의 숫자 값 추출
+            let couponDiscount = 0; // 쿠폰 할인 금액
+            if (couponValue) {
+                const numericValue = parseInt(couponValue[0]);
+                if (numericValue < 100) {
+                    // 2자리면 퍼센트 할인
+                    couponDiscount = Math.floor((soldPrice * numericValue) / 100); // 퍼센트 계산
+                } else {
+                    // 3자리 이상이면 원 할인
+                    couponDiscount = numericValue;
+                }
+            }
 
             // 전체 할인 금액 계산 (판매가 - 할인)
             let initialDiscount = soldPrice ? soldPrice - discountTotal : 0;

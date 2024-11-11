@@ -1,6 +1,7 @@
 package com.lotte4.controller.pagecontroller.CSB;
 
 import com.lotte4.dto.*;
+import com.lotte4.entity.CouponIssued;
 import com.lotte4.dto.coupon.CouponDTO;
 import com.lotte4.entity.Order;
 import com.lotte4.entity.ProductVariants;
@@ -54,16 +55,12 @@ public class OrderController {
         String uid = principal.getName();
 
         UserPointCouponDTO point = orderService.selectUserPoint(uid);
-        List<CouponDTO> couponList = orderService.selectUserCoupon(uid);
+
         log.info("Point = ="+point);
-        log.info("CouponList = ="+couponList);
 
         model.addAttribute("point", point);
-        model.addAttribute("couponList", couponList);
-
-        //getCouponByUid로 한개 생성 필요
-        couponService.getAllCoupons();
-
+        model.addAttribute("couponList", orderService.selectUserCoupon(uid));
+        log.info("test123124124"+orderService.selectUserCoupon(uid));
 
         // 공통 메서드를 통한 CartItemDTO 생성
         if (cartResponseDTO != null) {  // 바로 구매 시
@@ -76,7 +73,7 @@ public class OrderController {
             for (int i = 0; i < productVariantsList.size(); i++) {
                 ProductVariants variant = productVariantsList.get(i);
                 int count = counts.get(i);
-                
+
                 // 0으로 카트아이디는 설정
                 // 공통화된 CartItemDTO 생성
                 CartItemDTO item = CartItemDTO.createCartItemDTO(variant, count, 0);

@@ -351,6 +351,10 @@ public class UserService {
         return userRepository.findMemberInfoIdByUid(uid);
     }
 
+    public Optional<User> getUserByUid(String uid) {
+        return userRepository.findByUid(uid);
+    }
+
     // 검색조건에 따른 상점 목록 출력
     public Page<UserDTO> selectUserListBySeller(String role, int page, int size, String keyword, String searchCategory) {
         Pageable pageable = PageRequest.of(page, size);
