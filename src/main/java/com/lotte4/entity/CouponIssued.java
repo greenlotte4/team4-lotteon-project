@@ -2,8 +2,10 @@ package com.lotte4.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -25,11 +27,12 @@ public class CouponIssued {
     //사용자
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
-    private User users;
+    private User user;
 
     private int status;
 
     //사용일
-    private Date uDate;
+    @CreationTimestamp
+    private LocalDateTime uDate;
 
 }

@@ -181,37 +181,66 @@
                 <table class="modal-table">
                     <tr>
                         <th>발급처</th>
-                        <td><input type="text" id="company" value="(주)다있어" readonly required></td>
+                        <td th:if="${#authentication.principal.user.role} == 'seller'">
+                            <input type="text" id="company" th:value="${#authentication.principal.user.sellerInfo.comName}" readonly required>
+                        </td>
+                        <td th:if="${#authentication.principal.user.role} == 'ADMIN'">
+                            <input type="text" id="admin" th:value="관리자" readonly required>
+                        </td>
                     </tr>
                     <tr>
                         <th>쿠폰종류</th>
                         <td>
-                            <select id="type-select" class="dropdown">
-                                <option>종류 선택</option>
-                                <option>개별상품할인</option>
-                                <option>주문상품할인</option>
-                                <option>배송비 무료</option>
-                            </select>
+                            <div style="display: inline-block;">
+                                <select id="type-select" class="dropdown" onchange="toggleProductSelect()">
+                                    <option>종류 선택</option>
+                                    <option th:if="${#authentication.principal.user.role} == 'seller'">판매자상품할인</option>
+                                    <option id="select-product" th:if="${#authentication.principal.user.role} == 'seller'">개별상품할인</option>
+                                    <option th:if="${#authentication.principal.user.role} == 'ADMIN'">전체주문할인</option>
+                                    <option>배송비 무료</option>
+                                </select>
+                            </div>
+                            <div style="display: inline-block;">
+                                <select id="product-select" class="dropdown" style="display: none;">
+                                    <option>상품 선택</option>
+                                    <option th:each="product : ${sellerProducts}" th:text="${product.name}" th:value="${product.productId}"></option>
+                                </select>
+                            </div>
                         </td>
                     </tr>
+
+                    <script>
+                        function toggleProductSelect() {
+                            const typeSelect = document.getElementById("type-select");
+                            const productSelect = document.getElementById("product-select");
+
+                            // '개별상품할인' 선택 시만 상품 선택 드롭다운을 표시
+                            if (typeSelect.value === "개별상품할인") {
+                                productSelect.style.display = "inline-block";
+                            } else {
+                                productSelect.style.display = "none";
+                            }
+                        }
+                    </script>
+
                     <tr>
                         <th>쿠폰명</th>
-                        <td><input type="text" id="couponName" required></td>
+                        <td><input type="text" id="couponName" required> <input type="hidden" id="uid" th:value="${#authentication.principal.user.uid}"></td>
                     </tr>
                     <tr>
                         <th>혜택</th>
                         <td>
                             <div class="radio-group" id="benefit">
-                                <label><input type="radio" name="benefit" value="1"> 1,000원 할인</label>
-                                <label><input type="radio" name="benefit" value="2"> 2,000원 할인</label>
-                                <label><input type="radio" name="benefit" value="3"> 3,000원 할인</label>
-                                <label><input type="radio" name="benefit" value="4"> 4,000원 할인</label>
-                                <label><input type="radio" name="benefit" value="5"> 5,000원 할인</label>
-                                <label><input type="radio" name="benefit" value="6"> 10% 할인</label>
-                                <label><input type="radio" name="benefit" value="7"> 20% 할인</label>
-                                <label><input type="radio" name="benefit" value="8"> 30% 할인</label>
-                                <label><input type="radio" name="benefit" value="9"> 40% 할인</label>
-                                <label><input type="radio" name="benefit" value="10"> 50% 할인</label>
+                                <label><input type="radio" name="benefit" value="1000"> 1,000원 할인</label>
+                                <label><input type="radio" name="benefit" value="2000"> 2,000원 할인</label>
+                                <label><input type="radio" name="benefit" value="3000"> 3,000원 할인</label>
+                                <label><input type="radio" name="benefit" value="4000"> 4,000원 할인</label>
+                                <label><input type="radio" name="benefit" value="5000"> 5,000원 할인</label>
+                                <label><input type="radio" name="benefit" value="10"> 10% 할인</label>
+                                <label><input type="radio" name="benefit" value="20"> 20% 할인</label>
+                                <label><input type="radio" name="benefit" value="30"> 30% 할인</label>
+                                <label><input type="radio" name="benefit" value="40"> 40% 할인</label>
+                                <label><input type="radio" name="benefit" value="50"> 50% 할인</label>z
                                 <label><input type="radio" name="benefit" value="0"> 배송비 무료</label>
                             </div>
                         </td>
@@ -352,28 +381,33 @@
 
         // 등록 확인 버튼 클릭 시
         confirmButton.onclick = function() {
-            const company = document.getElementById("company").value;
             const type = document.getElementById("type-select").value;
+            const prodId = document.getElementById("product-select").value;
             const couponName = document.getElementById("couponName").value;
             const benefit = document.querySelector('input[name="benefit"]:checked').value;
             const startDate = document.getElementById("startDate").value;
             const endDate = document.getElementById("endDate").value;
             const dDate = document.getElementById("dDate").value;
             const descInput = document.getElementById("descInput").value;
+            const uid = document.getElementById("uid").value;
 
             if (type !== "종류 선택" && couponName && benefit && ((startDate && endDate) || dDate ) ) {
                 // 등록 로직 추가 (서버 전송 또는 콘솔 출력)
-                console.log("company:", company);
+
                 console.log("type:", type);
+                console.log("prodId:", Number(prodId));
                 console.log("benefit:", benefit);
                 console.log("startDate:", startDate);
                 console.log("endDate:", endDate);
                 console.log("dDate:", Number(dDate));
                 console.log("descInput:", descInput);
+                console.log("uid:", uid);
 
 
                 const jsonData = {
+                    "uid":uid,
                     "type" : type,
+                    "prodId" : Number(prodId),
                     "benefit" : benefit,
                     "sdate" : startDate,
                     "edate" : endDate,

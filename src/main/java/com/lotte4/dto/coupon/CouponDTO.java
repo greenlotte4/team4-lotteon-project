@@ -1,12 +1,9 @@
-package com.lotte4.dto;
+package com.lotte4.dto.coupon;
 
-import com.lotte4.entity.Order;
-import com.lotte4.entity.User;
-import jakarta.persistence.*;
+import com.lotte4.dto.UserDTO;
 import lombok.*;
 
 import java.sql.Date;
-import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -16,7 +13,7 @@ public class CouponDTO {
     private int couponId;
     private String type;
     private String name;
-
+    private int prodId;
     //benefit
     private String benefit;
 
@@ -25,17 +22,13 @@ public class CouponDTO {
     private int dDate;
 
     private int status;
-
     private int totalIssued;
-
     private int totalUsed;
-
-    private String IDate;
-
+    private String iDate;
     private String ect;
 
     //외래키
     private UserDTO users;
-
+    private int ProductId;
 
 }
