@@ -224,5 +224,19 @@ public class MyController {
         return ResponseEntity.ok().build();
     }
 
-
+    // 나의 정보 탈퇴 요청 처리
+    @PostMapping("/info/quit")
+    public ResponseEntity<String> quitUser(@RequestBody UserDTO userDTO) {
+        log.info("userDTO : " + userDTO);
+        try {
+            boolean success = userService.quitUser(userDTO.getUid());
+            if (success) {
+                return ResponseEntity.ok("탈퇴 완료");
+            } else {
+                return ResponseEntity.status(400).body("탈퇴 처리 실패");
+            }
+        } catch(Exception e) {
+            return ResponseEntity.status(500).body("서버 오류");
+        }
+    }
 }
