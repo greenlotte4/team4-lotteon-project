@@ -173,7 +173,7 @@ main {
   margin-top: 6px;
 }
 
-.main_section > section {
+.main_section  section {
   width: 98%;
   height: auto;
   margin-bottom: 10px;
@@ -183,23 +183,23 @@ main {
   padding-right: 0;
 }
 
-.main_section > .slider {
+.main_section  .slider {
   padding: 0px;
 }
 
-.main_section > .slider > .swiper{
+.main_section  .slider > .swiper{
   width: 975px;
   height: 430px;
 }
 
 
-.main_section > section > article {
+.main_section  section > article {
   margin-top: 10px;
   width: 100%;
   display: flex;
   justify-content: space-between;
 }
-.main_section > section > h3 > span {
+.main_section  section > h3 > span {
 
   font-weight: bold;
   font-size: 19px;
@@ -207,12 +207,12 @@ main {
 
 
 
-.main_section > section >article {
+.main_section  section >article {
   height: auto;
   display: block;
 }
 
-.main_section > section > article > a {
+.main_section  section > article > a {
   width: 210px;
   height: 260px;
   padding: 10px;
@@ -224,7 +224,7 @@ main {
   margin-top: 15px;
 }
 
-/*.main_section > .hit > article > a {*/
+/*.main_section  .hit > article > a {*/
 /*  width: 170px;*/
 /*  height: 260px;*/
 /*  box-sizing: border-box;*/
@@ -232,12 +232,12 @@ main {
 /*  margin-right: 12px;*/
 /*}*/
 
-/*.main_section > .hit >article {*/
+/*.main_section  .hit >article {*/
 /*  height: auto;*/
 /*  display: block;*/
 /*}*/
 
-.main_section > section > article > a:hover{
+.main_section  section > article > a:hover{
   transform:scale(1.05);
   transition: transform .5s;
 }
@@ -245,11 +245,11 @@ main {
 
 
 
-.main_section > section > article > a > .thumb {
+.main_section  section > article > a > .thumb {
   width: 100%;
 }
 
-.main_section > section > article > a > .thumb > img{
+.main_section  section > article > a > .thumb > img{
   width: 100%;
   height: 150px;
   box-sizing: border-box;
@@ -257,7 +257,7 @@ main {
 }
 
 
-.main_section > section > article h2 {
+.main_section  section > article h2 {
   font-size: 15px;
   font-weight: bold;
   margin-top: 4px;
@@ -267,7 +267,7 @@ main {
   overflow: hidden;
 }
 
-.main_section > section > article p {
+.main_section  section > article p {
   color: #222;
   font-size: 12px;
   line-height: 16px;
@@ -276,33 +276,33 @@ main {
   white-space: nowrap;
   overflow: hidden;
 }
-.main_section > section > article > a:hover > p {
+.main_section  section > article > a:hover > p {
   text-decoration: underline;
 }
 
-.main_section > section > article del::after {
+.main_section  section > article del::after {
   content: "원";
 }
-.main_section > section > article ins::after {
+.main_section  section > article ins::after {
   content: "원";
 }
-.main_section > section > article .org_price > del {
+.main_section  section > article .org_price > del {
   color: #aaa;
 }
-.main_section > section > article .org_price > span {
+.main_section  section > article .org_price > span {
   color: #eb000a;
 }
-.main_section > section > article .org_price > span::after {
+.main_section  section > article .org_price > span::after {
   content: "↓";
 }
-.main_section > section > article .dis_price {
+.main_section  section > article .dis_price {
   margin-top: 4px;
 }
-.main_section > section > article .dis_price > ins {
+.main_section  section > article .dis_price > ins {
   font-size: 14px;
   text-decoration: none;
 }
-.main_section > section > article .dis_price > .free {
+.main_section  section > article .dis_price > .free {
   float: right;
   font-size: 0;
   vertical-align: text-bottom;
@@ -312,12 +312,12 @@ main {
 }
 
 /* 슬라이더 영역 */
-.main_section > .slider {
+.main_section  .slider {
   width: 100%;
   height: 425px;
   overflow: hidden;
 }
-.main_section > .slider > .bx-wrapper {
+.main_section  .slider > .bx-wrapper {
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
   box-shadow: none;
@@ -325,16 +325,43 @@ main {
   background: #fff;
 }
 
-.main_section > .hit {
+.main_section  .hit {
 }
-.main_section > .recommend {
+.main_section  .recommend {
 }
-.main_section > .new {
+.main_section  .new {
 }
-.main_section > .popularity {
+.main_section  .popularity {
 }
-.main_section > .discount {
+.main_section  .discount {
 }
+
+/* 애니메이션을 위한 기본 설정 */
+.scroll-section a {
+  opacity: 0; /* 처음에는 보이지 않음 */
+  transform: translateY(20px); /* 약간 아래쪽에 배치 */
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+/* a 태그가 화면에 보일 때 적용되는 애니메이션 */
+.scroll-section a.visible {
+  opacity: 1;
+  transform: translateY(0); /* 원래 위치로 */
+}
+
+/* 섹션의 애니메이션 기본 설정 */
+.scroll-section {
+  opacity: 0; /* 처음에는 보이지 않음 */
+  transform: translateY(20px); /* 약간 아래쪽에 배치 */
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+/* 섹션이 화면에 보일 때 적용되는 애니메이션 */
+.scroll-section.visible {
+  opacity: 1;
+  transform: translateY(0); /* 원래 위치로 */
+}
+
 
 /* 푸터영역 */
 footer {
