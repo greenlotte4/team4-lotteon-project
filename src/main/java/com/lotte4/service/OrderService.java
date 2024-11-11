@@ -1,6 +1,7 @@
 package com.lotte4.service;
 
 import com.lotte4.dto.*;
+import com.lotte4.dto.coupon.CouponDTO;
 import com.lotte4.entity.*;
 import com.lotte4.repository.*;
 import com.lotte4.repository.admin.config.CouponRepository;
