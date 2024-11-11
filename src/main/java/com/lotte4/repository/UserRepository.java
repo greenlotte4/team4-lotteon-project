@@ -42,7 +42,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     // 아이디 중복확인
     int countByUid(String uid);
 
-    // role이 member인 회원 목록 select(관리자 회원목록을 위함)
+    // role이 member인 회원 목록 select(관리자 회원&상점목록을 위함)
     Page<User> findByRole(String role, Pageable pageable);
 
     // uid 검색 
@@ -71,8 +71,20 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     // 회사명&사업자등록번호&이메일로 아이디 조회
     Optional<User> findBySellerInfo_ComNameAndSellerInfo_ComNumberAndSellerInfo_Email(String comName, String comNumber, String email);
 
-    // 아이디&업자등록번호&이메일로 정보 조회
+    // 아이디&사업자등록번호&이메일로 정보 조회
     Optional<User> findByUidAndAndSellerInfo_ComNumberAndSellerInfo_Email(String uid, String comNumber, String email);
+
+    // 상호명 검색
+    Page<User> findByRoleAndSellerInfoComNameContaining(String role, String comName, Pageable pageable);
+
+    // 대표자 검색
+    Page<User> findByRoleAndSellerInfoCeoContaining(String role, String ceo, Pageable pageable);
+
+    // 사업자등록번호 검색
+    Page<User> findByRoleAndSellerInfoBizNumberContaining(String role, String bizNumber, Pageable pageable);
+
+    // 연락처 검색
+    Page<User> findByRoleAndSellerInfoHpContaining(String role, String hp, Pageable pageable);
 
 
 }
