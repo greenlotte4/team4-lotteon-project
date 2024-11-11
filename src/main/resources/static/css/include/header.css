@@ -192,10 +192,12 @@ header {
 
 .categoryMenu {
 
-    position:absolute;
+    height: 429px;
+    position: absolute;
     background-color: white;
     width: 200px;
-    border: 1px solid #ddd;
+    border-bottom: 1px solid #EF2A23;
+     border-right: 1px solid #ddd;
     border-left: 1px solid #EF2A23;
     display: none;
     transition: all 0.3s ease;
@@ -206,6 +208,7 @@ header {
 }
 
 .categoryMenu ul {
+    height: 300px;
     list-style: none;
     padding: 0;
     margin: 0;
@@ -219,7 +222,7 @@ header {
 }
 
 .categoryMenu li a {
-    font-size : 17px;
+    font-size : 14px;
     text-decoration: none;
     color: #333;
 }
