@@ -87,6 +87,7 @@
 
 <script>
     window.onload = function() {
+
         // URL에서 쿼리 파라미터 읽기
         const urlParams = new URLSearchParams(window.location.search);
         const success = urlParams.get('success');
@@ -100,6 +101,8 @@
             alert('로그인에 실패하였습니다. 아이디, 비밀번호를 확인해주세요.');
         } else if(success === '101') {
             alert('로그아웃 완료되었습니다.');
+        } else if(success === '401') {
+            alert('탈퇴한 회원입니다.');
         }
 
         // success-message 요소가 존재하는지 확인(비밀번호가 성공적으로 변경되었습니다.)
