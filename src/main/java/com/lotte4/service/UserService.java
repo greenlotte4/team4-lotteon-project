@@ -31,6 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.lang.reflect.Member;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
@@ -411,6 +412,9 @@ public class UserService {
         return false;  // 해당 사용자가 존재하지 않거나 상태 업데이트 실패
     }
 
+    public int findAllByDay(LocalDate date) {
+        return userRepository.findAllByDay(date);
+    }
 
 
 }

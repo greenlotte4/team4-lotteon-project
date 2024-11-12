@@ -15,217 +15,241 @@
 </head>
 <body>
 <header th:replace="~{/admin/include/header.html}"></header>
-    <main>
-        <div id="wrapper">
-            <aside th:replace="~{/admin/include/aside.html}"></aside>
-            <!--section-->
-            <section>
-                <div class="breadcrumb">
-                    <a href="#">Home</a> > <a href="#" class="location">관리자메인</a>
-                </div>
-                <h3>관리자 메인</h3>
+<main>
+    <div id="wrapper">
+        <aside th:replace="~{/admin/include/aside.html}"></aside>
+        <!--section-->
+        <section>
+            <div class="breadcrumb">
+                <a href="#">Home</a> > <a href="#" class="location">관리자메인</a>
+            </div>
+            <h3>관리자 메인</h3>
 
-                <div class="dashboard">
-                    <article class="dashboard-item">
-                        <div class="content__bar">
-                            <div>
-                                <canvas id="barChart"></canvas>
-                            </div>
-                            <div style="max-width: 500px">
-                                <canvas id="doughnutChart"></canvas>
-                            </div>
+            <div class="dashboard">
+                <article class="dashboard-item">
+                    <div class="content__bar">
+                        <div>
+                            <canvas id="barChart"></canvas>
                         </div>
-                    </article>
+                        <div style="max-width: 500px">
+                            <canvas id="doughnutChart"></canvas>
+                        </div>
+                    </div>
+                </article>
 
-                    <article class="dashboard-item operation_text dash">
-                        <h4>운영현황</h4>
-                        <table class="operation_product dash_table">
-                            <tr>
-                                <th class="tb-border">입금대기</th>
-                                <th class="tb-border">배송준비</th>
-                                <th class="tb-border">취소요청</th>
-                                <th class="tb-border">교환요청</th>
-                                <th>반품요청</th>
-                            </tr>
-                            <tr class="tb-bottom">
-                                <td class="tb-border count">101</td>
-                                <td class="tb-border count">124</td>
-                                <td class="tb-border count">14</td>
-                                <td class="tb-border count">7</td>
-                                <td class="count">24</td>
-                            </tr>
-                        </table>
-                        <table class="operation_total operation_table dash_table">
-                            <tr>
-                                <th colspan="2" class="tb-border">주문건수</th>
-                                <th colspan="2" class="tb-border">주문금액</th>
-                                <th colspan="2" class="tb-border">회원가입</th>
-                                <th colspan="2" class="tb-border">방문자 수</th>
-                                <th colspan="2">문의 게시물</th>
-                            </tr>
-                            <tr class="tb-bottom">
-                                <!--주문건수-->
-                                <td colspan="2" class="tb-border count">131</td>
-                                <!--주문금액-->
-                                <td colspan="2" class="tb-border count">1,130,000</td>
-                                <!--회원가입-->
-                                <td colspan="2" class="tb-border count">1,014</td>
-                                <!--방문자 수-->
-                                <td colspan="2" class="tb-border count">[[${yesterdayVisitor+todayVisitor}]]</td>
-                                <!--문의 게시물-->
-                                <td colspan="2" class="count">14</td>
-                            </tr>
-                            <tr>
-                                <!--주문건수-->
-                                <td class="tb-border">오늘<br>어제</td>
-                                <td class="tb-border">60<br>70</td>
-                                <!--주문금액-->
-                                <td class="tb-border">오늘<br>어제</td>
-                                <td class="tb-border">1,200,000<br>2,500,000</td>
-                                <!--회원가입-->
-                                <td class="tb-border">오늘<br>어제</td>
-                                <td class="tb-border">102<br>130</td>
-                                <!--방문자 수-->
-                                <td class="tb-border">어제<br>오늘</td>
-                                <td class="tb-border">[[${yesterdayVisitor}]]<br>[[${todayVisitor}]]</td>
-                                <!--문의 게시물-->
-                                <td class="tb-border">어제<br>오늘</td>
-                                <td>12<br>13</td>
+                <article class="dashboard-item operation_text dash">
+                    <h4>운영현황</h4>
+                    <table class="operation_product dash_table">
+                        <tr>
+                            <th class="tb-border">입금대기</th>
+                            <th class="tb-border">배송준비</th>
+                            <th class="tb-border">취소요청</th>
+                            <th class="tb-border">교환요청</th>
+                            <th>반품요청</th>
+                        </tr>
+                        <tr class="tb-bottom">
+                            <td class="tb-border count">[[${todayWaitMoney}]]</td>
+                            <td class="tb-border count">[[${todayPreDelivery}]]</td>
+                            <td class="tb-border count">[[${todayCancelRequest}]]</td>
+                            <td class="tb-border count">[[${todayChangeRequest}]]</td>
+                            <td class="count">[[${todayReturnRequest}]]</td>
+                        </tr>
+                    </table>
+                    <table class="operation_total operation_table dash_table">
+                        <tr>
+                            <th colspan="2" class="tb-border">주문건수</th>
+                            <th colspan="2" class="tb-border">주문금액</th>
+                            <th colspan="2" class="tb-border">회원가입</th>
+                            <th colspan="2" class="tb-border">방문자 수</th>
+                            <th colspan="2">문의 게시물</th>
+                        </tr>
+                        <tr class="tb-bottom">
+                            <!--주문건수-->
+                            <td colspan="2" class="tb-border count">[[${todayOrder+yesterdayOrder}]]</td>
+                            <!--주문금액-->
+                            <td colspan="2" class="tb-border count">[[${todayPrice+yesterdayPrice}]]</td>
+                            <!--회원가입-->
+                            <td colspan="2" class="tb-border count">[[${yesterdayRegister+todayRegister}]]</td>
+                            <!--방문자 수-->
+                            <td colspan="2" class="tb-border count">[[${yesterdayVisitor+todayVisitor}]]</td>
+                            <!--문의 게시물-->
+                            <td colspan="2" class="count">[[${yesterdayBoard+todayBoard}]]</td>
+                        </tr>
+                        <tr>
+                            <!--주문건수-->
+                            <td class="tb-border">오늘<br>어제</td>
+                            <td class="tb-border">[[${todayOrder}]]<br>[[${yesterdayOrder}]]</td>
+                            <!--주문금액-->
+                            <td class="tb-border">오늘<br>어제</td>
+                            <td class="tb-border">[[${todayPrice}]]<br>[[${yesterdayPrice}]]</td>
+                            <!--회원가입-->
+                            <td class="tb-border">오늘<br>어제</td>
+                            <td class="tb-border">[[${todayRegister}]]<br>[[${yesterdayRegister}]]</td>
+                            <!--방문자 수-->
+                            <td class="tb-border">오늘<br>어제</td>
+                            <td class="tb-border">[[${todayVisitor}]]<br>[[${yesterdayVisitor}]]</td>
+                            <!--문의 게시물-->
+                            <td class="tb-border">오늘<br>어제</td>
+                            <td>[[${todayBoard}]]<br>[[${yesterdayBoard}]]</td>
 
-                            </tr>
-                        </table>
-                    </article>
+                        </tr>
+                    </table>
+                </article>
 
-                    <article class="dashboard-item article">
-                        <h4 class="dash-bottom">공지사항</h4>
-                        <table class="dash-padding">
-                            <tbody>
-                                <tr>
-                                    <td><a href="#">[안내] 해외결제사 창 문자주의</a></td>
-                                    <td>22.10.31</td>
-                                </tr>
-                                <tr>
-                                    <td><a href="#">[안내] 롯데ON 배송관련 안내</a></td>
-                                    <td>22.10.31</td>
-                                </tr>
-                                <tr>
-                                    <td><a href="#">[안내] 구매확정 안내</a></td>
-                                    <td>22.10.31</td>
-                                </tr>
-                                <tr>
-                                    <td><a href="#">[안내] 롯데ON 배송관련 안내</a></td>
-                                    <td>22.10.31</td>
-                                </tr>
-                                <tr>
-                                    <td><a href="#">[안내] 구매확정 안내</a></td>
-                                    <td>22.10.31</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </article>
+                <article class="dashboard-item article">
+                    <h4 class="dash-bottom">공지사항</h4>
+                    <table class="dash-padding">
+                        <tbody>
+                        <tr>
+                            <td><a href="#">[안내] 해외결제사 창 문자주의</a></td>
+                            <td>22.10.31</td>
+                        </tr>
+                        <tr>
+                            <td><a href="#">[안내] 롯데ON 배송관련 안내</a></td>
+                            <td>22.10.31</td>
+                        </tr>
+                        <tr>
+                            <td><a href="#">[안내] 구매확정 안내</a></td>
+                            <td>22.10.31</td>
+                        </tr>
+                        <tr>
+                            <td><a href="#">[안내] 롯데ON 배송관련 안내</a></td>
+                            <td>22.10.31</td>
+                        </tr>
+                        <tr>
+                            <td><a href="#">[안내] 구매확정 안내</a></td>
+                            <td>22.10.31</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </article>
 
-                    <article class="dashboard-item article">
-                        <h4 class="dash-bottom">고객문의</h4>
-                        <table class="dash-padding">
-                            <tbody>
-                            <tr>
-                                <td><a href="#">[가입] 개인정보 문의</a></td>
-                                <td>작성자</td>
-                                <td>22.10.31</td>
-                            </tr>
-                            <tr>
-                                <td><a href="#">[배송] 배송 문의</a></td>
-                                <td>작성자</td>
-                                <td>22.10.31</td>
-                            </tr>
-                            <tr>
-                                <td><a href="#">[회원정보] 정보 수정 문의</a></td>
-                                <td>작성자</td>
-                                <td>22.10.31</td>
-                            </tr>
-                            <tr>
-                                <td><a href="#">[배송] 배송 문의</a></td>
-                                <td>작성자</td>
-                                <td>22.10.31</td>
-                            </tr>
-                            <tr>
-                                <td><a href="#">[회원정보] 정보 수정 문의</a></td>
-                                <td>작성자</td>
-                                <td>22.10.31</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </article>
-                </div>
-            </section>
-            <!--/section-->
-        </div>
-    </main>
+                <article class="dashboard-item article">
+                    <h4 class="dash-bottom">고객문의</h4>
+                    <table class="dash-padding">
+                        <tbody>
+                        <tr>
+                            <td><a href="#">[가입] 개인정보 문의</a></td>
+                            <td>작성자</td>
+                            <td>22.10.31</td>
+                        </tr>
+                        <tr>
+                            <td><a href="#">[배송] 배송 문의</a></td>
+                            <td>작성자</td>
+                            <td>22.10.31</td>
+                        </tr>
+                        <tr>
+                            <td><a href="#">[회원정보] 정보 수정 문의</a></td>
+                            <td>작성자</td>
+                            <td>22.10.31</td>
+                        </tr>
+                        <tr>
+                            <td><a href="#">[배송] 배송 문의</a></td>
+                            <td>작성자</td>
+                            <td>22.10.31</td>
+                        </tr>
+                        <tr>
+                            <td><a href="#">[회원정보] 정보 수정 문의</a></td>
+                            <td>작성자</td>
+                            <td>22.10.31</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </article>
+            </div>
+        </section>
+        <!--/section-->
+    </div>
+</main>
 
-    <footer th:replace="~{/admin/include/footer.html}"></footer>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const doughnutChartctx = document.querySelector('#doughnutChart').getContext('2d');
-            const doughnutChart = new Chart(doughnutChartctx, {
-                type: 'pie',
-                data: {
-                    datasets: [{
-                        data: [20, 30, 50],
-                        backgroundColor: [
-                            'rgba(255,0,0,0.5)',
-                            'rgba(0,0,255,0.5)',
-                            'rgba(48,255,93,0.5)'
-                        ],
-                        borderColor: [
-                            'rgba(255,0,0,1)',
-                            'rgba(0,0,255,1)',
-                            'rgba(48,255,93,1)'
-                        ],
-                        borderWidth: 1
-                    }],
-                    labels: ['결제취소', '배송완료', '배송 중']
-                },
-                options: {
-                    cutout: '50%'
-                }
-            });
+<footer th:replace="~{/admin/include/footer.html}"></footer>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        fetch(`/lotteon/admin/index/OrderPieChart`)
+            .then(response => response.json())
+            .then(data => {
+                const orderData = data.Counts;
+                const doughnutChartctx = document.querySelector('#doughnutChart').getContext('2d');
+                const doughnutChart = new Chart(doughnutChartctx, {
+                    type: 'pie',
+                    data: {
+                        datasets: [{
+                            data: orderData,
+                            backgroundColor: [
+                                'rgba(255,0,0,0.5)',
+                                'rgba(0,0,255,0.5)',
+                                'rgba(48,255,93,0.5)',
+                                'rgba(255,252,48,0.5)'
+                            ],
+                            borderColor: [
+                                'rgba(255,0,0,1)',
+                                'rgba(0,0,255,1)',
+                                'rgba(48,255,93,1)',
+                                'rgba(255,252,48,1)'
+                            ],
+                            borderWidth: 1
+                        }],
+                        labels: ['결제취소', '배송완료', '배송 중','배송 전']
+                    },
+                    options: {
+                        cutout: '50%'
+                    }
+                });
+            })
+            .catch(error => console.error('Error fetching data:', error));
 
-            const barChartCtx = document.querySelector('#barChart').getContext('2d');
-            const barChart = new Chart(barChartCtx, {
-                type: 'bar',
-                data: {
-                    labels: ['January', 'February', 'March', 'April', 'May'],
-                    datasets: [{
-                        label: 'Sales',
-                        data: [120, 190, 300, 500, 200],
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)',
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(255, 206, 86, 0.2)',
-                            'rgba(75, 192, 192, 0.2)',
-                            'rgba(153, 102, 255, 0.2)'
-                        ],
-                        borderColor: [
-                            'rgba(255, 99, 132, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 206, 86, 1)',
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(153, 102, 255, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true
+        const days = 5;
+
+        fetch(`/lotteon/admin/index/OrderStickChart?days=${days}`)
+            .then(response => response.json())
+            .then(data => {
+                const labels = data.dates.map(date => new Date(date).toISOString().slice(5, 10));
+                const orderData = data.orderCounts;
+                const paymentData = data.paymentCounts;
+                const cancelData = data.cancelCounts;
+
+                const barChartCtx = document.querySelector('#barChart').getContext('2d');
+                const barChart = new Chart(barChartCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: '주문',
+                                data: orderData,
+                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                borderWidth: 1
+                            },
+                            {
+                                label: '결제',
+                                data: paymentData,
+                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                borderColor: 'rgba(255, 99, 132, 1)',
+                                borderWidth: 1
+                            },
+                            {
+                                label: '취소',
+                                data: cancelData,
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            }
+                        ]
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
                         }
                     }
-                }
-            });
-        });
+                });
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    });
 
-    </script>
+</script>
 </body>
 </html>

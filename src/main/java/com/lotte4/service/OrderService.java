@@ -386,5 +386,27 @@ public class OrderService {
         return orderItems;
     }
 
+    public int findAllByDay(LocalDate date) {
+        return orderRepository.findAllByDay(date);
+    }
+
+    public int findPriceSumByDay(LocalDate date) {
+        return orderRepository.findPriceSumByDay(date).orElse(0);
+    }
+
+    public int findAllItemByDayWithStatus(LocalDate date, int status) {
+        return orderItemsRepository.findAllByDayWithStatus(date, status);
+    }
+
+    public int findAllByDayWithStatus(LocalDate date, int status) {
+        return orderRepository.findAllByDayWithStatus(date, status);
+    }
+
+    public int findAllByDayWithStatusFrom5Day(int from,LocalDate today, int status) {
+        LocalDate startDay = today.minusDays(from);
+        return orderItemsRepository.findAllByLastFiveDaysWithStatus(startDay, today, status);
+    }
+
+
 
 }
