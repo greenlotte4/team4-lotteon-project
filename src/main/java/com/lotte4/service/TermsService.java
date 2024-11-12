@@ -15,10 +15,16 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.mongodb.core.query.Term;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /*
      날짜 : 2024/10/28
      이름 : 강은경
@@ -111,6 +117,57 @@ public class TermsService {
 
     }
 
+    public List<String[]> selectTerm(int type) {
+        List<String[]> strList = new ArrayList<>();
+
+        Terms term = termsRepository.findByTermsId(1);
+
+        String target = "";
+
+
+        Pattern pattern = null;
+        Matcher matcher = null;
+
+        switch (type){
+            case 1:
+                target = term.getTerm();
+                pattern = Pattern.compile("(제\\d+조)([\\s\\S]+?)(?=제\\d+조|$)", Pattern.DOTALL);
+                matcher = pattern.matcher(target);
+                break;
+            case 2:
+                target = term.getTax();
+                pattern = Pattern.compile("(제\\d+조)([\\s\\S]+?)(?=제\\d+조|$)", Pattern.DOTALL);
+                matcher = pattern.matcher(target);
+                break;
+            case 3:
+                target = term.getFinance();
+                pattern = Pattern.compile("(제\\d+조)([\\s\\S]+?)(?=제\\d+조|$)", Pattern.DOTALL);
+                matcher = pattern.matcher(target);
+               break;
+            case 4:
+                target = term.getLocation();
+                pattern = Pattern.compile("(제\\d+조)([\\s\\S]+?)(?=제\\d+조|$)", Pattern.DOTALL);
+                matcher = pattern.matcher(target);
+                break;
+            case 5:
+                target = term.getPrivacy();
+                pattern = Pattern.compile("(제\\d+장)([\\s\\S]+?)(?=제\\d+장|$)", Pattern.DOTALL);
+                matcher = pattern.matcher(target);
+                break;
+        }
+
+        while (matcher.find()) {
+            // 제목 추출
+            String title = matcher.group(1).trim();
+            // 내용 추출 (제목 이후 텍스트)
+            String content = matcher.group(2).trim();
+
+            String[] str = new String[]{title, content};
+            strList.add(str);
+
+        }
+        return strList;
+    }
 
 
 
