@@ -118,8 +118,7 @@
     height:250px;
 }
 .recommend-article > a{
-    display:table-cell;
-
+    width: 170px;
 }
 .recommend-article .thumb {
     width: 150px !important;
