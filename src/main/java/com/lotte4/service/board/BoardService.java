@@ -21,6 +21,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -163,6 +165,10 @@ public class BoardService {
     public Board findById(int boardId) {
         return boardRepository.findById(boardId)
                 .orElseThrow(() -> new EntityNotFoundException("Board not found with ID: " + boardId));
+    }
+
+    public int countBoardWithDay(LocalDate localDate) {
+        return boardRepository.findAllByDay(localDate);
     }
 
 }

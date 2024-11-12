@@ -12,10 +12,12 @@ import org.springframework.stereotype.Repository;
 
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.Optional;
 
 /*
      날짜 : 2024/10/30
@@ -85,5 +87,13 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
             "WHERE oi.order.orderId = :orderId")
     Integer findOrderItemCountByOrderId(@Param("orderId") int orderId);
 
+    @Query("SELECT COUNT(b) FROM Order b WHERE DATE(b.buyDate) = :today")
+    int findAllByDay(@Param("today") LocalDate day);
+
+    @Query("SELECT SUM(b.totalPrice) FROM Order b WHERE DATE(b.buyDate) = :today")
+    Optional<Integer> findPriceSumByDay(@Param("today") LocalDate day);
+
+    @Query("SELECT COUNT(b) FROM Order b WHERE DATE(b.buyDate) = :today AND b.Status = :status")
+    int findAllByDayWithStatus(@Param("today") LocalDate day, @Param("status") int status);
 
 }

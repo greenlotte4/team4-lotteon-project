@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 //import java.util.List;
@@ -22,4 +24,7 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
     Page<Board> findByCate_Parent_BoardCateIdAndTypeOrderByRegDateDesc(int parentId, String type,Pageable pageable);
 
     List<Board> findTop5ByTypeOrderByRegDateDesc(String type);
+
+    @Query("SELECT COUNT(b) FROM Board b WHERE DATE(b.regDate) = :today")
+    int findAllByDay(@Param("today") LocalDate day);
 }

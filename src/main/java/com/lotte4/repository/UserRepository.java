@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 /*
@@ -86,5 +87,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     // 연락처 검색
     Page<User> findByRoleAndSellerInfoHpContaining(String role, String hp, Pageable pageable);
 
+    @Query("SELECT COUNT(b) FROM User b WHERE DATE(b.createdAt) = :today")
+    int findAllByDay(@Param("today") LocalDate day);
 
 }
