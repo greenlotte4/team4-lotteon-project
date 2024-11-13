@@ -57,12 +57,14 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         // user가 존재하고, 상태가 "탈퇴"인 경우
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-            if ("탈퇴".equals(user.getMemberInfo().getStatus())) {
+            // user의 MemberInfo가 null이 아니고, 상태가 "탈퇴"인 경우
+            if (user.getMemberInfo() != null && "탈퇴".equals(user.getMemberInfo().getStatus())) {
                 log.warn("로그인 실패: 사용자 " + username + "는 탈퇴 상태입니다.");
                 response.sendRedirect("/lotteon/member/login?success=401"); // 탈퇴된 사용자는 로그인 불가
                 return; // 이후 로직을 실행하지 않도록 종료
             }
         }
+
 
         userService.updateLastLoginDate(username);
 
