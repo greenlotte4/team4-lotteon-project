@@ -3,9 +3,8 @@ package com.lotte4.service;
 import com.lotte4.dto.*;
 import com.lotte4.entity.*;
 import com.lotte4.repository.*;
-import com.lotte4.repository.admin.config.CouponRepository;
+import com.lotte4.security.MyUserDetails;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -18,7 +17,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
-
+import org.springframework.security.core.context.SecurityContextHolder;
 /*
      날짜 : 2024/10/30
      이름 : 조수빈
@@ -53,6 +52,7 @@ public class OrderService {
     private final EntityManager entityManager;
 
     private final UserService userService;
+    private final com.lotte4.controller.pagecontroller.CustomErrorController customErrorController;
 
     public List<OrderDTO> getOrders() {
         List<Order> orders = orderRepository.findAll();
@@ -90,6 +90,20 @@ public class OrderService {
     // 2024-11-04 수정 완료
     public void insertOrder(OrderDTO orderDTO) {
         log.info("insertOrder: " + orderDTO);
+        // 로그인된 사용자 UID 가져오기
+        String uid = getLoggedInUserUid();
+        log.info("Logged-in user UID: " + uid);
+
+        // 사용자 정보 조회
+        User user = userRepository.findByUid(uid)
+                .orElseThrow(() -> new IllegalArgumentException("로그인된 사용자를 찾을 수 없습니다. UID: " + uid));
+        log.info("Logged-in user: " + user);
+
+        // 사용자의 현재 포인트 확인
+        int userPoints = user.getMemberInfo().getPoint();
+        log.info("User points: " + userPoints);
+
+
         Order order = new Order();
         order.setPayment(orderDTO.getPayment());
         order.setStatus(orderDTO.getStatus());
@@ -118,7 +132,7 @@ public class OrderService {
                 orderItems.setOriginPoint(orderItemsDTO.getOriginPoint());
                 orderItems.setOriginPrice(orderItemsDTO.getOriginPrice());
                 orderItems.setItemOption(orderItemsDTO.getProductVariants().getSku());
-//                orderItems.setStatus(1);
+                orderItems.setStatus(1);
                 orderItems.setVariantId(orderItemsDTO.getVariantId());
 
                 // ProductVariants 설정
@@ -153,6 +167,10 @@ public class OrderService {
                 deliveryRepository.save(delivery);
 
                 if (orderDTO.getUsePoint() != 0){
+
+
+
+                    pointRepository.findById(16);
                     Point point = new Point();
                     point.setMemberInfo(order.getMemberInfo());
                     point.setPoint(orderDTO.getUsePoint());
@@ -162,11 +180,10 @@ public class OrderService {
                     String formattedDate = LocalDateTime.now().format(formatter);
 
                     point.setPointName(formattedDate + " " + order.getProductVariants().getProduct().getName() + " " + order.getProductVariants().getSku() + "물품 구매건");
-                    point.setPresentPoint(orderDTO.getUsePoint());
+                    point.setPresentPoint(userPoints - orderDTO.getUsePoint());
                     point.setType("차감");
                     pointRepository.save(point);
                 }
-
             }
         }
         // 최종 Order 저장
@@ -471,7 +488,11 @@ public class OrderService {
                 if (productVariantOptional.isPresent()) {
                     ProductVariants productVariants = productVariantOptional.get();
                     productVariants.setStock(productVariants.getStock() - count);
-                    productVariantsRepository.save(productVariants);
+                    if(productVariants.getStock() <= 0){
+                        productVariants.setStock(0);
+                    }else{
+                        productVariantsRepository.save(productVariants);
+                    }
                 } else {
                     log.warn("variantId 못 찾음: " + variantId);
                 }
@@ -555,4 +576,20 @@ public class OrderService {
         }
     }
 
+    private String getLoggedInUserUid() {
+        // 현재 인증된 사용자 가져오기
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof MyUserDetails) {
+            return ((MyUserDetails) principal).getUser().getUid();
+        } else {
+            throw new IllegalStateException("현재 인증된 사용자 정보를 가져올 수 없습니다.");
+        }
+    }
+
+    public User getLoggedInUser() {
+        String uid = getLoggedInUserUid();
+        return userRepository.findByUid(uid)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다. UID: " + uid));
+    }
 }
