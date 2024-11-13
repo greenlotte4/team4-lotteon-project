@@ -51,92 +51,58 @@
               <tr>
                 <th>날짜</th>
                 <th>구분</th>
-                <th>주문번호</th>
-                <th>적립금액</th>
-                <th>비고</th>
-                <th>유효기간</th>
+                <th>내용</th>
+                <th>금액</th>
+                <th>현재 포인트</th>
+
               </tr>
             </thead>
             <tbody>
-              <!-- 반복 block -->
-              <tr>
-                <td>
-                  2022-12-13
-                </td>
-                <td>
-                  적립
-                </td>
-                <td>
-                  2022131001
-                </td>
-                <td>
-                  340
-                </td>
-                <td>
-                  상품 구매확정
-                </td>
-                <td>
-                  2024-12-10
-                </td>
-              </tr>
-              <!-- 반복 블럭 끝 -->
-
-              <!-- 반복 block -->
-              <tr>
-                <td>
-                  2022-12-13
-                </td>
-                <td>
-                  적립
-                </td>
-                <td>
-                  2022131001
-                </td>
-                <td>
-                  340
-                </td>
-                <td>
-                  상품 구매확정
-                </td>
-                <td>
-                  2024-12-10
-                </td>
-              </tr>
-              <!-- 반복 블럭 끝 -->
-              
-              <!-- 반복 block -->
-              <tr>
-                <td>
-                  2022-12-13
-                </td>
-                <td>
-                  적립
-                </td>
-                <td>
-                  2022131001
-                </td>
-                <td>
-                  340
-                </td>
-                <td>
-                  상품 구매확정
-                </td>
-                <td>
-                  2024-12-10
-                </td>
-              </tr>
-              <!-- 반복 블럭 끝 -->
-              
+            <tr th:if="${#lists.isEmpty(points)}">
+              <td colspan="4" style="text-align: center;">포인트 내역이 없습니다.</td>
+            </tr>
+            <tr th:each="point : ${points}">
+              <td>
+                [[${point.pointDate}]]
+              </td>
+              <td>
+                [[${point.type}]]
+              </td>
+              <td>
+                [[${point.pointName}]]
+              </td>
+              <td>
+                [[${point.point}]]
+              </td>
+              <td>
+                [[${point.presentPoint}]]
+              </td>
+            </tr>
+            <!-- 반복 블럭 끝 -->
             </tbody>
           </table>
+          <!-- 페이지네이션: 게시물이 있을 때만 표시 -->
+          <div class="pagination" th:if="${totalPages > 1}">
+            <button class="page-btn"
+                    th:disabled="${currentPage == 0}"
+                    th:onclick="'window.location.href=\'?page=' + ${currentPage - 1} + '&size=8\''">
+              이전
+            </button>
+
+            <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+            <button class="page-num"
+                    th:classappend="${i == currentPage} ? 'active'"
+                    th:onclick="'window.location.href=\'?page=' + ${i} + '&size=8\''"
+                    th:text="${i + 1}">1</button>
+        </span>
+
+            <button class="page-btn"
+                    th:disabled="${currentPage + 1 == totalPages}"
+                    th:onclick="'window.location.href=\'?page=' + ${currentPage + 1} + '&size=8\''">
+              다음
+            </button>
         </article>
-        <div class="page">
-          <a href="#">이전</a>
-          <a href="#" class="page_current">1</a>
-          <a href="#">2</a>
-          <a href="#">3</a>
-          <a href="#">다음</a>
-        </div>
+
 
       </section>
     </main>

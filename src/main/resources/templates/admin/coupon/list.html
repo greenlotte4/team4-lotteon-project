@@ -76,7 +76,8 @@
                         </td>
                         <td>[[${coupon.type}]]</td>
                         <td>[[${coupon.name}]]</td>
-                        <td>[[${coupon.benefit}]]</td>
+                        <td th:if ="${coupon.benefit} < 100 ">[[${coupon.benefit}]]% 할인</td>
+                        <td th:if ="${coupon.benefit} >= 1000 ">[[${coupon.benefit}]]원 할인</td>
                         <td th:if="${coupon.getDDate() eq 0}">
                             [[${coupon.sDate}]] ~ [[${coupon.eDate}]]
                         </td>

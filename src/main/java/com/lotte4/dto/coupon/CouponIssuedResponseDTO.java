@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Date;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,5 +21,5 @@ public class CouponIssuedResponseDTO {
     private User user;
     private int status;
     //사용일
-    private LocalDateTime uDate;
+    private Date uDate;
 }

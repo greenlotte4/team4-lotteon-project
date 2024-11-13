@@ -19,6 +19,8 @@ import com.lotte4.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page; // 2024/11/13 황수빈
+import org.springframework.data.domain.Pageable; // 2024/11/13 황수빈
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -102,25 +104,20 @@ public class CouponService {
         return couponDTO;
     }
     public List<CouponDTO> getAvailableCouponsForProduct(int productId) {
-        // 1. Product와 SellerInfoId 조회
+
         ProductDTO product = productService.getProductById(productId);
         SellerInfoDTO sellerInfoId = product.getSellerInfoId();
 
-        // 2. 쿠폰 조회 조건 설정
         List<Coupon> coupons = couponRepository.findAllByConditions(sellerInfoId.getSellerInfoId(), productId);
 
-        // 3. 쿠폰을 CouponDTO로 변환하여 반환
         return coupons.stream()
                 .map(coupon -> modelMapper.map(coupon, CouponDTO.class))
                 .collect(Collectors.toList());
     }
 
-    public List<CouponIssuedResponseDTO> getIssuedCouponsByUid(String uid){
-        List<CouponIssued> IssuedCoupons = couponIssuedRepository.findByUser_uid(uid);
+    public Page<CouponIssuedResponseDTO> getIssuedCouponsByUid(String uid, Pageable pageable) {
+        Page<CouponIssued> issuedCoupons = couponIssuedRepository.findByUser_uid(uid, pageable);
 
-        return IssuedCoupons.stream()
-                .map(coupon -> modelMapper.map(coupon, CouponIssuedResponseDTO.class))
-                .collect(Collectors.toList());
-
-    }
+        return issuedCoupons.map(coupon -> modelMapper.map(coupon, CouponIssuedResponseDTO.class));
+    } // 2024/11/13 황수빈
 }

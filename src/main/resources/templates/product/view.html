@@ -149,12 +149,72 @@
                     <img th:src="@{'/uploads/product/' + ${productDTO.getImg3()}}" alt="상품 상세 사진" class="product-image">
                     <img th:src="@{'/uploads/product/' + ${productDTO.getDetail()}}" alt="상품 상세 정보 사진" class="product-image">
                 </div>
-                <!-- Additional product info -->
+                <div id="product-info-public-announcement" class="hidden">
+                    <h3>상품정보제공공시</h3>
+                    <table class="info-table">
+                        <tr>
+                            <th>상품상태</th>
+                            <td th:text="${productDTO.productDetailId.condition_field}"></td>
+                        </tr>
+                        <tr>
+                            <th>부가세 면세여부</th>
+                            <td th:text="${productDTO.productDetailId.duty}"></td>
+                        </tr>
+                        <tr>
+                            <th>영수증 발행</th>
+                            <td th:text="${productDTO.productDetailId.receipt}"></td>
+                        </tr>
+                        <tr>
+                            <th>사업자구분</th>
+                            <td th:text="${productDTO.productDetailId.sellerType}"></td>
+                        </tr>
+                        <tr>
+                            <th>브랜드</th>
+                            <td th:text="${productDTO.productDetailId.brand}"></td>
+                        </tr>
+                        <tr>
+                            <th>원산지</th>
+                            <td th:text="${productDTO.productDetailId.coa}"></td>
+                        </tr>
+                        <tr>
+                            <th>제조자 / 수입국</th>
+                            <td th:text="${productDTO.productDetailId.creator}"></td>
+                        </tr>
+                        <tr>
+                            <th>제조국</th>
+                            <td th:text="${productDTO.productDetailId.country}"></td>
+                        </tr>
+                        <tr>
+                            <th>취급시주의사항</th>
+                            <td th:text="${productDTO.productDetailId.warning}"></td>
+                        </tr>
+                        <tr>
+                            <th>제조연월</th>
+                            <td th:text="${productDTO.productDetailId.createDate}"></td>
+                        </tr>
+                        <tr>
+                            <th>품질보증기준</th>
+                            <td th:text="${productDTO.productDetailId.quality}"></td>
+                        </tr>
+                        <tr>
+                            <th>A/S 책임자</th>
+                            <td th:text="${productDTO.productDetailId.as_field}"></td>
+                        </tr>
+                        <tr>
+                            <th>전화번호</th>
+                            <td th:text="${productDTO.productDetailId.asPhone}"></td>
+                        </tr>
+                        <!-- Additional product info -->
+                    </table>
+                </div>
             </section>
 
+            <!-- 상품리뷰 -->
             <section id="additional-product-info" th:data-product-id="${productDTO.productId}">
                 <h3>상품리뷰</h3>
-                <div class="review-list" id="review-list"></div>
+                <div class="review-list" id="review-list">
+
+                </div>
                 <div class="pagination"></div>
             </section>
 
@@ -162,5 +222,6 @@
     </main>
     <footer th:replace="~{/include/footer.html}"></footer>
 </div>
+
 </body>
 </html>

@@ -76,19 +76,31 @@
 
                   </th:block>
                 </td>
+                <td>  [[${review.regDate}]]</td>
               </tr>
               <!-- 반복 블럭 끝 -->
 
             </tbody>
           </table>
+          <div class="pagination">
+            <button class="page-btn"
+                    th:disabled="${currentPage == 0}"
+                    th:onclick="'window.location.href=\'?page=' + ${currentPage - 1} + '&size=8\''">
+              이전
+            </button>
+            <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                        <button class="page-num"
+                                th:classappend="${i == currentPage} ? 'active'"
+                                th:onclick="'window.location.href=\'?page=' + ${i} + '&size=8\''"
+                                th:text="${i + 1}">1</button>
+                    </span>
+            <button class="page-btn"
+                    th:disabled="${currentPage + 1 == totalPages}"
+                    th:onclick="'window.location.href=\'?page=' + ${currentPage + 1} + '&size=8\''">
+              다음
+            </button>
+          </div>
         </article>
-        <div class="page">
-          <a href="#">이전</a>
-          <a href="#" class="page_current">1</a>
-          <a href="#">2</a>
-          <a href="#">3</a>
-          <a href="#">다음</a>
-        </div>
 
       </section>
     </main>

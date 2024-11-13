@@ -1,14 +1,16 @@
 package com.lotte4.controller.pagecontroller.my;
 
 import com.lotte4.dto.*;
+import com.lotte4.dto.coupon.CouponIssuedResponseDTO;
+import com.lotte4.dto.coupon.CouponResponseDTO;
 import com.lotte4.dto.mongodb.ReviewDTO;
+import com.lotte4.entity.CouponIssued;
 import com.lotte4.entity.MemberInfo;
 import com.lotte4.entity.OrderItems;
 import com.lotte4.security.MyUserDetails;
-import com.lotte4.service.DeliveryService;
-import com.lotte4.service.MemberInfoService;
-import com.lotte4.service.OrderService;
-import com.lotte4.service.UserService;
+import com.lotte4.service.*;
+import com.lotte4.service.admin.config.CouponService;
+import com.lotte4.service.board.BoardService;
 import com.lotte4.service.mongodb.ReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -35,7 +37,7 @@ import java.util.List;
     - 2024-10-28 강중원 - 리뷰 컨트롤러 수정
     - 2024-11-05 황수빈 - 리뷰 컨트롤러 mongoDB 변환
     - 2024-11-08 전규찬 - 마이페이지 출력, 기간별 조회 기능
-
+    = 2024-11-12 황수빈 - 나의 쿠폰, 포인트 내역, 문의하기 내역
  */
 
 @Log4j2
@@ -50,7 +52,9 @@ public class MyController {
     private final OrderService orderService;
     private final DeliveryService deliveryService;
     private final ModelMapper modelMapper;
-
+    private final PointService pointService;        //  2024/11/12 황수빈
+    private final CouponService couponService;
+    private final BoardService boardService;
     // 각 orderDTO의 orderItems에 빠져있는 variants 주입 후 리턴
     private List<OrderDTO> getOrderItems(List<OrderDTO> orderDTOS) {
         List<OrderDTO> orderDTOList = new ArrayList<>();
@@ -157,12 +161,34 @@ public class MyController {
     }
 
     @GetMapping("/point")
-    public String point() {
+    public String point(Model model, Principal principal,
+                        @RequestParam(defaultValue = "0") int page,
+                        @RequestParam(defaultValue = "8") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        String uid = principal.getName();
+
+        Page<PointDTO> points = pointService.selectPointsByUid(uid, pageable);
+        model.addAttribute("points", points);
+        model.addAttribute("totalPages", points.getTotalPages());
+        model.addAttribute("currentPage", page);
+
         return "/my/point";
     }
 
     @GetMapping("/coupon")
-    public String coupon() {
+    public String coupon(Model model, Principal principal,
+                         @RequestParam(defaultValue = "0") int page,
+                         @RequestParam(defaultValue = "5") int size){
+        Pageable pageable = PageRequest.of(page, size);
+        String uid = principal.getName();
+
+        Page<CouponIssuedResponseDTO> coupons = couponService.getIssuedCouponsByUid(uid, pageable);
+        model.addAttribute("coupons", coupons);
+        model.addAttribute("totalPages", coupons.getTotalPages());
+        model.addAttribute("currentPage", page);
+
+        log.info("쿠폰 들어오나"+coupons);
         return "/my/coupon";
     }
 
@@ -177,12 +203,24 @@ public class MyController {
 
         Page<ReviewDTO> reviews = reviewService.findReviewsByUid(uid, pageable);
         model.addAttribute("reviews", reviews);
+        model.addAttribute("totalPages", reviews.getTotalPages());
+        model.addAttribute("currentPage", page);
+
 
         return "/my/review";
     }
 
     @GetMapping("/qna")
-    public String qna() {
+    public String qna(Model model,
+                      Principal principal,
+                      @RequestParam(defaultValue = "0") int page,
+                      @RequestParam(defaultValue = "8") int size) {
+        String type = "qna";
+        String uid = (principal != null) ? principal.getName() : null;
+        Page<BoardResponseDTO>  boardList = boardService.selectArticleByQnaAndUid(type, uid, page, size);
+        model.addAttribute("boards", boardList.getContent());
+        model.addAttribute("totalPages", boardList.getTotalPages());
+        model.addAttribute("currentPage", page);
         return "/my/qna";
     }
 
