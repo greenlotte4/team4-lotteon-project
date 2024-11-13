@@ -46,6 +46,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    function updateTotalPrice(price, quantity) {
+        const totalPrice = document.querySelector('.total-price strong');
+        totalPrice.textContent = (parseInt(totalPrice.textContent.replace(",", "").replace("원", "")) + price * quantity).toLocaleString() + "원";
+    }
+
     function displayVariant(matchingVariant) {
         console.log("Matched Variant Price:", matchingVariant.price);
         const total_price = document.querySelector('.total-price');
@@ -67,15 +72,12 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>`;
         if (!document.getElementById(`${matchingVariant.variant_id}`)) {
             total_price.insertAdjacentHTML('beforebegin', innerHtml);
-            updateTotalPrice(matchingVariant.price, 1);
+            updateTotalPrice(discounted_price(matchingVariant.price), 1);
             addEventListenersToVariant(matchingVariant);
         }
     }
 
-    function updateTotalPrice(price, quantity) {
-        const totalPrice = document.querySelector('.total-price strong');
-        totalPrice.textContent = (parseInt(totalPrice.textContent.replace(",", "").replace("원", "")) + price * quantity).toLocaleString() + "원";
-    }
+
 
     function addEventListenersToVariant(matchingVariant) {
         const variantElem = document.getElementById(matchingVariant.variant_id);
