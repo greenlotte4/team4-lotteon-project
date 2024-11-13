@@ -27,7 +27,8 @@ public class DeliveryDTO {
     private String deliveryWaybill;
     //송장생성일자
     private LocalDateTime waybillDate;
-    private OrderDTO orderDTO;
+    private OrderDTO orderDTO1;
+    private OrderItemsDTO orderDTO;
 
     private String content;
 
@@ -35,6 +36,6 @@ public class DeliveryDTO {
 
     }
     public void setOrderDTO(OrderDTO orderDTO) {
-        this.orderDTO = orderDTO;
+        this.orderDTO1 = orderDTO;
     }
 }

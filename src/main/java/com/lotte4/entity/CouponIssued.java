@@ -33,6 +33,6 @@ public class CouponIssued {
 
     //사용일
    @CreationTimestamp
-    private LocalDateTime uDate;
+    private Date uDate;
 
 }

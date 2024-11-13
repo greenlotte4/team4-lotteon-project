@@ -6,43 +6,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>상품현황</title>
+    <title>배송현황</title>
 
     <!--공통 css 부분-->
     <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}"/>
     <!--각 페이지(section) 개별 css-->
     <link rel="stylesheet" th:href="@{/css/admin/style_order_delivery.css}"/>
 
-    <style>
-        /* 모달 스타일 */
-        .modal {
-            display: none; /* 기본적으로 숨김 */
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-        }
-
-        .modal-content {
-            position: relative;
-            margin: 10% auto;
-            padding: 20px;
-            width: 80%;
-            max-width: 500px;
-            background-color: white;
-        }
-
-        .close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 20px;
-            cursor: pointer;
-        }
-    </style>
 
 </head>
 <body>
@@ -95,219 +65,193 @@
                     </thead>
                     <tbody>
                     <tr th:each="delivery : ${deliverys}">
-<!--                        <td>-->
-<!--                            <a href="#" class="delivery-detail-link" th:attr="data-waybill=${delivery.deliveryWaybill}" th:text="${delivery.deliveryWaybill}">송장번호 확인</a>-->
-<!--                        </td>-->
-                        <td><a href="#" id="openModalBtn">송장번호 확인</a></td>
-                        <td th:text="${delivery.deliveryCompany}">로젠택배</td>
-                        <td th:text="${delivery.orderDTO.orderId}">10121211341</td>
-                        <td th:text="${delivery.orderDTO.recipName}">김유신</td>
-                        <td th:text="${delivery.orderDTO.productVariants.product.name}">청바지</td>
-                        <td th:text="${delivery.orderDTO.count}">3</td>
-                        <td th:text="${#numbers.formatInteger(delivery.orderDTO.count * delivery.orderDTO.price , '0', 'COMMA')}">68,400</td>
-                        <td th:text="${#numbers.formatInteger(delivery.orderDTO.deliveryFee, '0', 'COMMA')}">무료</td>
-                        <td th:text="${delivery.orderDTO.Status == 2 ? '배송준비' :
-                                      (delivery.orderDTO.Status == 3 ? '배송 중' :
-                                      (delivery.orderDTO.Status == 4 ? '배송완료' :
-                                      (delivery.orderDTO.Status == 5 ? '취소' :
-                                      (delivery.orderDTO.Status == 6 ? '교환' :
-                                      (delivery.orderDTO.Status == 7 ? '반품' : '알 수 없음')))))}">
+                        <td>
+                            <a href="#"
+                               class="open-modal-link"
+                               th:if="${delivery.deliveryWaybill != null}"
+                               th:attr="data-waybill=${delivery.deliveryWaybill}"
+                               th:text="${delivery.deliveryWaybill}">
+                                송장번호 확인
+                            </a>
+
+                            <!-- 송장번호가 null인 경우 스타일을 희미하게 표시 -->
+                            <span th:if="${delivery.deliveryWaybill == null}"
+                                  style="color: lightgray; cursor: not-allowed;">
+                                송장번호 없음
+                            </span>
                         </td>
-                        <td th:text="${#temporals.format(delivery.deliveryDate, 'yyyy-MM-dd HH:mm:ss')}">2024-10-17 10:00:06</td>
+                        <td th:text="${delivery == null || delivery.getDeliveryCompany() == null ? '지정안됨'
+                                     : (delivery.getDeliveryCompany() == '롯데택배' ? '롯데택배'
+                                     : (delivery.getDeliveryCompany() == '로젠택배' ? '로젠택배'
+                                     : (delivery.getDeliveryCompany() == 'CJ대한통운' ? 'CJ대한통운' : '지정안됨')))}">
+                        </td>
+                        <td th:if="${delivery.getOrderItem() == null || delivery.getOrderItem().order == null}"
+                            style="color: gray; text-align: center;">
+                            주문내역 없음
+                        </td>
+                        <td th:if="${delivery.getOrderItem() != null && delivery.getOrderItem().order != null}"
+                            th:text="${delivery.getOrderItem().order.orderId}">
+                        </td>
+
+                        <td th:if="${delivery.getOrderItem() == null || delivery.getOrderItem().order == null || delivery.getOrderItem().order.getRecipName() == null}"
+                            style="color: gray; text-align: center;">
+                            수령인 없음
+                        </td>
+                        <td th:if="${delivery.getOrderItem() != null && delivery.getOrderItem().order != null && delivery.getOrderItem().order.getRecipName() != null}"
+                            th:text="${delivery.getOrderItem().order.getRecipName()}">
+                        </td>
+                        <td th:text="${delivery?.getOrderItem()?.order?.getProductVariants()?.getSku() != null ? delivery.getOrderItem().order.getProductVariants().getSku() : '선택안됨'}">
+                        </td>
+                        <td th:text="${#lists.size(delivery.getOrderItem().order.orderItems)}">3</td>
+                        <td th:text="${#numbers.formatInteger(delivery.orderItem.order.getTotalPrice(), '0', 'COMMA')}">68,400</td>
+                        <td th:text="${delivery?.orderItem?.deliveryFee != null ? #numbers.formatInteger(delivery.orderItem.deliveryFee, '0', 'COMMA') : '적용 안됨'}">
+                        </td>
+                        <td th:text="${delivery.orderItem.status == 1 ? '송장 준비중' :
+                                      (delivery.orderItem.status == 2 ? '배송준비' :
+                                      (delivery.orderItem.status == 3 ? '배송완료' :
+                                      (delivery.orderItem.status == 4 ? '수취확인' :
+                                      (delivery.orderItem.status == 5 ? '취소' :
+                                      (delivery.orderItem.status == 6 ? '교환' :
+                                      (delivery.orderItem.status == 7 ? '반품' : '미결제 상태'))))))}">
+                        </td>
+                        <td th:text="${#temporals.format(delivery.orderItem.order.buyDate, 'yyyy-MM-dd HH:mm:ss')}">2024-10-17 10:00:06</td>
                     </tr>
                     </tbody>
                 </table>
                 <div class="pagination">
-                    <button class="page-btn">이전</button>
-                    <button class="page-num">1</button>
-                    <button class="page-num">2</button>
-                    <button class="page-num">3</button>
-                    <button class="page-num">4</button>
-                    <button class="page-num">5</button>
-                    <button class="page-btn">다음</button>
+                    <span class="page-btn" th:classappend="${currentPage == 0} ? 'disabled'">
+                        <a th:if="${currentPage > 0}"
+                           th:href="@{/admin/order/delivery(page=${currentPage - 1}, size=${pageSize})}">이전</a>
+                        <span th:if="${currentPage == 0}">이전</span>
+                    </span>
+                    <span style="margin-top: 10px" th:with="startPage=${T(java.lang.Math).max(0, currentPage - 2)},
+                       endPage=${T(java.lang.Math).min(totalPages - 1, currentPage + 2)}">
+                        <span th:each="i : ${#numbers.sequence(startPage, endPage)}"
+                              th:classappend="${currentPage == i} ? 'active'">
+                            <a class="page-num" th:href="@{/admin/order/delivery(page=${i}, size=${pageSize})}" th:text="${i + 1}">1</a>
+                        </span>
+                    </span>
+                    <span class="page-btn" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
+                        <a th:if="${currentPage + 1 < totalPages}"
+                           th:href="@{/admin/order/delivery(page=${currentPage + 1}, size=${pageSize})}">다음</a>
+                        <span th:if="${currentPage + 1 == totalPages}">다음</span>
+                    </span>
                 </div>
             </div>
         </section>
         <!-- /Section -->
     </div>
 </main>
-<!-- 배송상세 모달 -->
+ 배송상세 모달
 <div id="versionModal" class="modal">
     <div class="modal-content">
-        <h4>배송상세</h4>
-        <span id="versionModalClose" class="close">&times;</span>
-        <p>여기에 배송 상세 정보가 표시됩니다.</p>
+        <div class="modal-header">
+            <h4>배송상세</h4>
+            <span id="versionModalClose" class="close">&times;</span> <!-- id 추가 -->
+        </div>
+        <div class="modal-body">
+            <div>
+                <h2 class="sub-title">상품정보</h2>
+                <table class="product-info-table">
+                    <colgroup>
+                        <col style="width: 10%">
+                        <col style="width: 2%">
+                        <col style="width: 13%">
+                        <col style="width: 10%">
+                        <col style="width: 9%">
+                        <col style="width: 6%">
+                        <col style="width: 7%">
+                        <col style="width: 7%">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>상품이미지</th>
+                        <th>상품번호</th>
+                        <th>상품명</th>
+                        <th>판매자</th>
+                        <th>가격</th>
+                        <th>수량</th>
+                        <th>배송비</th>
+                        <th>결제금액</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><img id="modalProductImg" src="" alt="상품 사진" class="product-image"></td>
+                        <td id="modalProductNo">상품번호</td>
+                        <td id="modalProductName">상품명</td>
+                        <td id="modalSeller">판매자</td>
+                        <td id="modalPrice">가격</td>
+                        <td id="modalCount">수량</td>
+                        <td id="modalDeliveryFee">배송비</td>
+                        <td id="modalTotalPrice">결제금액</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div>
+                <h2 class="sub-title3">배송정보</h2>
+                <table class="delivery-info-table">
+                    <colgroup>
+                        <col style="width: 13%;">
+                        <col style="width: 75%;">
+                    </colgroup>
+                    <tr>
+                        <th>주문번호</th>
+                        <td id="modalOrderId">주문번호</td>
+                    </tr>
+                    <tr>
+                        <th>수령인</th>
+                        <td id="modalRecipName">수령인</td>
+                    </tr>
+                    <tr>
+                        <th>연락처</th>
+                        <td id="modalRecipHp">연락처</td>
+                    </tr>
+                    <tr>
+                        <th>배송지 주소</th>
+                        <td id="modalRecipAddr">배송지 주소</td>
+                    </tr>
+                    <tr>
+                        <th>택배사</th>
+                        <td id="modalDeliveryCompany">택배사</td>
+                    </tr>
+                    <tr>
+                        <th>송장번호</th>
+                        <td id="modalWaybill">송장번호</td>
+                    </tr>
+                    <tr class="last-tr">
+                        <th>기타</th>
+                        <td id="modalContent">기타</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
-<!--<div id="versionModal" class="modal">-->
-<!--    <div class="modal-content">-->
-<!--        <div class="modal-header">-->
-<!--            <h4>배송상세</h4>-->
-<!--            <span id="versionModalClose" class="close">&times;</span> &lt;!&ndash; id 추가 &ndash;&gt;-->
-<!--        </div>-->
-<!--        <div class="modal-body">-->
-<!--            <div>-->
-<!--                <h2 class="sub-title">상품정보</h2>-->
-<!--                <table class="product-info-table">-->
-<!--                    <colgroup>-->
-<!--                        <col style="width: 10%">-->
-<!--                        <col style="width: 2%">-->
-<!--                        <col style="width: 13%">-->
-<!--                        <col style="width: 10%">-->
-<!--                        <col style="width: 9%">-->
-<!--                        <col style="width: 6%">-->
-<!--                        <col style="width: 7%">-->
-<!--                        <col style="width: 7%">-->
-<!--                    </colgroup>-->
-<!--                    <thead>-->
-<!--                    <tr>-->
-<!--                        <th>상품이미지</th>-->
-<!--                        <th>상품번호</th>-->
-<!--                        <th>상품명</th>-->
-<!--                        <th>판매자</th>-->
-<!--                        <th>가격</th>-->
-<!--                        <th>수량</th>-->
-<!--                        <th>배송비</th>-->
-<!--                        <th>결제금액</th>-->
-<!--                    </tr>-->
-<!--                    </thead>-->
-<!--                    <tbody>-->
-<!--                    <tr>-->
-<!--                        <td><img id="modalProductImg" src="" alt="상품 사진" class="product-image"></td>-->
-<!--                        <td id="modalProductNo">상품번호</td>-->
-<!--                        <td id="modalProductName">상품명</td>-->
-<!--                        <td id="modalSeller">판매자</td>-->
-<!--                        <td id="modalPrice">가격</td>-->
-<!--                        <td id="modalCount">수량</td>-->
-<!--                        <td id="modalDeliveryFee">배송비</td>-->
-<!--                        <td id="modalTotalPrice">결제금액</td>-->
-<!--                    </tr>-->
-<!--                    </tbody>-->
-<!--                </table>-->
-<!--            </div>-->
-
-<!--            <div>-->
-<!--                <h2 class="sub-title3">배송정보</h2>-->
-<!--                <table class="delivery-info-table">-->
-<!--                    <colgroup>-->
-<!--                        <col style="width: 13%;">-->
-<!--                        <col style="width: 75%;">-->
-<!--                    </colgroup>-->
-<!--                    <tr>-->
-<!--                        <th>주문번호</th>-->
-<!--                        <td id="modalOrderId">주문번호</td>-->
-<!--                    </tr>-->
-<!--                    <tr>-->
-<!--                        <th>수령인</th>-->
-<!--                        <td id="modalRecipName">수령인</td>-->
-<!--                    </tr>-->
-<!--                    <tr>-->
-<!--                        <th>연락처</th>-->
-<!--                        <td id="modalRecipHp">연락처</td>-->
-<!--                    </tr>-->
-<!--                    <tr>-->
-<!--                        <th>배송지 주소</th>-->
-<!--                        <td id="modalRecipAddr">배송지 주소</td>-->
-<!--                    </tr>-->
-<!--                    <tr>-->
-<!--                        <th>택배사</th>-->
-<!--                        <td id="modalDeliveryCompany">택배사</td>-->
-<!--                    </tr>-->
-<!--                    <tr>-->
-<!--                        <th>송장번호</th>-->
-<!--                        <td id="modalWaybill">송장번호</td>-->
-<!--                    </tr>-->
-<!--                    <tr class="last-tr">-->
-<!--                        <th>기타</th>-->
-<!--                        <td id="modalContent">기타</td>-->
-<!--                    </tr>-->
-<!--                    </tbody>-->
-<!--                </table>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
 <footer th:replace="~{/admin/include/footer.html}"></footer>
 </body>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // 모달 열기 버튼 클릭 이벤트
-        document.getElementById('openModalBtn').addEventListener('click', function (event) {
+    document.addEventListener('click', function (event) {
+        if (event.target.classList.contains('open-modal-link')) {
             event.preventDefault();
-            openDeliveryDetailModal();  // 모달 열기
-        });
+            const versionModal = document.getElementById('versionModal');
+            versionModal.style.display = 'block';
+        }
 
-        // 모달 닫기 버튼 설정
-        document.getElementById('versionModalClose').onclick = function () {
-            document.getElementById('versionModal').style.display = 'none';
-        };
+        const versionModalClose = document.getElementById('versionModalClose');
+        if (versionModalClose && event.target === versionModalClose) {
+            const versionModal = document.getElementById('versionModal');
+            versionModal.style.display = 'none';
+        }
+
+        const versionModal = document.getElementById('versionModal');
+        if (event.target === versionModal) {
+            versionModal.style.display = 'none';
+        }
     });
-
-    function openDeliveryDetailModal() {
-        console.log("Opening modal");
-        document.getElementById('versionModal').style.display = 'block';
-    }
-    }
 </script>
-<!--<script>-->
-<!--    console.log("Script Loaded");-->
-
-<!--    const deliveryData = /*[[${#objectMapper.writeValueAsString(deliverys)}]]*/ null;-->
-
-<!--    console.log("Delivery Data Loaded:", deliveryData);-->
-
-<!--    document.addEventListener('DOMContentLoaded', function () {-->
-<!--        console.log("DOMContentLoaded Event Fired");-->
-
-<!--        // 상세 보기 링크 클릭 이벤트 설정-->
-<!--        const detailLinks = document.querySelectorAll('.delivery-detail-link');-->
-<!--        console.log("Delivery Detail Links:", detailLinks);-->
-
-<!--        detailLinks.forEach(link => {-->
-<!--            link.addEventListener('click', function (event) {-->
-<!--                event.preventDefault();-->
-<!--                const waybill = this.getAttribute('data-waybill');-->
-<!--                console.log("Waybill Clicked:", waybill);-->
-<!--                openDeliveryDetailModal(waybill);-->
-<!--            });-->
-<!--        });-->
-
-<!--        document.getElementById('versionModalClose').onclick = function () {-->
-<!--            document.getElementById('versionModal').style.display = 'none';-->
-<!--        };-->
-<!--    });-->
-
-<!--    function openDeliveryDetailModal(deliveryWaybill) {-->
-<!--        console.log("Modal Opening Function Called for Waybill:", deliveryWaybill);-->
-
-<!--        const delivery = deliveryData.find(d => d.deliveryWaybill === deliveryWaybill);-->
-
-<!--        if (delivery) {-->
-<!--            console.log("Delivery Found:", delivery);  // 데이터 검색 확인-->
-
-<!--            document.getElementById('modalProductImg').src = `/uploads/product/${delivery.orderDTO.product.img1}`;-->
-<!--            document.getElementById('modalProductNo').innerText = delivery.orderDTO.product.productId;-->
-<!--            document.getElementById('modalProductName').innerText = delivery.orderDTO.product.name;-->
-<!--            document.getElementById('modalSeller').innerText = delivery.orderDTO.product.company;-->
-<!--            document.getElementById('modalPrice').innerText = delivery.orderDTO.price.toLocaleString();-->
-<!--            document.getElementById('modalCount').innerText = delivery.orderDTO.count;-->
-<!--            document.getElementById('modalDeliveryFee').innerText = delivery.orderDTO.deliveryFee.toLocaleString();-->
-<!--            document.getElementById('modalTotalPrice').innerText = (delivery.orderDTO.price * delivery.orderDTO.count).toLocaleString();-->
-
-<!--            document.getElementById('modalOrderId').innerText = delivery.orderDTO.orderId;-->
-<!--            document.getElementById('modalRecipName').innerText = delivery.orderDTO.recipName;-->
-<!--            document.getElementById('modalRecipHp').innerText = delivery.orderDTO.recipHp;-->
-<!--            document.getElementById('modalRecipAddr').innerText = `${delivery.orderDTO.recipAddr1} ${delivery.orderDTO.recipAddr2}`;-->
-<!--            document.getElementById('modalDeliveryCompany').innerText = delivery.deliveryCompany;-->
-<!--            document.getElementById('modalWaybill').innerText = delivery.deliveryWaybill;-->
-<!--            document.getElementById('modalContent').innerText = delivery.content;-->
-
-<!--            document.getElementById('versionModal').style.display = 'block';-->
-<!--        } else {-->
-<!--            console.log("Delivery data not found for waybill:", deliveryWaybill);-->
-<!--        }-->
-<!--    }-->
-<!--</script>-->
-
 </html>
 

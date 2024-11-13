@@ -4,6 +4,7 @@ import com.lotte4.dto.*;
 import com.lotte4.entity.CouponIssued;
 import com.lotte4.dto.coupon.CouponDTO;
 import com.lotte4.entity.Order;
+import com.lotte4.entity.Point;
 import com.lotte4.entity.ProductVariants;
 import com.lotte4.repository.OrderRepository;
 import com.lotte4.repository.ProductVariantsRepository;
@@ -56,11 +57,11 @@ public class OrderController {
 
         UserPointCouponDTO point = orderService.selectUserPoint(uid);
 
-        log.info("Point = ="+point);
+        log.info("Point = =" + point);
 
         model.addAttribute("point", point);
         model.addAttribute("couponList", orderService.selectUserCoupon(uid));
-        log.info("test123124124"+orderService.selectUserCoupon(uid));
+        log.info("test123124124" + orderService.selectUserCoupon(uid));
 
         // 공통 메서드를 통한 CartItemDTO 생성
         if (cartResponseDTO != null) {  // 바로 구매 시
@@ -69,7 +70,7 @@ public class OrderController {
 
             // 상품 구매 정보 조회 //일단 되는것으로 빨리 끝내고 추후 시간 남으면 바로 처리
             List<ProductVariants> productVariantsList = productVariantsRepository.findByVariantIdIn(ids);
-            log.info("variants" +  productVariantsList);
+            log.info("variants" + productVariantsList);
             for (int i = 0; i < productVariantsList.size(); i++) {
                 ProductVariants variant = productVariantsList.get(i);
                 int count = counts.get(i);
@@ -94,7 +95,7 @@ public class OrderController {
                         .map(item -> (Integer) item.get("cartId"))
                         .findFirst()
                         .orElse(0);
-                // 공통화된 CartItemDTO 생성  cart.getCartId() 추가작업분
+
                 CartItemDTO item = CartItemDTO.createCartItemDTO(variant, cart.getCount(), cartId);
                 cartItems.add(item);
             }
@@ -107,13 +108,11 @@ public class OrderController {
     }
 
 
-    // 바로 구매하기
     @ResponseBody
     @PostMapping("/product/order")
     public ResponseEntity<String> CartBuyOrder(@RequestBody CartResponseDTO cartResponseDTO, HttpSession session) {
         if (cartResponseDTO != null) {
-            session.setAttribute("directBuy", cartResponseDTO); // directBuy로만 설정
-            log.info("send ResponseData " + cartResponseDTO);
+            session.setAttribute("directBuy", cartResponseDTO);
             return ResponseEntity.ok("success");
         } else {
             return ResponseEntity.ok("fail");
@@ -127,14 +126,27 @@ public class OrderController {
             return "redirect:/member/login";
         }
 
+
         Object cartItemDTO = session.getAttribute("selectedOrderItems");
-        List<Order> order = orderService.selectLastOrder();
-        model.addAttribute("orderDTO", order);
-        model.addAttribute("cartList", cartItemDTO);
+        if (cartItemDTO instanceof List<?>) {
+            List<?> selectedOrderItems = (List<?>) cartItemDTO;
 
-//        orderService.updateSold();
+            if (selectedOrderItems.size() >= 2) {
+                selectedOrderItems.stream()
+                        .filter(item -> item instanceof CartItemDTO)
+                        .map(item -> ((CartItemDTO) item).getCartId())
+                        .forEach(cartService::deleteCartItems);
+            }
+        }
+            List<Order> order = orderService.selectLastOrder();
+            model.addAttribute("orderDTO", order);
+            model.addAttribute("cartList", cartItemDTO);
 
-        orderService.testProcedure();
-        return "/product/complete";
+
+            orderService.updateStock();
+
+
+            return "/product/complete";
+
     }
 }

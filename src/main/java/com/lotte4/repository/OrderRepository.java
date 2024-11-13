@@ -4,6 +4,7 @@ import com.lotte4.dto.OrderWithDetailsDTO;
 import com.lotte4.entity.MemberInfo;
 import com.lotte4.entity.Order;
 import com.lotte4.entity.OrderItems;
+import com.lotte4.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
@@ -46,7 +47,8 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 
     @Query("SELECT o FROM Order o " +
             "JOIN FETCH o.orderItems oi " +
-            "JOIN FETCH o.memberInfo m order by o.orderId desc")
+            "JOIN FETCH o.memberInfo m " +
+            "order by o.orderId desc")
     List<Order> findAllOrders();
 
     Order findFirstByMemberInfoOrderByBuyDateDesc(MemberInfo memberInfo);
@@ -54,19 +56,12 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     @Query("select o from Order o where o.Status = :status")
     List<Order> findByStatus(@Param("status") int status);
 
-    @Procedure(name = "testProcedure")
-    void testProcedure();
 
     @Query("SELECT o.orderId AS orderId, COUNT(oi) AS itemCount " +
             "FROM Order o JOIN o.orderItems oi " +
             "WHERE o.orderId IN :orderIds " +
             "GROUP BY o.orderId")
     List<Map<String, Object>> countItemsByOrderIds(@Param("orderIds") List<Integer> orderIds);
-
-
-    //test용 안됨 변환하기 빡셈
-//    @Procedure(name = "allOrder")
-//    void allOrder();
 
     // 해당 사용자의 모든 주문을 최신순으로 조회
     List<Order> findAllByMemberInfoOrderByBuyDateDesc(MemberInfo memberInfo);
@@ -95,5 +90,6 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 
     @Query("SELECT COUNT(b) FROM Order b WHERE DATE(b.buyDate) = :today AND b.Status = :status")
     int findAllByDayWithStatus(@Param("today") LocalDate day, @Param("status") int status);
+
 
 }

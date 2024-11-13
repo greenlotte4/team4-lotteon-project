@@ -16,5 +16,18 @@ public class OrderWithDetailsDTO {
     private MemberInfo memberInfo;
     private ProductVariants productVariant;
     private Product product;
+    private User user;
+    private Delivery delivery;
+    private SellerInfo sellerInfo;
+
+    public OrderWithDetailsDTO(Order order, OrderItems orderItem, MemberInfo memberInfo,
+                               ProductVariants productVariant, Product product, Delivery delivery) {
+        this.order = order;
+        this.orderItem = orderItem;
+        this.memberInfo = memberInfo;
+        this.productVariant = productVariant;
+        this.product = product;
+        this.delivery = delivery;
+    }
 
 }

@@ -13,4 +13,6 @@ public interface ProductVariantsRepository extends JpaRepository<ProductVariants
     @Query("SELECT pv FROM ProductVariants pv WHERE pv.variant_id IN :ids")
     List<ProductVariants> findByVariantIdIn(@Param("ids") List<Integer> ids);
 
+    @Query("SELECT pv FROM ProductVariants pv LEFT JOIN Product p on pv.product.productId = p.productId")
+    List<ProductVariants> findAllProductVariants();
 }

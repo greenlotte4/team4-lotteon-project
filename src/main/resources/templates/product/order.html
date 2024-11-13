@@ -12,7 +12,6 @@
     <link rel="stylesheet" th:href="@{/css/product/product_common.css}"/>
     <link rel="stylesheet" th:href="@{/css/product/style_product_order.css}"/>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-
 </head>
 <body>
 <div id="bannerTop" class="on">
@@ -107,7 +106,7 @@
                             <tr>
                                 <th>쿠폰선택</th>
                                 <td>
-                                    <select name="etc" id="condition">
+                                    <select name="etc" id="condition" style="float: left">
 
                                         <option value="">쿠폰 사용 안함</option>
                                         <!-- 쿠폰 리스트가 비어 있는지 확인 -->
@@ -372,7 +371,7 @@
         // 함수 호출 테스트
         calculateFinalPrice();
 
-
+        //포인트 동적부분
         addPoint.addEventListener('input', function () {
             let usedPoint = parseInt(addPoint.value) || 0;
 
