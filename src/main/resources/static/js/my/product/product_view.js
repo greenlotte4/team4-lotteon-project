@@ -7,11 +7,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const pageSize = 8;
     const prodId = document.getElementById("additional-product-info").dataset.productId;
 
-    // --- Discounted Price Calculation ---
     function roundToTens(num) {
         return Math.round(num / 10) * 10;
     }
 
+    // --- Discounted Price Calculation ---
     const discountRateNode = document.querySelector('.discount-rate');
     const originalPriceNode = document.querySelector('.original-price');
     const discountedPriceNode = document.querySelector('.discount-price');
@@ -30,12 +30,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     selects.forEach(select => select.addEventListener('change', findMatchingVariant));
 
-    function findMatchingVariant() {
-        // 선택된 옵션을 배열에 담음
+    function findMatchingVariant(e) {
         const selectedOptions = Array.from(selects).map(select => select.value);
         if (selectedOptions.every(value => value)) {
             const selectedOptionsKey = `[${Array.from(selects).map(select => select.previousElementSibling.innerText.replace(':', '').trim()).join(', ')}]`;
-
             const matchingVariant = variantDTO.productVariants.find(variant =>
                 JSON.stringify(variant.options[selectedOptionsKey]) === JSON.stringify(selectedOptions)
             );
@@ -48,9 +46,75 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    function displayVariant(variant) {
-        // Display the variant's HTML and add the price calculations
-        console.log("Matched Variant Price:", variant.price);
+    function displayVariant(matchingVariant) {
+        console.log("Matched Variant Price:", matchingVariant.price);
+        const total_price = document.querySelector('.total-price');
+        const innerHtml = `
+            <div id="${matchingVariant.variant_id}" class="selected_variant">
+                <input class="variantsIds" type="hidden" value="${matchingVariant.variant_id}">
+                <div class="delete_variant_div">
+                    <button class="delete_variant" type="button">X</button>                                  
+                </div>
+                <div class="variant_info_div">
+                    <span>${matchingVariant.sku}</span>            
+                    <div class="btnPlusMinusDiv">
+                        <button class="btn_minus" type="button">-</button>
+                        <input class="inputNum" type="number" min="1" max="${matchingVariant.stock}" value="1">
+                        <button class="btn_plus" type="button">+</button>
+                    </div>
+                    <span class="variant_price">${discounted_price(matchingVariant.price).toLocaleString()}원</span>
+                </div>
+            </div>`;
+        if (!document.getElementById(`${matchingVariant.variant_id}`)) {
+            total_price.insertAdjacentHTML('beforebegin', innerHtml);
+            updateTotalPrice(matchingVariant.price, 1);
+            addEventListenersToVariant(matchingVariant);
+        }
+    }
+
+    function updateTotalPrice(price, quantity) {
+        const totalPrice = document.querySelector('.total-price strong');
+        totalPrice.textContent = (parseInt(totalPrice.textContent.replace(",", "").replace("원", "")) + price * quantity).toLocaleString() + "원";
+    }
+
+    function addEventListenersToVariant(matchingVariant) {
+        const variantElem = document.getElementById(matchingVariant.variant_id);
+        variantElem.querySelector('.delete_variant').addEventListener('click', function () {
+            variantElem.remove();
+            updateTotalPrice(-discounted_price(matchingVariant.price), parseInt(variantElem.querySelector('.inputNum').value));
+        });
+
+        const btn_minus = variantElem.querySelector('.btn_minus');
+        const btn_plus = variantElem.querySelector('.btn_plus');
+        const inputNum = variantElem.querySelector('.inputNum');
+        let previousNum = parseInt(inputNum.value);
+
+        btn_minus.addEventListener('click', () => changeQuantity(inputNum, -1, previousNum));
+        btn_plus.addEventListener('click', () => changeQuantity(inputNum, 1, previousNum));
+        inputNum.addEventListener('change', () => validateInputNum(inputNum, previousNum));
+    }
+
+    function changeQuantity(input, diff, previousNum) {
+        let currentNum = parseInt(input.value) + diff;
+        if (currentNum > 0 && currentNum <= parseInt(input.max)) {
+            input.value = currentNum;
+            updateTotalPrice(parseInt(input.parentElement.nextElementSibling.textContent.replace(",", "").replace("원", "")), diff);
+            previousNum = currentNum;
+        }
+    }
+
+    function validateInputNum(input, previousNum) {
+        const currentNum = parseInt(input.value);
+        if (currentNum > parseInt(input.max)) {
+            alert(`해당 상품의 최대 수량은 ${input.max}개 입니다.`);
+            input.value = previousNum;
+        } else if (currentNum <= 0 || isNaN(currentNum)) {
+            alert('유효한 숫자를 입력해주세요');
+            input.value = previousNum;
+        } else {
+            updateTotalPrice(parseInt(input.parentElement.nextElementSibling.textContent.replace(",", "").replace("원", "")), currentNum - previousNum);
+            previousNum = currentNum;
+        }
     }
 
     // --- Load Reviews with Pagination ---
@@ -135,13 +199,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     document.getElementById("closeCouponModal")?.addEventListener("click", () => {
-        couponModal.style.display = "none";
+        couponModal.style.display         = "none";
     });
 
     window.addEventListener("click", (event) => {
         if (event.target === couponModal) couponModal.style.display = "none";
     });
 
+    // --- 쿠폰 발급 ---
     document.querySelectorAll(".download-btn").forEach(button =>
         button.addEventListener("click", () => issueCoupon(button))
     );
@@ -153,15 +218,90 @@ document.addEventListener("DOMContentLoaded", () => {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ couponId })
         })
-            .then(response => response.ok ? alert("쿠폰이 성공적으로 발급되었습니다.") : handleCouponError(response.status))
+            .then(response => {
+                if (response.ok) {
+                    alert("쿠폰이 성공적으로 발급되었습니다.");
+                } else if (response.status === 409) {
+                    alert("이미 발급된 쿠폰입니다.");
+                } else if (response.status === 401) {
+                    alert("로그인이 필요합니다.");
+                    window.location.href = "/lotteon/member/login"; // 로그인 페이지로 리다이렉트
+                } else {
+                    alert("쿠폰 발급 중 오류가 발생했습니다.");
+                }
+            })
             .catch(error => console.error("Error issuing coupon:", error));
     }
 
-    function handleCouponError(status) {
-        if (status === 409) alert("이미 발급된 쿠폰입니다.");
-        else if (status === 401) {
-            alert("로그인이 필요합니다.");
-            window.location.href = "/lotteon/member/login";
-        } else alert("쿠폰 발급 중 오류가 발생했습니다.");
-    }
+    // --- 장바구니 담기 ---
+    const btnCart = document.querySelector('.cart-button');
+    btnCart?.addEventListener('click', function (event) {
+        event.preventDefault(); // 기본 폼 제출 방지
+
+        const variantsIds = Array.from(document.querySelectorAll('.variantsIds')).map(node => parseInt(node.value.trim()));
+        const counts = Array.from(document.querySelectorAll('.inputNum')).map(node => parseInt(node.value.trim()));
+
+        const json = {
+            productVariants: variantsIds,
+            counts: counts
+        };
+
+        fetch('/lotteon/product/cart', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(json)
+        })
+            .then(response => response.text())
+            .then(data => {
+                if (data === "success") {
+                    if (confirm("장바구니에 상품이 담겼습니다. 장바구니로 이동하시겠습니까?")) {
+                        window.location.href = "/lotteon/product/cart";
+                    }
+                } else if (data === "failed") {
+                    alert("장바구니 등록에 실패했습니다.");
+                } else if (data === "noUser") {
+                    alert("로그인이 필요합니다.");
+                    window.location.href = "/lotteon/member/login";
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    });
+
+    // --- 바로구매 ---
+    const btnBuy = document.querySelector('.buy-button');
+    btnBuy?.addEventListener('click', function (event) {
+        event.preventDefault();
+
+        const variantsIds = Array.from(document.querySelectorAll('.variantsIds')).map(node => parseInt(node.value.trim()));
+        const counts = Array.from(document.querySelectorAll('.inputNum')).map(node => parseInt(node.value.trim()));
+
+        const json = {
+            productVariants: variantsIds,
+            counts: counts
+        };
+
+        fetch('/lotteon/product/order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(json)
+        })
+            .then(response => response.text())
+            .then(data => {
+                if (data === "success") {
+                    alert("주문 페이지로 이동합니다.");
+                    window.location.href = "/lotteon/product/order";
+                } else if (data === "failed") {
+                    alert("상품 구매 중 문제가 발생하였습니다.");
+                } else if (data === "noUser") {
+                    alert("로그인이 필요합니다.");
+                    window.location.href = "/lotteon/member/login";
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    });
+
 });
