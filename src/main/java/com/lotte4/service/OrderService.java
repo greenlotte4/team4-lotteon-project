@@ -10,12 +10,12 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -44,11 +44,10 @@ public class OrderService {
     private final DeliveryRepository deliveryRepository;
     private final MemberInfoRepository memberInfoRepository;
     private final PointRepository pointRepository;
-    private final CouponRepository couponRepository;
     private final OrderItemsRepository orderItemsRepository;
-    private final ProductRepository productRepository;
     private final BestProductService bestProductService;
     private final CouponIssuedRepository couponIssuedRepository;
+
 
 
     private final EntityManager entityManager;
@@ -119,6 +118,7 @@ public class OrderService {
                 orderItems.setOriginPoint(orderItemsDTO.getOriginPoint());
                 orderItems.setOriginPrice(orderItemsDTO.getOriginPrice());
                 orderItems.setItemOption(orderItemsDTO.getProductVariants().getSku());
+//                orderItems.setStatus(1);
                 orderItems.setVariantId(orderItemsDTO.getVariantId());
 
                 // ProductVariants 설정
@@ -126,11 +126,13 @@ public class OrderService {
                     int variantId = orderItemsDTO.getProductVariants().getVariant_id();
                     Optional<ProductVariants> productVariantsOptional = productVariantsRepository.findById(variantId);
 
+
                     productVariantsOptional.ifPresent(productVariants -> {
                         // OrderItems에 ProductVariants 엔티티를 직접 설정
                         orderItems.setVariantId(variantId);
                         log.info("ProductVariants 엔티티 설정 완료: " + productVariants);
-
+                        productVariants.setVariant_id(variantId); // 원하는 variantId 설정
+                        order.setProductVariants(productVariants); // order에 설정
                         //Redis에 판매 순위 업데이트 - 강중원 11.08
                         Product product = productVariants.getProduct();
                         ProductBestDTO bestDTO = modelMapper.map(product, ProductBestDTO.class);
@@ -149,11 +151,24 @@ public class OrderService {
                 delivery.setContent(orderDTO.getContent());
                 log.info("16722757257"+delivery.toString());
                 deliveryRepository.save(delivery);
+
+                if (orderDTO.getUsePoint() != 0){
+                    Point point = new Point();
+                    point.setMemberInfo(order.getMemberInfo());
+                    point.setPoint(orderDTO.getUsePoint());
+                    point.setPointDate(LocalDateTime.now());
+
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy-MM-dd");
+                    String formattedDate = LocalDateTime.now().format(formatter);
+
+                    point.setPointName(formattedDate + " " + order.getProductVariants().getProduct().getName() + " " + order.getProductVariants().getSku() + "물품 구매건");
+                    point.setPresentPoint(orderDTO.getUsePoint());
+                    point.setType("차감");
+                    pointRepository.save(point);
+                }
+
             }
         }
-
-
-
         // 최종 Order 저장
         orderRepository.save(order);
         log.info("주문저장 로그 " + order);
@@ -297,12 +312,120 @@ public class OrderService {
     }
 
 
+    public List<ProductVariants> selectProducts(){
+        return productVariantsRepository.findAllProductVariants();
+    }
+
+
+    public Page<OrderProductDTO> getOrdersWithProducts(Pageable pageable, String sortBy) {
+        Sort sort;
+        switch (sortBy) {
+            case "orderId":
+                sort = Sort.by(Sort.Direction.DESC, "orderId");
+                break;
+            case "buyerName": // 주문자명
+                sort = Sort.by(Sort.Direction.ASC, "memberInfo.name");
+                break;
+            case "buyerUid": // 주문자 아이디
+                sort = Sort.by(Sort.Direction.ASC, "memberInfo.uid");
+                break;
+            default: // 기본 정렬: 구매 날짜 내림차순
+                sort = Sort.by(Sort.Direction.DESC, "buyDate");
+        }
+
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "buyDate"));
+        Page<Order> pagedOrders = orderRepository.findAll(sortedPageable);
+        List<OrderItems> orderItems = getAllOrderItems();
+        List<ProductVariants> productVariants = selectProducts();
+
+        Map<Integer, ProductVariants> productMap = productVariants.stream()
+                .collect(Collectors.toMap(ProductVariants::getVariant_id, product -> product));
+
+        List<OrderProductDTO> orderProductDTOs = pagedOrders.getContent().stream().map(order -> {
+            // Order에 연결된 OrderItems를 MatchedOrderItemDTO로 변환
+            List<MatchedOrderItemDTO> matchedItems = orderItems.stream()
+                    .filter(item -> item.getOrder() != null && item.getOrder().getOrderId() == order.getOrderId())
+                    .map(item -> {
+                        ProductVariants product = productMap.get(item.getVariantId());
+                        return product != null ? new MatchedOrderItemDTO(item, product) : null;
+                    })
+                    .filter(Objects::nonNull) // null 값 제거
+                    .collect(Collectors.toList());
+
+            return new OrderProductDTO(order, matchedItems);
+        }).collect(Collectors.toList());
+
+        PageImpl<OrderProductDTO> orderProductDTOS = new PageImpl<>(orderProductDTOs, pageable, pagedOrders.getTotalElements());
+        return orderProductDTOS;
+    }
+
+
+
+    public List<OrderProductDTO> getOrdersWithProductsByOrderId(int orderId) {
+        List<Order> orders = getAllOrders();
+        List<OrderItems> orderItems = getAllOrderItems();
+        List<ProductVariants> productVariants = selectProducts();
+
+        Map<Integer, ProductVariants> productMap = productVariants.stream()
+                .collect(Collectors.toMap(ProductVariants::getVariant_id, product -> product));
+
+        List<OrderProductDTO> result = new ArrayList<>();
+
+        for (Order order : orders) {
+            if (order.getOrderId() == orderId) {
+                List<MatchedOrderItemDTO> matchedItems = new ArrayList<>();
+                for (OrderItems item : orderItems) {
+                    if (item.getOrder() != null && item.getOrder().getOrderId() == orderId) {
+                        ProductVariants product = productMap.get(item.getVariantId());
+                        if (product != null) {
+                            matchedItems.add(new MatchedOrderItemDTO(item, product));
+                        }
+                    }
+                }
+                result.add(new OrderProductDTO(order, matchedItems));
+            }
+        }
+        return result;
+    }
+
+
+    public OrderProductDTO getOrderDetailsById(int orderId) {
+        try {
+            List<Order> orders = getAllOrders();
+            List<OrderItems> orderItems = getAllOrderItems();
+            List<ProductVariants> productVariants = selectProducts();
+
+            Map<Integer, ProductVariants> productMap = productVariants.stream()
+                    .collect(Collectors.toMap(ProductVariants::getVariant_id, product -> product));
+
+            for (Order order : orders) {
+                if (order.getOrderId() == orderId) {
+                    List<MatchedOrderItemDTO> matchedItems = new ArrayList<>();
+                    for (OrderItems item : orderItems) {
+                        if (item.getOrder() != null && item.getOrder().getOrderId() == orderId) {
+                            ProductVariants product = productMap.get(item.getVariantId());
+                            if (product != null) {
+                                matchedItems.add(new MatchedOrderItemDTO(item, product));
+                            }
+                        }
+                    }
+                    return new OrderProductDTO(order, matchedItems);
+                }
+            }
+            log.warn("orderId: {}", orderId);
+            return null;
+        } catch (Exception e) {
+            log.error("details orderId: {}", orderId, e);
+            throw new RuntimeException("order details", e);
+        }
+    }
+
+
 
     //포인트값 조회
     public UserPointCouponDTO selectUserPoint(String uid) {
         int memberInfoId = userService.getMemberInfoIdByUid(uid);
         Integer totalPoints = pointRepository.findTotalPointsByMemberInfoId(memberInfoId);
-        log.info("totalPoints = " + totalPoints);
         return new UserPointCouponDTO(totalPoints);
     }
 
@@ -315,8 +438,6 @@ public class OrderService {
             log.warn("No user found with UID: " + uid);
             return Collections.emptyList();
         }
-
-        // Step 2: Get User ID and Fetch Coupons
         int userId = userInfo.get().getUserId();
         log.info("userId = " + userId);
         List<CouponIssued> result = couponIssuedRepository.findByUserUid(userId);
@@ -335,15 +456,11 @@ public class OrderService {
         return orderRepository.findAllOrders();
     }
 
-    //업데이트 처리
-    public void testProcedure() {
-        Query query = entityManager.createNativeQuery("CALL testProcedure()");
-        query.executeUpdate();
-    }
 
 
 
-    public void updateSold(){
+
+    public void updateStock(){
         List<Order> completedOrders = orderRepository.findByStatus(1);
         for (Order order : completedOrders) {
             List<OrderItems> orderItemsList = orderItemsRepository.findByOrderId(order.getOrderId());
@@ -352,17 +469,11 @@ public class OrderService {
                 int count = orderItem.getCount();
                 Optional<ProductVariants> productVariantOptional = productVariantsRepository.findById(variantId);
                 if (productVariantOptional.isPresent()) {
-                    int productId = productVariantOptional.get().getProduct().getProductId();
-                    Optional<Product> productOptional = productRepository.findById(productId);
-                    if (productOptional.isPresent()) {
-                        Product product = productOptional.get();
-                        product.setSold(product.getSold() + count);
-                        productRepository.save(product);
-                    } else {
-                        log.warn("찾지못함" + productId);
-                    }
+                    ProductVariants productVariants = productVariantOptional.get();
+                    productVariants.setStock(productVariants.getStock() - count);
+                    productVariantsRepository.save(productVariants);
                 } else {
-                    log.warn("variantId못찾음: " + variantId);
+                    log.warn("variantId 못 찾음: " + variantId);
                 }
             }
         }
@@ -408,5 +519,40 @@ public class OrderService {
     }
 
 
+
+
+    public Page<Delivery> getAllDeliverys(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return deliveryRepository.findAllByOrderByorderIdDesc(pageable);
+    }
+
+
+    // myPage용
+    public void confirmOrderItem(Integer orderItemId) {
+        OrderItems orderItem = orderItemsRepository.findById(orderItemId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 OrderItem입니다."));
+        orderItem.setStatus(4);
+        orderItemsRepository.save(orderItem);
+    }
+
+    public void processReturnOrder(int orderItemId) {
+        try {
+            orderItemsRepository.returnProc(orderItemId);
+            log.info("Return process completed in database for OrderItem ID: " + orderItemId);
+        } catch (Exception e) {
+            log.error("Error during database return process for OrderItem ID: " + orderItemId, e);
+            throw e;
+        }
+    }
+
+    public void processChangeOrder(int orderItemId) {
+        try {
+            orderItemsRepository.changeProc(orderItemId);
+            log.info("Change process completed in database for OrderItem ID: " + orderItemId);
+        } catch (Exception e) {
+            log.error("Error during database change process for OrderItem ID: " + orderItemId, e);
+            throw e;
+        }
+    }
 
 }

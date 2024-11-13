@@ -1,13 +1,14 @@
 package com.lotte4.repository;
 
-import com.lotte4.dto.DeliveryDTO;
 import com.lotte4.entity.Delivery;
 import com.lotte4.entity.OrderItems;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
 /*
      날짜 : 2024/10/30
@@ -22,13 +23,21 @@ import java.util.List;
 
 
 //조회 조건은 fetch로 받는게 좋다고 나와서 사용해봄
+@Repository
 public interface DeliveryRepository extends JpaRepository<Delivery, Long> {
-    @Query("SELECT d FROM Delivery d JOIN FETCH d.orderItem")
-    List<Delivery> findAllWithOrders();
-
-    @Query("SELECT d FROM Delivery d WHERE d.deliveryWaybill = :deliveryWaybill")
-    DeliveryDTO findByDeliveryWaybillEqual(@Param("deliveryWaybill") String deliveryWaybill);
 
     Delivery findByOrderItem(OrderItems orderItems);
 
+    @Query("SELECT d FROM Delivery d " +
+            "LEFT JOIN d.orderItem oi " +
+            "LEFT JOIN oi.order o " +
+            "ORDER BY o.orderId DESC")
+    Page<Delivery> findAllByOrderByorderIdDesc(Pageable pageable);
+
+    Optional<Delivery> findByOrderItem_OrderItemId(Integer orderItemId);
+
+    @Override
+    Page<Delivery> findAll(Pageable pageable);
+
+    Page<Delivery> findByOrderItem_OrderItemId(Integer orderItemId, Pageable pageable);
 }

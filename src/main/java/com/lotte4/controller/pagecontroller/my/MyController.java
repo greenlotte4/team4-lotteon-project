@@ -93,9 +93,12 @@ public class MyController {
 
             String content = deliveryService.getDeliveryContentByOrderItem(modelMapper.map(orderItems.get(0), OrderItems.class));
 
+            String statusText = resolveOrderItemStatus(orderDTO.getStatus(), orderItems.get(0).getStatus());
+
             model.addAttribute("orderDTO", orderDTO);
             model.addAttribute("orderItems", orderItems);
             model.addAttribute("content", content);
+            model.addAttribute("statusText", statusText);
             return "/my/home";
         }
         return "/my/home";
@@ -155,6 +158,15 @@ public class MyController {
         // 최근 5개월 출력을 위한 데이터
         List<String> lastFiveMonths = getLastFiveMonths();
         model.addAttribute("months", lastFiveMonths);
+
+
+        OrderDTO orderDTO = orderService.selectRecentOrder(memberInfo);
+        List<OrderItemsDTO> orderItemsDTOs = orderDTO.getOrderItems();
+        List<OrderItemsDTO> orderItems = orderService.getMissingProductVariants(orderItemsDTOs);
+        String statusText = resolveOrderItemStatus(orderDTO.getStatus(), orderItems.get(0).getStatus());
+        model.addAttribute("orderDTO", orderDTO);
+        model.addAttribute("orderItems", orderItems);
+        model.addAttribute("statusText", statusText);
 
         return "/my/order";
 
@@ -277,4 +289,32 @@ public class MyController {
             return ResponseEntity.status(500).body("서버 오류");
         }
     }
+
+    private String resolveOrderItemStatus(int orderStatus, int itemStatus) {
+        if (orderStatus == 1) {
+            switch (itemStatus) {
+                case 1:
+                    return "배송 대기";
+                case 2:
+                    return "배송 중";
+                case 3:
+                    return "배송 완료";
+                case 4:
+                    return "수취 완료";
+                case 5:
+                    return "취소처리";
+                case 6:
+                    return "교환요청";
+                case 7:
+                    return "반품요청";
+                default:
+                    return "알 수 없는 상태";
+            }
+        }else if (orderStatus == 0) {
+            return "입금 대기";
+        }
+        return "결제 대기";
+    }
+
 }
+

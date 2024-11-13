@@ -200,32 +200,132 @@ for (let i = 0; i < orderSellerBtns.length; i++) {
     });
 }
 
+//구매 확정 코드
 for (let i = 0; i < orderAcceptBtns.length; i++) {
     orderAcceptBtns[i].addEventListener('click', function (event) {
         event.preventDefault(); // a 태그의 기본 동작(링크 이동)을 막음
+        const orderItemId = event.target.getAttribute('data-order-item-id');
+        console.log("전송될 orderItemId:", orderItemId); // 로그로 값 확인
         const modal = document.getElementById('acceptModal');
         if (modal) {
             modal.classList.remove('Modalhidden'); // Modalhidden 클래스 제거
         }
-    });
-}
-
-for (let i = 0; i < orderReturnBtns.length; i++) {
-    orderReturnBtns[i].addEventListener('click', function (event) {
-        event.preventDefault(); // a 태그의 기본 동작(링크 이동)을 막음
-        const modal = document.getElementById('ReturnModal');
-        if (modal) {
-            modal.classList.remove('Modalhidden'); // Modalhidden 클래스 제거
+        const confirmButton = modal.querySelector('.confirmAcceptBtn');
+        if (confirmButton) {
+            confirmButton.addEventListener('click', function () {
+                // 서버로 데이터 전송
+                fetch('/lotteon/my/home/accept', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ orderItemId: orderItemId })
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            alert('구매확정 처리가 완료되었습니다.');
+                            modal.classList.add('Modalhidden');
+                            window.location.href = '/lotteon/my/home';
+                        } else {
+                            alert('구매확정 처리에 실패했습니다.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('에러 발생:', error);
+                        alert('에러가 발생했습니다. 다시 시도해주세요.');
+                    });
+            });
         }
     });
 }
 
+//반품 코드
+for (let i = 0; i < orderReturnBtns.length; i++) {
+    orderReturnBtns[i].addEventListener('click', function (event) {
+        event.preventDefault(); // a 태그의 기본 동작(링크 이동)을 막음
+        const orderItemId = event.target.getAttribute('data-order-item-id');
+        console.log("전송될 orderItemId:", orderItemId); // 로그로 값 확인
+        const modal = document.getElementById('ReturnModal');
+        if (modal) {
+            modal.classList.remove('Modalhidden'); // Modalhidden 클래스 제거
+        }
+        const returnButton = modal.querySelector('.returnAcceptBtn');
+        if (returnButton) {
+            returnButton.addEventListener('click', function () {
+                const fileInput = document.getElementById('returnImg');
+                if (!fileInput.files || fileInput.files.length === 0) {
+                    alert('반품 시 사진이 필수입니다.');
+                    return; // 파일이 없으면 서버로 데이터 전송하지 않음
+                }
+
+                // 서버로 데이터 전송
+                fetch('/lotteon/my/home/return', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ orderItemId: orderItemId })
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            alert('반품 처리가 완료되었습니다.');
+                            modal.classList.add('Modalhidden');
+                            window.location.href = '/lotteon/my/home';
+                        } else {
+                            alert('반품 처리에 실패했습니다.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('에러 발생:', error);
+                        alert('에러가 발생했습니다. 다시 시도해주세요.');
+                    });
+            });
+        }
+    });
+}
+
+//교환 코드
 for (let i = 0; i < orderChangeBtns.length; i++) {
     orderChangeBtns[i].addEventListener('click', function (event) {
         event.preventDefault(); // a 태그의 기본 동작(링크 이동)을 막음
+        const orderItemId = event.target.getAttribute('data-order-item-id');
+        console.log("전송될 orderItemId:", orderItemId); // 로그로 값 확인
         const modal = document.getElementById('ChangeModal');
         if (modal) {
             modal.classList.remove('Modalhidden'); // Modalhidden 클래스 제거
+        }
+        const changeButton = modal.querySelector('.changeAcceptBtn');
+        if (changeButton) {
+            changeButton.addEventListener('click', function () {
+                // 서버로 데이터 전송
+                const fileInput = document.getElementById('changeImg');
+                if (!fileInput.files || fileInput.files.length === 0) {
+                    alert('교환 시 사진이 필수입니다.');
+                    return; // 파일이 없으면 서버로 데이터 전송하지 않음
+                }
+
+                // 서버로 데이터 전송
+                fetch('/lotteon/my/home/change', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ orderItemId: orderItemId })
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            alert('교환 처리가 완료되었습니다.');
+                            modal.classList.add('Modalhidden');
+                            window.location.href = '/lotteon/my/home';
+                        } else {
+                            alert('교환 처리에 실패했습니다.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('에러 발생:', error);
+                        alert('에러가 발생했습니다. 다시 시도해주세요.');
+                    });
+            });
         }
     });
 }

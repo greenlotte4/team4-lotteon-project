@@ -1,8 +1,5 @@
 package com.lotte4.repository;
 
-import com.lotte4.dto.PointDTO;
-import com.lotte4.dto.UserDTO;
-import com.lotte4.dto.UserPointCouponDTO;
 import com.lotte4.entity.MemberInfo;
 import com.lotte4.entity.Point;
 import org.springframework.data.domain.Page;
@@ -12,14 +9,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 // 추가작업 2024-11-07 조수빈 : point를 memberId로 조회하여 가져오는 쿼리문 추가
 
 @Repository
 public interface PointRepository extends JpaRepository<Point,Integer> {
 
-    @Query("SELECT (SUM(p.point)) FROM Point p WHERE p.memberInfo.memberInfoId = :memberInfoId")
+    @Query("SELECT (SUM(p.presentPoint)) FROM Point p WHERE p.memberInfo.memberInfoId = :memberInfoId")
     Integer findTotalPointsByMemberInfoId(@Param("memberInfoId") int memberInfoId);
 
     Page<Point> findPointsByTypeOrderByPointDateDesc(String type, Pageable pageable);
@@ -42,4 +37,5 @@ public interface PointRepository extends JpaRepository<Point,Integer> {
     Page<Point> findByMemberInfo_EmailContainingOrderByPointDateDesc( String keyword, Pageable pageable);
     Page<Point> findByMemberInfo_NameContainingOrderByPointDateDesc(String keyword, Pageable pageable);
     Page<Point> findByMemberInfo_HpContainingOrderByPointDateDesc(String keyword, Pageable pageable);
+
 }

@@ -22,8 +22,6 @@ public class ProductBestController {
 
     private final BestProductService bestProductService;
 
-
-
     // 클라이언트 연결을 관리할 리스트 (복수 클라이언트 지원)
     private final CopyOnWriteArrayList<SseEmitter> emitters = new CopyOnWriteArrayList<>();
 

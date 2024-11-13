@@ -39,7 +39,7 @@ public class OrderDTO {
     private int Payment;
     private int Status;
     private LocalDateTime buyDate;
-    private int couponUse; // 추후 쿠폰 ID값 받아 올 수 있도록 세팅해야함 필수 2024-11-04 조수빈
+    private int couponUse;
     private ProductVariantsDTO productVariants;
     private MemberInfoDTO memberInfo;
     private List<OrderItemsDTO> orderItems;
