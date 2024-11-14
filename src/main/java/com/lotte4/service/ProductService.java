@@ -119,6 +119,7 @@ public class ProductService {
         }
         return cateForProdRegisterDTOList;
     }
+
     // TODO : 사용자 행동수집 type : view , uid 와 함께 mongoDB insert
     public Product_V_DTO getProduct_V_ById(int productId) {
         Optional<Product> productOptional = productRepository.findById(productId);
@@ -427,7 +428,6 @@ public class ProductService {
         }
 
 
-
         //정렬
         switch (type) {
             //낮은 가격
@@ -519,32 +519,32 @@ public class ProductService {
         switch (type) {
             case "Hit":
                 products = productRepository.findTop8ByOrderByHitDesc();
-                for(Product product : products){
+                for (Product product : products) {
                     productDTOList.add(modelMapper.map(product, ProductListDTO.class));
                 }
                 break;
             case "Score":
                 products = productRepository.findTop8ByOrderByRatingDesc();
-                for(Product product : products){
+                for (Product product : products) {
                     productDTOList.add(modelMapper.map(product, ProductListDTO.class));
                 }
                 break;
             case "ScoreMany":
                 products = productRepository.findTop8ByOrderByReviewDesc();
-                for(Product product : products){
+                for (Product product : products) {
                     productDTOList.add(modelMapper.map(product, ProductListDTO.class));
                 }
                 break;
 
             case "Discount":
                 products = productRepository.findTop8ByOrderByDiscountDesc();
-                for(Product product : products){
+                for (Product product : products) {
                     productDTOList.add(modelMapper.map(product, ProductListDTO.class));
                 }
                 break;
             case "Recent":
                 products = productRepository.findTop8ByOrderByCreatedAtDesc();
-                for(Product product : products){
+                for (Product product : products) {
                     productDTOList.add(modelMapper.map(product, ProductListDTO.class));
                 }
                 break;
@@ -635,12 +635,6 @@ public class ProductService {
             return productPage.map(ProductDTO::new);
         }
 
-        int intKeyword = 0;
-
-        if (keyword != null) {
-            intKeyword = Integer.parseInt(keyword);
-        }
-
 
         // 검색 키워드가 있을 때 searchCategory에 따라 조건을 나눔
         if (keyword != null && !keyword.isEmpty() && role.equals("seller")) {
@@ -650,6 +644,7 @@ public class ProductService {
                     productPage = productRepository.findBySellerInfoIdAndNameContaining(sellerInfoId, keyword, pageable);
                     break;
                 case "productId":
+                    int intKeyword = Integer.parseInt(keyword);
                     productPage = productRepository.findBySellerInfoIdAndProductId(sellerInfoId, intKeyword, pageable);
                     break;
                 case "company":
@@ -667,10 +662,12 @@ public class ProductService {
                     productPage = productRepository.findByName(keyword, pageable);
                     break;
                 case "productId":
+                    int intKeyword = Integer.parseInt(keyword);
                     productPage = productRepository.findByProductId(intKeyword, pageable);
                     break;
                 case "sellerInfoId":
-                    Optional<SellerInfo> optional = sellerInfoRepository.findById(intKeyword);
+                    int intKeyword1 = Integer.parseInt(keyword);
+                    Optional<SellerInfo> optional = sellerInfoRepository.findById(intKeyword1);
                     if (optional.isPresent()) {
                         SellerInfo sellerInfo = optional.get();
                         productPage = productRepository.findBySellerInfoId(sellerInfo, pageable);
@@ -690,7 +687,7 @@ public class ProductService {
         return productPage.map(ProductDTO::new);
     }
 
-    public List<ProductDTO> orderProductList(List<ProductDTO> productDTOListPre,String type) {
+    public List<ProductDTO> orderProductList(List<ProductDTO> productDTOListPre, String type) {
 
         //정렬
         switch (type) {
