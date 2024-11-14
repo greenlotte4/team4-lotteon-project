@@ -132,7 +132,7 @@ public class OrderService {
                 orderItems.setOriginPoint(orderItemsDTO.getOriginPoint());
                 orderItems.setOriginPrice(orderItemsDTO.getOriginPrice());
                 orderItems.setItemOption(orderItemsDTO.getProductVariants().getSku());
-//                orderItems.setStatus(1);
+                orderItems.setStatus(1);
                 orderItems.setVariantId(orderItemsDTO.getVariantId());
 
                 // ProductVariants 설정
