@@ -167,10 +167,6 @@ public class OrderService {
                 deliveryRepository.save(delivery);
 
                 if (orderDTO.getUsePoint() != 0){
-
-
-
-                    pointRepository.findById(16);
                     Point point = new Point();
                     point.setMemberInfo(order.getMemberInfo());
                     point.setPoint(orderDTO.getUsePoint());

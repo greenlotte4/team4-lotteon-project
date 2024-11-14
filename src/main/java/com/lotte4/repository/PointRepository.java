@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PointRepository extends JpaRepository<Point,Integer> {
 
-    @Query("SELECT (SUM(p.presentPoint)) FROM Point p WHERE p.memberInfo.memberInfoId = :memberInfoId")
+    @Query("SELECT p.presentPoint FROM Point p WHERE p.memberInfo.memberInfoId = :memberInfoId ORDER BY p.pointId DESC" )
     Integer findTotalPointsByMemberInfoId(@Param("memberInfoId") int memberInfoId);
 
     Page<Point> findPointsByTypeOrderByPointDateDesc(String type, Pageable pageable);

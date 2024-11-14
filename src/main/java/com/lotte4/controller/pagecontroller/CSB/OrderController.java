@@ -57,11 +57,10 @@ public class OrderController {
 
         UserPointCouponDTO point = orderService.selectUserPoint(uid);
 
-        log.info("Point = =" + point);
+        log.info("Point ==" + point);
 
         model.addAttribute("point", point);
         model.addAttribute("couponList", orderService.selectUserCoupon(uid));
-        log.info("test123124124" + orderService.selectUserCoupon(uid));
 
         // 공통 메서드를 통한 CartItemDTO 생성
         if (cartResponseDTO != null) {  // 바로 구매 시
