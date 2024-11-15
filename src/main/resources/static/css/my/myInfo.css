@@ -241,6 +241,7 @@ td{
     height: 25px;
     text-align:center;
     width:auto;
+    text-overflow: ellipsis;
 }
 td > a{
     font-size : 14px;

@@ -59,7 +59,8 @@
                   <td class="st1" th:if="${board.state == 0}">검토중</td>
                   <td class="st2" th:if="${board.state == 1}">답변완료</td>
                   <td th:text="${board.user.uid}"></td>
-                  <td th:text="${board.regDate}"></td>
+                  <td th:text="${#strings.substring(board.regDate, 0, 10)}"></td>
+
                 </tr>
 
                 <!-- 문의 내역이 없을 경우 메시지 출력 -->

@@ -64,7 +64,7 @@
                         <td>
                             <div th:text="${cart.sku}" class="option1"></div>
                         </td>
-                        <td id="price" th:text="${cart.price} + '원'"></td>
+                        <td id="price" th:text="${#numbers.formatInteger((cart.price),1, 'COMMA')} + '원'"></td>
                         <td>
                             <div class="quantity">
                                 <p id="quantity" th:text="${cart.count}"></p>
@@ -72,11 +72,11 @@
                         </td>
                         <td>
                             <div class="price-info">
-                                <del th:text="${cart.price}"></del>
-                                <span id="discount" class="discount-price" th:text="${cart.price - (cart.price * cart.productVariants.product.getDiscount() / 100)} + '원'"></span>
+                                <del th:text="${#numbers.formatInteger((cart.price),1, 'COMMA')}"></del>
+                                <span id="discount" class="discount-price" th:text="${#numbers.formatInteger((cart.price - (cart.price * cart.productVariants.product.getDiscount() / 100)),1, 'COMMA')} + '원'"></span>
                             </div>
                         </td>
-                        <td class="shipping-info" id="deliveryFee" th:text="${cart.productVariants.product.deliveryFee != null ? cart.productVariants.product.deliveryFee + '원' : '무료배송'}"></td>
+                        <td class="shipping-info" id="deliveryFee" th:text="${cart.productVariants.product.deliveryFee != 0 ? #numbers.formatInteger(cart.productVariants.product.deliveryFee,1, 'COMMA') + '원' : '무료배송'}"></td>
                     </tr>
                     </tbody>
                 </table>

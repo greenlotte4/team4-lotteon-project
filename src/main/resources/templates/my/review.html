@@ -28,6 +28,13 @@
         <article class="myInfo_Review myInfo_Article">
           <div class="myInfo_ArticleTitle"><span>나의리뷰</span></div>
           <table class="myInfo_ReviewTable myInfo_Table">
+            <colgroup>
+              <col style="width: 6%">
+              <col style="width: 29%">
+              <col style="width: 35%">
+              <col style="width: 15%">
+              <col style="width: 10%">
+            </colgroup>
             <thead>
               <tr>
                 <th>번호</th>
@@ -76,7 +83,7 @@
 
                   </th:block>
                 </td>
-                <td>  [[${review.regDate}]]</td>
+                <td>[[${#strings.substring(review.regDate, 0, 10)}]]</td>
               </tr>
               <!-- 반복 블럭 끝 -->
 
