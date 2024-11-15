@@ -86,20 +86,36 @@ public class MyController {
         if (myUserDetails.getUser() != null && myUserDetails.getUser().getRole().equals("member")) {
             MemberInfo memberInfo = myUserDetails.getUser().getMemberInfo();
             OrderDTO orderDTO = orderService.selectRecentOrder(memberInfo);
-            List<OrderItemsDTO> orderItemsDTOs = orderDTO.getOrderItems();
+            if(orderDTO != null){
+                List<OrderItemsDTO> orderItemsDTOs = orderDTO.getOrderItems();
 
-            // variantsId 만 있는 orderItemsDTOs 의 variantsDTO 채워주기
-            List<OrderItemsDTO> orderItems = orderService.getMissingProductVariants(orderItemsDTOs);
+                // variantsId 만 있는 orderItemsDTOs 의 variantsDTO 채워주기
+                List<OrderItemsDTO> orderItems = orderService.getMissingProductVariants(orderItemsDTOs);
 
-            String content = deliveryService.getDeliveryContentByOrderItem(modelMapper.map(orderItems.get(0), OrderItems.class));
+                String content = deliveryService.getDeliveryContentByOrderItem(modelMapper.map(orderItems.get(0), OrderItems.class));
 
-            String statusText = resolveOrderItemStatus(orderDTO.getStatus(), orderItems.get(0).getStatus());
+                String statusText = resolveOrderItemStatus(orderDTO.getStatus(), orderItems.get(0).getStatus());
 
-            model.addAttribute("orderDTO", orderDTO);
-            model.addAttribute("orderItems", orderItems);
-            model.addAttribute("content", content);
-            model.addAttribute("statusText", statusText);
-            return "/my/home";
+                model.addAttribute("orderDTO", orderDTO);
+                model.addAttribute("orderItems", orderItems);
+                model.addAttribute("content", content);
+                model.addAttribute("statusText", statusText);
+                return "/my/home";
+            }
+            else{
+                List<OrderItemsDTO> orderItemsDTOs = orderDTO.getOrderItems();
+
+                List<OrderItemsDTO> orderItems = orderService.getMissingProductVariants(orderItemsDTOs);
+
+                String content = deliveryService.getDeliveryContentByOrderItem(modelMapper.map(orderItems.get(0), OrderItems.class));
+
+                String statusText = resolveOrderItemStatus(orderDTO.getStatus(), orderItems.get(0).getStatus());
+
+                model.addAttribute("orderDTO", orderDTO);
+                model.addAttribute("orderItems", orderItems);
+                model.addAttribute("content", content);
+                model.addAttribute("statusText", statusText);
+            }
         }
         return "/my/home";
     }

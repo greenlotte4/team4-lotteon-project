@@ -498,20 +498,26 @@ public class OrderService {
 
     public OrderDTO selectRecentOrder(MemberInfo memberInfo) {
         Order recentOrder = orderRepository.findFirstByMemberInfoOrderByBuyDateDesc(memberInfo);
+        if (recentOrder == null) {
+            return null;
+        }
         return new OrderDTO(recentOrder);
     }
 
     // orderItems 의 variantId를 받아와 조회하고 DTO로 변환 후 리스트에 담아 반환
     public List<OrderItemsDTO> getMissingProductVariants(List<OrderItemsDTO> orderItems) {
-
-        for (OrderItemsDTO orderItem : orderItems) {
-            Optional<ProductVariants> optional = productVariantsRepository.findById(orderItem.getVariantId());
-            if (optional.isPresent()) {
-                ProductVariants productVariants = optional.get();
-                orderItem.setProductVariants(new ProductVariantsDTO(productVariants));
+        if (orderItems == null) {
+            return null;
+        }else {
+            for (OrderItemsDTO orderItem : orderItems) {
+                Optional<ProductVariants> optional = productVariantsRepository.findById(orderItem.getVariantId());
+                if (optional.isPresent()) {
+                    ProductVariants productVariants = optional.get();
+                    orderItem.setProductVariants(new ProductVariantsDTO(productVariants));
+                }
             }
+            return orderItems;
         }
-        return orderItems;
     }
 
     public int findAllByDay(LocalDate date) {
